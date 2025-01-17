@@ -17,15 +17,18 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  /** Swerve constants. */
   public static class Swerve {
-    public static final int GyroCanID = 0xdeadbeef; // AHH WHAT'S THE CANID
+    public static final int GyroCanID = 0x1abe1; // AHH WHAT'S THE CANID
 
     /** Module specific constants */
 
+    // No but seriously, we have to change the CanIDs.
+    // or maybe... we could set them to these values!
     /** Module 0 constants. Front left. */
     public static final SwerveModuleConstants Module0 = new SwerveModuleConstants(
       0xdeafbeef, // Yes I meant deafbeef.
-      0xcafe, // #cafe is my favorite color
+      0xCAFE, // #cafe is my favorite color
       0xBadF00d,
       Rotation2d.fromDegrees(0xAce) // of spades
     );
@@ -35,14 +38,14 @@ public final class Constants {
       0xdefaced,
       0xB0BA, // mm yummy
       0x600DCAFE, // good cafes rock
-      Rotation2d.fromDegrees(0xDead) // is my emotional state
+      Rotation2d.fromDegrees(0xBA7713) // battle
     );
 
     /** Module 2 constants. Back left. */
     public static final SwerveModuleConstants Module2 = new SwerveModuleConstants(
       0xDECAF, // see next line
       0xC0FFEE, // makes you...
-      0xDEAD,
+      0xDEAD, // which is also my current emotional state.
       Rotation2d.fromDegrees(0xFEED)
     );
 

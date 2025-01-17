@@ -15,12 +15,15 @@ public class Swerve extends SubsystemBase {
   /** Creates a new Swerve. If you're doing that more than once, something is
    * horribly wrong. */
   public Swerve() {
+    // Set up the gyroscope.
     gyro = new Canandgyro(Constants.Swerve.GyroCanID);
     gyro.resetFactoryDefaults(0.35);
     gyro.setYaw(0);
 
+    // Start the gyroscope because it would be bad not to.
     CanandEventLoop.getInstance();
 
+    // The swerve-y stuff.
     m_swerveModules = new SwerveModule[] {
       new SwerveModule(0, Constants.Swerve.Module0),
       new SwerveModule(1, Constants.Swerve.Module1),
