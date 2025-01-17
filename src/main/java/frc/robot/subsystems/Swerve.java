@@ -2,6 +2,12 @@ package frc.robot.subsystems;
 
 import frc.lib.swerve.SwerveModule;
 import frc.robot.Constants;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.Odometry;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.reduxrobotics.canand.CanandEventLoop;
@@ -10,10 +16,13 @@ import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 public class Swerve extends SubsystemBase {
   private Canandgyro gyro; // The gyroscope for getting... wait what is it actually for?
   private SwerveModule[] m_swerveModules;
-  
+  private Pose2d m_pose;
+  private Odometry odometry;
 
-  /** Creates a new Swerve. If you're doing that more than once, something is
-   * horribly wrong. */
+  /**
+   * Creates a new Swerve. If you're doing that more than once, something is
+   * horribly wrong.
+   */
   public Swerve() {
     // Set up the gyroscope.
     gyro = new Canandgyro(Constants.Swerve.GyroCanID);
@@ -25,11 +34,31 @@ public class Swerve extends SubsystemBase {
 
     // The swerve-y stuff.
     m_swerveModules = new SwerveModule[] {
-      new SwerveModule(0, Constants.Swerve.Module0),
-      new SwerveModule(1, Constants.Swerve.Module1),
-      new SwerveModule(2, Constants.Swerve.Module2),
-      new SwerveModule(3, Constants.Swerve.Module3),
+        new SwerveModule(0, Constants.Swerve.Module0), // Front left.
+        new SwerveModule(1, Constants.Swerve.Module1), // Front right.
+        new SwerveModule(2, Constants.Swerve.Module2), // Back left.
+        new SwerveModule(3, Constants.Swerve.Module3), // Back right.
     };
+
+    odometry = new SwerveDriveOdometry(
+        Constants.Swerve.kinematics,
+        getGyroYaw(),
+        getModulePositions(),
+        new Pose2d(0, 0, new Rotation2d())
+      );
+    m_pose = odometry.update(getGyroYaw(), getModulePositions());
+  }
+
+  public Rotation2d getGyroYaw() {
+    return Rotation2d.fromDegrees(360 - gyro.getYaw());
+  }
+
+  public SwerveModulePosition[] getModulePositions() {
+    SwerveModulePosition[] positions = new SwerveModulePosition[4]; // Because we have 4 wheels.
+    for (SwerveModule module : m_swerveModules) {
+      positions[module.moduleNumber] = module.getPosition();
+    }
+    return positions;
   }
 
   @Override

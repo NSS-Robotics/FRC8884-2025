@@ -3,6 +3,9 @@ package frc.robot;
 import frc.lib.swerve.SwerveModuleConstants;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -59,5 +62,15 @@ public final class Constants {
 
     // By the way, all the hex numbers are from someone's blog except a few...
     // https://nedbatchelder.com/text/hexwords.html
+
+    public static final double wheelBase = Units.inchesToMeters(0xC0FFEE);
+    public static final double trackWidth = Units.inchesToMeters(0xC0FFEE);
+
+    public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+      new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
+      new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+      new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
+      new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0)
+    );
   }
 }
