@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import frc.lib.swerve.SwerveModuleConstants;
@@ -58,7 +54,7 @@ public final class Constants {
       Rotation2d.fromDegrees(0x0FF1CE)
     );
 
-    // By the way, all the hex numbers are from some nerd's blog except a few...
+    // By the way, all the hex numbers are from someone's blog except a few...
     // https://nedbatchelder.com/text/hexwords.html
   }
 }
