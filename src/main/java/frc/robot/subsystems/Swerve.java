@@ -5,8 +5,10 @@ import frc.robot.Constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.reduxrobotics.canand.CanandEventLoop;
@@ -43,8 +45,7 @@ public class Swerve extends SubsystemBase {
         Constants.Swerve.kinematics,
         getGyroYaw(),
         getModulePositions(),
-        new Pose2d(0, 0, new Rotation2d())
-      );
+        new Pose2d(0, 0, new Rotation2d()));
     m_pose = odometry.update(getGyroYaw(), getModulePositions());
   }
 
@@ -58,6 +59,14 @@ public class Swerve extends SubsystemBase {
       positions[module.moduleNumber] = module.getPosition();
     }
     return positions;
+  }
+
+  public void setModuleStates(SwerveModuleState[] desiredStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
+
+    for (SwerveModule module : m_swerveModules) {
+      module.setState(desiredStates[module.moduleNumber], false);
+    }
   }
 
   @Override

@@ -75,5 +75,6 @@ public final class Constants {
     );
 
     public static final double wheelCircumference = Units.inchesToMeters(4.0);
+    public static final double maxSpeed = 4.5;
   }
 }
