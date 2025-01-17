@@ -63,6 +63,7 @@ public final class Constants {
     // By the way, all the hex numbers are from someone's blog except a few...
     // https://nedbatchelder.com/text/hexwords.html
 
+    // Change these values so that they are not 12648430. That's a big number.
     public static final double wheelBase = Units.inchesToMeters(0xC0FFEE);
     public static final double trackWidth = Units.inchesToMeters(0xC0FFEE);
 

@@ -5,7 +5,6 @@ import frc.robot.Constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,7 +16,7 @@ public class Swerve extends SubsystemBase {
   private Canandgyro gyro; // The gyroscope for getting... wait what is it actually for?
   private SwerveModule[] m_swerveModules;
   private Pose2d m_pose;
-  private Odometry odometry;
+  private SwerveDriveOdometry odometry;
 
   /**
    * Creates a new Swerve. If you're doing that more than once, something is
