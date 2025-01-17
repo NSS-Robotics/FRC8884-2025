@@ -1,9 +1,12 @@
 package frc.lib.swerve;
 
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.Conversions;
@@ -17,7 +20,7 @@ public class SwerveModule {
   // TalonFX is the controller class for Kraken motors.
   private final TalonFX m_angleMotor;
   private final TalonFX m_driveMotor;
-  // private final CANCODERTYPE m_angleEncoder;
+  private final CANcoder m_angleEncoder;
 
   private final PositionVoltage anglePosition = new PositionVoltage(0);
 
@@ -26,7 +29,7 @@ public class SwerveModule {
     this.angleOffset = moduleConstants.angleOffset;
     this.m_angleMotor = new TalonFX(moduleConstants.angleMotorID);
     this.m_driveMotor = new TalonFX(moduleConstants.angleMotorID);
-    //this.m_angleEncoder = new CANCODERTYPE(moduleConstants.canCoderID);
+    this.m_angleEncoder = new CANcoder(moduleConstants.canCoderID);
   }
 
   public SwerveModulePosition getPosition() {

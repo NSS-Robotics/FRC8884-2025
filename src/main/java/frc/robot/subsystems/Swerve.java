@@ -5,6 +5,7 @@ import frc.robot.Constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -66,6 +67,20 @@ public class Swerve extends SubsystemBase {
 
     for (SwerveModule module : m_swerveModules) {
       module.setState(desiredStates[module.moduleNumber], false);
+    }
+  }
+
+  public void autoDrive(ChassisSpeeds speeds) {
+    SwerveModuleState[] moduleStates = Constants.Swerve.kinematics.toSwerveModuleStates(speeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, Constants.Swerve.maxSpeed);
+    setModuleStates(moduleStates);
+  }
+
+  public void driveFromSpeeds(ChassisSpeeds speeds, boolean isOpenLoop) {
+    SwerveModuleState[] moduleStates = Constants.Swerve.kinematics.toSwerveModuleStates(speeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, Constants.Swerve.maxSpeed);
+    for (SwerveModule module : m_swerveModules) {
+      module.setState(moduleStates[module.moduleNumber], isOpenLoop);
     }
   }
 
