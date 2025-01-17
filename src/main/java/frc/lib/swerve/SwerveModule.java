@@ -4,6 +4,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+
+import frc.lib.Conversions;
 import frc.robot.Constants;
 
 public class SwerveModule {

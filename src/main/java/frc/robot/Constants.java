@@ -73,5 +73,7 @@ public final class Constants {
       new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
       new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0)
     );
+
+    public static final double wheelCircumference = Units.inchesToMeters(4.0);
   }
 }
