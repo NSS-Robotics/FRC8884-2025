@@ -90,26 +90,29 @@ public class Swerve extends SubsystemBase {
 
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
     driveFromSpeeds(
-      fieldRelative
-        ? isRed() // If we're in the red alliance
-          ? ChassisSpeeds.fromFieldRelativeSpeeds(
-              translation.getX(),
-              translation.getY(),
-              rotation,
-              gyro.getRotation2d()
-            )
-          : ChassisSpeeds.fromFieldRelativeSpeeds(
-              -translation.getX(),
-              -translation.getY(),
-              rotation,
-              gyro.getRotation2d()
-            )
-        : new ChassisSpeeds( // And if we aren't on the red alliance
-            translation.getX(),
-            translation.getY(),
-            rotation
-        ),
-      isOpenLoop);
+        fieldRelative
+            ? isRed() // If we're in the red alliance
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                    translation.getX(),
+                    translation.getY(),
+                    rotation,
+                    gyro.getRotation2d())
+                : ChassisSpeeds.fromFieldRelativeSpeeds(
+                    -translation.getX(),
+                    -translation.getY(),
+                    rotation,
+                    gyro.getRotation2d())
+            : new ChassisSpeeds( // And if we aren't on the red alliance
+                translation.getX(),
+                translation.getY(),
+                rotation),
+        isOpenLoop);
+  }
+
+  public void turnStates(double angularSpeed) {
+    var moduleStates = Constants.Swerve.kinematics.toSwerveModuleStates(
+        ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, angularSpeed, gyro.getRotation2d()));
+    setModuleStates(moduleStates);
   }
 
   public boolean isRed() {
