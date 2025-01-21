@@ -115,6 +115,34 @@ public class Swerve extends SubsystemBase {
     setModuleStates(moduleStates);
   }
 
+  public SwerveDriveOdometry createOdometry(Pose2d pose) {
+    return new SwerveDriveOdometry(Constants.Swerve.kinematics, getGyroYaw(), getModulePositions(), pose);
+  }
+
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
+
+  public void setPose(Pose2d pose) {
+    odometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+  }
+
+  public Rotation2d getHeading() {
+    return getPose().getRotation();
+  }
+
+  public ChassisSpeeds getRobotRelativeChassisSpeeds() {
+    return Constants.Swerve.kinematics.toChassisSpeeds(getModuleStates());
+  }
+
+  public SwerveModuleState[] getModuleStates() {
+    SwerveModuleState[] states = new SwerveModuleState[4];
+    for (SwerveModule module : m_swerveModules) {
+      states[module.moduleNumber] = module.getState();
+    }
+    return states;
+  }
+
   public boolean isRed() {
     Optional<Alliance> alliance = DriverStation.getAlliance();
     return alliance.isPresent() && alliance.get() == Alliance.Red;
