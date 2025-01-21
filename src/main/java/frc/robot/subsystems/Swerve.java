@@ -148,6 +148,16 @@ public class Swerve extends SubsystemBase {
     return alliance.isPresent() && alliance.get() == Alliance.Red;
   }
 
+  public Pose2d getLimelightBotPose() {
+    return m_pose;
+  }
+
+  public void resetModulesToAbsolute() {
+    for (SwerveModule module : m_swerveModules) {
+      module.resetToAbsolute();
+    }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

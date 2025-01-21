@@ -56,4 +56,14 @@ public class SwerveModule {
       Rotation2d.fromRotations(m_angleMotor.getPosition().getValueAsDouble())
     );
   }
+
+  public void resetToAbsolute() {
+    m_angleMotor.setPosition(
+      getCANCoder().getRotations() - angleOffset.getRotations()
+    );
+  }
+
+  public Rotation2d getCANCoder() {
+    return Rotation2d.fromRotations(m_angleEncoder.getAbsolutePosition().getValueAsDouble());
+  }
 }
