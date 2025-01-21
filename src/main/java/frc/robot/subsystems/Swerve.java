@@ -1,19 +1,23 @@
 package frc.robot.subsystems;
 
-import frc.lib.swerve.SwerveModule;
-import frc.robot.Constants;
+import java.util.Optional;
+
+import com.reduxrobotics.canand.CanandEventLoop;
+import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import com.reduxrobotics.canand.CanandEventLoop;
-import com.reduxrobotics.sensors.canandgyro.Canandgyro;
+import frc.lib.swerve.SwerveModule;
+import frc.robot.Constants;
 
 public class Swerve extends SubsystemBase {
   private Canandgyro gyro; // The gyroscope for getting... wait what is it actually for?
@@ -82,6 +86,35 @@ public class Swerve extends SubsystemBase {
     for (SwerveModule module : m_swerveModules) {
       module.setState(moduleStates[module.moduleNumber], isOpenLoop);
     }
+  }
+
+  public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+    driveFromSpeeds(
+      fieldRelative
+        ? isRed() // If we're in the red alliance
+          ? ChassisSpeeds.fromFieldRelativeSpeeds(
+              translation.getX(),
+              translation.getY(),
+              rotation,
+              gyro.getRotation2d()
+            )
+          : ChassisSpeeds.fromFieldRelativeSpeeds(
+              -translation.getX(),
+              -translation.getY(),
+              rotation,
+              gyro.getRotation2d()
+            )
+        : new ChassisSpeeds( // And if we aren't on the red alliance
+            translation.getX(),
+            translation.getY(),
+            rotation
+        ),
+      isOpenLoop);
+  }
+
+  public boolean isRed() {
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+    return alliance.isPresent() && alliance.get() == Alliance.Red;
   }
 
   @Override
