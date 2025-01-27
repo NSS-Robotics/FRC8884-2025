@@ -1,14 +1,18 @@
 package frc.lib.swerve;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DutyCycle;
 import frc.lib.Conversions;
 import frc.robot.Constants;
 
@@ -21,6 +25,16 @@ public class SwerveModule {
   private final TalonFX m_angleMotor;
   private final TalonFX m_driveMotor;
   private final CANcoder m_angleEncoder;
+
+  private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(
+    Constants.Swerve.driveKS,
+    Constants.Swerve.driveKV,
+    Constants.Swerve.driveKA
+  );
+
+  // Drive motor control stuff.
+  private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
+  private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
 
   private final PositionVoltage anglePosition = new PositionVoltage(0);
 
@@ -57,6 +71,20 @@ public class SwerveModule {
     );
   }
 
+  public void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
+    if (isOpenLoop) {
+      driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
+      m_driveMotor.setControl(driveDutyCycle);
+    } else {
+      driveVelocity.Velocity = Conversions.mpsToRPS(
+        desiredState.speedMetersPerSecond,
+        Constants.Swerve.wheelCircumference
+      );
+      driveVelocity.FeedForward = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
+      m_driveMotor.setControl(driveVelocity);
+    }
+  }
+  
   public void resetToAbsolute() {
     m_angleMotor.setPosition(
       getCANCoder().getRotations() - angleOffset.getRotations()

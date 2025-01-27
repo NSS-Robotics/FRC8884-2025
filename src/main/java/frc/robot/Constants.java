@@ -24,6 +24,14 @@ public final class Constants {
   public static class Swerve {
     public static final int GyroCanID = 0x1abe1; // AHH WHAT'S THE CANID
 
+    public static final double driveKA = 0xcafe;
+    public static final double driveKS = 0xcafe;
+    public static final double driveKV = 0xface;
+
+    public static final double driveKP = 0.1;
+    public static final double driveKI = 0;
+    public static final double driveKD = 0;
+    
     /** Module specific constants */
 
     // No but seriously, we have to change the CanIDs.
