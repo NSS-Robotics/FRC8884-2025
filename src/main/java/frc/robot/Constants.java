@@ -89,4 +89,15 @@ public final class Constants {
     public static final double wheelCircumference = Units.inchesToMeters(4.0);
     public static final double maxSpeed = 4.5;
   }
+
+    public static class ElevatorConstants{
+      public static final int motorID = 0;  
+      public static final int encoder = 0;
+
+      public static final double kP = 0;
+      public static final double kI = 0;
+      public static final double kD = 0;
+
+      public static final double maxRotations = 0;
+    } 
 }
