@@ -2,6 +2,8 @@ package frc.robot;
 
 import frc.lib.swerve.SwerveModuleConstants;
 
+import com.fasterxml.jackson.databind.ser.std.ClassSerializer;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -90,7 +92,7 @@ public final class Constants {
     public static final double maxSpeed = 4.5;
   }
 
-    public static class ElevatorConstants{
+  public static class ElevatorConstants {
       public static final int motorID = 0;  
       public static final int encoder = 0;
 
@@ -99,5 +101,18 @@ public final class Constants {
       public static final double kD = 0;
 
       public static final double maxRotations = 0;
-    } 
+    }
+
+  public static final class PivotConstants {
+    public static final double magnetSensorOffset = 109876.45224;
+    public static final double kP = 45.907;
+    public static final double kI = 45.907;
+    public static final double kD = 45.907;
+    public static final int motorID = 4321432;
+    public static final double maxRotations = 4776.23;
+  }
+
+  public static final class CANcoderConstants {
+    public static final int CANcoder = 4934231;
+  }
 }
