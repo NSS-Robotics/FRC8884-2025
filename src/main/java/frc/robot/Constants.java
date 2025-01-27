@@ -2,8 +2,6 @@ package frc.robot;
 
 import frc.lib.swerve.SwerveModuleConstants;
 
-import com.fasterxml.jackson.databind.ser.std.ClassSerializer;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
