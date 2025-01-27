@@ -13,8 +13,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.swerve.SwerveModule;
 import frc.robot.Constants;
@@ -131,6 +133,27 @@ public class Swerve extends SubsystemBase {
     }
   }
 
+  public void zeroGyro() {
+    gyro.setYaw(0);
+    setHeading(new Rotation2d(Units.degreesToRadians(isRed() ? 0 : 180)));
+  }
+
+  public void setHeading(Rotation2d heading) {
+    odometry.resetPosition(
+      getGyroYaw(),
+      getModulePositions(),
+      new Pose2d(getPose().getTranslation(), heading)
+    );
+  }
+
+  public double[] getReefDistances() {
+    Pose2d pose = getLimelightBotPose();
+
+    double x = (isRed() ? Constants.redReefX : Constants.blueReefX) - pose.getX();
+    double y = Constants.reefY - pose.getY();
+    return new double[]{x, y};
+  }
+
   public void turnStates(double angularSpeed) {
     var moduleStates = Constants.Swerve.kinematics.toSwerveModuleStates(
         ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, angularSpeed, gyro.getRotation2d()));
@@ -182,11 +205,19 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
+    for (SwerveModule mod : m_swerveModules) {
+      SmartDashboard.putNumber(
+        "Mod " + mod.moduleNumber + " CANcoder",
+        mod.getCANCoder().getDegrees()
+      );
+      SmartDashboard.putNumber(
+        "Mod " + mod.moduleNumber + " Angle",
+        mod.getPosition().angle.getDegrees()
+      );
+      SmartDashboard.putNumber(
+        "Mod " + mod.moduleNumber + " Velocity",
+        mod.getState().speedMetersPerSecond
+      );
+    }
   }
 }

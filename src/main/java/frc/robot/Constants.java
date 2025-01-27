@@ -16,6 +16,10 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final double redReefX = 100;
+  public static final double blueReefX = 100;
+  public static final double reefY = 4;
+
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
