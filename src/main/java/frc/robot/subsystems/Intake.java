@@ -6,6 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -61,4 +62,19 @@ public class Intake extends SubsystemBase {
         intakeMotor.getConfigurator().apply(intakeSlot0Configs);
         intakeMotor.setNeutralMode(NeutralModeValue.Brake);
     }
+
+    public void setPivot(double position) {
+        position = Math.max(0, Math.min(Constants.IntakeConstants.pivotMaxRotations, position));
+
+        pivotPositionVoltage = new PositionVoltage(position);
+
+        pivotMotor.setControl(pivotPositionVoltage);
+    }
+
+    public void setIntake(double velocity) {
+        intakeVelocityVoltage = new VelocityVoltage(velocity);
+
+        intakeMotor.setControl(intakeVelocityVoltage);
+    }
+
 }

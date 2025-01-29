@@ -141,5 +141,6 @@ public final class Constants {
     public static final double intakeKP = 0;
     public static final double intakeKI = 0;
     public static final double intakeKD = 0;
+    public static final double pivotMaxRotations = 0;
   }
 }
