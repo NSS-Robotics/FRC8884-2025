@@ -23,7 +23,7 @@ public class Indexer extends SubsystemBase {
       .p(Constants.IndexerConstants.kP)
       .i(Constants.IndexerConstants.kI)
       .d(Constants.IndexerConstants.kD)
-      .velocityFeedForward(Constants.IndexerConstants.kFF);
+      .velocityFF(Constants.IndexerConstants.kFF);
 
     motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
   }
