@@ -130,5 +130,14 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
+    public static final int pivotMotorID = 0;
+    public static final int intakeMotorID = 0;
+    public static final int encoderID = 0;
+    public static final double pivotKP = 0;
+    public static final double pivotKI = 0;
+    public static final double pivotKD = 0;
+    public static final double intakeKP = 0;
+    public static final double intakeKI = 0;
+    public static final double intakeKD = 0;
   }
 }
