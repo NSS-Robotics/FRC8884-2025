@@ -102,15 +102,33 @@ public final class Constants {
     }
 
   public static final class PivotConstants {
+    public static final int encoder = 4934231;
+    public static final int motorID = 4321432;
     public static final double magnetSensorOffset = 109876.45224;
     public static final double kP = 45.907;
     public static final double kI = 45.907;
     public static final double kD = 45.907;
-    public static final int motorID = 4321432;
     public static final double maxRotations = 4776.23;
   }
 
-  public static final class CANcoderConstants {
-    public static final int CANcoder = 4934231;
+  public static final class ClimberConstants {
+    public static final int lMotorID = 0;
+    public static final int rMotorID = 0;
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double maxRot = 0;
+    public static final double minRot = 0;
+  }
+
+  public static final class IndexerConstants {
+    public static final int motorID = 0;
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kFF = 0;
+  }
+
+  public static final class IntakeConstants {
   }
 }

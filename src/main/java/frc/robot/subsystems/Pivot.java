@@ -25,7 +25,7 @@ public class Pivot extends SubsystemBase {
 
   private static PositionVoltage pivotPositionVoltage;
   private CANcoder encoder = new CANcoder(
-    Constants.CANcoderConstants.CANcoder
+    Constants.PivotConstants.encoder
   );
 
   private Swerve m_swerve;
