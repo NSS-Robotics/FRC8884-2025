@@ -63,6 +63,10 @@ public class Intake extends SubsystemBase {
         intakeMotor.setNeutralMode(NeutralModeValue.Brake);
     }
 
+    public void resetEncoders() {
+        intakeMotor.setPosition(0);
+    }
+
     public void setPivot(double position) {
         position = Math.max(0, Math.min(Constants.IntakeConstants.pivotMaxRotations, position));
 
