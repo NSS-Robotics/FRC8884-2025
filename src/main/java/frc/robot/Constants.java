@@ -123,6 +123,7 @@ public final class Constants {
 
   public static final class IndexerConstants {
     public static final int motorID = 0;
+    public static final int laserCANID = 0;
     public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;
@@ -136,6 +137,7 @@ public final class Constants {
     public static final double pivotKP = 0;
     public static final double pivotKI = 0;
     public static final double pivotKD = 0;
+    public static final double maxRot = 0;
     public static final double intakeKP = 0;
     public static final double intakeKI = 0;
     public static final double intakeKD = 0;
