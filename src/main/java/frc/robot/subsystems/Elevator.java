@@ -47,11 +47,6 @@ public class Elevator extends SubsystemBase {
         motor.setNeutralMode(NeutralModeValue.Brake);
     }
 
-
-    public void resetEncoders() {
-        encoder.setPosition(0);
-    }
-
     public void setElevator(double position) {
         position = Math.max(0, Math.min(Constants.ElevatorConstants.maxRotations, position));
 
