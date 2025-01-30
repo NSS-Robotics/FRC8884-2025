@@ -98,7 +98,7 @@ public class Elevator extends SubsystemBase {
 
         motor.getConfigurator().apply(talonFXConfig);
         motor.getConfigurator().apply(slot0Configs);
-        motor.setNeutralMode(NeutralModeValue.Brake);
+        motor.setNeutralMode(NeutralModeValue.Coast);
     }
 
     public void setElevator(double position) {

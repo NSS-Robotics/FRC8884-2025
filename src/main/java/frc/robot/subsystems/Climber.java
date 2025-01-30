@@ -75,8 +75,9 @@ public class Climber extends SubsystemBase {
     public Climber() {
         lMotor.clearStickyFaults();
         rMotor.clearStickyFaults();
-        lMotor.setNeutralMode(NeutralModeValue.Brake);
-        rMotor.setNeutralMode(NeutralModeValue.Brake);
+        // Put these in Brake mode when running for real.
+        lMotor.setNeutralMode(NeutralModeValue.Coast);
+        rMotor.setNeutralMode(NeutralModeValue.Coast);
         rMotor.setControl(leader);
 
         slot0configs.kP = Constants.ClimberConstants.kP;

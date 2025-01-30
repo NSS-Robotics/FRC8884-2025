@@ -100,7 +100,7 @@ public class Pivot extends SubsystemBase {
 
     motor.getConfigurator().apply(motorConfig);
     motor.getConfigurator().apply(slot0Configs);
-    motor.setNeutralMode(NeutralModeValue.Brake);
+    motor.setNeutralMode(NeutralModeValue.Coast);
 
     m_swerve = swerve;
   }

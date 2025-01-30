@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.measure.MutDistance;
 import edu.wpi.first.units.measure.MutLinearVelocity;
@@ -78,6 +79,7 @@ public class EndEffector extends SubsystemBase {
 
         motor.getConfigurator().apply(slot0Configs);
         motor.getConfigurator().apply(currentLimitsConfigs);
+        motor.setNeutralMode(NeutralModeValue.Coast);
     }
 
     /**

@@ -144,14 +144,14 @@ public class Intake extends SubsystemBase {
 
         pivotMotor.getConfigurator().apply(pivotMotorConfig);
         pivotMotor.getConfigurator().apply(pivotSlot0Configs);
-        pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+        pivotMotor.setNeutralMode(NeutralModeValue.Coast);
 
         intakeSlot0Configs.kP = Constants.IntakeConstants.intakeKP;
         intakeSlot0Configs.kI = Constants.IntakeConstants.intakeKI;
         intakeSlot0Configs.kD = Constants.IntakeConstants.intakeKD;
 
         intakeMotor.getConfigurator().apply(intakeSlot0Configs);
-        intakeMotor.setNeutralMode(NeutralModeValue.Brake);
+        intakeMotor.setNeutralMode(NeutralModeValue.Coast);
     }
 
     /**

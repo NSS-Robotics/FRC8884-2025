@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import static edu.wpi.first.units.Units.Meters;
@@ -81,7 +82,9 @@ public class Indexer extends SubsystemBase {
         .d(Constants.IndexerConstants.kD)
         .velocityFF(Constants.IndexerConstants.kFF);
 
-    motorConfig.smartCurrentLimit(40);
+    motorConfig
+        .smartCurrentLimit(40)
+        .idleMode(IdleMode.kCoast);
     motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     try {
