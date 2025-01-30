@@ -36,7 +36,7 @@ public class EndEffector extends SubsystemBase {
                         motor.setVoltage(voltage.in(Volts));
                     },
                     log -> {
-                        log.motor("motor")
+                        log.motor("endeffector")
                                 .voltage(
                                         m_appliedVoltage.mut_replace(
                                                 motor.get() * RobotController.getBatteryVoltage(), Volts))
