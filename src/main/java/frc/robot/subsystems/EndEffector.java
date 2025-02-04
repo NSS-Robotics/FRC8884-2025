@@ -1,5 +1,15 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+
+import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.units.measure.MutDistance;
 import edu.wpi.first.units.measure.MutLinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
@@ -8,33 +18,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.PositionVoltage;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Volts;
-
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.hardware.CANcoder;
-
-public class Elevator extends SubsystemBase {
-
-    private static TalonFX motor = new TalonFX(
-        Constants.ElevatorConstants.motorID
-    );
-
-    private static CANcoder encoder = new CANcoder(
-        Constants.ElevatorConstants.encoder
-    );
-    private static TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
-    private static Slot0Configs slot0Configs = new Slot0Configs();
-    private static PositionVoltage elevatorPositionVoltage;
+public class EndEffector extends SubsystemBase {
+    private final TalonFX motor = new TalonFX(Constants.EndEffectorConstants.motorID); // The motor in the End Effector.
+    private VelocityVoltage velocityVoltage;
+    private final Slot0Configs slot0Configs = new Slot0Configs();
+    private final CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
 
     /** START: SYSID */
     private final MutVoltage m_appliedVoltage = Volts.mutable(0);
@@ -48,7 +37,7 @@ public class Elevator extends SubsystemBase {
                         motor.setVoltage(voltage.in(Volts));
                     },
                     log -> {
-                        log.motor("elevator")
+                        log.motor("endeffector")
                                 .voltage(
                                         m_appliedVoltage.mut_replace(
                                                 motor.get() * RobotController.getBatteryVoltage(), Volts))
@@ -80,32 +69,36 @@ public class Elevator extends SubsystemBase {
 
     /* END: SYSID */
 
-    public Elevator() {
+    public EndEffector() {
+        slot0Configs.kP = Constants.EndEffectorConstants.kP;
+        slot0Configs.kI = Constants.EndEffectorConstants.kI;
+        slot0Configs.kD = Constants.EndEffectorConstants.kD;
 
-        CANcoderConfiguration CANcoderConfig = new CANcoderConfiguration();
+        currentLimitsConfigs.SupplyCurrentLimit = Constants.EndEffectorConstants.currentLimit;
+        currentLimitsConfigs.SupplyCurrentLimitEnable = true;
 
-        CANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
-        CANcoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        CANcoderConfig.MagnetSensor.MagnetOffset = 0;
-        encoder.getConfigurator().apply(CANcoderConfig);
-
-        slot0Configs.kP = Constants.ElevatorConstants.kP;
-        slot0Configs.kI = Constants.ElevatorConstants.kI;
-        slot0Configs.kD = Constants.ElevatorConstants.kD;
-
-        talonFXConfig.Feedback.FeedbackRemoteSensorID = encoder.getDeviceID();
-        talonFXConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-
-        motor.getConfigurator().apply(talonFXConfig);
         motor.getConfigurator().apply(slot0Configs);
+        motor.getConfigurator().apply(currentLimitsConfigs);
         motor.setNeutralMode(NeutralModeValue.Coast);
     }
 
-    public void setElevator(double position) {
-        position = Math.max(0, Math.min(Constants.ElevatorConstants.maxRotations, position));
+    /**
+     * Sends the correct amount of voltage to the motor to move it at the given
+     * velocity.
+     * 
+     * @param velocity The velocity at which to spin the motor.
+     */
+    public void setEndEffector(double velocity) {
+        velocity = Math.max(0, Math.min(Constants.ElevatorConstants.maxRotations, velocity));
+        velocityVoltage = new VelocityVoltage(velocity);
 
-        elevatorPositionVoltage = new PositionVoltage(position);
+        motor.setControl(velocityVoltage);
+    }
 
-        motor.setControl(elevatorPositionVoltage);
+    /**
+     * Resets the motor encoder positions to 0.
+     */
+    public void resetEncoders() {
+        motor.setPosition(0);
     }
 }

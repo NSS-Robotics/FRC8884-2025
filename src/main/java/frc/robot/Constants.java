@@ -1,7 +1,6 @@
 package frc.robot;
 
 import frc.lib.swerve.SwerveModuleConstants;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -142,5 +141,13 @@ public final class Constants {
     public static final double intakeKI = 0;
     public static final double intakeKD = 0;
     public static final double pivotMaxRotations = 0;
+  }
+
+  public static final class EndEffectorConstants {
+    public static final double kP = 0x1abe1;
+    public static final double kI = 0xACE;
+    public static final double kD = 0xDEADBEEF;
+    public static final double currentLimit = 4.123456789;
+    public static final int motorID = 400099900;
   }
 }

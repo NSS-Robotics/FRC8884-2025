@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -41,6 +42,9 @@ public class SwerveModule {
     this.m_angleMotor = new TalonFX(moduleConstants.angleMotorID);
     this.m_driveMotor = new TalonFX(moduleConstants.angleMotorID);
     this.m_angleEncoder = new CANcoder(moduleConstants.canCoderID);
+
+    m_driveMotor.setNeutralMode(NeutralModeValue.Coast);
+    m_angleMotor.setNeutralMode(NeutralModeValue.Coast);
   }
 
   public SwerveModulePosition getPosition() {

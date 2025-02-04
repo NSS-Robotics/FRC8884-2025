@@ -4,31 +4,87 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
 import com.revrobotics.spark.SparkBase.ControlType;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.ConfigurationFailedException;
+import edu.wpi.first.units.measure.MutDistance;
+import edu.wpi.first.units.measure.MutLinearVelocity;
+import edu.wpi.first.units.measure.MutVoltage;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 
 public class Indexer extends SubsystemBase {
-  private final SparkMax motor;
+  private final SparkMax motor = new SparkMax(Constants.IndexerConstants.motorID, MotorType.kBrushless);
   private final SparkMaxConfig motorConfig;
   private final LaserCan lasercan;
 
+  /** START: SYSID */
+  private final MutVoltage m_appliedVoltage = Volts.mutable(0);
+  private final MutDistance m_distance = Meters.mutable(0);
+  private final MutLinearVelocity m_velocity = MetersPerSecond.mutable(0);
+
+  private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(),
+      new SysIdRoutine.Mechanism(
+          voltage -> {
+            motor.setVoltage(voltage.in(Volts));
+          },
+          log -> {
+            log.motor("indexer")
+                .voltage(
+                    m_appliedVoltage.mut_replace(
+                        motor.get() * RobotController.getBatteryVoltage(), Volts))
+                .linearPosition(m_distance.mut_replace(motor.getEncoder().getPosition(), Meters))
+                .linearVelocity(
+                    m_velocity.mut_replace(motor.getEncoder().getVelocity(),
+                        MetersPerSecond));
+          },
+          this));
+
+  /**
+   * Returns a command that will execute a quasistatic test in the given
+   * direction.
+   *
+   * @param direction The direction (forward or reverse) to run the test in
+   */
+  public Command sysIdQuasistatic(SysIdRoutine.Direction dir) {
+    return m_sysIdRoutine.quasistatic(dir);
+  }
+
+  /**
+   * Returns a command that will execute a dynamic test in the given direction.
+   * 
+   * @param direction The direction (forward or reverse) to run the test in
+   */
+  public Command sysIdDynamic(SysIdRoutine.Direction dir) {
+    return m_sysIdRoutine.dynamic(dir);
+  }
+
+  /* END: SYSID */
+
   public Indexer() {
-    motor = new SparkMax(Constants.IndexerConstants.motorID, MotorType.kBrushless);
     motorConfig = new SparkMaxConfig();
     lasercan = new LaserCan(Constants.IndexerConstants.laserCANID);
 
     motorConfig.closedLoop
-      .p(Constants.IndexerConstants.kP)
-      .i(Constants.IndexerConstants.kI)
-      .d(Constants.IndexerConstants.kD)
-      .velocityFF(Constants.IndexerConstants.kFF);
+        .p(Constants.IndexerConstants.kP)
+        .i(Constants.IndexerConstants.kI)
+        .d(Constants.IndexerConstants.kD)
+        .velocityFF(Constants.IndexerConstants.kFF);
 
-    motorConfig.smartCurrentLimit(40);
+    motorConfig
+        .smartCurrentLimit(40)
+        .idleMode(IdleMode.kCoast);
     motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     try {
