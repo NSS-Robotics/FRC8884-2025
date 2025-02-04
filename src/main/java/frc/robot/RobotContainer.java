@@ -7,6 +7,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Swerve;
 
@@ -29,6 +30,8 @@ public class RobotContainer {
   private final EndEffector m_endEffector = new EndEffector();
   private final Indexer m_indexer = new Indexer();
   private final Pivot m_pivot = new Pivot(m_swerve);
+  private final Limelight m_limelightReef = new Limelight("Reef", m_swerve.isRed());
+  private final Limelight m_limelightBarge = new Limelight("Barge", m_swerve.isRed());
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
