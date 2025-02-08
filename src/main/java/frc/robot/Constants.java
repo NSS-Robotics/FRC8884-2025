@@ -149,5 +149,7 @@ public final class Constants {
     public static final double kD = 0xDEADBEEF;
     public static final double currentLimit = 4.123456789;
     public static final int motorID = 400099900;
+    public static final int laserCANID = 0;
+
   }
 }
