@@ -14,6 +14,8 @@ import edu.wpi.first.units.measure.MutDistance;
 import edu.wpi.first.units.measure.MutLinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -23,6 +25,8 @@ public class Climber extends SubsystemBase {
 
     private static TalonFX lMotor = new TalonFX(Constants.ClimberConstants.lMotorID);
     private static TalonFX rMotor = new TalonFX(Constants.ClimberConstants.rMotorID);
+    private static Servo lServo = new Servo(Constants.ClimberConstants.lChannel);
+    private static Servo rServo = new Servo(Constants.ClimberConstants.rChannel);
     private static Follower leader = new Follower(Constants.ClimberConstants.lMotorID, true);
     private static Slot0Configs slot0configs = new Slot0Configs();
     private static PositionVoltage positionPID;
@@ -97,4 +101,20 @@ public class Climber extends SubsystemBase {
         positionPID = new PositionVoltage(position);
         lMotor.setControl(positionPID);
     }
-}
+
+    public void resetServos() {
+        lServo.setAngle(0);
+        rServo.setAngle(0);
+    }
+
+    public void setServos(double degrees) {
+        lServo.setAngle(degrees);
+        rServo.setAngle(degrees);
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("lServo", lServo.getAngle());
+        SmartDashboard.putNumber("rServo", rServo.getAngle());
+    }
+}   
