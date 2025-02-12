@@ -1,7 +1,6 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.EndEffector;
@@ -10,7 +9,8 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Swerve;
-
+import frc.robot.commands.*;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -37,10 +37,24 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+  private final int translationAxis = XboxController.Axis.kRightY.value;
+  private final int strafeAxis = XboxController.Axis.kRightX.value;
+  private final int rotationAxis = XboxController.Axis.kLeftX.value;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    m_swerve.setDefaultCommand(
+      new TeleopSwerve(
+          m_swerve,
+          () -> -m_driverController.getRawAxis(translationAxis),
+          () -> -m_driverController.getRawAxis(strafeAxis),
+          () -> -m_driverController.getRawAxis(rotationAxis) * 0.75,
+          () -> false
+      )
+  );
   }
 
   /**
@@ -55,10 +69,11 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.a().whileTrue(m_climber.sysIdDynamic(Direction.kForward));
-    m_driverController.b().whileTrue(m_climber.sysIdDynamic(Direction.kReverse));
-    m_driverController.x().whileTrue(m_climber.sysIdQuasistatic(Direction.kForward));
-    m_driverController.y().whileTrue(m_climber.sysIdQuasistatic(Direction.kForward));
+    
+    // m_driverController.a().whileTrue(m_climber.sysIdDynamic(Direction.kForward));
+    // m_driverController.b().whileTrue(m_climber.sysIdDynamic(Direction.kReverse));
+    // m_driverController.x().whileTrue(m_climber.sysIdQuasistatic(Direction.kForward));
+    // m_driverController.y().whileTrue(m_climber.sysIdQuasistatic(Direction.kForward));
 
     // m_driverController.a().whileTrue(m_elevator.sysIdDynamic(Direction.kForward));
     // m_driverController.b().whileTrue(m_elevator.sysIdDynamic(Direction.kReverse));
@@ -70,10 +85,10 @@ public class RobotContainer {
     // m_driverController.x().whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
     // m_driverController.y().whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
 
-    // m_driverController.a().whileTrue(m_indexer.sysIdDynamic(Direction.kForward));
-    // m_driverController.b().whileTrue(m_indexer.sysIdDynamic(Direction.kReverse));
-    // m_driverController.x().whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
-    // m_driverController.y().whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
+    m_driverController.a().whileTrue(m_indexer.sysIdDynamic(Direction.kForward));
+    m_driverController.b().whileTrue(m_indexer.sysIdDynamic(Direction.kReverse));
+    m_driverController.x().whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
+    m_driverController.y().whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
 
     // m_driverController.a().whileTrue(m_intake.sysIdDynamic(Direction.kForward));
     // m_driverController.b().whileTrue(m_intake.sysIdDynamic(Direction.kReverse));

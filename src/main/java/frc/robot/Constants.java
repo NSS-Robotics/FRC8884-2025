@@ -27,13 +27,15 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  public static final double stickDeadband = 0.1;
+
   /** Swerve constants. */
   public static class Swerve {
     public static final int GyroCanID = 13;
 
-    public static final double driveKA = 0xcafe;
-    public static final double driveKS = 0xcafe;
-    public static final double driveKV = 0xface;
+    public static final double driveKA = 0.32;
+    public static final double driveKS = 1.51;
+    public static final double driveKV = 0.27;
 
     public static final double driveKP = 0.1;
     public static final double driveKI = 0;
@@ -48,7 +50,7 @@ public final class Constants {
         1,
         2,
         3,
-        Rotation2d.fromDegrees(0xAce) // of spades
+        Rotation2d.fromDegrees(37.265625) // of spades
     );
 
     /** Module 1 constants. Front right. */
@@ -56,7 +58,7 @@ public final class Constants {
         4,
         5,
         6,
-        Rotation2d.fromDegrees(0xBA7713) // battle
+        Rotation2d.fromDegrees(37.265625) // battle
     );
 
     /** Module 2 constants. Back left. */
@@ -64,20 +66,20 @@ public final class Constants {
         10,
         11,
         12,
-        Rotation2d.fromDegrees(0xFEED));
+        Rotation2d.fromDegrees(-85.95703125));
 
     /** Module 3 constants. Back right. */
     public static final SwerveModuleConstants Module3 = new SwerveModuleConstants(
         7,
         8,
         9,
-        Rotation2d.fromDegrees(0x0FF1CE));
+        Rotation2d.fromDegrees(-11.513671875));
 
     // By the way, all the hex numbers are from someone's blog except a few...
     // https://nedbatchelder.com/text/hexwords.html
 
-    public static final double wheelBase = Units.inchesToMeters(27.5);
-    public static final double trackWidth = Units.inchesToMeters(21);
+    public static final double wheelBase = Units.inchesToMeters(26.5);
+    public static final double trackWidth = Units.inchesToMeters(20.5);
 
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
@@ -87,6 +89,7 @@ public final class Constants {
 
     public static final double wheelCircumference = Units.inchesToMeters(4.0);
     public static final double maxSpeed = 4.5;
+    public static final double maxAngularVelocity = 10.0;
   }
 
   public static class ElevatorConstants {

@@ -83,8 +83,6 @@ public class Elevator extends SubsystemBase {
     public Elevator() {
 
         CANcoderConfiguration CANcoderConfig = new CANcoderConfiguration();
-
-        CANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
         CANcoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         CANcoderConfig.MagnetSensor.MagnetOffset = 0;
         encoder.getConfigurator().apply(CANcoderConfig);
