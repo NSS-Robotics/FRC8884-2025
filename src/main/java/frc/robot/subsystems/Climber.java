@@ -97,7 +97,7 @@ public class Climber extends SubsystemBase {
     }
 
     public void setClimber(double position) {
-        position = Math.max(0, Math.min(Constants.ElevatorConstants.maxRotations, position));
+        position = Math.max(0, Math.min(Constants.ClimberConstants.maxRotations, position));
         positionPID = new PositionVoltage(position);
         lMotor.setControl(positionPID);
     }

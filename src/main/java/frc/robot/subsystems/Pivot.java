@@ -132,13 +132,13 @@ public class Pivot extends SubsystemBase {
   }
 
   public void printPivotData() {
-    System.out.println("Distance to speaker: " + getDistance());
-    System.out.println("Pivot position     : " + getEncoderPosition());
-    System.out.println("Shoot position     : " + getRotations());
-    System.out.println("Difference         : " + (getRotations() - getEncoderPosition()));
+    System.out.println("Distance to reef: " + getDistance());
+    System.out.println("Pivot position  : " + getEncoderPosition());
+    System.out.println("Shoot position  : " + getRotations());
+    System.out.println("Difference      : " + (getRotations() - getEncoderPosition()));
   }
 
-  public void setyOffset(double y) {
+  public void setYOffset(double y) {
     yOffset = y;
   }
 
@@ -158,6 +158,6 @@ public class Pivot extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Y Offset", yOffset);
-    SmartDashboard.putNumber("Distance to speaker", getDistance());
+    SmartDashboard.putNumber("Distance to reef", getDistance());
   }
 }
