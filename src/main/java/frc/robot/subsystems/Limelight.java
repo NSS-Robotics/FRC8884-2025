@@ -19,9 +19,8 @@ public class Limelight extends SubsystemBase {
 
     public Pose2d botPose = new Pose2d(0, 0, new Rotation2d());
 
-    public Limelight(String name, boolean isRed) {
+    public Limelight(String name) {
         this.name = "limelight-" + name;
-        this.isRed = isRed;
         table = NetworkTableInstance.getDefault().getTable(this.name);
     }
 

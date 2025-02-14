@@ -1,6 +1,6 @@
 package frc.robot;
 
-import frc.lib.swerve.SwerveModuleConstants;
+import frc.lib.util.SwerveModuleConstants;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -39,7 +39,7 @@ public final class Constants {
     public static final int GyroCanID = 13;
 
     public static final boolean invertGyro = true;
-        public static final double angleKP = 0.3;
+        public static final double angleKP = 15;
         public static final double angleKI = 0.0;
         public static final double angleKD = 0.0;
 
