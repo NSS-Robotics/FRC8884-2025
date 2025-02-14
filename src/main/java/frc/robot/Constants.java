@@ -39,11 +39,7 @@ public final class Constants {
     public static final int GyroCanID = 13;
 
     public static final boolean invertGyro = true;
-
-        /** (6.75 : 1) */
-        public static final double L2 = (6.75 / 1.0);
-
-        public static final double angleKP = 0.10;
+        public static final double angleKP = 0.3;
         public static final double angleKI = 0.0;
         public static final double angleKD = 0.0;
 
