@@ -48,11 +48,7 @@ public class Swerve extends SubsystemBase {
         new SwerveModule(3, Constants.Swerve.Module3), // Back right.
     };
 
-    odometry = new SwerveDriveOdometry(
-        Constants.Swerve.kinematics,
-        getGyroYaw(),
-        getModulePositions(),
-        new Pose2d(0, 0, new Rotation2d()));
+    odometry = createOdometry(new Pose2d(0,0, new Rotation2d()));
     m_pose = odometry.update(getGyroYaw(), getModulePositions());
   }
 
@@ -112,6 +108,10 @@ public class Swerve extends SubsystemBase {
   }
 
   public void drivee(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+    SmartDashboard.putNumber("translation getx", translation.getX());
+    SmartDashboard.putNumber("translation gety", translation.getY());
+    SmartDashboard.putNumber("rotation in drive", rotation);
+    SmartDashboard.putBoolean("isopenloop", isOpenLoop);
     SwerveModuleState[] moduleStates = Constants.Swerve.kinematics.toSwerveModuleStates(
       fieldRelative
       ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -140,7 +140,7 @@ public class Swerve extends SubsystemBase {
 
   public void setHeading(Rotation2d heading) {
     odometry.resetPosition(
-      getGyroYaw(),
+      gyro.getRotation2d(),
       getModulePositions(),
       new Pose2d(getPose().getTranslation(), heading)
     );

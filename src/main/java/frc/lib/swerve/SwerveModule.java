@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.Conversions;
+import frc.robot.CTREConfigs;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -23,6 +24,7 @@ public class SwerveModule {
   private final TalonFX m_angleMotor;
   private final TalonFX m_driveMotor;
   private final CANcoder m_angleEncoder;
+  private final CTREConfigs configs = new CTREConfigs();
 
   private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(
     Constants.Swerve.driveKS,
@@ -39,12 +41,20 @@ public class SwerveModule {
   public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants) {
     this.moduleNumber = moduleNumber;
     this.angleOffset = moduleConstants.angleOffset;
-    this.m_angleMotor = new TalonFX(moduleConstants.angleMotorID);
-    this.m_driveMotor = new TalonFX(moduleConstants.angleMotorID);
-    this.m_angleEncoder = new CANcoder(moduleConstants.canCoderID);
+    m_angleMotor = new TalonFX(moduleConstants.angleMotorID);
+    m_angleMotor.getConfigurator().apply(configs.swerveAngleFXConfig);
+    m_driveMotor = new TalonFX(moduleConstants.angleMotorID);
+    m_driveMotor.getConfigurator().apply(configs.swerveDriveFXConfig);
+    m_angleEncoder = new CANcoder(moduleConstants.canCoderID);
+    m_angleEncoder.getConfigurator().apply(configs.swerveCANcoderConfig);
 
-    m_driveMotor.setNeutralMode(NeutralModeValue.Coast);
+    m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
     m_angleMotor.setNeutralMode(NeutralModeValue.Coast);
+
+    m_driveMotor.getConfigurator().setPosition(0);
+
+    resetToAbsolute();
+
   }
 
   public SwerveModulePosition getPosition() {
@@ -58,8 +68,9 @@ public class SwerveModule {
   }
 
   public void setState(SwerveModuleState desiredState, boolean isOpenLoop) {
-    desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
+    desiredState.optimize(getState().angle);
     m_angleMotor.setControl(anglePosition.withPosition(desiredState.angle.getRotations()));
+    setSpeed(desiredState, isOpenLoop);
   }
 
   public SwerveModuleState getState() {
