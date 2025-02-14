@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.lib.swerve.SwerveModule;
 
 import java.util.Optional;
 
@@ -43,7 +42,7 @@ public class Swerve extends SubsystemBase {
         .publish();
 
     public Swerve(Limelight limelight) {
-        gyro = new Canandgyro(14);
+        gyro = new Canandgyro(Constants.Swerve.GyroCanID);
         gyro.resetFactoryDefaults(0.35);
         gyro.setYaw(0);
         CanandEventLoop.getInstance();
@@ -229,7 +228,7 @@ public class Swerve extends SubsystemBase {
         return alliance.isPresent() && alliance.get() == Alliance.Red;
     }
 
-    public double[] getSpeakerDistances() {
+    public double[] getReefDistances() {
         Pose2d pose = getLimelightBotPose();
 
         double x =
@@ -279,7 +278,7 @@ public class Swerve extends SubsystemBase {
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber(
                 "Mod " + mod.moduleNumber + " CANcoder",
-                mod.getCANCoder().getDegrees()
+                mod.getCANcoder().getDegrees()
             );
             SmartDashboard.putNumber(
                 "Mod " + mod.moduleNumber + " Angle",
