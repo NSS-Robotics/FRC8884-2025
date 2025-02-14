@@ -24,14 +24,14 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Swerve m_swerve = new Swerve();
   private final Climber m_climber = new Climber();
   private final Elevator m_elevator = new Elevator();
   private final EndEffector m_endEffector = new EndEffector();
   private final Indexer m_indexer = new Indexer();
+  private final Limelight m_limelightLow = new Limelight("low");
+  private final Limelight m_limelightHigh = new Limelight("high");
+  private final Swerve m_swerve = new Swerve(m_limelightHigh);
   private final Pivot m_pivot = new Pivot(m_swerve);
-  private final Limelight m_limelightLow = new Limelight("low", m_swerve.isRed());
-  private final Limelight m_limelightHigh = new Limelight("high", m_swerve.isRed());
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =

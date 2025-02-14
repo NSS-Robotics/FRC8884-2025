@@ -119,23 +119,12 @@ public class Pivot extends SubsystemBase {
     motor.setControl(pivotPositionVoltage);
   }
 
-  public double getRotations() {
-    return 0.146 * Math.pow(getDistance(), -0.586) + yOffset;
-  }
-
   public double getEncoderPosition() {
     return encoder.getPosition().getValueAsDouble();
   }
 
   public double getEncoderVelocity() {
     return encoder.getPosition().getValueAsDouble();
-  }
-
-  public void printPivotData() {
-    System.out.println("Distance to reef: " + getDistance());
-    System.out.println("Pivot position  : " + getEncoderPosition());
-    System.out.println("Shoot position  : " + getRotations());
-    System.out.println("Difference      : " + (getRotations() - getEncoderPosition()));
   }
 
   public void setYOffset(double y) {
@@ -150,14 +139,8 @@ public class Pivot extends SubsystemBase {
     yOffset += amount;
   }
 
-  private double getDistance() {
-    double[] dist = m_swerve.getReefDistances();
-    return Math.sqrt(dist[0] * dist[0] + dist[1] * dist[1]);
-  }
-
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Y Offset", yOffset);
-    SmartDashboard.putNumber("Distance to reef", getDistance());
   }
 }
