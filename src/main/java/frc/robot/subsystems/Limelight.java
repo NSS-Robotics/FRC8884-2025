@@ -62,6 +62,11 @@ public class Limelight extends SubsystemBase {
         return tx;
     }
 
+    public double gettv() {
+        updateLimelightTracking();
+        return tv;
+    }
+
     @Override
     public void periodic(){
         updateLimelightTracking();

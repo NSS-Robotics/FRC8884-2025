@@ -42,11 +42,11 @@ public class SwerveModule {
     this.moduleNumber = moduleNumber;
     this.angleOffset = moduleConstants.angleOffset;
     m_angleMotor = new TalonFX(moduleConstants.angleMotorID);
-    m_angleMotor.getConfigurator().apply(configs.swerveAngleFXConfig);
+    // m_angleMotor.getConfigurator().apply(configs.swerveAngleFXConfig);
     m_driveMotor = new TalonFX(moduleConstants.angleMotorID);
-    m_driveMotor.getConfigurator().apply(configs.swerveDriveFXConfig);
+    // m_driveMotor.getConfigurator().apply(configs.swerveDriveFXConfig);
     m_angleEncoder = new CANcoder(moduleConstants.canCoderID);
-    m_angleEncoder.getConfigurator().apply(configs.swerveCANcoderConfig);
+    // m_angleEncoder.getConfigurator().apply(configs.swerveCANcoderConfig);
 
     m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
     m_angleMotor.setNeutralMode(NeutralModeValue.Coast);
@@ -67,11 +67,16 @@ public class SwerveModule {
     );
   }
 
-  public void setState(SwerveModuleState desiredState, boolean isOpenLoop) {
-    desiredState.optimize(getState().angle);
-    m_angleMotor.setControl(anglePosition.withPosition(desiredState.angle.getRotations()));
-    setSpeed(desiredState, isOpenLoop);
-  }
+  public void setDesiredState(
+        SwerveModuleState desiredState,
+        boolean isOpenLoop
+    ) {
+        desiredState.optimize(getState().angle);
+        m_angleMotor.setControl(
+            anglePosition.withPosition(desiredState.angle.getRotations())
+        );
+        setSpeed(desiredState, isOpenLoop);
+    }
 
   public SwerveModuleState getState() {
     return new SwerveModuleState(
@@ -83,19 +88,22 @@ public class SwerveModule {
     );
   }
 
-  public void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
+  private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
     if (isOpenLoop) {
-      driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
-      m_driveMotor.setControl(driveDutyCycle);
+        driveDutyCycle.Output =
+            desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
+        m_driveMotor.setControl(driveDutyCycle);
     } else {
-      driveVelocity.Velocity = Conversions.mpsToRPS(
-        desiredState.speedMetersPerSecond,
-        Constants.Swerve.wheelCircumference
-      );
-      driveVelocity.FeedForward = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
-      m_driveMotor.setControl(driveVelocity);
+        driveVelocity.Velocity =
+            Conversions.mpsToRPS(
+                desiredState.speedMetersPerSecond,
+                Constants.Swerve.wheelCircumference
+            );
+        driveVelocity.FeedForward =
+            driveFeedForward.calculate(desiredState.speedMetersPerSecond);
+        m_driveMotor.setControl(driveVelocity);
     }
-  }
+}
   
   public void resetToAbsolute() {
     m_angleMotor.setPosition(
