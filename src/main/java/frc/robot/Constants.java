@@ -112,7 +112,7 @@ public final class Constants {
         1,
         2,
         3,
-        Rotation2d.fromDegrees(37.265625)
+        Rotation2d.fromDegrees(37.08984375)
     );
 
     /** Module 1 constants. Front right. */
@@ -120,7 +120,7 @@ public final class Constants {
         4,
         5,
         6,
-        Rotation2d.fromDegrees(37.265625)
+        Rotation2d.fromDegrees(-82.08984375)
     );
 
     /** Module 2 constants. Back left. */
@@ -128,14 +128,14 @@ public final class Constants {
         10,
         11,
         12,
-        Rotation2d.fromDegrees(-85.95703125));
+        Rotation2d.fromDegrees(94.21875));
 
     /** Module 3 constants. Back right. */
     public static final SwerveModuleConstants Module3 = new SwerveModuleConstants(
         7,
         8,
         9,
-        Rotation2d.fromDegrees(-11.513671875));
+        Rotation2d.fromDegrees(168.486328125));
 
     // By the way, all the hex numbers are from someone's blog except a few...
     // https://nedbatchelder.com/text/hexwords.html

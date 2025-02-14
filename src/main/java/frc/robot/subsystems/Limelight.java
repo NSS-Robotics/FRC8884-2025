@@ -32,7 +32,7 @@ public class Limelight extends SubsystemBase {
         tv = table.getEntry("tv").getDouble(0);
 
         double[] pos = table
-            .getEntry("botpose_wpi" + (isRed ? "red" : "blue")) 
+            .getEntry("botpose_wpiblue")
             .getDoubleArray(new double[6]);
 
         if (pos.length < 6) {
@@ -41,8 +41,7 @@ public class Limelight extends SubsystemBase {
 
         double rz = pos[5];
 
-        botPose = 
-            new Pose2d(pos[0], pos[1], new Rotation2d(Math.toRadians(rz)));
+        botPose = new Pose2d(pos[0], pos[1], new Rotation2d(Math.toRadians(rz)));
 
         String[] names = {
             "pos x",
