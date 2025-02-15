@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.units.measure.MutDistance;
-import edu.wpi.first.units.measure.MutLinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
+import edu.wpi.first.units.measure.MutAngle;
+import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,8 +15,8 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -38,8 +38,8 @@ public class Elevator extends SubsystemBase {
 
     /** START: SYSID */
     private final MutVoltage m_appliedVoltage = Volts.mutable(0);
-    private final MutDistance m_distance = Meters.mutable(0);
-    private final MutLinearVelocity m_velocity = MetersPerSecond.mutable(0);
+    private final MutAngle m_angle = Rotations.mutable(0);
+    private final MutAngularVelocity m_angularVelocity = RotationsPerSecond.mutable(0);
 
     private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(),
@@ -52,10 +52,10 @@ public class Elevator extends SubsystemBase {
                                 .voltage(
                                         m_appliedVoltage.mut_replace(
                                                 motor.get() * RobotController.getBatteryVoltage(), Volts))
-                                .linearPosition(m_distance.mut_replace(motor.getPosition().getValueAsDouble(), Meters))
-                                .linearVelocity(
-                                        m_velocity.mut_replace(motor.getVelocity().getValueAsDouble(),
-                                                MetersPerSecond));
+                                .angularPosition(m_angle.mut_replace(encoder.getPosition().getValueAsDouble(), Rotations))
+                                .angularVelocity(
+                                        m_angularVelocity.mut_replace(encoder.getVelocity().getValueAsDouble(),
+                                                RotationsPerSecond));
                     },
                     this));
 

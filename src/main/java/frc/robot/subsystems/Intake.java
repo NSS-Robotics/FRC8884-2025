@@ -1,7 +1,8 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.units.measure.MutDistance;
-import edu.wpi.first.units.measure.MutLinearVelocity;
+
+import edu.wpi.first.units.measure.MutAngle;
+import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,9 +17,10 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 
-import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Volts;
-import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -35,12 +37,12 @@ public class Intake extends SubsystemBase {
             Constants.IntakeConstants.encoderID);
 
     /** START: SYSID */
-    private final MutVoltage m_appliedVoltage = Volts.mutable(0);
-    private final MutDistance m_distance = Meters.mutable(0);
-    private final MutLinearVelocity m_velocity = MetersPerSecond.mutable(0);
+    private final MutVoltage m_intakeAppliedVoltage = Volts.mutable(0);
+    private final MutAngle m_intakeAngle = Rotations.mutable(0);
+    private final MutAngularVelocity m_intakeAngularVelocity = RotationsPerSecond.mutable(0);
     private final MutVoltage m_pivotAppliedVoltage = Volts.mutable(0);
-    private final MutDistance m_pivotDistance = Meters.mutable(0);
-    private final MutLinearVelocity m_pivotVelocity = MetersPerSecond.mutable(0);
+    private final MutAngle m_pivotAngle = Rotations.mutable(0);
+    private final MutAngularVelocity m_pivotAngularVelocity = RotationsPerSecond.mutable(0);
 
     private final SysIdRoutine m_intakeSysIdRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(),
@@ -51,13 +53,13 @@ public class Intake extends SubsystemBase {
                     log -> {
                         log.motor("intake")
                                 .voltage(
-                                        m_appliedVoltage.mut_replace(
+                                        m_intakeAppliedVoltage.mut_replace(
                                                 intakeMotor.get() * RobotController.getBatteryVoltage(), Volts))
-                                .linearPosition(
-                                        m_distance.mut_replace(intakeMotor.getPosition().getValueAsDouble(), Meters))
-                                .linearVelocity(
-                                        m_velocity.mut_replace(intakeMotor.getVelocity().getValueAsDouble(),
-                                                MetersPerSecond));
+                                .angularPosition(
+                                        m_intakeAngle.mut_replace(intakeMotor.getPosition().getValueAsDouble(), Rotations))
+                                .angularVelocity(
+                                        m_intakeAngularVelocity.mut_replace(intakeMotor.getVelocity().getValueAsDouble(),
+                                                RotationsPerSecond));
                     },
                     this));
 
@@ -72,12 +74,11 @@ public class Intake extends SubsystemBase {
                                 .voltage(
                                         m_pivotAppliedVoltage.mut_replace(
                                                 pivotMotor.get() * RobotController.getBatteryVoltage(), Volts))
-                                .linearPosition(
-                                        m_pivotDistance.mut_replace(pivotMotor.getPosition().getValueAsDouble(),
-                                                Meters))
-                                .linearVelocity(
-                                        m_pivotVelocity.mut_replace(pivotMotor.getVelocity().getValueAsDouble(),
-                                                MetersPerSecond));
+                                .angularPosition(
+                                        m_pivotAngle.mut_replace(pivotEncoder.getPosition().getValueAsDouble(), Rotations))
+                                .angularVelocity(
+                                        m_pivotAngularVelocity.mut_replace(pivotMotor.getVelocity().getValueAsDouble(),
+                                                RotationsPerSecond));
                     },
                     this));
 
@@ -144,7 +145,7 @@ public class Intake extends SubsystemBase {
 
         pivotMotor.getConfigurator().apply(pivotMotorConfig);
         pivotMotor.getConfigurator().apply(pivotSlot0Configs);
-        pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+        pivotMotor.setNeutralMode(NeutralModeValue.Coast);
 
         intakeSlot0Configs.kP = Constants.IntakeConstants.intakeKP;
         intakeSlot0Configs.kI = Constants.IntakeConstants.intakeKI;

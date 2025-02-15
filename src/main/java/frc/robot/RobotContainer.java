@@ -46,15 +46,15 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
 
-    m_swerve.setDefaultCommand(
-      new TeleopSwerve(
-          m_swerve,
-          () -> m_driverController.getRawAxis(translationAxis),
-          () -> m_driverController.getRawAxis(strafeAxis),
-          () -> -m_driverController.getRawAxis(rotationAxis) * 0.75,
-          () -> false
-      )
-    );
+    // m_swerve.setDefaultCommand(
+    //   new TeleopSwerve(
+    //       m_swerve,
+    //       () -> m_driverController.getRawAxis(translationAxis),
+    //       () -> m_driverController.getRawAxis(strafeAxis),
+    //       () -> -m_driverController.getRawAxis(rotationAxis) * 0.75,
+    //       () -> false
+    //   )
+    // );
     
     configureBindings();
   }
@@ -82,15 +82,15 @@ public class RobotContainer {
     // m_driverController.x().whileTrue(m_elevator.sysIdQuasistatic(Direction.kForward));
     // m_driverController.y().whileTrue(m_elevator.sysIdQuasistatic(Direction.kForward));
 
-    // m_driverController.a().whileTrue(m_endEffector.sysIdDynamic(Direction.kForward));
-    // m_driverController.b().whileTrue(m_endEffector.sysIdDynamic(Direction.kReverse));
-    // m_driverController.x().whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
-    // m_driverController.y().whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
+    m_driverController.a().whileTrue(m_endEffector.sysIdDynamic(Direction.kForward));
+    m_driverController.b().whileTrue(m_endEffector.sysIdDynamic(Direction.kReverse));
+    m_driverController.x().whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
+    m_driverController.y().whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
 
-    m_driverController.a().whileTrue(m_indexer.sysIdDynamic(Direction.kForward));
-    m_driverController.b().whileTrue(m_indexer.sysIdDynamic(Direction.kReverse));
-    m_driverController.x().whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
-    m_driverController.y().whileTrue(new InstantCommand(m_swerve::zeroGyro));
+    // m_driverController.a().whileTrue(m_indexer.sysIdDynamic(Direction.kForward));
+    // m_driverController.b().whileTrue(m_indexer.sysIdDynamic(Direction.kReverse));
+    // m_driverController.x().whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
+    // m_driverController.y().whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
     // m_driverController.a().whileTrue(m_intake.sysIdDynamic(Direction.kForward));
     // m_driverController.b().whileTrue(m_intake.sysIdDynamic(Direction.kReverse));
