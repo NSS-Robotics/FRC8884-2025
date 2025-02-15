@@ -12,6 +12,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -44,17 +45,18 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    configureBindings();
 
     m_swerve.setDefaultCommand(
       new TeleopSwerve(
           m_swerve,
-          () -> -m_driverController.getRawAxis(translationAxis),
-          () -> -m_driverController.getRawAxis(strafeAxis),
+          () -> m_driverController.getRawAxis(translationAxis),
+          () -> m_driverController.getRawAxis(strafeAxis),
           () -> -m_driverController.getRawAxis(rotationAxis) * 0.75,
           () -> false
       )
     );
+    
+    configureBindings();
   }
 
   /**
@@ -88,7 +90,7 @@ public class RobotContainer {
     m_driverController.a().whileTrue(m_indexer.sysIdDynamic(Direction.kForward));
     m_driverController.b().whileTrue(m_indexer.sysIdDynamic(Direction.kReverse));
     m_driverController.x().whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
-    m_driverController.y().whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
+    m_driverController.y().whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
     // m_driverController.a().whileTrue(m_intake.sysIdDynamic(Direction.kForward));
     // m_driverController.b().whileTrue(m_intake.sysIdDynamic(Direction.kReverse));

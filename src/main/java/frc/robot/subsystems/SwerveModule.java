@@ -29,7 +29,7 @@ public class SwerveModule {
         Constants.Swerve.driveKA
     );
 
-    private CTREConfigs configs = new CTREConfigs();
+    private final CTREConfigs ctreConfigs = new CTREConfigs();
 
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
@@ -47,16 +47,16 @@ public class SwerveModule {
 
         /* Angle Encoder Config */
         angleEncoder = new CANcoder(moduleConstants.cancoderID);
-        angleEncoder.getConfigurator().apply(configs.swerveCANcoderConfig);
+        angleEncoder.getConfigurator().apply(ctreConfigs.swerveCANcoderConfig);
 
         /* Angle Motor Config */
         mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
-        mAngleMotor.getConfigurator().apply(configs.swerveAngleFXConfig);
+        mAngleMotor.getConfigurator().apply(ctreConfigs.swerveAngleFXConfig);
         resetToAbsolute();
 
         /* Drive Motor Config */
         mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
-        mDriveMotor.getConfigurator().apply(configs.swerveDriveFXConfig);
+        mDriveMotor.getConfigurator().apply(ctreConfigs.swerveDriveFXConfig);
         mDriveMotor.getConfigurator().setPosition(0.0);
     }
 
@@ -64,7 +64,8 @@ public class SwerveModule {
         SwerveModuleState desiredState,
         boolean isOpenLoop
     ) {
-        desiredState.optimize(getState().angle);
+        desiredState =
+            SwerveModuleState.optimize(desiredState, getState().angle);
         mAngleMotor.setControl(
             anglePosition.withPosition(desiredState.angle.getRotations())
         );

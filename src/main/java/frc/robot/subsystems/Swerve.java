@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import java.util.Optional;
-
 import com.reduxrobotics.canand.CanandEventLoop;
 import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 
@@ -42,17 +41,17 @@ public class Swerve extends SubsystemBase {
         .publish();
 
     public Swerve(Limelight limelight) {
-        gyro = new Canandgyro(Constants.Swerve.GyroCanID);
+        gyro = new Canandgyro(Constants.Swerve.gyroID);
         gyro.resetFactoryDefaults(0.35);
         gyro.setYaw(0);
         CanandEventLoop.getInstance();
 
         mSwerveMods =
             new SwerveModule[] {
-                new SwerveModule(0, Constants.Swerve.Module0),
-                new SwerveModule(1, Constants.Swerve.Module1),
-                new SwerveModule(2, Constants.Swerve.Module2),
-                new SwerveModule(3, Constants.Swerve.Module3),
+                new SwerveModule(0, Constants.Swerve.Mod0.constants),
+                new SwerveModule(1, Constants.Swerve.Mod1.constants),
+                new SwerveModule(2, Constants.Swerve.Mod2.constants),
+                new SwerveModule(3, Constants.Swerve.Mod3.constants),
             };
 
         swerveOdometry = createOdometry(new Pose2d(0, 0, new Rotation2d()));
@@ -62,7 +61,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void autoDrive(ChassisSpeeds speed) {
-        SwerveModuleState[] moduleStates = Constants.Swerve.kinematics.toSwerveModuleStates(
+        SwerveModuleState[] moduleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
             speed
         );
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, 4);
@@ -70,7 +69,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void driveFromSpeeds(ChassisSpeeds speeds, boolean isOpenLoop) {
-        SwerveModuleState[] swerveModuleStates = Constants.Swerve.kinematics.toSwerveModuleStates(
+        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
             speeds
         );
         SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -128,7 +127,7 @@ public class Swerve extends SubsystemBase {
 
     public void drivee(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates =
-            Constants.Swerve.kinematics.toSwerveModuleStates(
+            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                     -translation.getX(), 
                                     -translation.getY(), 
@@ -148,7 +147,7 @@ public class Swerve extends SubsystemBase {
     }    
 
     public ChassisSpeeds getRobotRelativeChassisSpeeds() {
-        return Constants.Swerve.kinematics.toChassisSpeeds(
+        return Constants.Swerve.swerveKinematics.toChassisSpeeds(
             getModuleStates()
         );
     }
@@ -228,18 +227,8 @@ public class Swerve extends SubsystemBase {
         return alliance.isPresent() && alliance.get() == Alliance.Red;
     }
 
-    public double[] getReefDistances() {
-        Pose2d pose = getLimelightBotPose();
-
-        double x =
-            (isRed() ? Constants.redReefX : Constants.blueReefX) -
-            pose.getX();
-        double y = Constants.reefY - pose.getY();
-        return new double[] { x, y };
-    }
-
     public void turnStates(double angularSpeed, double x, double y) {
-        var swerveModuleStates = Constants.Swerve.kinematics.toSwerveModuleStates(
+        var swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 x,
                 y,
@@ -252,7 +241,7 @@ public class Swerve extends SubsystemBase {
 
     public SwerveDriveOdometry createOdometry(Pose2d pose) {
         return new SwerveDriveOdometry(
-            Constants.Swerve.kinematics,
+            Constants.Swerve.swerveKinematics,
             gyro.getRotation2d(),
             getModulePositions(),
             pose
