@@ -20,8 +20,6 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -77,7 +75,7 @@ public class Intake extends SubsystemBase {
                                 .angularPosition(
                                         m_pivotAngle.mut_replace(pivotEncoder.getPosition().getValueAsDouble(), Rotations))
                                 .angularVelocity(
-                                        m_pivotAngularVelocity.mut_replace(pivotMotor.getVelocity().getValueAsDouble(),
+                                        m_pivotAngularVelocity.mut_replace(pivotEncoder.getVelocity().getValueAsDouble(),
                                                 RotationsPerSecond));
                     },
                     this));
