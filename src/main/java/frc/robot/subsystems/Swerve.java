@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.reduxrobotics.canand.CanandEventLoop;
+import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,12 +22,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-
 import java.util.Optional;
-import com.reduxrobotics.canand.CanandEventLoop;
-import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 
 public class Swerve extends SubsystemBase {
+
     private SwerveDriveOdometry swerveOdometry;
     private SwerveModule[] mSwerveMods;
     private Canandgyro gyro;
@@ -35,8 +35,7 @@ public class Swerve extends SubsystemBase {
     public boolean wtfIsRunning = false;
 
     // WPILib
-    StructPublisher<Pose2d> publisher = NetworkTableInstance
-        .getDefault()
+    StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
         .getStructTopic("MyPose", Pose2d.struct)
         .publish();
 
@@ -46,32 +45,32 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(0);
         CanandEventLoop.getInstance();
 
-        mSwerveMods =
-            new SwerveModule[] {
-                new SwerveModule(0, Constants.Swerve.Mod0.constants),
-                new SwerveModule(1, Constants.Swerve.Mod1.constants),
-                new SwerveModule(2, Constants.Swerve.Mod2.constants),
-                new SwerveModule(3, Constants.Swerve.Mod3.constants),
-            };
+        mSwerveMods = new SwerveModule[] {
+            new SwerveModule(0, Constants.Swerve.Mod0.constants),
+            new SwerveModule(1, Constants.Swerve.Mod1.constants),
+            new SwerveModule(2, Constants.Swerve.Mod2.constants),
+            new SwerveModule(3, Constants.Swerve.Mod3.constants),
+        };
 
         swerveOdometry = createOdometry(new Pose2d(0, 0, new Rotation2d()));
-        m_pose = swerveOdometry.update(gyro.getRotation2d(), getModulePositions());
+        m_pose = swerveOdometry.update(
+            gyro.getRotation2d(),
+            getModulePositions()
+        );
         // driveInvert = (isRed() ? 1 : -1);
         l_limelight = limelight;
     }
 
     public void autoDrive(ChassisSpeeds speed) {
-        SwerveModuleState[] moduleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-            speed
-        );
+        SwerveModuleState[] moduleStates =
+            Constants.Swerve.swerveKinematics.toSwerveModuleStates(speed);
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, 4);
         setModuleStates(moduleStates);
     }
 
     public void driveFromSpeeds(ChassisSpeeds speeds, boolean isOpenLoop) {
-        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-            speeds
-        );
+        SwerveModuleState[] swerveModuleStates =
+            Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(
             swerveModuleStates,
             Constants.Swerve.maxSpeed
@@ -124,27 +123,39 @@ public class Swerve extends SubsystemBase {
         );
     }
 
-
-    public void drivee(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+    public void drivee(
+        Translation2d translation,
+        double rotation,
+        boolean fieldRelative,
+        boolean isOpenLoop
+    ) {
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    -translation.getX(), 
-                                    -translation.getY(), 
-                                    -rotation, 
-                                    gyro.getRotation2d()
-                                )
-                                : new ChassisSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
-                                    rotation)
-                                );
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+                fieldRelative
+                    ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                        -translation.getX(),
+                        -translation.getY(),
+                        -rotation,
+                        gyro.getRotation2d()
+                    )
+                    : new ChassisSpeeds(
+                        translation.getX(),
+                        translation.getY(),
+                        rotation
+                    )
+            );
+        SwerveDriveKinematics.desaturateWheelSpeeds(
+            swerveModuleStates,
+            Constants.Swerve.maxSpeed
+        );
 
-        for(SwerveModule mod : mSwerveMods){
-            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+        for (SwerveModule mod : mSwerveMods) {
+            mod.setDesiredState(
+                swerveModuleStates[mod.moduleNumber],
+                isOpenLoop
+            );
         }
-    }    
+    }
 
     public ChassisSpeeds getRobotRelativeChassisSpeeds() {
         return Constants.Swerve.swerveKinematics.toChassisSpeeds(
@@ -190,7 +201,11 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setPose(Pose2d pose) {
-        swerveOdometry.resetPosition(gyro.getRotation2d(), getModulePositions(), pose);
+        swerveOdometry.resetPosition(
+            gyro.getRotation2d(),
+            getModulePositions(),
+            pose
+        );
     }
 
     public Rotation2d getHeading() {
@@ -228,14 +243,15 @@ public class Swerve extends SubsystemBase {
     }
 
     public void turnStates(double angularSpeed, double x, double y) {
-        var swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-            ChassisSpeeds.fromFieldRelativeSpeeds(
-                x,
-                y,
-                angularSpeed,
-                gyro.getRotation2d()
-            )
-        );
+        var swerveModuleStates =
+            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                    x,
+                    y,
+                    angularSpeed,
+                    gyro.getRotation2d()
+                )
+            );
         setModuleStates(swerveModuleStates);
     }
 
@@ -261,7 +277,10 @@ public class Swerve extends SubsystemBase {
             swerveOdometry = createOdometry(l_limelight.botPose);
             m_pose = l_limelight.botPose;
         } else {
-            m_pose = swerveOdometry.update(gyro.getRotation2d(), getModulePositions());
+            m_pose = swerveOdometry.update(
+                gyro.getRotation2d(),
+                getModulePositions()
+            );
         }
 
         for (SwerveModule mod : mSwerveMods) {
@@ -287,7 +306,6 @@ public class Swerve extends SubsystemBase {
             "gyro getrotation2d",
             gyro.getRotation2d().getDegrees()
         );
-
 
         publisher.set(m_pose);
     }

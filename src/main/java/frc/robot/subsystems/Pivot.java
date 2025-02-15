@@ -13,7 +13,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutDistance;
@@ -27,122 +26,143 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 
 public class Pivot extends SubsystemBase {
-  private static TalonFX motor = new TalonFX(
-      Constants.PivotConstants.motorID);
 
-  private static TalonFXConfiguration motorConfig = new TalonFXConfiguration();
-  private static Slot0Configs slot0Configs = motorConfig.Slot0;
+    private static TalonFX motor = new TalonFX(
+        Constants.PivotConstants.motorID
+    );
 
-  private static PositionVoltage pivotPositionVoltage;
-  private CANcoder encoder = new CANcoder(
-      Constants.PivotConstants.encoder);
+    private static TalonFXConfiguration motorConfig =
+        new TalonFXConfiguration();
+    private static Slot0Configs slot0Configs = motorConfig.Slot0;
 
-  /** START: SYSID */
-  private final MutVoltage m_appliedVoltage = Volts.mutable(0);
-  private final MutAngle m_angle = Rotations.mutable(0);
-  private final MutAngularVelocity m_angularVelocity = RotationsPerSecond.mutable(0);
+    private static PositionVoltage pivotPositionVoltage;
+    private CANcoder encoder = new CANcoder(Constants.PivotConstants.encoder);
 
-  private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
-      new SysIdRoutine.Config(),
-      new SysIdRoutine.Mechanism(
-          voltage -> {
-            motor.setVoltage(voltage.in(Volts));
-          },
-          log -> {
-            log.motor("pivot")
-                .voltage(
-                    m_appliedVoltage.mut_replace(
-                        motor.get() * RobotController.getBatteryVoltage(), Volts))
-                .angularPosition(m_angle.mut_replace(encoder.getPosition().getValueAsDouble(), Rotations))
-                .angularVelocity(
-                    m_angularVelocity.mut_replace(encoder.getVelocity().getValueAsDouble(),
-                        RotationsPerSecond));
-          },
-          this));
+    /** START: SYSID */
+    private final MutVoltage m_appliedVoltage = Volts.mutable(0);
+    private final MutAngle m_angle = Rotations.mutable(0);
+    private final MutAngularVelocity m_angularVelocity =
+        RotationsPerSecond.mutable(0);
 
-  /**
-   * Returns a command that will execute a quasistatic test in the given
-   * direction.
-   *
-   * @param direction The direction (forward or reverse) to run the test in
-   */
-  public Command sysIdQuasistatic(SysIdRoutine.Direction dir) {
-    return m_sysIdRoutine.quasistatic(dir);
-  }
+    private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(),
+        new SysIdRoutine.Mechanism(
+            voltage -> {
+                motor.setVoltage(voltage.in(Volts));
+            },
+            log -> {
+                log
+                    .motor("pivot")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            motor.get() * RobotController.getBatteryVoltage(),
+                            Volts
+                        )
+                    )
+                    .angularPosition(
+                        m_angle.mut_replace(
+                            encoder.getPosition().getValueAsDouble(),
+                            Rotations
+                        )
+                    )
+                    .angularVelocity(
+                        m_angularVelocity.mut_replace(
+                            encoder.getVelocity().getValueAsDouble(),
+                            RotationsPerSecond
+                        )
+                    );
+            },
+            this
+        )
+    );
 
-  /**
-   * Returns a command that will execute a dynamic test in the given direction.
-   * 
-   * @param direction The direction (forward or reverse) to run the test in
-   */
-  public Command sysIdDynamic(SysIdRoutine.Direction dir) {
-    return m_sysIdRoutine.dynamic(dir);
-  }
+    /**
+     * Returns a command that will execute a quasistatic test in the given
+     * direction.
+     *
+     * @param direction The direction (forward or reverse) to run the test in
+     */
+    public Command sysIdQuasistatic(SysIdRoutine.Direction dir) {
+        return m_sysIdRoutine.quasistatic(dir);
+    }
 
-  /* END: SYSID */
+    /**
+     * Returns a command that will execute a dynamic test in the given direction.
+     *
+     * @param direction The direction (forward or reverse) to run the test in
+     */
+    public Command sysIdDynamic(SysIdRoutine.Direction dir) {
+        return m_sysIdRoutine.dynamic(dir);
+    }
 
-  private Swerve m_swerve;
-  private double yOffset;
+    /* END: SYSID */
 
-  public Pivot(Swerve swerve) {
-    yOffset = 0;
+    private Swerve m_swerve;
+    private double yOffset;
 
-    CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
-    canCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
-    canCoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    canCoderConfig.MagnetSensor.MagnetOffset = Constants.PivotConstants.magnetSensorOffset;
-    encoder.getConfigurator().apply(canCoderConfig);
+    public Pivot(Swerve swerve) {
+        yOffset = 0;
 
-    slot0Configs.kP = Constants.PivotConstants.kP;
-    slot0Configs.kI = Constants.PivotConstants.kI;
-    slot0Configs.kD = Constants.PivotConstants.kD;
+        CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
+        canCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+        canCoderConfig.MagnetSensor.SensorDirection =
+            SensorDirectionValue.CounterClockwise_Positive;
+        canCoderConfig.MagnetSensor.MagnetOffset =
+            Constants.PivotConstants.magnetSensorOffset;
+        encoder.getConfigurator().apply(canCoderConfig);
 
-    motorConfig.Feedback.FeedbackRemoteSensorID = encoder.getDeviceID();
-    motorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+        slot0Configs.kP = Constants.PivotConstants.kP;
+        slot0Configs.kI = Constants.PivotConstants.kI;
+        slot0Configs.kD = Constants.PivotConstants.kD;
 
-    motor.getConfigurator().apply(motorConfig);
-    motor.getConfigurator().apply(slot0Configs);
-    motor.setNeutralMode(NeutralModeValue.Brake);
+        motorConfig.Feedback.FeedbackRemoteSensorID = encoder.getDeviceID();
+        motorConfig.Feedback.FeedbackSensorSource =
+            FeedbackSensorSourceValue.RemoteCANcoder;
 
-    m_swerve = swerve;
-  }
+        motor.getConfigurator().apply(motorConfig);
+        motor.getConfigurator().apply(slot0Configs);
+        motor.setNeutralMode(NeutralModeValue.Brake);
 
-  public void resetEncoders() {
-    encoder.setPosition(0);
-  }
+        m_swerve = swerve;
+    }
 
-  public void setPivot(double position) {
-    position = Math.max(
-        0,
-        Math.min(Constants.PivotConstants.maxRotations, position));
+    public void resetEncoders() {
+        encoder.setPosition(0);
+    }
 
-    pivotPositionVoltage = new PositionVoltage(position);
+    public void setPivot(double position) {
+        position = Math.max(
+            0,
+            Math.min(Constants.PivotConstants.maxRotations, position)
+        );
 
-    motor.setControl(pivotPositionVoltage);
-  }
+        pivotPositionVoltage = new PositionVoltage(position);
 
-  public double getEncoderPosition() {
-    return encoder.getPosition().getValueAsDouble();
-  }
+        motor.setControl(pivotPositionVoltage);
+    }
 
-  public double getEncoderVelocity() {
-    return encoder.getPosition().getValueAsDouble();
-  }
+    public double getEncoderPosition() {
+        return encoder.getPosition().getValueAsDouble();
+    }
 
-  public void setYOffset(double y) {
-    yOffset = y;
-  }
+    public double getEncoderVelocity() {
+        return encoder.getPosition().getValueAsDouble();
+    }
 
-  public double getYOffset() {
-    return yOffset;
-  }
+    public void setYOffset(double y) {
+        yOffset = y;
+    }
 
-  public void changeYOffset(double amount) {
-    yOffset += amount;
-  }
+    public double getYOffset() {
+        return yOffset;
+    }
 
-  @Override
-  public void periodic() {
-    SmartDashboard.putNumber("Y Offset", yOffset);
-  }
+    public void changeYOffset(double amount) {
+        yOffset += amount;
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Y Offset", yOffset);
+    }
 }

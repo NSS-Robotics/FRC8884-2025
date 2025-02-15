@@ -23,11 +23,12 @@ public class SwerveModule {
     private TalonFX mDriveMotor;
     private CANcoder angleEncoder;
 
-    private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(
-        Constants.Swerve.driveKS,
-        Constants.Swerve.driveKV,
-        Constants.Swerve.driveKA
-    );
+    private final SimpleMotorFeedforward driveFeedForward =
+        new SimpleMotorFeedforward(
+            Constants.Swerve.driveKS,
+            Constants.Swerve.driveKV,
+            Constants.Swerve.driveKA
+        );
 
     private final CTREConfigs ctreConfigs = new CTREConfigs();
 
@@ -64,8 +65,10 @@ public class SwerveModule {
         SwerveModuleState desiredState,
         boolean isOpenLoop
     ) {
-        desiredState =
-            SwerveModuleState.optimize(desiredState, getState().angle);
+        desiredState = SwerveModuleState.optimize(
+            desiredState,
+            getState().angle
+        );
         mAngleMotor.setControl(
             anglePosition.withPosition(desiredState.angle.getRotations())
         );
@@ -78,13 +81,13 @@ public class SwerveModule {
                 desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
             mDriveMotor.setControl(driveDutyCycle);
         } else {
-            driveVelocity.Velocity =
-                Conversions.MPSToRPS(
-                    desiredState.speedMetersPerSecond,
-                    Constants.Swerve.wheelCircumference
-                );
-            driveVelocity.FeedForward =
-                driveFeedForward.calculate(desiredState.speedMetersPerSecond);
+            driveVelocity.Velocity = Conversions.MPSToRPS(
+                desiredState.speedMetersPerSecond,
+                Constants.Swerve.wheelCircumference
+            );
+            driveVelocity.FeedForward = driveFeedForward.calculate(
+                desiredState.speedMetersPerSecond
+            );
             mDriveMotor.setControl(driveVelocity);
         }
     }
@@ -107,7 +110,9 @@ public class SwerveModule {
                 mDriveMotor.getVelocity().getValueAsDouble(),
                 Constants.Swerve.wheelCircumference
             ),
-            Rotation2d.fromRotations(mAngleMotor.getPosition().getValueAsDouble())
+            Rotation2d.fromRotations(
+                mAngleMotor.getPosition().getValueAsDouble()
+            )
         );
     }
 
@@ -117,7 +122,9 @@ public class SwerveModule {
                 mDriveMotor.getPosition().getValueAsDouble(),
                 Constants.Swerve.wheelCircumference
             ),
-            Rotation2d.fromRotations(mAngleMotor.getPosition().getValueAsDouble())
+            Rotation2d.fromRotations(
+                mAngleMotor.getPosition().getValueAsDouble()
+            )
         );
     }
 }
