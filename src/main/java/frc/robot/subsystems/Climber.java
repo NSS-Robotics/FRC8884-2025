@@ -135,13 +135,13 @@ public class Climber extends SubsystemBase {
     }
 
     public void setServos(double degrees) {
-        lServo.setAngle(degrees);
-        rServo.setAngle(degrees);
+        lServo.setPosition(degrees);
+        rServo.setPosition(degrees);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("lServo", lServo.getAngle());
-        SmartDashboard.putNumber("rServo", rServo.getAngle());
+        SmartDashboard.putNumber("lServo", lServo.getPosition());
+        SmartDashboard.putNumber("rServo", rServo.getPosition());
     }
 }

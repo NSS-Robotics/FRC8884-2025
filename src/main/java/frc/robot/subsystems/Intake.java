@@ -18,6 +18,7 @@ import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -165,8 +166,8 @@ public class Intake extends SubsystemBase {
 
         pivotCANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
         pivotCANcoderConfig.MagnetSensor.SensorDirection =
-            SensorDirectionValue.CounterClockwise_Positive;
-        pivotCANcoderConfig.MagnetSensor.MagnetOffset = 0;
+            SensorDirectionValue.Clockwise_Positive;
+        pivotCANcoderConfig.MagnetSensor.MagnetOffset = -0.72509765625;
         pivotEncoder.getConfigurator().apply(pivotCANcoderConfig);
 
         pivotMotorConfig.Feedback.FeedbackRemoteSensorID =
@@ -212,5 +213,13 @@ public class Intake extends SubsystemBase {
         intakeVelocityVoltage = new VelocityVoltage(velocity);
 
         intakeMotor.setControl(intakeVelocityVoltage);
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber(
+            "Intake Pivot Encoder",
+            pivotEncoder.getPosition().getValueAsDouble()
+        );
     }
 }

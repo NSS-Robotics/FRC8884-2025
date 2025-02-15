@@ -215,17 +215,8 @@ public final class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
 
-  public static final class ClimberConstants {
-    public static final int lMotorID = 20;
-    public static final int rMotorID = 21;
-    public static final int lChannel = 7;
-    public static final int rChannel = 8;
-    public static final double kP = 0;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double maxRotations = 0;
-    public static final double minRot = 0;
-  }
+        public static final double maxRotations = 0;
+    }
 
     public static final class PivotConstants {
 
@@ -238,16 +229,55 @@ public final class Constants {
         public static final double maxRotations = 0xdeafbeef; // This should also be undefbeefed
     }
 
-  public static final class EndEffectorConstants {
-    public static final double kP = 0x1abe1;
-    public static final double kI = 0xACE;
-    public static final double kD = 0xDEADBEEF;
-    public static final double currentLimit = 4.123456789; // That's a very small current limit
-    public static final int motorID = 41;
-    public static final int laserCANID = 43;
-    public static final double climbPosition = 0.233;
-    public static final double intakePosition = 0.49;
-    public static final double elevatorUpMaxValue = 0.18;
-    public static final double elevatorUpMinValue = -0.12;
-  }
+    public static final class ClimberConstants {
+
+        public static final int lMotorID = 20;
+        public static final int rMotorID = 21;
+        public static final int lChannel = 7;
+        public static final int rChannel = 8;
+        public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double maxRotations = 0;
+        public static final double minRot = 0;
+    }
+
+    public static final class IndexerConstants {
+
+        public static final int motorID = 50;
+        public static final int laserCANID = 51;
+        public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kFF = 0;
+    }
+
+    public static final class IntakeConstants {
+
+        public static final int pivotMotorID = 60;
+        public static final int intakeMotorID = 61;
+        public static final int encoderID = 62;
+        public static final double pivotKP = 0;
+        public static final double pivotKI = 0;
+        public static final double pivotKD = 0;
+        public static final double maxRot = 0;
+        public static final double intakeKP = 0;
+        public static final double intakeKI = 0;
+        public static final double intakeKD = 0;
+        public static final double pivotMaxRotations = 0;
+    }
+
+    public static final class EndEffectorConstants {
+
+        public static final double kP = 0x1abe1;
+        public static final double kI = 0xACE;
+        public static final double kD = 0xDEADBEEF;
+        public static final double currentLimit = 4.123456789; // That's a very small current limit
+        public static final int motorID = 41;
+        public static final int laserCANID = 43;
+        public static final double climbPosition = 0.233;
+        public static final double intakePosition = 0.49;
+        public static final double elevatorUpMaxValue = 0.18;
+        public static final double elevatorUpMinValue = -0.12;
+    }
 }

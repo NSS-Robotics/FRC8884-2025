@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 
-public class Pivot extends SubsystemBase {
+public class ClawPivot extends SubsystemBase {
 
     private static TalonFX motor = new TalonFX(
         Constants.PivotConstants.motorID
@@ -100,7 +100,7 @@ public class Pivot extends SubsystemBase {
     private Swerve m_swerve;
     private double yOffset;
 
-    public Pivot(Swerve swerve) {
+    public ClawPivot(Swerve swerve) {
         yOffset = 0;
 
         CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
@@ -161,8 +161,11 @@ public class Pivot extends SubsystemBase {
         yOffset += amount;
     }
 
-  @Override
-  public void periodic() {
-    SmartDashboard.putNumber("Claw Pivot Encoder", encoder.getAbsolutePosition().getValueAsDouble());
-  }
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber(
+            "Claw Pivot Encoder",
+            encoder.getAbsolutePosition().getValueAsDouble()
+        );
+    }
 }

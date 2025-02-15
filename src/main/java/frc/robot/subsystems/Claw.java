@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 
-public class EndEffector extends SubsystemBase {
+public class Claw extends SubsystemBase {
 
     private final TalonFX motor = new TalonFX(
         Constants.EndEffectorConstants.motorID
@@ -87,7 +87,7 @@ public class EndEffector extends SubsystemBase {
 
     /* END: SYSID */
 
-    public EndEffector() {
+    public Claw() {
         slot0Configs.kP = Constants.EndEffectorConstants.kP;
         slot0Configs.kI = Constants.EndEffectorConstants.kI;
         slot0Configs.kD = Constants.EndEffectorConstants.kD;
