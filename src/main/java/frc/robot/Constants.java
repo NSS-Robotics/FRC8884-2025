@@ -223,7 +223,7 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final int lMotorID = 20;
     public static final int rMotorID = 21;
-    public static final int lChannel = 9;
+    public static final int lChannel = 7;
     public static final int rChannel = 8;
     public static final double kP = 0;
     public static final double kI = 0;
