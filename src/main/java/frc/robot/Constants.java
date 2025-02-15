@@ -41,11 +41,11 @@ public final class Constants {
         public static final int gyroID = 13;
         public static final boolean invertGyro = true;
 
-        public static final COTSTalonFXSwerveConstants chosenModuleDRIVE = COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(
-            COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2
+        public static final COTSTalonFXSwerveConstants chosenModuleDRIVE = COTSTalonFXSwerveConstants.SDS.MK4n.KrakenX60(
+            COTSTalonFXSwerveConstants.SDS.MK4n.driveRatios.L2_plus
         );
-        public static final COTSTalonFXSwerveConstants chosenModuleTURN = COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(
-            COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2
+        public static final COTSTalonFXSwerveConstants chosenModuleTURN = COTSTalonFXSwerveConstants.SDS.MK4n.KrakenX60(
+            COTSTalonFXSwerveConstants.SDS.MK4n.driveRatios.L2_plus
         );
 
         public static final double angleKP = 100;
