@@ -82,10 +82,12 @@ public class RobotContainer {
     // m_driverController.x().whileTrue(m_elevator.sysIdQuasistatic(Direction.kForward));
     // m_driverController.y().whileTrue(m_elevator.sysIdQuasistatic(Direction.kForward));
 
-    m_driverController.a().whileTrue(m_endEffector.sysIdDynamic(Direction.kForward));
-    m_driverController.b().whileTrue(m_endEffector.sysIdDynamic(Direction.kReverse));
-    m_driverController.x().whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
-    m_driverController.y().whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
+    // m_driverController.a().whileTrue(m_endEffector.sysIdDynamic(Direction.kForward));
+    // m_driverController.b().whileTrue(m_endEffector.sysIdDynamic(Direction.kReverse));
+    // m_driverController.x().whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
+    // m_driverController.y().whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
+
+    m_driverController.rightTrigger().whileTrue(new ExampleCommand(m_climber));
 
     // m_driverController.a().whileTrue(m_indexer.sysIdDynamic(Direction.kForward));
     // m_driverController.b().whileTrue(m_indexer.sysIdDynamic(Direction.kReverse));

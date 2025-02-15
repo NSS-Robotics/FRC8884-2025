@@ -262,6 +262,9 @@ public final class Constants {
     public static final double currentLimit = 4.123456789; // That's a very small current limit
     public static final int motorID = 41;
     public static final int laserCANID = 43;
-
+    public static final double climbPosition = 0.233;
+    public static final double intakePosition = 0.49;
+    public static final double elevatorUpMaxValue = 0.18;
+    public static final double elevatorUpMinValue = -0.12;
   }
 }

@@ -141,6 +141,6 @@ public class Pivot extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Y Offset", yOffset);
+    SmartDashboard.putNumber("Claw Pivot Encoder", encoder.getAbsolutePosition().getValueAsDouble());
   }
 }
