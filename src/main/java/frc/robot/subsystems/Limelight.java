@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
@@ -39,7 +40,11 @@ public class Limelight extends SubsystemBase {
 
         double rz = pos[5];
 
-        botPose = new Pose2d(pos[0], pos[1], new Rotation2d(Math.toRadians(rz)));
+        botPose = new Pose2d(
+            pos[0],
+            pos[1],
+            new Rotation2d(Math.toRadians(rz))
+        );
 
         String[] names = {
             "pos x",
@@ -66,8 +71,7 @@ public class Limelight extends SubsystemBase {
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
         updateLimelightTracking();
     }
-
 }

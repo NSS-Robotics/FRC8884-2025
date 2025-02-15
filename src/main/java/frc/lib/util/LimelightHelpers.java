@@ -397,8 +397,7 @@ public class LimelightHelpers {
     }
 
     public static NetworkTable getLimelightNTTable(String tableName) {
-        return NetworkTableInstance
-            .getDefault()
+        return NetworkTableInstance.getDefault()
             .getTable(sanitizeName(tableName));
     }
 
@@ -436,8 +435,9 @@ public class LimelightHelpers {
         String tableName,
         String entryName
     ) {
-        return getLimelightNTTableEntry(tableName, entryName)
-            .getDoubleArray(new double[0]);
+        return getLimelightNTTableEntry(tableName, entryName).getDoubleArray(
+            new double[0]
+        );
     }
 
     public static String getLimelightNTString(
@@ -807,7 +807,8 @@ public class LimelightHelpers {
     ) {
         URL url = getLimelightURLString(tableName, "capturesnapshot");
         try {
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            HttpURLConnection connection =
+                (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             if (snapshotName != null && snapshotName != "") {
                 connection.setRequestProperty("snapname", snapshotName);
@@ -830,22 +831,21 @@ public class LimelightHelpers {
      */
     public static LimelightResults getLatestResults(String limelightName) {
         long start = System.nanoTime();
-        LimelightHelpers.LimelightResults results = new LimelightHelpers.LimelightResults();
+        LimelightHelpers.LimelightResults results =
+            new LimelightHelpers.LimelightResults();
         if (mapper == null) {
-            mapper =
-                new ObjectMapper()
-                    .configure(
-                        DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-                        false
-                    );
+            mapper = new ObjectMapper()
+                .configure(
+                    DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                    false
+                );
         }
 
         try {
-            results =
-                mapper.readValue(
-                    getJSONDump(limelightName),
-                    LimelightResults.class
-                );
+            results = mapper.readValue(
+                getJSONDump(limelightName),
+                LimelightResults.class
+            );
         } catch (JsonProcessingException e) {
             System.err.println("lljson error: " + e.getMessage());
         }

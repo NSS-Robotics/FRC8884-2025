@@ -9,7 +9,6 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.units.measure.MutDistance;
 import edu.wpi.first.units.measure.MutLinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
@@ -23,11 +22,22 @@ import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
 
-    private static TalonFX lMotor = new TalonFX(Constants.ClimberConstants.lMotorID);
-    private static TalonFX rMotor = new TalonFX(Constants.ClimberConstants.rMotorID);
-    private static Servo lServo = new Servo(Constants.ClimberConstants.lChannel);
-    private static Servo rServo = new Servo(Constants.ClimberConstants.rChannel);
-    private static Follower leader = new Follower(Constants.ClimberConstants.lMotorID, true);
+    private static TalonFX lMotor = new TalonFX(
+        Constants.ClimberConstants.lMotorID
+    );
+    private static TalonFX rMotor = new TalonFX(
+        Constants.ClimberConstants.rMotorID
+    );
+    private static Servo lServo = new Servo(
+        Constants.ClimberConstants.lChannel
+    );
+    private static Servo rServo = new Servo(
+        Constants.ClimberConstants.rChannel
+    );
+    private static Follower leader = new Follower(
+        Constants.ClimberConstants.lMotorID,
+        true
+    );
     private static Slot0Configs slot0configs = new Slot0Configs();
     private static PositionVoltage positionPID;
 
@@ -37,23 +47,37 @@ public class Climber extends SubsystemBase {
     private final MutLinearVelocity m_velocity = MetersPerSecond.mutable(0);
 
     private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
-            new SysIdRoutine.Config(),
-            new SysIdRoutine.Mechanism(
-                    voltage -> {
-                        lMotor.setVoltage(voltage.in(Volts));
-                        rMotor.setVoltage(voltage.in(Volts));
-                    },
-                    log -> {
-                        log.motor("climber")
-                                .voltage(
-                                        m_appliedVoltage.mut_replace(
-                                                lMotor.get() * RobotController.getBatteryVoltage(), Volts))
-                                .linearPosition(m_distance.mut_replace(lMotor.getPosition().getValueAsDouble(), Meters))
-                                .linearVelocity(
-                                        m_velocity.mut_replace(lMotor.getVelocity().getValueAsDouble(),
-                                                MetersPerSecond));
-                    },
-                    this));
+        new SysIdRoutine.Config(),
+        new SysIdRoutine.Mechanism(
+            voltage -> {
+                lMotor.setVoltage(voltage.in(Volts));
+                rMotor.setVoltage(voltage.in(Volts));
+            },
+            log -> {
+                log
+                    .motor("climber")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            lMotor.get() * RobotController.getBatteryVoltage(),
+                            Volts
+                        )
+                    )
+                    .linearPosition(
+                        m_distance.mut_replace(
+                            lMotor.getPosition().getValueAsDouble(),
+                            Meters
+                        )
+                    )
+                    .linearVelocity(
+                        m_velocity.mut_replace(
+                            lMotor.getVelocity().getValueAsDouble(),
+                            MetersPerSecond
+                        )
+                    );
+            },
+            this
+        )
+    );
 
     /**
      * Returns a command that will execute a quasistatic test in the given
@@ -67,7 +91,7 @@ public class Climber extends SubsystemBase {
 
     /**
      * Returns a command that will execute a dynamic test in the given direction.
-     * 
+     *
      * @param direction The direction (forward or reverse) to run the test in
      */
     public Command sysIdDynamic(SysIdRoutine.Direction dir) {
@@ -97,7 +121,10 @@ public class Climber extends SubsystemBase {
     }
 
     public void setClimber(double position) {
-        position = Math.max(0, Math.min(Constants.ClimberConstants.maxRotations, position));
+        position = Math.max(
+            0,
+            Math.min(Constants.ClimberConstants.maxRotations, position)
+        );
         positionPID = new PositionVoltage(position);
         lMotor.setControl(positionPID);
     }
@@ -117,4 +144,4 @@ public class Climber extends SubsystemBase {
         SmartDashboard.putNumber("lServo", lServo.getAngle());
         SmartDashboard.putNumber("rServo", rServo.getAngle());
     }
-}   
+}
