@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.*;
+import frc.robot.commands.Claw.*;
+import frc.robot.commands.RaiseElevator;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.ClawPivot;
 import frc.robot.subsystems.Climber;
@@ -34,7 +36,7 @@ public class RobotContainer {
     private final Limelight m_limelightLow = new Limelight("low");
     private final Limelight m_limelightHigh = new Limelight("high");
     private final Swerve m_swerve = new Swerve(m_limelightHigh);
-    private final ClawPivot m_pivot = new ClawPivot(m_swerve);
+    private final ClawPivot m_pivot = new ClawPivot();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController =
@@ -77,48 +79,47 @@ public class RobotContainer {
         // m_driverController.a().whileTrue(m_climber.sysIdDynamic(Direction.kForward));
         // m_driverController.b().whileTrue(m_climber.sysIdDynamic(Direction.kReverse));
         // m_driverController.x().whileTrue(m_climber.sysIdQuasistatic(Direction.kForward));
-        // m_driverController.y().whileTrue(m_climber.sysIdQuasistatic(Direction.kForward));
+        // m_driverController.y().whileTrue(m_climber.sysIdQuasistatic(Direction.kReverse));
 
-        // m_driverController.a().whileTrue(m_elevator.sysIdDynamic(Direction.kForward));
-        // m_driverController.b().whileTrue(m_elevator.sysIdDynamic(Direction.kReverse));
-        // m_driverController.x().whileTrue(m_elevator.sysIdQuasistatic(Direction.kForward));
-        // m_driverController.y().whileTrue(m_elevator.sysIdQuasistatic(Direction.kForward));
+        // m_driverController.rightTrigger().whileTrue(new ClimbPos(m_pivot));
+        m_driverController.leftTrigger().whileTrue(new IntakePos(m_pivot));
 
-        // m_driverController
-        //     .a()
-        //     .whileTrue(m_endEffector.sysIdDynamic(Direction.kForward));
-        // m_driverController
-        //     .b()
-        //     .whileTrue(m_endEffector.sysIdDynamic(Direction.kReverse));
-        // m_driverController
-        //     .x()
-        //     .whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
-        // m_driverController
-        //     .y()
-        //     .whileTrue(m_endEffector.sysIdQuasistatic(Direction.kForward));
-        // m_driverController.rightTrigger().whileTrue(new ExampleCommand(m_climber));
-
-        // m_driverController.a().whileTrue(m_indexer.sysIdDynamic(Direction.kForward));
-        // m_driverController.b().whileTrue(m_indexer.sysIdDynamic(Direction.kReverse));
-        // m_driverController.x().whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
-        // m_driverController.y().whileTrue(m_indexer.sysIdQuasistatic(Direction.kReverse));
-        //X Y A B
-        m_driverController
-            .a()
-            .whileTrue(m_intake.pivotSysIdDynamic(Direction.kForward));
-        m_driverController
-            .b()
-            .whileTrue(m_intake.pivotSysIdDynamic(Direction.kReverse));
         m_driverController
             .x()
-            .whileTrue(m_intake.pivotSysIdQuasistatic(Direction.kForward));
+            .whileTrue(
+                new RaiseElevator(
+                    m_elevator,
+                    0 - Constants.ElevatorConstants.pidOffset,
+                    0
+                )
+            );
+        m_driverController
+            .a()
+            .whileTrue(
+                new RaiseElevator(
+                    m_elevator,
+                    0 - Constants.ElevatorConstants.pidOffset,
+                    1
+                )
+            );
+        m_driverController
+            .b()
+            .whileTrue(
+                new RaiseElevator(
+                    m_elevator,
+                    1 + Constants.ElevatorConstants.pidOffset,
+                    0
+                )
+            );
         m_driverController
             .y()
-            .whileTrue(m_intake.pivotSysIdQuasistatic(Direction.kReverse));
-        // m_driverController.a().whileTrue(m_pivot.sysIdDynamic(Direction.kForward));
-        // m_driverController.b().whileTrue(m_pivot.sysIdDynamic(Direction.kReverse));
-        // m_driverController.x().whileTrue(m_pivot.sysIdQuasistatic(Direction.kForward));
-        // m_driverController.y().whileTrue(m_pivot.sysIdQuasistatic(Direction.kForward));
+            .whileTrue(
+                new RaiseElevator(
+                    m_elevator,
+                    1 + Constants.ElevatorConstants.pidOffset,
+                    1
+                )
+            );
     }
 
     /**

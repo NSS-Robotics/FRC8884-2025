@@ -37,76 +37,15 @@ public class ClawPivot extends SubsystemBase {
 
     private static PositionVoltage pivotPositionVoltage;
     private CANcoder encoder = new CANcoder(Constants.PivotConstants.encoder);
-
-    /** START: SYSID */
-    private final MutVoltage m_appliedVoltage = Volts.mutable(0);
-    private final MutAngle m_angle = Rotations.mutable(0);
-    private final MutAngularVelocity m_angularVelocity =
-        RotationsPerSecond.mutable(0);
-
-    private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(),
-        new SysIdRoutine.Mechanism(
-            voltage -> {
-                motor.setVoltage(voltage.in(Volts));
-            },
-            log -> {
-                log
-                    .motor("pivot")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            motor.get() * RobotController.getBatteryVoltage(),
-                            Volts
-                        )
-                    )
-                    .angularPosition(
-                        m_angle.mut_replace(
-                            encoder.getPosition().getValueAsDouble(),
-                            Rotations
-                        )
-                    )
-                    .angularVelocity(
-                        m_angularVelocity.mut_replace(
-                            encoder.getVelocity().getValueAsDouble(),
-                            RotationsPerSecond
-                        )
-                    );
-            },
-            this
-        )
-    );
-
-    /**
-     * Returns a command that will execute a quasistatic test in the given
-     * direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command sysIdQuasistatic(SysIdRoutine.Direction dir) {
-        return m_sysIdRoutine.quasistatic(dir);
-    }
-
-    /**
-     * Returns a command that will execute a dynamic test in the given direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command sysIdDynamic(SysIdRoutine.Direction dir) {
-        return m_sysIdRoutine.dynamic(dir);
-    }
-
-    /* END: SYSID */
-
-    private Swerve m_swerve;
     private double yOffset;
 
-    public ClawPivot(Swerve swerve) {
+    public ClawPivot() {
         yOffset = 0;
-
+        encoder.clearStickyFaults();
         CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
-        canCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+        canCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
         canCoderConfig.MagnetSensor.SensorDirection =
-            SensorDirectionValue.CounterClockwise_Positive;
+            SensorDirectionValue.Clockwise_Positive;
         canCoderConfig.MagnetSensor.MagnetOffset =
             Constants.PivotConstants.magnetSensorOffset;
         encoder.getConfigurator().apply(canCoderConfig);
@@ -122,8 +61,6 @@ public class ClawPivot extends SubsystemBase {
         motor.getConfigurator().apply(motorConfig);
         motor.getConfigurator().apply(slot0Configs);
         motor.setNeutralMode(NeutralModeValue.Brake);
-
-        m_swerve = swerve;
     }
 
     public void resetEncoders() {
@@ -165,7 +102,12 @@ public class ClawPivot extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber(
             "Claw Pivot Encoder",
-            encoder.getAbsolutePosition().getValueAsDouble()
+            encoder.getPosition().getValueAsDouble()
+        );
+
+        SmartDashboard.putNumber(
+            "Claw Pivot Motor",
+            motor.getPosition().getValueAsDouble()
         );
     }
 }

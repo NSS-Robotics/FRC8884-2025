@@ -130,7 +130,7 @@ public class Indexer extends SubsystemBase {
         motor.getEncoder().setPosition(0);
     }
 
-    public boolean coralDetected() {
+    public boolean gamepieceDetected() {
         double measurement = lasercan.getMeasurement().distance_mm;
         return measurement <= 20;
     }

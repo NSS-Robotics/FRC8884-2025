@@ -210,23 +210,29 @@ public final class Constants {
 
         public static final int motorID = 30;
         public static final int encoder = 31;
+        public static final double magnetSensorOffset = 0.599609375;
+        public static final double intialkP = 1.5;
+        public static final double intialkI = 0;
+        public static final double intialkD = 0;
 
-        public static final double kP = 0;
-        public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double middlekP = 9;
+        public static final double middlekI = 0;
+        public static final double middlekD = 0;
 
-        public static final double maxRotations = 0;
+        public static final double pidOffset = 1.0 - 0.947998046875;
+
+        public static final double maxRotations = 4.45;
     }
 
     public static final class PivotConstants {
 
         public static final int encoder = 42;
         public static final int motorID = 40;
-        public static final double magnetSensorOffset = 0xdeafbeef; // This should be undefbeefed
-        public static final double kP = 0xBadF00d; // Why so much bad food
-        public static final double kI = 0xBadF00d; // Why so much bad food
-        public static final double kD = 0xBadF00d; // Why so much bad food
-        public static final double maxRotations = 0xdeafbeef; // This should also be undefbeefed
+        public static final double magnetSensorOffset = -0.413818359375; // This should be undefbeefed
+        public static final double kP = 13.868; // Why so much bad food
+        public static final double kI = 0; // Why so much bad food
+        public static final double kD = 0; // Why so much bad food
+        public static final double maxRotations = 0.593505859375; // This should also be undefbeefed
     }
 
     public static final class ClimberConstants {
@@ -246,7 +252,7 @@ public final class Constants {
 
         public static final int motorID = 50;
         public static final int laserCANID = 51;
-        public static final double kP = 0;
+        public static final double kP = 0.17;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kFF = 0;
@@ -269,9 +275,12 @@ public final class Constants {
 
     public static final class EndEffectorConstants {
 
-        public static final double kP = 0x1abe1;
-        public static final double kI = 0xACE;
-        public static final double kD = 0xDEADBEEF;
+        public static final double kP = 0.17;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kS = 0.3274;
+        public static final double kV = 0.16686;
+        public static final double kA = 0.019518;
         public static final double currentLimit = 4.123456789; // That's a very small current limit
         public static final int motorID = 41;
         public static final int laserCANID = 43;

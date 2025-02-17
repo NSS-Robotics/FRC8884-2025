@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import au.grapplerobotics.ConfigurationFailedException;
+import au.grapplerobotics.LaserCan;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -27,6 +29,7 @@ public class Claw extends SubsystemBase {
     private final Slot0Configs slot0Configs = new Slot0Configs();
     private final CurrentLimitsConfigs currentLimitsConfigs =
         new CurrentLimitsConfigs();
+    private final LaserCan lasercan = new LaserCan(43);
 
     /** START: SYSID */
     private final MutVoltage m_appliedVoltage = Volts.mutable(0);
@@ -91,6 +94,9 @@ public class Claw extends SubsystemBase {
         slot0Configs.kP = Constants.EndEffectorConstants.kP;
         slot0Configs.kI = Constants.EndEffectorConstants.kI;
         slot0Configs.kD = Constants.EndEffectorConstants.kD;
+        slot0Configs.kS = Constants.EndEffectorConstants.kS;
+        slot0Configs.kA = Constants.EndEffectorConstants.kA;
+        slot0Configs.kV = Constants.EndEffectorConstants.kV;
 
         currentLimitsConfigs.SupplyCurrentLimit =
             Constants.EndEffectorConstants.currentLimit;
@@ -99,6 +105,16 @@ public class Claw extends SubsystemBase {
         motor.getConfigurator().apply(slot0Configs);
         motor.getConfigurator().apply(currentLimitsConfigs);
         motor.setNeutralMode(NeutralModeValue.Coast);
+
+        try {
+            lasercan.setRangingMode(LaserCan.RangingMode.SHORT);
+            lasercan.setRegionOfInterest(
+                new LaserCan.RegionOfInterest(8, 8, 16, 16)
+            );
+            lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+        } catch (ConfigurationFailedException e) {
+            System.out.println("Configuration failed! " + e);
+        }
     }
 
     /**
@@ -107,7 +123,7 @@ public class Claw extends SubsystemBase {
      *
      * @param velocity The velocity at which to spin the motor.
      */
-    public void setEndEffector(double velocity) {
+    public void setClaw(double velocity) {
         velocityVoltage = new VelocityVoltage(velocity);
 
         motor.setControl(velocityVoltage);
@@ -118,5 +134,10 @@ public class Claw extends SubsystemBase {
      */
     public void resetEncoders() {
         motor.setPosition(0);
+    }
+
+    public boolean gamepieceDetected() {
+        double measurement = lasercan.getMeasurement().distance_mm;
+        return measurement <= 20;
     }
 }
