@@ -1,20 +1,24 @@
-package frc.robot.commands.Claw;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.*;
 
 /** An example command that uses an example subsystem. */
-public class ClimbPos extends Command {
+public class RunPivot extends Command {
 
     private final ClawPivot m_clawPivot;
+    private final Elevator m_elevator;
+    private final double pos;
 
     /**
      * Creates a new ExampleCommand.
      *
      * @param subsystem The subsystem used by this command.
      */
-    public ClimbPos(ClawPivot clawPivot) {
+    public RunPivot(ClawPivot clawPivot, Elevator elevator, double pos) {
         m_clawPivot = clawPivot;
+        m_elevator = elevator;
+        this.pos = pos;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(m_clawPivot);
     }
@@ -26,7 +30,13 @@ public class ClimbPos extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_clawPivot.setPivot(0.25927734375);
+        if (m_elevator.getPosition() > 0.47) {
+            if (0.55 < pos) {
+                m_clawPivot.setPivot(pos);
+            }
+        } else {
+            m_clawPivot.setPivot(pos);
+        }
     }
 
     // Called once the command ends or is interrupted%.

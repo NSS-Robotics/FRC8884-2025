@@ -140,6 +140,10 @@ public class Elevator extends SubsystemBase {
         motor.setControl(elevatorPositionVoltage);
     }
 
+    public double getPosition() {
+        return encoder.getPosition().getValueAsDouble();
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber(

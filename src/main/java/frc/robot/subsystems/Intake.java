@@ -6,9 +6,11 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -157,17 +159,17 @@ public class Intake extends SubsystemBase {
     private static TalonFXConfiguration pivotMotorConfig =
         new TalonFXConfiguration();
     private static Slot0Configs pivotSlot0Configs = new Slot0Configs();
+    private static Slot1Configs pivotSlot1Configs = new Slot1Configs();
     private static Slot0Configs intakeSlot0Configs = new Slot0Configs();
     private static PositionVoltage pivotPositionVoltage;
     private static VelocityVoltage intakeVelocityVoltage;
 
     public Intake() {
         CANcoderConfiguration pivotCANcoderConfig = new CANcoderConfiguration();
-
-        pivotCANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
         pivotCANcoderConfig.MagnetSensor.SensorDirection =
             SensorDirectionValue.Clockwise_Positive;
-        pivotCANcoderConfig.MagnetSensor.MagnetOffset = -0.72509765625;
+        pivotCANcoderConfig.MagnetSensor.MagnetOffset =
+            Constants.IntakeConstants.encoderOffset;
         pivotEncoder.getConfigurator().apply(pivotCANcoderConfig);
 
         pivotMotorConfig.Feedback.FeedbackRemoteSensorID =
@@ -175,17 +177,24 @@ public class Intake extends SubsystemBase {
         pivotMotorConfig.Feedback.FeedbackSensorSource =
             FeedbackSensorSourceValue.RemoteCANcoder;
 
-        pivotSlot0Configs.kP = Constants.IntakeConstants.pivotKP;
-        pivotSlot0Configs.kI = Constants.IntakeConstants.pivotKI;
-        pivotSlot0Configs.kD = Constants.IntakeConstants.pivotKD;
+        pivotSlot0Configs.kP = Constants.IntakeConstants.uppivotKP;
+        pivotSlot0Configs.kI = Constants.IntakeConstants.uppivotKI;
+        pivotSlot0Configs.kD = Constants.IntakeConstants.uppivotKD;
+        pivotSlot1Configs.kP = Constants.IntakeConstants.downpivotKD;
+        pivotSlot1Configs.kI = Constants.IntakeConstants.downpivotKI;
+        pivotSlot1Configs.kD = Constants.IntakeConstants.downpivotKD;
 
         pivotMotor.getConfigurator().apply(pivotMotorConfig);
         pivotMotor.getConfigurator().apply(pivotSlot0Configs);
-        pivotMotor.setNeutralMode(NeutralModeValue.Coast);
+        pivotMotor.getConfigurator().apply(pivotSlot1Configs);
+        pivotMotor.setNeutralMode(NeutralModeValue.Brake);
 
         intakeSlot0Configs.kP = Constants.IntakeConstants.intakeKP;
         intakeSlot0Configs.kI = Constants.IntakeConstants.intakeKI;
         intakeSlot0Configs.kD = Constants.IntakeConstants.intakeKD;
+        intakeSlot0Configs.kS = Constants.IntakeConstants.intakeKS;
+        intakeSlot0Configs.kV = Constants.IntakeConstants.intakeKV;
+        intakeSlot0Configs.kA = Constants.IntakeConstants.intakeKA;
 
         intakeMotor.getConfigurator().apply(intakeSlot0Configs);
         intakeMotor.setNeutralMode(NeutralModeValue.Coast);
@@ -198,21 +207,26 @@ public class Intake extends SubsystemBase {
         intakeMotor.setPosition(0);
     }
 
-    public void setPivot(double position) {
+    public void setPivot(double position, int slot) {
         position = Math.max(
             0,
             Math.min(Constants.IntakeConstants.pivotMaxRotations, position)
         );
 
-        pivotPositionVoltage = new PositionVoltage(position);
+        pivotPositionVoltage = new PositionVoltage(position).withSlot(slot);
 
         pivotMotor.setControl(pivotPositionVoltage);
     }
 
     public void setIntake(double velocity) {
-        intakeVelocityVoltage = new VelocityVoltage(velocity);
+        intakeVelocityVoltage = new VelocityVoltage(velocity / 60);
 
         intakeMotor.setControl(intakeVelocityVoltage);
+    }
+
+    public void stopIntake() {
+        VoltageOut intakeVoltageOut = new VoltageOut(0);
+        intakeMotor.setControl(intakeVoltageOut);
     }
 
     @Override
@@ -220,6 +234,11 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber(
             "Intake Pivot Encoder",
             pivotEncoder.getPosition().getValueAsDouble()
+        );
+
+        SmartDashboard.putNumber(
+            "Intake Velocity",
+            pivotEncoder.getVelocity().getValueAsDouble()
         );
     }
 }

@@ -3,21 +3,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.*;
-import frc.robot.commands.Claw.*;
-import frc.robot.commands.RaiseElevator;
-import frc.robot.subsystems.Claw;
-import frc.robot.subsystems.ClawPivot;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -49,18 +42,16 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         // Configure the trigger bindings
-
-        // m_swerve.setDefaultCommand(
-        //   new TeleopSwerve(
-        //       m_swerve,
-        //       () -> m_driverController.getRawAxis(translationAxis),
-        //       () -> m_driverController.getRawAxis(strafeAxis),
-        //       () -> -m_driverController.getRawAxis(rotationAxis) * 0.75,
-        //       () -> false
-        //   )
-        // );
-
         configureBindings();
+        m_swerve.setDefaultCommand(
+            new TeleopSwerve(
+                m_swerve,
+                () -> m_driverController.getRawAxis(translationAxis),
+                () -> m_driverController.getRawAxis(strafeAxis),
+                () -> -m_driverController.getRawAxis(rotationAxis) * 0.75,
+                () -> false
+            )
+        );
     }
 
     /**
@@ -81,43 +72,120 @@ public class RobotContainer {
         // m_driverController.x().whileTrue(m_climber.sysIdQuasistatic(Direction.kForward));
         // m_driverController.y().whileTrue(m_climber.sysIdQuasistatic(Direction.kReverse));
 
-        // m_driverController.rightTrigger().whileTrue(new ClimbPos(m_pivot));
-        m_driverController.leftTrigger().whileTrue(new IntakePos(m_pivot));
-
+        // m_driverController
+        //     .a()
+        //     .whileTrue(m_indexer.sysIdDynamic(Direction.kForward));
+        // m_driverController
+        //     .b()
+        //     .whileTrue(m_indexer.sysIdDynamic(Direction.kReverse));
+        // m_driverController
+        //     .x()
+        //     .whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
+        // m_driverController
+        //     .y()
+        //     .whileTrue(m_indexer.sysIdQuasistatic(Direction.kReverse));
         m_driverController
-            .x()
+            .rightTrigger()
             .whileTrue(
-                new RaiseElevator(
+                new RunPivot(
+                    m_pivot,
                     m_elevator,
-                    0 - Constants.ElevatorConstants.pidOffset,
-                    0
+                    Constants.PivotConstants.testPos
                 )
             );
+        m_driverController
+            .leftTrigger()
+            .whileTrue(
+                new RunPivot(
+                    m_pivot,
+                    m_elevator,
+                    Constants.PivotConstants.l2Pos
+                )
+            );
+
         m_driverController
             .a()
             .whileTrue(
-                new RaiseElevator(
+                new RunPivot(
+                    m_pivot,
                     m_elevator,
-                    0 - Constants.ElevatorConstants.pidOffset,
-                    1
+                    Constants.PivotConstants.l4Pos
                 )
             );
-        m_driverController
-            .b()
-            .whileTrue(
-                new RaiseElevator(
-                    m_elevator,
-                    1 + Constants.ElevatorConstants.pidOffset,
-                    0
-                )
-            );
+
+        // m_driverController
+        //     .x()
+        //     .whileTrue(
+        //         new RaiseElevator(
+        //             m_elevator,
+        //             0 - Constants.ElevatorConstants.pidOffset,
+        //             0
+        //         )
+        //     );
+        // m_driverController
+        //     .a()
+        //     .whileTrue(
+        //         new RaiseElevator(
+        //             m_elevator,
+        //             0 - Constants.ElevatorConstants.pidOffset,
+        //             1
+        //         )
+        //     );
+        // m_driverController
+        //     .b()
+        //     .whileTrue(
+        //         new RaiseElevator(
+        //             m_elevator,
+        //             Constants.ElevatorConstants.l4 +
+        //             Constants.ElevatorConstants.pidOffset,
+        //             0
+        //         )
+        //     );
         m_driverController
             .y()
+            .whileTrue(new InstantCommand(m_swerve::zeroGyro));
+
+        m_driverController
+            .rightBumper()
             .whileTrue(
-                new RaiseElevator(
-                    m_elevator,
-                    1 + Constants.ElevatorConstants.pidOffset,
-                    1
+                new RunClaw(
+                    m_endEffector,
+                    Constants.EndEffectorConstants.velocity
+                )
+            );
+        m_driverController
+            .leftBumper()
+            .whileTrue(
+                new RunClaw(
+                    m_endEffector,
+                    -Constants.EndEffectorConstants.outtakeVelocity
+                )
+            );
+
+        // m_driverController
+        //     .pov(0)
+        //     .whileTrue(
+        //         new RunIntakePivot(
+        //             m_intake,
+        //             Constants.IntakeConstants.upPosition,
+        //             1
+        //         )
+        //     );
+
+        m_driverController
+            .pov(0)
+            .onTrue(
+                new ParallelDeadlineGroup(
+                    new WaitCommand(10),
+                    new ElevatorLevel(m_elevator, 4)
+                )
+            );
+        m_driverController
+            .pov(180)
+            .onTrue(
+                new ParallelDeadlineGroup(
+                    new WaitCommand(6),
+                    new ElevatorDown(m_elevator)
                 )
             );
     }

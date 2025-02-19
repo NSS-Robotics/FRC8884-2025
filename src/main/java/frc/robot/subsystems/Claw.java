@@ -9,12 +9,14 @@ import au.grapplerobotics.LaserCan;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -26,6 +28,7 @@ public class Claw extends SubsystemBase {
         Constants.EndEffectorConstants.motorID
     ); // The motor in the End Effector.
     private VelocityVoltage velocityVoltage;
+    private VoltageOut voltageOut;
     private final Slot0Configs slot0Configs = new Slot0Configs();
     private final CurrentLimitsConfigs currentLimitsConfigs =
         new CurrentLimitsConfigs();
@@ -124,9 +127,15 @@ public class Claw extends SubsystemBase {
      * @param velocity The velocity at which to spin the motor.
      */
     public void setClaw(double velocity) {
-        velocityVoltage = new VelocityVoltage(velocity);
+        velocityVoltage = new VelocityVoltage(velocity / 60);
 
         motor.setControl(velocityVoltage);
+    }
+
+    public void stopClaw() {
+        voltageOut = new VoltageOut(0);
+
+        motor.setControl(voltageOut);
     }
 
     /**
@@ -139,5 +148,13 @@ public class Claw extends SubsystemBase {
     public boolean gamepieceDetected() {
         double measurement = lasercan.getMeasurement().distance_mm;
         return measurement <= 20;
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber(
+            "Claw Velocity",
+            motor.getVelocity().getValueAsDouble()
+        );
     }
 }

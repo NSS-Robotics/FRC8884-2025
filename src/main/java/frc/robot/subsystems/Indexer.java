@@ -13,12 +13,12 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
-import edu.wpi.first.units.measure.MutDistance;
-import edu.wpi.first.units.measure.MutLinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -32,6 +32,11 @@ public class Indexer extends SubsystemBase {
     );
     private final SparkMaxConfig motorConfig;
     private final LaserCan lasercan;
+    private final SimpleMotorFeedforward ff = new SimpleMotorFeedforward(
+        Constants.IndexerConstants.kS,
+        Constants.IndexerConstants.kV,
+        Constants.IndexerConstants.kA
+    );
 
     /** START: SYSID */
     private final MutVoltage m_appliedVoltage = Volts.mutable(0);
@@ -50,7 +55,7 @@ public class Indexer extends SubsystemBase {
                     .motor("indexer")
                     .voltage(
                         m_appliedVoltage.mut_replace(
-                            motor.get() * RobotController.getBatteryVoltage(),
+                            motor.getAppliedOutput() * motor.getBusVoltage(),
                             Volts
                         )
                     )
@@ -99,8 +104,7 @@ public class Indexer extends SubsystemBase {
         motorConfig.closedLoop
             .p(Constants.IndexerConstants.kP)
             .i(Constants.IndexerConstants.kI)
-            .d(Constants.IndexerConstants.kD)
-            .velocityFF(Constants.IndexerConstants.kFF);
+            .d(Constants.IndexerConstants.kD);
 
         motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast);
         motor.configure(
@@ -123,7 +127,7 @@ public class Indexer extends SubsystemBase {
     public void setIndexer(double velocity) {
         motor
             .getClosedLoopController()
-            .setReference(velocity, ControlType.kVelocity);
+            .setReference(ff.calculate(velocity / 60), ControlType.kVelocity);
     }
 
     public void resetEncoders() {
@@ -133,5 +137,17 @@ public class Indexer extends SubsystemBase {
     public boolean gamepieceDetected() {
         double measurement = lasercan.getMeasurement().distance_mm;
         return measurement <= 20;
+    }
+
+    public void stopIndexer() {
+        motor.stopMotor();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber(
+            "Indexer Velocity",
+            motor.getEncoder().getVelocity()
+        );
     }
 }

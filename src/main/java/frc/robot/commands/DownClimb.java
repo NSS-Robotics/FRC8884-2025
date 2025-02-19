@@ -1,20 +1,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Climber;
 
-public class RaiseElevator extends Command {
+public class DownClimb extends Command {
 
-    private final Elevator m_elevator;
-    private final double pos;
-    private final int slot;
+    private final Climber m_climber;
 
-    public RaiseElevator(Elevator elevator, double pos, int slot) {
-        m_elevator = elevator;
-        this.pos = pos;
-        this.slot = slot;
+    public DownClimb(Climber m_climber) {
+        this.m_climber = m_climber;
 
-        addRequirements(elevator);
+        addRequirements(m_climber);
     }
 
     // Called when the command is initially scheduled.
@@ -24,7 +20,7 @@ public class RaiseElevator extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_elevator.setElevator(pos, slot);
+        m_climber.resetServos();
     }
 
     // Called once the command ends or is interrupted%.

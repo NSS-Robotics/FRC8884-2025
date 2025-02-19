@@ -218,7 +218,15 @@ public final class Constants {
         public static final double middlekP = 9;
         public static final double middlekI = 0;
         public static final double middlekD = 0;
-
+        public static final double[] levels = {
+            0,
+            0,
+            1.768798828125,
+            2.7,
+            4.30,
+        };
+        public static final double[] levelsSlot1 = { 0, 0, 1.39, 2.39, 3.95 };
+        public static final double downSlot1 = 0.278896484375;
         public static final double pidOffset = 1.0 - 0.947998046875;
 
         public static final double maxRotations = 4.45;
@@ -232,7 +240,13 @@ public final class Constants {
         public static final double kP = 13.868; // Why so much bad food
         public static final double kI = 0; // Why so much bad food
         public static final double kD = 0; // Why so much bad food
-        public static final double maxRotations = 0.593505859375; // This should also be undefbeefed
+        public static final double intakePos = 0.02518359375;
+        public static final double testPos = 0.4111328125;
+        public static final double l2Pos = 0.626;
+        public static final double l4Pos = 0.70849609375;
+
+        public static final double maxRotations = 0.72; // This should also be undefbeefed
+        // 0.593505859375; // This should also be undefbeefed
     }
 
     public static final class ClimberConstants {
@@ -252,10 +266,13 @@ public final class Constants {
 
         public static final int motorID = 50;
         public static final int laserCANID = 51;
-        public static final double kP = 0.17;
+        public static final double kP = 9.999E-04;
         public static final double kI = 0;
         public static final double kD = 0;
-        public static final double kFF = 0;
+        public static final double kS = 0.5;
+        public static final double kV = 0.5;
+        public static final double kA = 0.1;
+        public static final double velocity = 10000;
     }
 
     public static final class IntakeConstants {
@@ -263,30 +280,41 @@ public final class Constants {
         public static final int pivotMotorID = 60;
         public static final int intakeMotorID = 61;
         public static final int encoderID = 62;
-        public static final double pivotKP = 0;
-        public static final double pivotKI = 0;
-        public static final double pivotKD = 0;
+        public static final double encoderOffset = -0.69384765625;
+        public static final double uppivotKP = 20.946;
+        public static final double uppivotKI = 0;
+        public static final double uppivotKD = 1.1742;
+        public static final double downpivotKP = 3;
+        public static final double downpivotKI = 3;
+        public static final double downpivotKD = 0;
         public static final double maxRot = 0;
-        public static final double intakeKP = 0;
+        public static final double intakeKP = 0.04968;
         public static final double intakeKI = 0;
         public static final double intakeKD = 0;
-        public static final double pivotMaxRotations = 0;
+        public static final double intakeKS = 0.23712;
+        public static final double intakeKV = 0.12479;
+        public static final double intakeKA = 0.0070548;
+        public static final double pivotMaxRotations = 0.90353515625;
+        public static final double upPosition = 0.886484375;
+        public static final double intakePosition = 0;
     }
 
     public static final class EndEffectorConstants {
 
-        public static final double kP = 0.17;
+        public static final double kP = 4;
         public static final double kI = 0;
         public static final double kD = 0;
-        public static final double kS = 0.3274;
-        public static final double kV = 0.16686;
-        public static final double kA = 0.019518;
-        public static final double currentLimit = 4.123456789; // That's a very small current limit
+        public static final double kS = 1.0274;
+        public static final double kV = 1.16686;
+        public static final double kA = 0.119518;
+        public static final double currentLimit = 20; // That's a very small current limit
         public static final int motorID = 41;
         public static final int laserCANID = 43;
         public static final double climbPosition = 0.233;
         public static final double intakePosition = 0.49;
         public static final double elevatorUpMaxValue = 0.18;
         public static final double elevatorUpMinValue = -0.12;
+        public static final double velocity = 5000;
+        public static final double outtakeVelocity = 2000;
     }
 }
