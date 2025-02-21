@@ -27,6 +27,20 @@ public final class Constants {
     public static final double blueReefX = 100;
     public static final double reefY = 4;
 
+    public enum RobotState {
+        l1,
+        l2,
+        l3,
+        l4,
+        stationIntake,
+        handoff,
+        barge,
+        algaeGround,
+        algaeReefLow,
+        algaeReefHigh,
+        climb,
+    }
+
     public static class OperatorConstants {
 
         public static final int kDriverControllerPort = 0;
@@ -220,24 +234,21 @@ public final class Constants {
         public static final int upSlot = 0;
         public static final int downSlot = 1;
         public static final double stationPos = 0.984619140625;
-        public static final double[] levels = {
-            0, // unused
-            0, // unused
+        public static final double[] pos = {
+            0, // l1
             1.82, // l2
             2.8, // l3
             4.28, // l4
-            0.984619140625, // STATION. ENUMIFY!!!
-        };
-        public static final double[] levelsSlot1 = {
-            0,
-            0,
-            1.39,
-            2.39,
-            3.9,
-            0.68,
+            0.984619140625, // stationIntake
+            0, // handoff
+            4.28, // barge
+            0, // algaeGround
+            1.82, // algaeReefLow
+            2.8, // algaeReefHigh
+            0, // climb
         };
 
-        public static final double maxRotations = 4.45;
+        public static final double maxRotations = 4.3;
     }
 
     public static final class ClawPivotConstants {
@@ -249,6 +260,19 @@ public final class Constants {
         public static final double kI = 0; // Why so much bad food
         public static final double kD = 0; // Why so much bad food
         // public static final double handoffPos = 0.02976171875;
+        public static final double[] pos = {
+            0.5, // l1
+            0.626, // l2
+            0.626, // l3
+            0.6625, // l4
+            0.455810546875, // stationIntake
+            0.03576171875, // handoff
+            0.4111328125, // barge
+            0.61, // algaeGround
+            0.626, // algaeReefLow
+            0.626, // algaeReefHigh
+            0.4, // climb
+        };
         public static final double handoffPos = 0.03576171875;
         public static final double algaeIntakePos = 0.61;
         public static final double stationPos = 0.455810546875;

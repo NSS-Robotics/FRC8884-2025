@@ -28,9 +28,6 @@ public class ElevatorDown extends Command {
         if (clawPivotPosition < 0.64) {
             m_elevator.setElevator(pos, Constants.ElevatorConstants.downSlot);
         }
-        // if (m_elevator.getPosition() <= posSlot1) {
-        //     slot = 1;
-        // }
     }
 
     // Called once the command ends or is interrupted%.
