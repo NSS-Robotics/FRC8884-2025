@@ -31,7 +31,7 @@ public class RunClawPivot extends Command {
     @Override
     public void execute() {
         if (m_elevator.getPosition() > 0.47) {
-            if (0.55 < pos) {
+            if (0.40 < pos) {
                 m_clawPivot.setPivot(pos);
             }
         } else {

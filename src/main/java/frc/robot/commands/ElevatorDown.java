@@ -9,34 +9,24 @@ public class ElevatorDown extends Command {
 
     private final Elevator m_elevator;
     private final ClawPivot m_clawPivot;
-    private int slot;
-    private final double posSlot1;
-    private final double pos;
+    private final double pos = 0;
 
     public ElevatorDown(Elevator elevator, ClawPivot clawPivot) {
         m_elevator = elevator;
         m_clawPivot = clawPivot;
-        posSlot1 = Constants.ElevatorConstants.downSlot1;
-        double targetPos = 0;
-        this.pos = targetPos - Constants.ElevatorConstants.pidOffset;
         addRequirements(elevator);
     }
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {
-        slot = 0;
-    }
+    public void initialize() {}
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         double clawPivotPosition = m_clawPivot.getPosition(); // temporary
-        if (
-            clawPivotPosition > Constants.ClawPivotConstants.stationPos &&
-            clawPivotPosition < 0.64
-        ) {
-            m_elevator.setElevator(pos, slot);
+        if (clawPivotPosition < 0.64) {
+            m_elevator.setElevator(pos, Constants.ElevatorConstants.downSlot);
         }
         // if (m_elevator.getPosition() <= posSlot1) {
         //     slot = 1;

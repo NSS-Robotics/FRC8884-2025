@@ -134,7 +134,7 @@ public class RobotContainer {
                 new RunClawPivot(
                     m_pivot,
                     m_elevator,
-                    Constants.ClawPivotConstants.stationPos
+                    Constants.ClawPivotConstants.bargePos
                 )
             );
 
@@ -163,7 +163,7 @@ public class RobotContainer {
             .onTrue(
                 new ParallelDeadlineGroup(
                     new WaitCommand(10),
-                    new ElevatorLevel(m_elevator, 2)
+                    new ElevatorUp(m_elevator, 4)
                 )
             );
         m_driverController

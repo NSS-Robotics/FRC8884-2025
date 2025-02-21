@@ -113,13 +113,13 @@ public class Elevator extends SubsystemBase {
             Constants.ElevatorConstants.magnetSensorOffset;
         encoder.getConfigurator().apply(CANcoderConfig);
 
-        slot0Configs.kP = Constants.ElevatorConstants.intialkP;
-        slot0Configs.kI = Constants.ElevatorConstants.intialkI;
-        slot0Configs.kD = Constants.ElevatorConstants.intialkD;
+        slot0Configs.kP = Constants.ElevatorConstants.upKP;
+        slot0Configs.kI = Constants.ElevatorConstants.upKI;
+        slot0Configs.kD = Constants.ElevatorConstants.upKD;
 
-        slot1Configs.kP = Constants.ElevatorConstants.middlekP;
-        slot1Configs.kI = Constants.ElevatorConstants.middlekI;
-        slot1Configs.kD = Constants.ElevatorConstants.middlekD;
+        slot1Configs.kP = Constants.ElevatorConstants.downKP;
+        slot1Configs.kI = Constants.ElevatorConstants.downKI;
+        slot1Configs.kD = Constants.ElevatorConstants.downKD;
 
         talonFXConfig.Feedback.FeedbackRemoteSensorID = encoder.getDeviceID();
         talonFXConfig.Feedback.FeedbackSensorSource =

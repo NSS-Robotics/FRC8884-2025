@@ -210,24 +210,24 @@ public final class Constants {
         public static final int motorID = 30;
         public static final int encoder = 31;
         public static final double magnetSensorOffset = 0.599609375;
-        public static final double currentLimit = 27;
-        public static final double intialkP = 20;
-        public static final double intialkI = 0;
-        public static final double intialkD = 0;
-
-        // public static final double middlekP = 31.8;
-        public static final double middlekP = 20;
-        public static final double middlekI = 0;
-        public static final double middlekD = 0;
-        public static final double[] levels = {
-            0,
-            0,
-            1.82,
-            2.8,
-            4.30,
-            0.984619140625, // STATION. DELETE LATER!!!
-        };
+        public static final double currentLimit = 30;
+        public static final double upKP = 27;
+        public static final double upKI = 0;
+        public static final double upKD = 0;
+        public static final double downKP = 20;
+        public static final double downKI = 0;
+        public static final double downKD = 0;
+        public static final int upSlot = 0;
+        public static final int downSlot = 1;
         public static final double stationPos = 0.984619140625;
+        public static final double[] levels = {
+            0, // unused
+            0, // unused
+            1.82, // l2
+            2.8, // l3
+            4.28, // l4
+            0.984619140625, // STATION. ENUMIFY!!!
+        };
         public static final double[] levelsSlot1 = {
             0,
             0,
@@ -236,8 +236,7 @@ public final class Constants {
             3.9,
             0.68,
         };
-        public static final double downSlot1 = 0.278896484375;
-        public static final double pidOffset = 0;
+
         public static final double maxRotations = 4.45;
     }
 
@@ -253,10 +252,10 @@ public final class Constants {
         public static final double handoffPos = 0.03576171875;
         public static final double algaeIntakePos = 0.61;
         public static final double stationPos = 0.455810546875;
-        public static final double testPos = 0.4111328125;
+        public static final double bargePos = 0.4111328125;
 
         public static final double l2Pos = 0.626;
-        public static final double l4Pos = 0.70849609375;
+        public static final double l4Pos = 0.6625;
 
         public static final double maxRotations = 0.72; // This should also be undefbeefed
         // 0.593505859375; // This should also be undefbeefed

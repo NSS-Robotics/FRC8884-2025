@@ -5,36 +5,26 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
-public class ElevatorLevel extends Command {
+public class ElevatorUp extends Command {
 
     private final Elevator m_elevator;
-    private int slot;
-    private final double posSlot1;
+    private int slot = 0;
     private final double pos;
 
-    public ElevatorLevel(Elevator elevator, int level) {
+    public ElevatorUp(Elevator elevator, int level) {
         m_elevator = elevator;
-        posSlot1 = Constants.ElevatorConstants.levelsSlot1[level];
-        double targetPos = Constants.ElevatorConstants.levels[level];
-        this.pos = targetPos + Constants.ElevatorConstants.pidOffset;
+        pos = Constants.ElevatorConstants.levels[level];
         addRequirements(elevator);
     }
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {
-        slot = 0;
-    }
+    public void initialize() {}
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        SmartDashboard.putNumber("Slot of elevator", slot);
-        SmartDashboard.putNumber("posSlot1", posSlot1);
-        m_elevator.setElevator(pos, slot);
-        if (m_elevator.getPosition() >= posSlot1) {
-            slot = 1;
-        }
+        m_elevator.setElevator(pos, Constants.ElevatorConstants.upSlot);
     }
 
     // Called once the command ends or is interrupted%.
