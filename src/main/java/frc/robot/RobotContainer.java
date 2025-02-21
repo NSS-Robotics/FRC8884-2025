@@ -84,63 +84,60 @@ public class RobotContainer {
         // m_driverController
         //     .y()
         //     .whileTrue(m_indexer.sysIdQuasistatic(Direction.kReverse));
+
         m_driverController
-            .rightTrigger()
+            .x()
             .whileTrue(
-                new RunPivot(
-                    m_pivot,
-                    m_elevator,
-                    Constants.PivotConstants.testPos
-                )
+                new RunIndexer(m_indexer, Constants.IndexerConstants.velocity)
             );
+        m_driverController
+            .x()
+            .whileTrue(
+                new RunIntake(m_intake, Constants.IntakeConstants.velocity)
+            );
+        m_driverController
+            .b()
+            .whileTrue(
+                new RunIntake(m_intake, -Constants.IntakeConstants.velocity)
+            );
+
+        // m_driverController
+        //     .rightTrigger()
+        //     .whileTrue(
+        //         new RunClawPivot(
+        //             m_pivot,
+        //             m_elevator,
+        //             Constants.ClawPivotConstants.testPos
+        //         )
+        //     );
+        // m_driverController
+        //     .leftTrigger()
+        //     .whileTrue(
+        //         new RunClawPivot(
+        //             m_pivot,
+        //             m_elevator,
+        //             Constants.ClawPivotConstants.handoffPos
+        //         )
+        //     );
         m_driverController
             .leftTrigger()
             .whileTrue(
-                new RunPivot(
+                new RunClawPivot(
                     m_pivot,
                     m_elevator,
-                    Constants.PivotConstants.l2Pos
+                    Constants.ClawPivotConstants.l2Pos
                 )
             );
-
         m_driverController
             .a()
             .whileTrue(
-                new RunPivot(
+                new RunClawPivot(
                     m_pivot,
                     m_elevator,
-                    Constants.PivotConstants.l4Pos
+                    Constants.ClawPivotConstants.stationPos
                 )
             );
 
-        // m_driverController
-        //     .x()
-        //     .whileTrue(
-        //         new RaiseElevator(
-        //             m_elevator,
-        //             0 - Constants.ElevatorConstants.pidOffset,
-        //             0
-        //         )
-        //     );
-        // m_driverController
-        //     .a()
-        //     .whileTrue(
-        //         new RaiseElevator(
-        //             m_elevator,
-        //             0 - Constants.ElevatorConstants.pidOffset,
-        //             1
-        //         )
-        //     );
-        // m_driverController
-        //     .b()
-        //     .whileTrue(
-        //         new RaiseElevator(
-        //             m_elevator,
-        //             Constants.ElevatorConstants.l4 +
-        //             Constants.ElevatorConstants.pidOffset,
-        //             0
-        //         )
-        //     );
         m_driverController
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
@@ -161,23 +158,12 @@ public class RobotContainer {
                     -Constants.EndEffectorConstants.outtakeVelocity
                 )
             );
-
-        // m_driverController
-        //     .pov(0)
-        //     .whileTrue(
-        //         new RunIntakePivot(
-        //             m_intake,
-        //             Constants.IntakeConstants.upPosition,
-        //             1
-        //         )
-        //     );
-
         m_driverController
             .pov(0)
             .onTrue(
                 new ParallelDeadlineGroup(
                     new WaitCommand(10),
-                    new ElevatorLevel(m_elevator, 4)
+                    new ElevatorLevel(m_elevator, 2)
                 )
             );
         m_driverController
@@ -185,7 +171,7 @@ public class RobotContainer {
             .onTrue(
                 new ParallelDeadlineGroup(
                     new WaitCommand(6),
-                    new ElevatorDown(m_elevator)
+                    new ElevatorDown(m_elevator, m_pivot)
                 )
             );
     }

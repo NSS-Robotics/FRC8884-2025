@@ -2,17 +2,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.ClawPivot;
 import frc.robot.subsystems.Elevator;
 
 public class ElevatorDown extends Command {
 
     private final Elevator m_elevator;
+    private final ClawPivot m_clawPivot;
     private int slot;
     private final double posSlot1;
     private final double pos;
 
-    public ElevatorDown(Elevator elevator) {
+    public ElevatorDown(Elevator elevator, ClawPivot clawPivot) {
         m_elevator = elevator;
+        m_clawPivot = clawPivot;
         posSlot1 = Constants.ElevatorConstants.downSlot1;
         double targetPos = 0;
         this.pos = targetPos - Constants.ElevatorConstants.pidOffset;
@@ -28,10 +31,16 @@ public class ElevatorDown extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_elevator.setElevator(pos, slot);
-        if (m_elevator.getPosition() <= posSlot1) {
-            slot = 1;
+        double clawPivotPosition = m_clawPivot.getPosition(); // temporary
+        if (
+            clawPivotPosition > Constants.ClawPivotConstants.stationPos &&
+            clawPivotPosition < 0.64
+        ) {
+            m_elevator.setElevator(pos, slot);
         }
+        // if (m_elevator.getPosition() <= posSlot1) {
+        //     slot = 1;
+        // }
     }
 
     // Called once the command ends or is interrupted%.

@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
@@ -37,6 +38,8 @@ public class Elevator extends SubsystemBase {
     );
     private static TalonFXConfiguration talonFXConfig =
         new TalonFXConfiguration();
+    private static CurrentLimitsConfigs currentLimitsConfigs =
+        new CurrentLimitsConfigs();
     private static Slot0Configs slot0Configs = new Slot0Configs();
     private static Slot1Configs slot1Configs = new Slot1Configs();
     private static PositionVoltage elevatorPositionVoltage;
@@ -124,9 +127,14 @@ public class Elevator extends SubsystemBase {
 
         motorOutputConfigs.withInverted(InvertedValue.Clockwise_Positive);
         motorOutputConfigs.withNeutralMode(NeutralModeValue.Brake);
+        currentLimitsConfigs.StatorCurrentLimit =
+            Constants.ElevatorConstants.currentLimit;
+        currentLimitsConfigs.StatorCurrentLimitEnable = true;
+
         motor.getConfigurator().apply(slot0Configs);
         motor.getConfigurator().apply(slot1Configs);
         motor.getConfigurator().apply(motorOutputConfigs);
+        motor.getConfigurator().apply(currentLimitsConfigs);
     }
 
     public void setElevator(double position, int slot) {
@@ -149,6 +157,10 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber(
             "Elevator Rotations",
             encoder.getPosition().getValueAsDouble()
+        );
+        SmartDashboard.putNumber(
+            "elev current",
+            motor.getStatorCurrent().getValueAsDouble()
         );
     }
 }

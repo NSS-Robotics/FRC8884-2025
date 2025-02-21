@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.*;
 
 /** An example command that uses an example subsystem. */
-public class RunPivot extends Command {
+public class RunClawPivot extends Command {
 
     private final ClawPivot m_clawPivot;
     private final Elevator m_elevator;
@@ -15,7 +15,7 @@ public class RunPivot extends Command {
      *
      * @param subsystem The subsystem used by this command.
      */
-    public RunPivot(ClawPivot clawPivot, Elevator elevator, double pos) {
+    public RunClawPivot(ClawPivot clawPivot, Elevator elevator, double pos) {
         m_clawPivot = clawPivot;
         m_elevator = elevator;
         this.pos = pos;

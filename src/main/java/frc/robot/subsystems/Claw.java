@@ -107,7 +107,7 @@ public class Claw extends SubsystemBase {
 
         motor.getConfigurator().apply(slot0Configs);
         motor.getConfigurator().apply(currentLimitsConfigs);
-        motor.setNeutralMode(NeutralModeValue.Coast);
+        motor.setNeutralMode(NeutralModeValue.Brake);
 
         try {
             lasercan.setRangingMode(LaserCan.RangingMode.SHORT);

@@ -17,7 +17,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -101,10 +100,10 @@ public class Indexer extends SubsystemBase {
         motorConfig = new SparkMaxConfig();
         lasercan = new LaserCan(Constants.IndexerConstants.laserCANID);
 
-        motorConfig.closedLoop
-            .p(Constants.IndexerConstants.kP)
-            .i(Constants.IndexerConstants.kI)
-            .d(Constants.IndexerConstants.kD);
+        // motorConfig.closedLoop
+        //     .p(Constants.IndexerConstants.kP)
+        //     .i(Constants.IndexerConstants.kI)
+        //     .d(Constants.IndexerConstants.kD);
 
         motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast);
         motor.configure(
@@ -124,10 +123,14 @@ public class Indexer extends SubsystemBase {
         }
     }
 
-    public void setIndexer(double velocity) {
-        motor
-            .getClosedLoopController()
-            .setReference(ff.calculate(velocity / 60), ControlType.kVelocity);
+    // public void setIndexer(double velocity) {
+    //     motor
+    //         .getClosedLoopController()
+    //         .setReference(ff.calculate(velocity / 60), ControlType.kVelocity);
+    // }
+
+    public void setIndexer(double speed) {
+        motor.set(speed);
     }
 
     public void resetEncoders() {

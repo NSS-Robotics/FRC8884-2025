@@ -6,7 +6,6 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -211,37 +210,51 @@ public final class Constants {
         public static final int motorID = 30;
         public static final int encoder = 31;
         public static final double magnetSensorOffset = 0.599609375;
-        public static final double intialkP = 1.5;
+        public static final double currentLimit = 27;
+        public static final double intialkP = 20;
         public static final double intialkI = 0;
         public static final double intialkD = 0;
 
-        public static final double middlekP = 9;
+        // public static final double middlekP = 31.8;
+        public static final double middlekP = 20;
         public static final double middlekI = 0;
         public static final double middlekD = 0;
         public static final double[] levels = {
             0,
             0,
-            1.768798828125,
-            2.7,
+            1.82,
+            2.8,
             4.30,
+            0.984619140625, // STATION. DELETE LATER!!!
         };
-        public static final double[] levelsSlot1 = { 0, 0, 1.39, 2.39, 3.95 };
+        public static final double stationPos = 0.984619140625;
+        public static final double[] levelsSlot1 = {
+            0,
+            0,
+            1.39,
+            2.39,
+            3.9,
+            0.68,
+        };
         public static final double downSlot1 = 0.278896484375;
-        public static final double pidOffset = 1.0 - 0.947998046875;
-
+        public static final double pidOffset = 0;
         public static final double maxRotations = 4.45;
     }
 
-    public static final class PivotConstants {
+    public static final class ClawPivotConstants {
 
         public static final int encoder = 42;
         public static final int motorID = 40;
         public static final double magnetSensorOffset = -0.413818359375; // This should be undefbeefed
-        public static final double kP = 13.868; // Why so much bad food
+        public static final double kP = 16; // Why so much bad food
         public static final double kI = 0; // Why so much bad food
         public static final double kD = 0; // Why so much bad food
-        public static final double intakePos = 0.02518359375;
+        // public static final double handoffPos = 0.02976171875;
+        public static final double handoffPos = 0.03576171875;
+        public static final double algaeIntakePos = 0.61;
+        public static final double stationPos = 0.455810546875;
         public static final double testPos = 0.4111328125;
+
         public static final double l2Pos = 0.626;
         public static final double l4Pos = 0.70849609375;
 
@@ -272,7 +285,7 @@ public final class Constants {
         public static final double kS = 0.5;
         public static final double kV = 0.5;
         public static final double kA = 0.1;
-        public static final double velocity = 10000;
+        public static final double velocity = 0.5;
     }
 
     public static final class IntakeConstants {
@@ -285,10 +298,10 @@ public final class Constants {
         public static final double uppivotKI = 0;
         public static final double uppivotKD = 1.1742;
         public static final double downpivotKP = 3;
-        public static final double downpivotKI = 3;
+        public static final double downpivotKI = 0;
         public static final double downpivotKD = 0;
         public static final double maxRot = 0;
-        public static final double intakeKP = 0.04968;
+        public static final double intakeKP = 0.053;
         public static final double intakeKI = 0;
         public static final double intakeKD = 0;
         public static final double intakeKS = 0.23712;
@@ -297,6 +310,7 @@ public final class Constants {
         public static final double pivotMaxRotations = 0.90353515625;
         public static final double upPosition = 0.886484375;
         public static final double intakePosition = 0;
+        public static final double velocity = 2000;
     }
 
     public static final class EndEffectorConstants {

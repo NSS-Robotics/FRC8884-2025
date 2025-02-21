@@ -28,7 +28,7 @@ import frc.robot.Constants;
 public class ClawPivot extends SubsystemBase {
 
     private static TalonFX motor = new TalonFX(
-        Constants.PivotConstants.motorID
+        Constants.ClawPivotConstants.motorID
     );
 
     private static TalonFXConfiguration motorConfig =
@@ -36,23 +36,23 @@ public class ClawPivot extends SubsystemBase {
     private static Slot0Configs slot0Configs = motorConfig.Slot0;
 
     private static PositionVoltage pivotPositionVoltage;
-    private CANcoder encoder = new CANcoder(Constants.PivotConstants.encoder);
-    private double yOffset;
+    private CANcoder encoder = new CANcoder(
+        Constants.ClawPivotConstants.encoder
+    );
 
     public ClawPivot() {
-        yOffset = 0;
         encoder.clearStickyFaults();
         CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
         canCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
         canCoderConfig.MagnetSensor.SensorDirection =
             SensorDirectionValue.Clockwise_Positive;
         canCoderConfig.MagnetSensor.MagnetOffset =
-            Constants.PivotConstants.magnetSensorOffset;
+            Constants.ClawPivotConstants.magnetSensorOffset;
         encoder.getConfigurator().apply(canCoderConfig);
 
-        slot0Configs.kP = Constants.PivotConstants.kP;
-        slot0Configs.kI = Constants.PivotConstants.kI;
-        slot0Configs.kD = Constants.PivotConstants.kD;
+        slot0Configs.kP = Constants.ClawPivotConstants.kP;
+        slot0Configs.kI = Constants.ClawPivotConstants.kI;
+        slot0Configs.kD = Constants.ClawPivotConstants.kD;
 
         motorConfig.Feedback.FeedbackRemoteSensorID = encoder.getDeviceID();
         motorConfig.Feedback.FeedbackSensorSource =
@@ -70,7 +70,7 @@ public class ClawPivot extends SubsystemBase {
     public void setPivot(double position) {
         position = Math.max(
             0,
-            Math.min(Constants.PivotConstants.maxRotations, position)
+            Math.min(Constants.ClawPivotConstants.maxRotations, position)
         );
 
         pivotPositionVoltage = new PositionVoltage(position);
@@ -78,24 +78,12 @@ public class ClawPivot extends SubsystemBase {
         motor.setControl(pivotPositionVoltage);
     }
 
-    public double getEncoderPosition() {
+    public double getPosition() {
         return encoder.getPosition().getValueAsDouble();
     }
 
-    public double getEncoderVelocity() {
+    public double getVelocity() {
         return encoder.getPosition().getValueAsDouble();
-    }
-
-    public void setYOffset(double y) {
-        yOffset = y;
-    }
-
-    public double getYOffset() {
-        return yOffset;
-    }
-
-    public void changeYOffset(double amount) {
-        yOffset += amount;
     }
 
     @Override
