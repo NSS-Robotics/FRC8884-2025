@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.RobotState;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -29,7 +29,7 @@ public class RobotContainer {
     private final Limelight m_limelightLow = new Limelight("low");
     private final Limelight m_limelightHigh = new Limelight("high");
     private final Swerve m_swerve = new Swerve(m_limelightHigh);
-    private final ClawPivot m_pivot = new ClawPivot();
+    private final Wrist m_wrist = new Wrist();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController =
@@ -38,6 +38,8 @@ public class RobotContainer {
     private final int translationAxis = XboxController.Axis.kRightY.value;
     private final int strafeAxis = XboxController.Axis.kRightX.value;
     private final int rotationAxis = XboxController.Axis.kLeftX.value;
+
+    private RobotState state;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -52,6 +54,8 @@ public class RobotContainer {
                 () -> false
             )
         );
+
+        state = RobotState.handoff;
     }
 
     /**
@@ -105,36 +109,36 @@ public class RobotContainer {
         //     .rightTrigger()
         //     .whileTrue(
         //         new RunClawPivot(
-        //             m_pivot,
+        //             m_wrist,
         //             m_elevator,
-        //             Constants.ClawPivotConstants.testPos
+        //             Constants.WristConstants.testPos
         //         )
         //     );
         // m_driverController
         //     .leftTrigger()
         //     .whileTrue(
         //         new RunClawPivot(
-        //             m_pivot,
+        //             m_wrist,
         //             m_elevator,
-        //             Constants.ClawPivotConstants.handoffPos
+        //             Constants.WristConstants.handoffPos
         //         )
         //     );
         m_driverController
             .leftTrigger()
             .whileTrue(
-                new RunClawPivot(
-                    m_pivot,
+                new RunWrist(
+                    m_wrist,
                     m_elevator,
-                    Constants.ClawPivotConstants.l2Pos
+                    Constants.WristConstants.l2Pos
                 )
             );
         m_driverController
             .a()
             .whileTrue(
-                new RunClawPivot(
-                    m_pivot,
+                new RunWrist(
+                    m_wrist,
                     m_elevator,
-                    Constants.ClawPivotConstants.bargePos
+                    Constants.WristConstants.bargePos
                 )
             );
 
@@ -163,7 +167,7 @@ public class RobotContainer {
             .onTrue(
                 new ParallelDeadlineGroup(
                     new WaitCommand(10),
-                    new ElevatorUp(m_elevator, 4)
+                    new ElevatorUp(m_elevator, this::getRobotState)
                 )
             );
         m_driverController
@@ -171,9 +175,13 @@ public class RobotContainer {
             .onTrue(
                 new ParallelDeadlineGroup(
                     new WaitCommand(6),
-                    new ElevatorDown(m_elevator, m_pivot)
+                    new ElevatorDown(m_elevator, m_wrist)
                 )
             );
+    }
+
+    public RobotState getRobotState() {
+        return state;
     }
 
     /**

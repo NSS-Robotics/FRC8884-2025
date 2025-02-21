@@ -251,7 +251,7 @@ public final class Constants {
         public static final double maxRotations = 4.3;
     }
 
-    public static final class ClawPivotConstants {
+    public static final class WristConstants {
 
         public static final int encoder = 42;
         public static final int motorID = 40;
