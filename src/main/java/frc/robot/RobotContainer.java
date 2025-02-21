@@ -31,6 +31,7 @@ public class RobotContainer {
     private final Swerve m_swerve = new Swerve(m_limelightHigh);
     private final Wrist m_wrist = new Wrist();
 
+
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController =
         new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -39,7 +40,7 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kRightX.value;
     private final int rotationAxis = XboxController.Axis.kLeftX.value;
 
-    private RobotState state;
+    public RobotState state;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -54,7 +55,6 @@ public class RobotContainer {
                 () -> false
             )
         );
-
         state = RobotState.handoff;
     }
 
@@ -167,7 +167,7 @@ public class RobotContainer {
             .onTrue(
                 new ParallelDeadlineGroup(
                     new WaitCommand(10),
-                    new ElevatorUp(m_elevator, this::getRobotState)
+                    new Up(m_elevator)
                 )
             );
         m_driverController
@@ -178,10 +178,6 @@ public class RobotContainer {
                     new ElevatorDown(m_elevator, m_wrist)
                 )
             );
-    }
-
-    public RobotState getRobotState() {
-        return state;
     }
 
     /**

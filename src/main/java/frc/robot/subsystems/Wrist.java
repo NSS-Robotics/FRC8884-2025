@@ -55,7 +55,7 @@ public class Wrist extends SubsystemBase {
         encoder.setPosition(0);
     }
 
-    public void setPivot(double position) {
+    public void setWrist(double position) {
         position = Math.max(
             0,
             Math.min(Constants.WristConstants.maxRotations, position)

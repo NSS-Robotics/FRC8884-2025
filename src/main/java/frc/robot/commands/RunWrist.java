@@ -19,7 +19,7 @@ public class RunWrist extends Command {
         m_clawPivot = clawPivot;
         m_elevator = elevator;
         this.pos = pos;
-        // Use addRequirements() here to declare subsystem dependencies.
+
         addRequirements(m_clawPivot);
     }
 
@@ -32,10 +32,10 @@ public class RunWrist extends Command {
     public void execute() {
         if (m_elevator.getPosition() > 0.47) {
             if (0.40 < pos) {
-                m_clawPivot.setPivot(pos);
+                m_clawPivot.setWrist(pos);
             }
         } else {
-            m_clawPivot.setPivot(pos);
+            m_clawPivot.setWrist(pos);
         }
     }
 

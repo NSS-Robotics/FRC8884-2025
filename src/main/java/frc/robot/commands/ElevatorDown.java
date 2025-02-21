@@ -6,7 +6,6 @@ import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Elevator;
 
 public class ElevatorDown extends Command {
-
     private final Elevator m_elevator;
     private final Wrist m_wrist;
     private final double pos = 0;
