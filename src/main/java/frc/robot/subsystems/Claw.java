@@ -97,10 +97,9 @@ public class Claw extends SubsystemBase {
             "Claw Velocity",
             motor.getVelocity().getValueAsDouble()
         );
-
-        SmartDashboard.putBoolean(
-            "Claw Game Piece Detected",
-            gamepieceDetected()
-        );
+        // SmartDashboard.putBoolean(
+        //     "Claw Game Piece Detected",
+        //     gamepieceDetected()
+        // );
     }
 }

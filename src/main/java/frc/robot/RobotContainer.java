@@ -26,7 +26,7 @@ public class RobotContainer {
     private final Intake m_intake = new Intake();
     private final Limelight m_limelightLow = new Limelight("low");
     private final Limelight m_limelightHigh = new Limelight("high");
-    private final Swerve m_swerve = new Swerve(m_limelightHigh);
+    private final Swerve m_swerve = new Swerve(m_limelightLow, m_limelightHigh);
     private final Wrist m_wrist = new Wrist();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -70,6 +70,10 @@ public class RobotContainer {
         m_driverController
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
+
+        m_driverController
+            .pov(0)
+            .onTrue(new Up(this, Constants.RobotState.l2, m_elevator, m_wrist));
     }
 
     // public RobotState getRobotState() {

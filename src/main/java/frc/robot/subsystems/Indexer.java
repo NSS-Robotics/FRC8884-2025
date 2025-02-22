@@ -92,9 +92,9 @@ public class Indexer extends SubsystemBase {
             "Indexer Velocity",
             motor.getEncoder().getVelocity()
         );
-        SmartDashboard.putBoolean(
-            "Indexer Game Piece Detected",
-            gamepieceDetected()
-        );
+        // SmartDashboard.putBoolean(
+        //     "Indexer Game Piece Detected",
+        //     gamepieceDetected()
+        // );
     }
 }
