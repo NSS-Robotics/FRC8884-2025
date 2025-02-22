@@ -24,9 +24,7 @@ public class Wrist extends SubsystemBase {
     private static Slot0Configs slot0Configs = motorConfig.Slot0;
 
     private static PositionVoltage pivotPositionVoltage;
-    private CANcoder encoder = new CANcoder(
-        Constants.WristConstants.encoder
-    );
+    private CANcoder encoder = new CANcoder(Constants.WristConstants.encoder);
 
     public Wrist() {
         encoder.clearStickyFaults();

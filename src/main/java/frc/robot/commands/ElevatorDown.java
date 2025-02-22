@@ -2,10 +2,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Wrist;
 
 public class ElevatorDown extends Command {
+
     private final Elevator m_elevator;
     private final Wrist m_wrist;
     private final double pos = 0;
