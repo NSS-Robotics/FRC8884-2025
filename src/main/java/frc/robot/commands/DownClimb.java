@@ -20,7 +20,7 @@ public class DownClimb extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_climber.resetServos();
+        m_climber.setClimber(-26.35986328125, 1);
     }
 
     // Called once the command ends or is interrupted%.

@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -40,121 +41,8 @@ public class Intake extends SubsystemBase {
         Constants.IntakeConstants.encoderID
     );
 
-    /** START: SYSID */
-    private final MutVoltage m_intakeAppliedVoltage = Volts.mutable(0);
-    private final MutAngle m_intakeAngle = Rotations.mutable(0);
-    private final MutAngularVelocity m_intakeAngularVelocity =
-        RotationsPerSecond.mutable(0);
-    private final MutVoltage m_pivotAppliedVoltage = Volts.mutable(0);
-    private final MutAngle m_pivotAngle = Rotations.mutable(0);
-    private final MutAngularVelocity m_pivotAngularVelocity =
-        RotationsPerSecond.mutable(0);
-
-    private final SysIdRoutine m_intakeSysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(),
-        new SysIdRoutine.Mechanism(
-            voltage -> {
-                intakeMotor.setVoltage(voltage.in(Volts));
-            },
-            log -> {
-                log
-                    .motor("intake")
-                    .voltage(
-                        m_intakeAppliedVoltage.mut_replace(
-                            intakeMotor.get() *
-                            RobotController.getBatteryVoltage(),
-                            Volts
-                        )
-                    )
-                    .angularPosition(
-                        m_intakeAngle.mut_replace(
-                            intakeMotor.getPosition().getValueAsDouble(),
-                            Rotations
-                        )
-                    )
-                    .angularVelocity(
-                        m_intakeAngularVelocity.mut_replace(
-                            intakeMotor.getVelocity().getValueAsDouble(),
-                            RotationsPerSecond
-                        )
-                    );
-            },
-            this
-        )
-    );
-
-    private final SysIdRoutine m_pivotSysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(),
-        new SysIdRoutine.Mechanism(
-            voltage -> {
-                pivotMotor.setVoltage(voltage.in(Volts));
-            },
-            log -> {
-                log
-                    .motor("pivot")
-                    .voltage(
-                        m_pivotAppliedVoltage.mut_replace(
-                            pivotMotor.get() *
-                            RobotController.getBatteryVoltage(),
-                            Volts
-                        )
-                    )
-                    .angularPosition(
-                        m_pivotAngle.mut_replace(
-                            pivotEncoder.getPosition().getValueAsDouble(),
-                            Rotations
-                        )
-                    )
-                    .angularVelocity(
-                        m_pivotAngularVelocity.mut_replace(
-                            pivotEncoder.getVelocity().getValueAsDouble(),
-                            RotationsPerSecond
-                        )
-                    );
-            },
-            this
-        )
-    );
-
-    /**
-     * Returns a command that will execute a quasistatic test in the given
-     * direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command intakeSysIdQuasistatic(SysIdRoutine.Direction dir) {
-        return m_intakeSysIdRoutine.quasistatic(dir);
-    }
-
-    /**
-     * Returns a command that will execute a dynamic test in the given direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command intakeSysIdDynamic(SysIdRoutine.Direction dir) {
-        return m_intakeSysIdRoutine.dynamic(dir);
-    }
-
-    /**
-     * Returns a command that will execute a quasistatic test in the given
-     * direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command pivotSysIdQuasistatic(SysIdRoutine.Direction dir) {
-        return m_pivotSysIdRoutine.quasistatic(dir);
-    }
-
-    /**
-     * Returns a command that will execute a dynamic test in the given direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command pivotSysIdDynamic(SysIdRoutine.Direction dir) {
-        return m_pivotSysIdRoutine.dynamic(dir);
-    }
-
-    /* END: SYSID */
+    CurrentLimitsConfigs intakeCurrentLimitsConfigs =
+        new CurrentLimitsConfigs();
 
     private static TalonFXConfiguration pivotMotorConfig =
         new TalonFXConfiguration();
@@ -195,8 +83,11 @@ public class Intake extends SubsystemBase {
         intakeSlot0Configs.kS = Constants.IntakeConstants.intakeKS;
         intakeSlot0Configs.kV = Constants.IntakeConstants.intakeKV;
         intakeSlot0Configs.kA = Constants.IntakeConstants.intakeKA;
+        intakeCurrentLimitsConfigs.StatorCurrentLimitEnable = true;
+        intakeCurrentLimitsConfigs.StatorCurrentLimit = 40;
 
         intakeMotor.getConfigurator().apply(intakeSlot0Configs);
+        intakeMotor.getConfigurator().apply(intakeCurrentLimitsConfigs);
         intakeMotor.setNeutralMode(NeutralModeValue.Coast);
     }
 
@@ -208,18 +99,20 @@ public class Intake extends SubsystemBase {
     }
 
     public void setPivot(double position, int slot) {
-        position = Math.max(
-            0,
-            Math.min(Constants.IntakeConstants.pivotMaxRotations, position)
-        );
+        // position = Math.min(
+        //     0,
+        //     Math.max(Constants.IntakeConstants.pivotMaxRotations, position)
+        // );
 
         pivotPositionVoltage = new PositionVoltage(position).withSlot(slot);
 
         pivotMotor.setControl(pivotPositionVoltage);
     }
 
-    public void setIntake(double velocity) {
+    public void setIntake(double velocity, boolean l1) {
         intakeVelocityVoltage = new VelocityVoltage(velocity / 60);
+        intakeCurrentLimitsConfigs.StatorCurrentLimitEnable = l1;
+        intakeMotor.getConfigurator().apply(intakeCurrentLimitsConfigs);
 
         intakeMotor.setControl(intakeVelocityVoltage);
     }
@@ -233,7 +126,12 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber(
             "Intake Pivot Encoder",
-            pivotEncoder.getPosition().getValueAsDouble()
+            pivotEncoder.getAbsolutePosition().getValueAsDouble()
+        );
+
+        SmartDashboard.putNumber(
+            "Intake Motor Encoder",
+            pivotMotor.getPosition().getValueAsDouble()
         );
 
         SmartDashboard.putNumber(

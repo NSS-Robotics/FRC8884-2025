@@ -12,10 +12,10 @@ public class Limelight extends SubsystemBase {
     private NetworkTable table;
     private String name;
 
-    private double ta = 0;
-    private double tx = 0;
-    private double ty = 0;
-    private double tv = 0;
+    public double ta = 0;
+    public double tx = 0;
+    public double ty = 0;
+    public double tv = 0;
 
     public Pose2d botPose = new Pose2d(0, 0, new Rotation2d());
 
@@ -47,27 +47,17 @@ public class Limelight extends SubsystemBase {
         );
 
         String[] names = {
-            "pos x",
-            "pos y",
-            "pos z",
-            "rot x",
-            "rot y",
-            "rot z",
+            "llpos x",
+            "llpos y",
+            "llpos z",
+            "llrot x",
+            "llrot y",
+            "llrot z",
         };
 
         for (int i = 0; i < names.length; i++) {
             SmartDashboard.putNumber(names[i], pos[i]);
         }
-    }
-
-    public double gettx() {
-        updateLimelightTracking();
-        return tx;
-    }
-
-    public double gettv() {
-        updateLimelightTracking();
-        return tv;
     }
 
     @Override

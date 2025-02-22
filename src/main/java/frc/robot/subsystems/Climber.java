@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -38,81 +39,32 @@ public class Climber extends SubsystemBase {
         Constants.ClimberConstants.lMotorID,
         true
     );
-    private static Slot0Configs slot0configs = new Slot0Configs();
+    private static Slot0Configs upPID = new Slot0Configs();
+    private static Slot1Configs downPID = new Slot1Configs();
     private static PositionVoltage positionPID;
-
-    /** START: SYSID */
-    private final MutVoltage m_appliedVoltage = Volts.mutable(0);
-    private final MutDistance m_distance = Meters.mutable(0);
-    private final MutLinearVelocity m_velocity = MetersPerSecond.mutable(0);
-
-    private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(),
-        new SysIdRoutine.Mechanism(
-            voltage -> {
-                lMotor.setVoltage(voltage.in(Volts));
-                rMotor.setVoltage(voltage.in(Volts));
-            },
-            log -> {
-                log
-                    .motor("climber")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            lMotor.get() * RobotController.getBatteryVoltage(),
-                            Volts
-                        )
-                    )
-                    .linearPosition(
-                        m_distance.mut_replace(
-                            lMotor.getPosition().getValueAsDouble(),
-                            Meters
-                        )
-                    )
-                    .linearVelocity(
-                        m_velocity.mut_replace(
-                            lMotor.getVelocity().getValueAsDouble(),
-                            MetersPerSecond
-                        )
-                    );
-            },
-            this
-        )
-    );
-
-    /**
-     * Returns a command that will execute a quasistatic test in the given
-     * direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command sysIdQuasistatic(SysIdRoutine.Direction dir) {
-        return m_sysIdRoutine.quasistatic(dir);
-    }
-
-    /**
-     * Returns a command that will execute a dynamic test in the given direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command sysIdDynamic(SysIdRoutine.Direction dir) {
-        return m_sysIdRoutine.dynamic(dir);
-    }
-
-    /* END: SYSID */
 
     public Climber() {
         lMotor.clearStickyFaults();
         rMotor.clearStickyFaults();
+        resetEncoders();
         // Put these in Brake mode when running for real.
-        lMotor.setNeutralMode(NeutralModeValue.Coast);
-        rMotor.setNeutralMode(NeutralModeValue.Coast);
+        lMotor.setNeutralMode(NeutralModeValue.Brake);
+        rMotor.setNeutralMode(NeutralModeValue.Brake);
         rMotor.setControl(leader);
 
-        slot0configs.kP = Constants.ClimberConstants.kP;
-        slot0configs.kI = Constants.ClimberConstants.kI;
-        slot0configs.kD = Constants.ClimberConstants.kD;
+        upPID.kP = Constants.ClimberConstants.upkP;
+        upPID.kI = Constants.ClimberConstants.upkI;
+        upPID.kD = Constants.ClimberConstants.upkD;
+        downPID.kP = Constants.ClimberConstants.downkP;
+        downPID.kI = Constants.ClimberConstants.downkI;
+        downPID.kD = Constants.ClimberConstants.downkD;
 
-        rMotor.getConfigurator().apply(slot0configs);
+        lMotor.getConfigurator().apply(upPID);
+        lMotor.getConfigurator().apply(downPID);
+        rMotor.getConfigurator().apply(upPID);
+        rMotor.getConfigurator().apply(downPID);
+
+        engageLatch();
     }
 
     public void resetEncoders() {
@@ -120,28 +72,37 @@ public class Climber extends SubsystemBase {
         rMotor.setPosition(0);
     }
 
-    public void setClimber(double position) {
-        position = Math.max(
+    public void setClimber(double position, int slot) {
+        position = Math.min(
             0,
-            Math.min(Constants.ClimberConstants.maxRotations, position)
+            Math.max(Constants.ClimberConstants.maxRotations, position)
         );
-        positionPID = new PositionVoltage(position);
+        SmartDashboard.putNumber("Climber target pos", position);
+        positionPID = new PositionVoltage(position).withSlot(slot);
         lMotor.setControl(positionPID);
     }
 
-    public void resetServos() {
-        lServo.setAngle(0);
-        rServo.setAngle(150);
+    public void engageLatch() {
+        lServo.set(0.5);
+        rServo.set(0.3);
     }
 
-    public void setServos(double degrees) {
-        lServo.setAngle(degrees);
-        rServo.setAngle(degrees + 150);
+    public void disengageLatch() {
+        lServo.set(0.6);
+        rServo.set(0.2);
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("lServo", lServo.getPosition());
         SmartDashboard.putNumber("rServo", rServo.getPosition());
+        SmartDashboard.putNumber(
+            "L Climber Pos",
+            lMotor.getPosition().getValueAsDouble()
+        );
+        SmartDashboard.putNumber(
+            "R Climber Pos",
+            rMotor.getPosition().getValueAsDouble()
+        );
     }
 }

@@ -34,65 +34,6 @@ public class Claw extends SubsystemBase {
         new CurrentLimitsConfigs();
     private final LaserCan lasercan = new LaserCan(43);
 
-    /** START: SYSID */
-    private final MutVoltage m_appliedVoltage = Volts.mutable(0);
-    private final MutAngle m_angle = Rotations.mutable(0);
-    private final MutAngularVelocity m_angularVelocity =
-        RotationsPerSecond.mutable(0);
-
-    private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(),
-        new SysIdRoutine.Mechanism(
-            voltage -> {
-                motor.setVoltage(voltage.in(Volts));
-            },
-            log -> {
-                log
-                    .motor("endeffector")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            motor.get() * RobotController.getBatteryVoltage(),
-                            Volts
-                        )
-                    )
-                    .angularPosition(
-                        m_angle.mut_replace(
-                            motor.getPosition().getValueAsDouble(),
-                            Rotations
-                        )
-                    )
-                    .angularVelocity(
-                        m_angularVelocity.mut_replace(
-                            motor.getVelocity().getValueAsDouble(),
-                            RotationsPerSecond
-                        )
-                    );
-            },
-            this
-        )
-    );
-
-    /**
-     * Returns a command that will execute a quasistatic test in the given
-     * direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command sysIdQuasistatic(SysIdRoutine.Direction dir) {
-        return m_sysIdRoutine.quasistatic(dir);
-    }
-
-    /**
-     * Returns a command that will execute a dynamic test in the given direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command sysIdDynamic(SysIdRoutine.Direction dir) {
-        return m_sysIdRoutine.dynamic(dir);
-    }
-
-    /* END: SYSID */
-
     public Claw() {
         slot0Configs.kP = Constants.EndEffectorConstants.kP;
         slot0Configs.kI = Constants.EndEffectorConstants.kI;
@@ -147,7 +88,7 @@ public class Claw extends SubsystemBase {
 
     public boolean gamepieceDetected() {
         double measurement = lasercan.getMeasurement().distance_mm;
-        return measurement <= 20;
+        return measurement < 140.0;
     }
 
     @Override
@@ -156,5 +97,9 @@ public class Claw extends SubsystemBase {
             "Claw Velocity",
             motor.getVelocity().getValueAsDouble()
         );
+        // SmartDashboard.putBoolean(
+        //     "Claw Game Piece Detected",
+        //     gamepieceDetected()
+        // );
     }
 }

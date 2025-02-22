@@ -31,7 +31,8 @@ public class Swerve extends SubsystemBase {
     private Canandgyro gyro;
 
     private Pose2d m_pose;
-    private Limelight l_limelight;
+    private Limelight l_limelightlow;
+    private Limelight l_limelighthigh;
     public boolean wtfIsRunning = false;
 
     // WPILib
@@ -39,7 +40,7 @@ public class Swerve extends SubsystemBase {
         .getStructTopic("MyPose", Pose2d.struct)
         .publish();
 
-    public Swerve(Limelight limelight) {
+    public Swerve(Limelight limelightlow, Limelight limelighthigh) {
         gyro = new Canandgyro(Constants.Swerve.gyroID);
         gyro.resetFactoryDefaults(0.35);
         gyro.setYaw(0);
@@ -58,7 +59,8 @@ public class Swerve extends SubsystemBase {
             getModulePositions()
         );
         // driveInvert = (isRed() ? 1 : -1);
-        l_limelight = limelight;
+        l_limelightlow = limelightlow;
+        l_limelighthigh = limelighthigh;
     }
 
     public void autoDrive(ChassisSpeeds speed) {
@@ -266,21 +268,26 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // if (l_limelight.tv > 0) {
-        // swerveOdometry = createOdometry(l_limelight.botPose);
-        // m_pose = l_limelight.botPose;
-        // } else {
-        // m_pose = swerveOdometry.update(getGyroYaw(), getModulePositions());
-        // }
+        Limelight limelight = null;
 
-        if (l_limelight.gettv() > 0) {
-            swerveOdometry = createOdometry(l_limelight.botPose);
-            m_pose = l_limelight.botPose;
+        boolean htv = l_limelighthigh.tv > 0;
+        boolean ltv = l_limelightlow.tv > 0;
+
+        if (htv && ltv) {
+            limelight = l_limelighthigh.ta > l_limelightlow.ta
+                ? l_limelighthigh
+                : l_limelightlow;
+        } else if (htv) {
+            limelight = l_limelighthigh;
+        } else if (ltv) {
+            limelight = l_limelightlow;
+        }
+
+        if (limelight != null) {
+            swerveOdometry = createOdometry(limelight.botPose);
+            m_pose = limelight.botPose;
         } else {
-            m_pose = swerveOdometry.update(
-                gyro.getRotation2d(),
-                getModulePositions()
-            );
+            m_pose = swerveOdometry.update(getGyroYaw(), getModulePositions());
         }
 
         for (SwerveModule mod : mSwerveMods) {

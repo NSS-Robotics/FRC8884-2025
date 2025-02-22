@@ -1,10 +1,9 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.RobotState;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
 
@@ -29,12 +28,18 @@ public class Up extends Command {
     // };
     // private boolean isSafeFromState = false;
 
-    public Up(RobotContainer robotContainer, RobotState targetState, Elevator elevator, Wrist wrist) {
+    public Up(
+        RobotContainer robotContainer,
+        RobotState targetState,
+        Elevator elevator,
+        Wrist wrist
+    ) {
         this.robotContainer = robotContainer;
         this.targetState = targetState;
         m_elevator = elevator;
         m_wrist = wrist;
-        targetElevatorPos = Constants.ElevatorConstants.pos[targetState.ordinal()];
+        targetElevatorPos =
+            Constants.ElevatorConstants.pos[targetState.ordinal()];
         targetWristPos = Constants.WristConstants.pos[targetState.ordinal()];
         addRequirements(m_elevator, m_wrist);
     }
@@ -63,10 +68,22 @@ public class Up extends Command {
             }
             
             // only move elevator when wrist out (prevents dismembering)
-            if (Math.abs(m_wrist.getPosition() - outWristPos) < Constants.WristConstants.posTolerance) {
-                m_elevator.setElevator(targetElevatorPos, Constants.ElevatorConstants.upSlot);
+            if (
+                Math.abs(m_wrist.getPosition() - outWristPos) <
+                Constants.WristConstants.posTolerance
+            ) {
+                m_elevator.setElevator(
+                    targetElevatorPos,
+                    Constants.ElevatorConstants.upSlot
+                );
             }
-            
+            // only move wrist when elevator up (prevents wrist/bumper collision)
+            if (
+                m_elevator.getPosition() >
+                Constants.ElevatorConstants.wristDownSafePos
+            ) {
+                m_wrist.setWrist(targetWristPos);
+            }
         }
     }
 

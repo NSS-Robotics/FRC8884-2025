@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.Volts;
 
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -36,65 +35,6 @@ public class Indexer extends SubsystemBase {
         Constants.IndexerConstants.kV,
         Constants.IndexerConstants.kA
     );
-
-    /** START: SYSID */
-    private final MutVoltage m_appliedVoltage = Volts.mutable(0);
-    private final MutAngle m_angle = Rotations.mutable(0);
-    private final MutAngularVelocity m_angularVelocity =
-        RotationsPerSecond.mutable(0);
-
-    private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(),
-        new SysIdRoutine.Mechanism(
-            voltage -> {
-                motor.setVoltage(voltage.in(Volts));
-            },
-            log -> {
-                log
-                    .motor("indexer")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            motor.getAppliedOutput() * motor.getBusVoltage(),
-                            Volts
-                        )
-                    )
-                    .angularPosition(
-                        m_angle.mut_replace(
-                            motor.getEncoder().getPosition(),
-                            Rotations
-                        )
-                    )
-                    .angularVelocity(
-                        m_angularVelocity.mut_replace(
-                            motor.getEncoder().getVelocity(),
-                            RotationsPerSecond
-                        )
-                    );
-            },
-            this
-        )
-    );
-
-    /**
-     * Returns a command that will execute a quasistatic test in the given
-     * direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command sysIdQuasistatic(SysIdRoutine.Direction dir) {
-        return m_sysIdRoutine.quasistatic(dir);
-    }
-
-    /**
-     * Returns a command that will execute a dynamic test in the given direction.
-     *
-     * @param direction The direction (forward or reverse) to run the test in
-     */
-    public Command sysIdDynamic(SysIdRoutine.Direction dir) {
-        return m_sysIdRoutine.dynamic(dir);
-    }
-
-    /* END: SYSID */
 
     public Indexer() {
         motorConfig = new SparkMaxConfig();
@@ -139,7 +79,7 @@ public class Indexer extends SubsystemBase {
 
     public boolean gamepieceDetected() {
         double measurement = lasercan.getMeasurement().distance_mm;
-        return measurement <= 20;
+        return measurement < 20;
     }
 
     public void stopIndexer() {
@@ -152,5 +92,9 @@ public class Indexer extends SubsystemBase {
             "Indexer Velocity",
             motor.getEncoder().getVelocity()
         );
+        // SmartDashboard.putBoolean(
+        //     "Indexer Game Piece Detected",
+        //     gamepieceDetected()
+        // );
     }
 }

@@ -3,8 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -28,9 +26,8 @@ public class RobotContainer {
     private final Intake m_intake = new Intake();
     private final Limelight m_limelightLow = new Limelight("low");
     private final Limelight m_limelightHigh = new Limelight("high");
-    private final Swerve m_swerve = new Swerve(m_limelightHigh);
+    private final Swerve m_swerve = new Swerve(m_limelightLow, m_limelightHigh);
     private final Wrist m_wrist = new Wrist();
-
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController =
@@ -70,115 +67,19 @@ public class RobotContainer {
     private void configureBindings() {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
         // cancelling on release.
-
-        // m_driverController.a().whileTrue(m_climber.sysIdDynamic(Direction.kForward));
-        // m_driverController.b().whileTrue(m_climber.sysIdDynamic(Direction.kReverse));
-        // m_driverController.x().whileTrue(m_climber.sysIdQuasistatic(Direction.kForward));
-        // m_driverController.y().whileTrue(m_climber.sysIdQuasistatic(Direction.kReverse));
-
-        // m_driverController
-        //     .a()
-        //     .whileTrue(m_indexer.sysIdDynamic(Direction.kForward));
-        // m_driverController
-        //     .b()
-        //     .whileTrue(m_indexer.sysIdDynamic(Direction.kReverse));
-        // m_driverController
-        //     .x()
-        //     .whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
-        // m_driverController
-        //     .y()
-        //     .whileTrue(m_indexer.sysIdQuasistatic(Direction.kReverse));
-
-        m_driverController
-            .x()
-            .whileTrue(
-                new RunIndexer(m_indexer, Constants.IndexerConstants.velocity)
-            );
-        m_driverController
-            .x()
-            .whileTrue(
-                new RunIntake(m_intake, Constants.IntakeConstants.velocity)
-            );
-        m_driverController
-            .b()
-            .whileTrue(
-                new RunIntake(m_intake, -Constants.IntakeConstants.velocity)
-            );
-
-        // m_driverController
-        //     .rightTrigger()
-        //     .whileTrue(
-        //         new RunClawPivot(
-        //             m_wrist,
-        //             m_elevator,
-        //             Constants.WristConstants.testPos
-        //         )
-        //     );
-        // m_driverController
-        //     .leftTrigger()
-        //     .whileTrue(
-        //         new RunClawPivot(
-        //             m_wrist,
-        //             m_elevator,
-        //             Constants.WristConstants.handoffPos
-        //         )
-        //     );
-        m_driverController
-            .leftTrigger()
-            .whileTrue(
-                new RunWrist(
-                    m_wrist,
-                    m_elevator,
-                    Constants.WristConstants.l2Pos
-                )
-            );
-        m_driverController
-            .a()
-            .whileTrue(
-                new RunWrist(
-                    m_wrist,
-                    m_elevator,
-                    Constants.WristConstants.bargePos
-                )
-            );
-
         m_driverController
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
         m_driverController
-            .rightBumper()
-            .whileTrue(
-                new RunClaw(
-                    m_endEffector,
-                    Constants.EndEffectorConstants.velocity
-                )
-            );
-        m_driverController
-            .leftBumper()
-            .whileTrue(
-                new RunClaw(
-                    m_endEffector,
-                    -Constants.EndEffectorConstants.outtakeVelocity
-                )
-            );
-        m_driverController
             .pov(0)
-            .onTrue(
-                new ParallelDeadlineGroup(
-                    new WaitCommand(10),
-                    new Up(m_elevator)
-                )
-            );
-        m_driverController
-            .pov(180)
-            .onTrue(
-                new ParallelDeadlineGroup(
-                    new WaitCommand(6),
-                    new ElevatorDown(m_elevator, m_wrist)
-                )
-            );
+            .onTrue(new Up(this, Constants.RobotState.l2, m_elevator, m_wrist));
     }
+
+    // public RobotState getRobotState() {
+
+    //     return RobotState.l2;
+    // }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
