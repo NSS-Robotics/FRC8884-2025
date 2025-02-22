@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -66,132 +67,9 @@ public class RobotContainer {
     private void configureBindings() {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
         // cancelling on release.
-
-        // m_driverController.a().whileTrue(m_climber.sysIdDynamic(Direction.kForward));
-        // m_driverController.b().whileTrue(m_climber.sysIdDynamic(Direction.kReverse));
-        // m_driverController.x().whileTrue(m_climber.sysIdQuasistatic(Direction.kForward));
-        // m_driverController.y().whileTrue(m_climber.sysIdQuasistatic(Direction.kReverse));
-
-        // m_driverController
-        //     .a()
-        //     .whileTrue(m_intake.pivotSysIdDynamic(Direction.kForward));
-        // m_driverController
-        //     .b()
-        //     .whileTrue(m_intake.pivotSysIdDynamic(Direction.kReverse));
-        // m_driverController
-        //     .x()
-        //     .whileTrue(m_intake.pivotSysIdQuasistatic(Direction.kForward));
-        // m_driverController
-        //     .y()
-        //     .whileTrue(m_intake.pivotSysIdQuasistatic(Direction.kReverse));
-        // m_driverController
-        //     .x()
-        //     .whileTrue(
-        //         new RunIndexer(m_indexer, Constants.IndexerConstants.velocity)
-        //     );
         m_driverController
-            .x()
-            .whileTrue(
-                new RunIntake(m_intake, -Constants.IntakeConstants.l1velocity)
-            );
-        // m_driverController
-        //     .b()
-        //     .whileTrue(
-        //         new RunIntake(m_intake, -Constants.IntakeConstants.velocity)
-        //     );
-
-        // m_driverController
-        //     .rightTrigger()
-        //     .whileTrue(
-        //         new RunClawPivot(
-        //             m_wrist,
-        //             m_elevator,
-        //             Constants.WristConstants.testPos
-        //         )
-        //     );
-        // m_driverController
-        //     .leftTrigger()
-        //     .whileTrue(
-        //         new RunClawPivot(
-        //             m_wrist,
-        //             m_elevator,
-        //             Constants.WristConstants.handoffPos
-        //         )
-        //     );
-        //     m_driverController
-        //         .leftTrigger()
-        //         .whileTrue(
-        //             new RunWrist(
-        //                 m_wrist,
-        //                 m_elevator,
-        //                 Constants.WristConstants.algaeIntakePos
-        //             )
-        //         );
-        //     m_driverController
-        //         .a()
-        //         .whileTrue(
-        //             new RunWrist(
-        //                 m_wrist,
-        //                 m_elevator,
-        //                 Constants.WristConstants.bargePos
-        //             )
-        //         );
-
-        //     m_driverController
-        //         .y()
-        //         .whileTrue(new InstantCommand(m_swerve::zeroGyro));
-
-        //     m_driverController
-        //         .rightBumper()
-        //         .whileTrue(
-        //             new RunClaw(
-        //                 m_endEffector,
-        //                 Constants.EndEffectorConstants.velocity
-        //             )
-        //         );
-        //     m_driverController
-        //         .leftBumper()
-        //         .whileTrue(
-        //             new RunClaw(
-        //                 m_endEffector,
-        //                 -Constants.EndEffectorConstants.outtakeVelocity
-        //             )
-        //         );
-        //     m_driverController
-        //         .pov(0)
-        //         .onTrue(
-        //             new ParallelDeadlineGroup(
-        //                 new WaitCommand(10),
-        //                 new ElevatorUp(m_elevator, this::getRobotState)
-        //             )
-        //         );
-        //     m_driverController
-        //         .pov(180)
-        //         .onTrue(
-        //             new ParallelDeadlineGroup(
-        //                 new WaitCommand(6),
-        //                 new ElevatorDown(m_elevator, m_wrist)
-        //             )
-        //         );
-
-        m_driverController
-            .pov(90)
-            .whileTrue(
-                new RunIntakePivot(
-                    m_intake,
-                    Constants.IntakeConstants.upPosition,
-                    0
-                )
-            );
-        m_driverController
-            .pov(270)
-            .whileTrue(
-                new RunIntakePivot(
-                    m_intake,
-                    Constants.IntakeConstants.intakePosition,
-                    1
-                )
-            );
+            .y()
+            .whileTrue(new InstantCommand(m_swerve::zeroGyro));
     }
 
     // public RobotState getRobotState() {
