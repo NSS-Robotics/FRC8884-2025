@@ -139,7 +139,7 @@ public class Indexer extends SubsystemBase {
 
     public boolean gamepieceDetected() {
         double measurement = lasercan.getMeasurement().distance_mm;
-        return measurement <= 20;
+        return measurement < 20;
     }
 
     public void stopIndexer() {
@@ -151,6 +151,10 @@ public class Indexer extends SubsystemBase {
         SmartDashboard.putNumber(
             "Indexer Velocity",
             motor.getEncoder().getVelocity()
+        );
+        SmartDashboard.putBoolean(
+            "Indexer Game Piece Detected",
+            gamepieceDetected()
         );
     }
 }

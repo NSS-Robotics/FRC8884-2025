@@ -131,12 +131,12 @@ public class Climber extends SubsystemBase {
 
     public void resetServos() {
         lServo.setAngle(0);
-        rServo.setAngle(150);
+        rServo.setAngle(0);
     }
 
     public void setServos(double degrees) {
         lServo.setAngle(degrees);
-        rServo.setAngle(degrees + 150);
+        rServo.setAngle(degrees);
     }
 
     @Override

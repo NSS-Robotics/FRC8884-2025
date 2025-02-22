@@ -316,13 +316,13 @@ public final class Constants {
         public static final int pivotMotorID = 60;
         public static final int intakeMotorID = 61;
         public static final int encoderID = 62;
-        public static final double encoderOffset = -0.69384765625;
-        public static final double uppivotKP = 20.946;
+        public static final double encoderOffset = 0.6474609375;
+        public static final double uppivotKP = 8.842;
         public static final double uppivotKI = 0;
-        public static final double uppivotKD = 1.1742;
-        public static final double downpivotKP = 3;
+        public static final double uppivotKD = 1;
+        public static final double downpivotKP = 5;
         public static final double downpivotKI = 0;
-        public static final double downpivotKD = 0;
+        public static final double downpivotKD = 1;
         public static final double maxRot = 0;
         public static final double intakeKP = 0.053;
         public static final double intakeKI = 0;
@@ -331,14 +331,16 @@ public final class Constants {
         public static final double intakeKV = 0.12479;
         public static final double intakeKA = 0.0070548;
         public static final double pivotMaxRotations = 0.90353515625;
-        public static final double upPosition = 0.886484375;
+        public static final double algaePosition = 0.84;
+        public static final double upPosition = 0.966484375;
         public static final double intakePosition = 0;
         public static final double velocity = 2000;
+        public static final double l1velocity = 1000;
     }
 
     public static final class EndEffectorConstants {
 
-        public static final double kP = 4;
+        public static final double kP = 5;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kS = 1.0274;

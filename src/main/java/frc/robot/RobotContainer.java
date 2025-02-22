@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.RobotState;
 import frc.robot.commands.*;
@@ -78,32 +79,31 @@ public class RobotContainer {
 
         // m_driverController
         //     .a()
-        //     .whileTrue(m_indexer.sysIdDynamic(Direction.kForward));
+        //     .whileTrue(m_intake.pivotSysIdDynamic(Direction.kForward));
         // m_driverController
         //     .b()
-        //     .whileTrue(m_indexer.sysIdDynamic(Direction.kReverse));
+        //     .whileTrue(m_intake.pivotSysIdDynamic(Direction.kReverse));
         // m_driverController
         //     .x()
-        //     .whileTrue(m_indexer.sysIdQuasistatic(Direction.kForward));
+        //     .whileTrue(m_intake.pivotSysIdQuasistatic(Direction.kForward));
         // m_driverController
         //     .y()
-        //     .whileTrue(m_indexer.sysIdQuasistatic(Direction.kReverse));
-
+        //     .whileTrue(m_intake.pivotSysIdQuasistatic(Direction.kReverse));
+        // m_driverController
+        //     .x()
+        //     .whileTrue(
+        //         new RunIndexer(m_indexer, Constants.IndexerConstants.velocity)
+        //     );
         m_driverController
             .x()
             .whileTrue(
-                new RunIndexer(m_indexer, Constants.IndexerConstants.velocity)
+                new RunIntake(m_intake, -Constants.IntakeConstants.l1velocity)
             );
-        m_driverController
-            .x()
-            .whileTrue(
-                new RunIntake(m_intake, Constants.IntakeConstants.velocity)
-            );
-        m_driverController
-            .b()
-            .whileTrue(
-                new RunIntake(m_intake, -Constants.IntakeConstants.velocity)
-            );
+        // m_driverController
+        //     .b()
+        //     .whileTrue(
+        //         new RunIntake(m_intake, -Constants.IntakeConstants.velocity)
+        //     );
 
         // m_driverController
         //     .rightTrigger()
@@ -123,66 +123,86 @@ public class RobotContainer {
         //             Constants.WristConstants.handoffPos
         //         )
         //     );
-        m_driverController
-            .leftTrigger()
-            .whileTrue(
-                new RunWrist(
-                    m_wrist,
-                    m_elevator,
-                    Constants.WristConstants.l2Pos
-                )
-            );
-        m_driverController
-            .a()
-            .whileTrue(
-                new RunWrist(
-                    m_wrist,
-                    m_elevator,
-                    Constants.WristConstants.bargePos
-                )
-            );
+        //     m_driverController
+        //         .leftTrigger()
+        //         .whileTrue(
+        //             new RunWrist(
+        //                 m_wrist,
+        //                 m_elevator,
+        //                 Constants.WristConstants.algaeIntakePos
+        //             )
+        //         );
+        //     m_driverController
+        //         .a()
+        //         .whileTrue(
+        //             new RunWrist(
+        //                 m_wrist,
+        //                 m_elevator,
+        //                 Constants.WristConstants.bargePos
+        //             )
+        //         );
+
+        //     m_driverController
+        //         .y()
+        //         .whileTrue(new InstantCommand(m_swerve::zeroGyro));
+
+        //     m_driverController
+        //         .rightBumper()
+        //         .whileTrue(
+        //             new RunClaw(
+        //                 m_endEffector,
+        //                 Constants.EndEffectorConstants.velocity
+        //             )
+        //         );
+        //     m_driverController
+        //         .leftBumper()
+        //         .whileTrue(
+        //             new RunClaw(
+        //                 m_endEffector,
+        //                 -Constants.EndEffectorConstants.outtakeVelocity
+        //             )
+        //         );
+        //     m_driverController
+        //         .pov(0)
+        //         .onTrue(
+        //             new ParallelDeadlineGroup(
+        //                 new WaitCommand(10),
+        //                 new ElevatorUp(m_elevator, this::getRobotState)
+        //             )
+        //         );
+        //     m_driverController
+        //         .pov(180)
+        //         .onTrue(
+        //             new ParallelDeadlineGroup(
+        //                 new WaitCommand(6),
+        //                 new ElevatorDown(m_elevator, m_wrist)
+        //             )
+        //         );
 
         m_driverController
-            .y()
-            .whileTrue(new InstantCommand(m_swerve::zeroGyro));
-
-        m_driverController
-            .rightBumper()
+            .pov(90)
             .whileTrue(
-                new RunClaw(
-                    m_endEffector,
-                    Constants.EndEffectorConstants.velocity
+                new RunIntakePivot(
+                    m_intake,
+                    Constants.IntakeConstants.upPosition,
+                    0
                 )
             );
         m_driverController
-            .leftBumper()
+            .pov(270)
             .whileTrue(
-                new RunClaw(
-                    m_endEffector,
-                    -Constants.EndEffectorConstants.outtakeVelocity
-                )
-            );
-        m_driverController
-            .pov(0)
-            .onTrue(
-                new ParallelDeadlineGroup(
-                    new WaitCommand(10),
-                    new ElevatorUp(m_elevator, this::getRobotState)
-                )
-            );
-        m_driverController
-            .pov(180)
-            .onTrue(
-                new ParallelDeadlineGroup(
-                    new WaitCommand(6),
-                    new ElevatorDown(m_elevator, m_wrist)
+                new RunIntakePivot(
+                    m_intake,
+                    Constants.IntakeConstants.intakePosition,
+                    1
                 )
             );
     }
 
-    public RobotState getRobotState() {
-        return state;
-    }
+    // public RobotState getRobotState() {
+
+    //     return RobotState.l2;
+    // }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
