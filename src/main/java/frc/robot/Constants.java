@@ -233,7 +233,7 @@ public final class Constants {
         public static final double downKD = 0;
         public static final int upSlot = 0;
         public static final int downSlot = 1;
-        public static final double wristDownSafePos = 0.7;
+        public static final double upThreshold = 0.7;
         public static final double[] pos = {
             0, // l1
             1.82, // l2
