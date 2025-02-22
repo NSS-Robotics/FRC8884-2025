@@ -233,7 +233,7 @@ public final class Constants {
         public static final double downKD = 0;
         public static final int upSlot = 0;
         public static final int downSlot = 1;
-        public static final double stationPos = 0.984619140625;
+        public static final double wristDownSafePos = 0.7;
         public static final double[] pos = {
             0, // l1
             1.82, // l2
@@ -273,14 +273,7 @@ public final class Constants {
             0.626, // algaeReefHigh
             0.4, // climb
         };
-        public static final double handoffPos = 0.03576171875;
-        public static final double algaeIntakePos = 0.61;
-        public static final double stationPos = 0.455810546875;
-        public static final double bargePos = 0.4111328125;
-
-        public static final double l2Pos = 0.626;
-        public static final double l4Pos = 0.6625;
-
+        public static final double posTolerance = 0.05;
         public static final double maxRotations = 0.72; // This should also be undefbeefed
         // 0.593505859375; // This should also be undefbeefed
     }

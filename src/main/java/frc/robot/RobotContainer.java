@@ -40,7 +40,7 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kRightX.value;
     private final int rotationAxis = XboxController.Axis.kLeftX.value;
 
-    private RobotState state;
+    public RobotState state;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -55,7 +55,6 @@ public class RobotContainer {
                 () -> false
             )
         );
-
         state = RobotState.handoff;
     }
 
