@@ -1,11 +1,13 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotState;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
+import java.lang.invoke.ConstantCallSite;
 
 public class Up extends Command {
 
@@ -15,18 +17,8 @@ public class Up extends Command {
     private final Wrist m_wrist;
     private final double targetElevatorPos;
     private final double targetWristPos;
-    private final double outWristPos = Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
-    // private final RobotState[] safeFromStates = {
-    //     RobotState.handoff, 
-    //     RobotState.algaeGround,
-    //     RobotState.l1,
-    //     RobotState.l2,
-    //     RobotState.l3,
-    //     RobotState.l4,
-        
-        
-    // };
-    // private boolean isSafeFromState = false;
+    private final double outWristPos =
+        Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
 
     public Up(
         RobotContainer robotContainer,
@@ -46,52 +38,36 @@ public class Up extends Command {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {
-        // isSafeFromState = false;
-        // for (RobotState safeFromState : safeFromStates) {
-        //     if (robotContainer.state.equals(safeFromState)) {
-        //         isSafeFromState = true;
-        //         break;
-        //     }
-        //
-        
-    }
+    public void initialize() {}
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-            if (m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold) {
-                m_wrist.setWrist(outWristPos); // safe position for elev to move up
-            } else {
-                // only move wrist down when elevator up (prevents wrist/bumper collision)
-                m_wrist.setWrist(targetWristPos);
-            }
-            
-            // only move elevator when wrist out (prevents dismembering)
-            if (
-                Math.abs(m_wrist.getPosition() - outWristPos) <
-                Constants.WristConstants.posTolerance
-            ) {
-                m_elevator.setElevator(
-                    targetElevatorPos,
-                    Constants.ElevatorConstants.upSlot
-                );
-            }
-            // only move wrist when elevator up (prevents wrist/bumper collision)
-            if (
-                m_elevator.getPosition() >
-                Constants.ElevatorConstants.wristDownSafePos
-            ) {
-                m_wrist.setWrist(targetWristPos);
-            }
+        if (
+            m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+        ) {
+            m_wrist.setWrist(outWristPos); // safe position for elev to move up
+        } else if (
+            m_elevator.getPosition() >
+            Constants.ElevatorConstants.wristDownSafeThreshold
+        ) {
+            m_wrist.setWrist(targetWristPos); // only move wrist down when elevator up (prevents wrist/bumper collision)
+        }
+        // // only move elevator when wrist out (prevents dismembering)
+        if (
+            Math.abs(m_wrist.getPosition() - outWristPos) <
+            Constants.WristConstants.posTolerance
+        ) {
+            m_elevator.setElevator(
+                targetElevatorPos,
+                Constants.ElevatorConstants.upSlot
+            );
         }
     }
 
     // Called once the command ends or is interrupted%.
     @Override
-    public void end(boolean interrupted) {
-        robotContainer.state = targetState;
-    }
+    public void end(boolean interrupted) {}
 
     // Returns true when the command should end.
     @Override

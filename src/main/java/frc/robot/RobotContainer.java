@@ -72,8 +72,21 @@ public class RobotContainer {
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
         m_driverController
+            .leftTrigger()
+            .onTrue(
+                new RunWrist(
+                    m_wrist,
+                    m_elevator,
+                    Constants.WristConstants.pos[RobotState.handoff.ordinal()]
+                )
+            );
+
+        m_driverController
             .pov(0)
             .onTrue(new Up(this, Constants.RobotState.l2, m_elevator, m_wrist));
+        m_driverController
+            .pov(180)
+            .onTrue(new ElevatorDown(m_elevator, m_wrist));
     }
 
     // public RobotState getRobotState() {
