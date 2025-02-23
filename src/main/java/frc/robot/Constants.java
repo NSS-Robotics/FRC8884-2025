@@ -279,7 +279,6 @@ public final class Constants {
         public static final double maxRotations = 0.72;
         public static final double minElevatorRaisedPos = 0.323;
         public static final double maxElevatorLoweredPos = 0.634;
-
     }
 
     public static final class ClimberConstants {
@@ -336,7 +335,7 @@ public final class Constants {
         public static final double pivotMaxRotations = -0.92871;
         public static final double intakeStartPos = -0.7;
         public static final double algaePosition = 0;
-        public static final double upPosition = 0.02;
+        public static final double upPosition = -0.05;
         public static final double intakePosition = -0.8487109375;
         public static final double velocity = 2000;
         public static final double l1velocity = 1000;
