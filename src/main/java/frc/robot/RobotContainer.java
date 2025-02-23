@@ -3,6 +3,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -26,17 +30,25 @@ public class RobotContainer {
     private final Intake m_intake = new Intake();
     private final Limelight m_limelightLow = new Limelight("low");
     private final Limelight m_limelightHigh = new Limelight("high");
-    private final Swerve m_swerve = new Swerve(m_limelightLow, m_limelightHigh);
+    private final Swerve m_swerve = new Swerve(
+        m_limelightLow,
+        m_limelightHigh,
+        this
+    );
     private final Wrist m_wrist = new Wrist();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController =
         new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+    private final CommandPS4Controller m_operatorController =
+        new CommandPS4Controller(OperatorConstants.kOperatorControllerPort);
+
     private final int translationAxis = XboxController.Axis.kRightY.value;
     private final int strafeAxis = XboxController.Axis.kRightX.value;
     private final int rotationAxis = XboxController.Axis.kLeftX.value;
-
+    public boolean isCoral = true;
+    public boolean isLeft = true;
     public RobotState state;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -68,25 +80,79 @@ public class RobotContainer {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
         // cancelling on release.
         m_driverController
+            .b()
+            .onTrue(
+                new SequentialCommandGroup(
+                    new ParallelDeadlineGroup(
+                        new WaitCommand(0.75),
+                        new RunServos(m_climber, false)
+                    ),
+                    new UpClimb(m_climber)
+                )
+            );
+        m_driverController
+            .a()
+            .onTrue(
+                new SequentialCommandGroup(
+                    new ParallelDeadlineGroup(
+                        new WaitCommand(0.5),
+                        new RunServos(m_climber, true)
+                    ),
+                    new DownClimb(m_climber)
+                )
+            );
+        m_driverController
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
         m_driverController
             .leftTrigger()
-            .onTrue(
-                new RunWrist(
+            .whileTrue(
+                new RunClaw(
+                    m_endEffector,
+                    -Constants.EndEffectorConstants.velocity
+                )
+            );
+        m_driverController
+            .rightTrigger()
+            .whileTrue(
+                new CoralIntake(
+                    m_intake,
+                    m_indexer,
                     m_wrist,
-                    m_elevator,
-                    Constants.WristConstants.pos[RobotState.handoff.ordinal()]
+                    m_endEffector,
+                    m_elevator
                 )
             );
 
         m_driverController
             .pov(0)
-            .onTrue(new Up(this, Constants.RobotState.l2, m_elevator, m_wrist));
+            .onTrue(new Up(this, Constants.RobotState.l4, m_elevator, m_wrist));
         m_driverController
             .pov(180)
             .onTrue(new ElevatorDown(m_elevator, m_wrist));
+        m_operatorController
+            .square()
+            .whileTrue(new InstantCommand(() -> this.isCoral = true));
+        m_operatorController
+            .circle()
+            .whileTrue(new InstantCommand(() -> this.isCoral = false));
+        m_operatorController
+            .L2()
+            .whileTrue(new InstantCommand(() -> this.isLeft = true));
+        m_operatorController
+            .R2()
+            .whileTrue(new InstantCommand(() -> this.isLeft = false));
+    }
+
+    public Command setupRobot() {
+        return new SequentialCommandGroup(
+            new ParallelDeadlineGroup(
+                new WaitCommand(0.5),
+                new RunServos(m_climber, true)
+            ),
+            new RestingClimb(m_climber)
+        );
     }
 
     // public RobotState getRobotState() {

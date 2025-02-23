@@ -42,6 +42,7 @@ public class Climber extends SubsystemBase {
     private static Slot0Configs upPID = new Slot0Configs();
     private static Slot1Configs downPID = new Slot1Configs();
     private static PositionVoltage positionPID;
+    public boolean latchEngaged = true;
 
     public Climber() {
         lMotor.clearStickyFaults();
@@ -82,14 +83,25 @@ public class Climber extends SubsystemBase {
         lMotor.setControl(positionPID);
     }
 
+    public void stopClimber() {
+        lMotor.stopMotor();
+        rMotor.stopMotor();
+    }
+
+    public double getPosition() {
+        return lMotor.getPosition().getValueAsDouble();
+    }
+
     public void engageLatch() {
         lServo.set(0.5);
         rServo.set(0.3);
+        latchEngaged = true;
     }
 
     public void disengageLatch() {
         lServo.set(0.6);
         rServo.set(0.2);
+        latchEngaged = false;
     }
 
     @Override
@@ -104,5 +116,6 @@ public class Climber extends SubsystemBase {
             "R Climber Pos",
             rMotor.getPosition().getValueAsDouble()
         );
+        SmartDashboard.putBoolean("Latch Engaged", latchEngaged);
     }
 }

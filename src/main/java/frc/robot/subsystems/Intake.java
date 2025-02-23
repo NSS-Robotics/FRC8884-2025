@@ -65,12 +65,12 @@ public class Intake extends SubsystemBase {
         pivotMotorConfig.Feedback.FeedbackSensorSource =
             FeedbackSensorSourceValue.RemoteCANcoder;
 
-        pivotSlot0Configs.kP = Constants.IntakeConstants.uppivotKP;
-        pivotSlot0Configs.kI = Constants.IntakeConstants.uppivotKI;
-        pivotSlot0Configs.kD = Constants.IntakeConstants.uppivotKD;
-        pivotSlot1Configs.kP = Constants.IntakeConstants.downpivotKD;
-        pivotSlot1Configs.kI = Constants.IntakeConstants.downpivotKI;
-        pivotSlot1Configs.kD = Constants.IntakeConstants.downpivotKD;
+        pivotSlot0Configs.kP = Constants.IntakeConstants.upKP;
+        pivotSlot0Configs.kI = Constants.IntakeConstants.upKP;
+        pivotSlot0Configs.kD = Constants.IntakeConstants.upKD;
+        pivotSlot1Configs.kP = Constants.IntakeConstants.downKP;
+        pivotSlot1Configs.kI = Constants.IntakeConstants.downKI;
+        pivotSlot1Configs.kD = Constants.IntakeConstants.downKD;
 
         pivotMotor.getConfigurator().apply(pivotMotorConfig);
         pivotMotor.getConfigurator().apply(pivotSlot0Configs);
@@ -111,7 +111,7 @@ public class Intake extends SubsystemBase {
 
     public void setIntake(double velocity, boolean l1) {
         intakeVelocityVoltage = new VelocityVoltage(velocity / 60);
-        intakeCurrentLimitsConfigs.StatorCurrentLimitEnable = l1;
+        intakeCurrentLimitsConfigs.StatorCurrentLimit = 80;
         intakeMotor.getConfigurator().apply(intakeCurrentLimitsConfigs);
 
         intakeMotor.setControl(intakeVelocityVoltage);
@@ -122,11 +122,15 @@ public class Intake extends SubsystemBase {
         intakeMotor.setControl(intakeVoltageOut);
     }
 
+    public double getPosition() {
+        return pivotMotor.getPosition().getValueAsDouble();
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber(
             "Intake Pivot Encoder",
-            pivotEncoder.getAbsolutePosition().getValueAsDouble()
+            pivotEncoder.getPosition().getValueAsDouble()
         );
 
         SmartDashboard.putNumber(
@@ -137,6 +141,10 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber(
             "Intake Velocity",
             pivotEncoder.getVelocity().getValueAsDouble()
+        );
+        SmartDashboard.putNumber(
+            "Intake Current",
+            intakeMotor.getStatorCurrent().getValueAsDouble()
         );
     }
 }

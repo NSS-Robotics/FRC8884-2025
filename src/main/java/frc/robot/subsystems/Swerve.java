@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import java.util.Optional;
 
 public class Swerve extends SubsystemBase {
@@ -33,6 +34,7 @@ public class Swerve extends SubsystemBase {
     private Pose2d m_pose;
     private Limelight l_limelightlow;
     private Limelight l_limelighthigh;
+    private RobotContainer robotContainer;
     public boolean wtfIsRunning = false;
 
     // WPILib
@@ -40,7 +42,11 @@ public class Swerve extends SubsystemBase {
         .getStructTopic("MyPose", Pose2d.struct)
         .publish();
 
-    public Swerve(Limelight limelightlow, Limelight limelighthigh) {
+    public Swerve(
+        Limelight limelightlow,
+        Limelight limelighthigh,
+        RobotContainer robotContainer
+    ) {
         gyro = new Canandgyro(Constants.Swerve.gyroID);
         gyro.resetFactoryDefaults(0.35);
         gyro.setYaw(0);
@@ -61,6 +67,7 @@ public class Swerve extends SubsystemBase {
         // driveInvert = (isRed() ? 1 : -1);
         l_limelightlow = limelightlow;
         l_limelighthigh = limelighthigh;
+        this.robotContainer = robotContainer;
     }
 
     public void autoDrive(ChassisSpeeds speed) {
@@ -268,6 +275,8 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("isLeft", robotContainer.isLeft);
+        SmartDashboard.putBoolean("isCoral", robotContainer.isCoral);
         Limelight limelight = null;
 
         boolean htv = l_limelighthigh.tv > 0;
