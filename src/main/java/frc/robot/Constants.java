@@ -275,8 +275,10 @@ public final class Constants {
             0.4, // climb
         };
         public static final double posTolerance = 0.05;
-        public static final double maxRotations = 0.72; // This should also be undefbeefed
-        // 0.593505859375; // This should also be undefbeefed
+        public static final double maxRotations = 0.72;
+        public static final double minElevatorRaisedPos = 0.323;
+        public static final double maxElevatorLoweredPos = 0.634;
+
     }
 
     public static final class ClimberConstants {

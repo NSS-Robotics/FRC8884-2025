@@ -54,10 +54,7 @@ public class Up extends Command {
             m_wrist.setWrist(targetWristPos); // only move wrist down when elevator up (prevents wrist/bumper collision)
         }
         // // only move elevator when wrist out (prevents dismembering)
-        if (
-            Math.abs(m_wrist.getPosition() - outWristPos) <
-            Constants.WristConstants.posTolerance
-        ) {
+        if (m_wrist.getPosition() > Constants.WristConstants.minElevatorRaisedPos) {
             m_elevator.setElevator(
                 targetElevatorPos,
                 Constants.ElevatorConstants.upSlot
