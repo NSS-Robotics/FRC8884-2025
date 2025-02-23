@@ -67,7 +67,7 @@ public class Elevator extends SubsystemBase {
             FeedbackSensorSourceValue.RemoteCANcoder;
 
         motorOutputConfigs.withInverted(InvertedValue.Clockwise_Positive);
-        motorOutputConfigs.withNeutralMode(NeutralModeValue.Coast);
+        motorOutputConfigs.withNeutralMode(NeutralModeValue.Brake);
         currentLimitsConfigs.StatorCurrentLimit =
             Constants.ElevatorConstants.currentLimit;
         currentLimitsConfigs.StatorCurrentLimitEnable = true;
