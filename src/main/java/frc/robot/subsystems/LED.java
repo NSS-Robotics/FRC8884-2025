@@ -14,10 +14,10 @@ public class LED extends SubsystemBase {
         Constants.LEDConstants.channel
     );
     private final AddressableLEDBuffer ledbuffer = new AddressableLEDBuffer(
-        100
+        128
     );
-    private final AddressableLEDBufferView left = ledbuffer.createView(0, 0);
-    private final AddressableLEDBufferView right = ledbuffer.createView(0, 0);
+    //private final AddressableLEDBufferView left = ledbuffer.createView(0, 0);
+    //private final AddressableLEDBufferView right = ledbuffer.createView(0, 0);
     private LEDPattern colour;
 
     public LED() {
@@ -29,6 +29,13 @@ public class LED extends SubsystemBase {
     }
 
     public void startLED() {
-        leds.setData(ledbuffer);
+        leds.start();
     }
+    public void halfLED() {
+        for(var i = 0; i < ledbuffer.getLength(); i++){
+            ledbuffer.setRGB(i, i>64?255:0, i>64?0:255, 0);
+        }
+        leds.start();
+    }
+
 }
