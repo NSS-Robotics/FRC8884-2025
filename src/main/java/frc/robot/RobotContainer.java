@@ -94,10 +94,10 @@ public class RobotContainer {
         m_driverController
             .pov(270)
             .onTrue(
-                new RunWrist(
-                    m_wrist,
-                    m_elevator,
-                    Constants.WristConstants.pos[Constants.RobotState.algaeGround.ordinal()]
+                new RunIntakePivot(
+                    m_intake,
+                    Constants.IntakeConstants.intakePosition,
+                    1
                 )
             );
         m_driverController

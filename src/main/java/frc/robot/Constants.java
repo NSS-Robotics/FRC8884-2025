@@ -287,7 +287,7 @@ public final class Constants {
         public static final int rMotorID = 21;
         public static final int lChannel = 7;
         public static final int rChannel = 8;
-        public static final double upkP = 3.1952;
+        public static final double upkP = 5.1952;
         public static final double upkI = 0;
         public static final double upkD = 0.020493;
         // public static final double downkP = 3.781;
