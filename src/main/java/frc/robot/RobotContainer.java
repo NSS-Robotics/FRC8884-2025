@@ -36,6 +36,7 @@ public class RobotContainer {
         this
     );
     private final Wrist m_wrist = new Wrist();
+    private final LED m_led = new LED();
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController =
@@ -91,6 +92,15 @@ public class RobotContainer {
                 )
             );
         m_driverController
+            .pov(270)
+            .onTrue(
+                new RunWrist(
+                    m_wrist,
+                    m_elevator,
+                    Constants.WristConstants.pos[Constants.RobotState.algaeGround.ordinal()]
+                )
+            );
+        m_driverController
             .a()
             .onTrue(
                 new SequentialCommandGroup(
@@ -143,6 +153,7 @@ public class RobotContainer {
         m_operatorController
             .R2()
             .whileTrue(new InstantCommand(() -> this.isLeft = false));
+        m_operatorController.cross().whileTrue(new RunLEDs(m_led));
     }
 
     public Command setupRobot() {

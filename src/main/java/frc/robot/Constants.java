@@ -359,4 +359,9 @@ public final class Constants {
         public static final double velocity = 5000;
         public static final double outtakeVelocity = 2000;
     }
+
+    public static final class LEDConstants {
+
+        public static final int channel = 9;
+    }
 }
