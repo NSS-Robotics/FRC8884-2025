@@ -36,7 +36,7 @@ public class RobotContainer {
         this
     );
     private final Wrist m_wrist = new Wrist();
-    private final LED m_led = new LED();
+    private final LED m_led;
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController =
@@ -66,6 +66,7 @@ public class RobotContainer {
             )
         );
         state = RobotState.handoff;
+        m_led = new LED(this);
     }
 
     /**
@@ -80,7 +81,7 @@ public class RobotContainer {
     private void configureBindings() {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
         // cancelling on release.
-        m_driverController.x().whileTrue(new InstantCommand(m_led::startLED));
+        m_driverController.x().whileTrue(new InstantCommand(m_led::runLED));
         m_driverController
             .b()
             .onTrue(
@@ -132,7 +133,8 @@ public class RobotContainer {
                     m_indexer,
                     m_wrist,
                     m_endEffector,
-                    m_elevator
+                    m_elevator,
+                    m_led
                 )
             );
 

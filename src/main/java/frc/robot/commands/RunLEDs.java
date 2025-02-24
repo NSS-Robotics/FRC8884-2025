@@ -20,7 +20,7 @@ public class RunLEDs extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_leds.startLED();
+        m_leds.testLED();
     }
 
     // Called once the command ends or is interrupted%.

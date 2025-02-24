@@ -7,35 +7,54 @@ import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class LED extends SubsystemBase {
 
-    private final AddressableLED leds = new AddressableLED(
-        Constants.LEDConstants.channel
-    );
-    private final AddressableLEDBuffer ledbuffer = new AddressableLEDBuffer(
-        128
-    );
-    //private final AddressableLEDBufferView left = ledbuffer.createView(0, 0);
-    //private final AddressableLEDBufferView right = ledbuffer.createView(0, 0);
-    private LEDPattern colour;
+    private final AddressableLED leds;
+    private final AddressableLEDBuffer ledBuffer;
+    private final AddressableLEDBufferView left;
+    private final AddressableLEDBufferView right;
+    private LEDPattern colour = LEDPattern.solid(Color.kCrimson);
 
-    public LED() {
+    private RobotContainer robotContainer;
+
+    public LED(RobotContainer robotContainer) {
+        this.robotContainer = robotContainer;
+
+
+        leds = new AddressableLED(Constants.LEDConstants.channel);
+        ledBuffer = new AddressableLEDBuffer(64);
+        leds.setLength(ledBuffer.getLength());
+        leds.setData(ledBuffer);
         leds.start();
-        colour = LEDPattern.solid(Color.kAqua);
-        leds.setLength(ledbuffer.getLength());
-        colour.applyTo(ledbuffer);
-        leds.setData(ledbuffer);
+        left = ledBuffer.createView(0, ledBuffer.getLength()/2);
+        right = ledBuffer.createView(ledBuffer.getLength()/2, ledBuffer.getLength());
     }
 
-    public void startLED() {
-        leds.start();
+    // Turns on all the LEDs, just for testing.
+    public void testLED() {
+        colour.applyTo(ledBuffer);
     }
-    public void halfLED() {
-        for(var i = 0; i < ledbuffer.getLength(); i++){
-            ledbuffer.setRGB(i, i>64?255:0, i>64?0:255, 0);
+
+    public void runLED() {
+        leds.start();
+        if (robotContainer.isCoral) {
+            colour = LEDPattern.solid(Color.kWhite);
+        } else {
+            colour = LEDPattern.solid(Color.kAqua);
         }
-        leds.start();
+
+        // FIXME: We have to check if we have a coral/algae in our robot before turning on lights
+
+        if (robotContainer.isLeft) {
+            colour.applyTo(left);
+        } else {
+            colour.applyTo(right);
+        }
     }
 
+    public void stopLED() {
+        leds.stop();
+    }
 }
