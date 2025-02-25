@@ -131,9 +131,9 @@ public class Align extends Command {
         double bY = min2.getY() - botPose.getY();
 
         double angleAL =
-            (dot(aX, aY, lX, lY) / mag(aX, aY)) * signOfAngle(lX, lY, aX, aY);
+            Math.acos((dot(aX, aY, lX, lY) / mag(aX, aY))) * signOfAngle(lX, lY, aX, aY);
         double angleBL =
-            (dot(bX, bY, lX, lY) / mag(bX, bY)) * signOfAngle(lX, lY, bX, bY);
+            Math.acos((dot(bX, bY, lX, lY) / mag(bX, bY))) * signOfAngle(lX, lY, bX, bY);
 
         Pose2d left;
         Pose2d right;
