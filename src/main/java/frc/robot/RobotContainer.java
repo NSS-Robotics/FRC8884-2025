@@ -38,7 +38,7 @@ public class RobotContainer {
         this
     );
     private final Wrist m_wrist = new Wrist();
-    private final LED l_led = new LED();
+    private final LED l_led = new LED(this);
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController =
@@ -91,7 +91,6 @@ public class RobotContainer {
                     Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
                 )
             );
-        m_driverController.x().whileTrue(new InstantCommand(l_led::startLED));
         // m_driverController
         //     .b()
         //     .onTrue(
