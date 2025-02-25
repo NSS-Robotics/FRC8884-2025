@@ -144,7 +144,8 @@ public class RobotContainer {
                     m_indexer,
                     m_wrist,
                     m_endEffector,
-                    m_elevator
+                    m_elevator,
+                    l_led
                 )
             );
 
