@@ -84,7 +84,7 @@ public class Intake extends SubsystemBase {
         intakeSlot0Configs.kV = Constants.IntakeConstants.intakeKV;
         intakeSlot0Configs.kA = Constants.IntakeConstants.intakeKA;
         intakeCurrentLimitsConfigs.StatorCurrentLimitEnable = true;
-        intakeCurrentLimitsConfigs.StatorCurrentLimit = 40;
+        intakeCurrentLimitsConfigs.StatorCurrentLimit = 55;
 
         intakeMotor.getConfigurator().apply(intakeSlot0Configs);
         intakeMotor.getConfigurator().apply(intakeCurrentLimitsConfigs);

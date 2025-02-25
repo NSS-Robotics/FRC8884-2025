@@ -4,18 +4,24 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
 
 public class Align extends Command {
+
+    private RobotContainer rob;
     private Swerve swerve;
     private AlignPIDController pidController;
-    private boolean isLeft;
     private Pose2d target;
 
     private Pose2d[] redCoralPoses = {
         // 6
         new Pose2d(13.651, 2.704, Rotation2d.fromDegrees(120)),
-        new Pose2d(13.950, 2.923, Rotation2d.fromDegrees(120)),
+        new Pose2d(
+            14.05569019504144,
+            2.5442079371517803,
+            Rotation2d.fromDegrees(120)
+        ),
         // 7
         new Pose2d(14.429, 3.860, Rotation2d.fromDegrees(180)),
         new Pose2d(14.429, 4.140, Rotation2d.fromDegrees(180)),
@@ -54,14 +60,14 @@ public class Align extends Command {
         new Pose2d(5.35, 2.863, Rotation2d.fromDegrees(120)),
     };
 
-    public Align(Swerve swerve, boolean isLeft) {
+    public Align(RobotContainer rob, Swerve swerve) {
+        this.rob = rob;
         this.swerve = swerve;
-        this.isLeft = isLeft;
         pidController = new AlignPIDController(swerve);
 
         addRequirements(swerve);
     }
-    
+
     public double mag(double x, double y) {
         return Math.sqrt(x * x + y * y);
     }
@@ -71,7 +77,7 @@ public class Align extends Command {
     }
 
     public int signOfAngle(double x1, double y1, double x2, double y2) {
-       return x1 * y2 - y1 * x2 > 0 ? 1 : -1;
+        return x1 * y2 - y1 * x2 > 0 ? 1 : -1;
     }
 
     @Override
@@ -88,7 +94,10 @@ public class Align extends Command {
 
         // find target with minimum distance
         for (Pose2d target : coralPoses) {
-            double dist = mag(target.getX() - botPose.getX(), target.getY() - botPose.getY());
+            double dist = mag(
+                target.getX() - botPose.getX(),
+                target.getY() - botPose.getY()
+            );
 
             if (dist < minDist) {
                 minDist = dist;
@@ -98,7 +107,10 @@ public class Align extends Command {
 
         // find target with second minimum distance
         for (Pose2d target : coralPoses) {
-            double dist = mag(target.getX() - botPose.getX(), target.getY() - botPose.getY());
+            double dist = mag(
+                target.getX() - botPose.getX(),
+                target.getY() - botPose.getY()
+            );
 
             if (dist < minDist2 && !target.equals(min1)) {
                 minDist2 = dist;
@@ -109,7 +121,7 @@ public class Align extends Command {
         double botRotation = botPose.getRotation().getRadians();
         // line of sight vector
         double lX = Math.cos(botRotation);
-        double lY  = Math.sin(botRotation);
+        double lY = Math.sin(botRotation);
         // vector a: closest target
         double aX = min1.getX() - botPose.getX();
         double aY = min1.getY() - botPose.getY();
@@ -117,8 +129,10 @@ public class Align extends Command {
         double bX = min2.getX() - botPose.getX();
         double bY = min2.getY() - botPose.getY();
 
-        double angleAL = dot(aX, aY, lX, lY) / mag(aX, aY) * signOfAngle(lX, lY, aX, aY);
-        double angleBL = dot(bX, bY, lX, lY) / mag(bX, bY) * signOfAngle(lX, lY, bX, bY);
+        double angleAL =
+            (dot(aX, aY, lX, lY) / mag(aX, aY)) * signOfAngle(lX, lY, aX, aY);
+        double angleBL =
+            (dot(bX, bY, lX, lY) / mag(bX, bY)) * signOfAngle(lX, lY, bX, bY);
 
         Pose2d left;
         Pose2d right;
@@ -131,7 +145,7 @@ public class Align extends Command {
             right = min1;
         }
 
-        target = isLeft ? left : right;
+        target = rob.isLeft ? left : right;
     }
 
     @Override

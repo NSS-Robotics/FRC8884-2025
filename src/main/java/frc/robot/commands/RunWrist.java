@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
 /** An example command that uses an example subsystem. */
@@ -30,13 +31,17 @@ public class RunWrist extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (m_elevator.getPosition() > 0.47) {
-            if (0.40 < pos) {
-                m_clawPivot.setWrist(pos);
-            }
-        } else {
+        // if (m_elevator.getPosition() > 0.47) {
+        //     if (0.40 < pos) {
+        //         m_clawPivot.setWrist(pos);
+        //     }
+        // } else {
+        if (
+            m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+        ) {
             m_clawPivot.setWrist(pos);
         }
+        // }
     }
 
     // Called once the command ends or is interrupted%.

@@ -44,6 +44,13 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        SmartDashboard.putString(
+            "Scoring Level",
+            m_robotContainer.scoringLevel.name()
+        );
+
+        SmartDashboard.putBoolean("Is Coral", m_robotContainer.isCoral);
+        SmartDashboard.putBoolean("Is Left", m_robotContainer.isLeft);
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
@@ -77,7 +84,7 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
-        m_robotContainer.setupRobot().schedule();
+        // m_robotContainer.setupRobot().schedule();
     }
 
     /** This function is called periodically during operator control. */

@@ -10,32 +10,38 @@ import frc.robot.Constants;
 
 public class LED extends SubsystemBase {
 
-    private final AddressableLED leds = new AddressableLED(
-        Constants.LEDConstants.channel
-    );
-    private final AddressableLEDBuffer ledbuffer = new AddressableLEDBuffer(
-        128
-    );
+    private final AddressableLED leds;
+    private final AddressableLEDBuffer ledBuffer;
     //private final AddressableLEDBufferView left = ledbuffer.createView(0, 0);
     //private final AddressableLEDBufferView right = ledbuffer.createView(0, 0);
     private LEDPattern colour;
 
     public LED() {
-        leds.start();
+        leds = new AddressableLED(Constants.LEDConstants.channel);
+        ledBuffer = new AddressableLEDBuffer(128);
         colour = LEDPattern.solid(Color.kAqua);
-        leds.setLength(ledbuffer.getLength());
-        colour.applyTo(ledbuffer);
-        leds.setData(ledbuffer);
+        leds.setLength(ledBuffer.getLength());
+        colour.applyTo(ledBuffer);
+        leds.setData(ledBuffer);
+        leds.start();
     }
 
     public void startLED() {
-        leds.start();
+        colour.applyTo(ledBuffer);
+        leds.setData(ledBuffer);
     }
+
     public void halfLED() {
-        for(var i = 0; i < ledbuffer.getLength(); i++){
-            ledbuffer.setRGB(i, i>64?255:0, i>64?0:255, 0);
+        for (var i = 0; i < ledBuffer.getLength(); i++) {
+            ledBuffer.setRGB(i, i > 64 ? 255 : 0, i > 64 ? 0 : 255, 0);
         }
+        leds.setData(ledBuffer);
         leds.start();
     }
 
+    @Override
+    public void periodic() {
+        colour.applyTo(ledBuffer);
+        leds.setData(ledBuffer);
+    }
 }

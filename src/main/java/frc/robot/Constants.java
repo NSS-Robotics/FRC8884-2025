@@ -23,10 +23,6 @@ import frc.lib.util.SwerveModuleConstants;
  */
 public final class Constants {
 
-    public static final double redReefX = 100;
-    public static final double blueReefX = 100;
-    public static final double reefY = 4;
-
     public enum RobotState {
         l1,
         l2,
@@ -266,7 +262,7 @@ public final class Constants {
             0.5, // l1
             0.626, // l2
             0.626, // l3
-            0.6625, // l4
+            0.63, // l4
             0.455810546875, // stationIntake
             0.03576171875, // handoff
             0.4111328125, // barge
@@ -357,7 +353,7 @@ public final class Constants {
         public static final double elevatorUpMaxValue = 0.18;
         public static final double elevatorUpMinValue = -0.12;
         public static final double velocity = 5000;
-        public static final double outtakeVelocity = 2000;
+        public static final double outtakeVelocity = 1000;
     }
 
     public static final class LEDConstants {

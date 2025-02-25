@@ -12,33 +12,29 @@ import java.lang.invoke.ConstantCallSite;
 public class Up extends Command {
 
     private final RobotContainer robotContainer;
-    private final RobotState targetState;
     private final Elevator m_elevator;
     private final Wrist m_wrist;
-    private final double targetElevatorPos;
-    private final double targetWristPos;
-    private final double outWristPos =
+    private RobotState targetState;
+    private double targetElevatorPos;
+    private double targetWristPos;
+    private double outWristPos =
         Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
 
-    public Up(
-        RobotContainer robotContainer,
-        RobotState targetState,
-        Elevator elevator,
-        Wrist wrist
-    ) {
+    public Up(RobotContainer robotContainer, Elevator elevator, Wrist wrist) {
         this.robotContainer = robotContainer;
-        this.targetState = targetState;
         m_elevator = elevator;
         m_wrist = wrist;
-        targetElevatorPos =
-            Constants.ElevatorConstants.pos[targetState.ordinal()];
-        targetWristPos = Constants.WristConstants.pos[targetState.ordinal()];
         addRequirements(m_elevator, m_wrist);
     }
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+        targetState = robotContainer.scoringLevel;
+        targetElevatorPos =
+            Constants.ElevatorConstants.pos[targetState.ordinal()];
+        targetWristPos = Constants.WristConstants.pos[targetState.ordinal()];
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
@@ -54,7 +50,10 @@ public class Up extends Command {
             m_wrist.setWrist(targetWristPos); // only move wrist down when elevator up (prevents wrist/bumper collision)
         }
         // // only move elevator when wrist out (prevents dismembering)
-        if (m_wrist.getPosition() > Constants.WristConstants.minElevatorRaisedPos) {
+        if (
+            m_wrist.getPosition() >
+            Constants.WristConstants.minElevatorRaisedPos
+        ) {
             m_elevator.setElevator(
                 targetElevatorPos,
                 Constants.ElevatorConstants.upSlot
