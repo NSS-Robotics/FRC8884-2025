@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
@@ -18,9 +19,9 @@ public class Align extends Command {
         // 6
         new Pose2d(13.651, 2.704, Rotation2d.fromDegrees(120)),
         new Pose2d(
-            14.05569019504144,
-            2.5442079371517803,
-            Rotation2d.fromDegrees(120)
+            13.892115076650555,
+            2.77283229770283,
+            Rotation2d.fromDegrees(115)
         ),
         // 7
         new Pose2d(14.429, 3.860, Rotation2d.fromDegrees(180)),
@@ -151,6 +152,9 @@ public class Align extends Command {
     @Override
     public void execute() {
         pidController.alignLimelight(target);
+        SmartDashboard.putNumber("Target X", target.getX());
+        SmartDashboard.putNumber("Target Y", target.getY());
+        SmartDashboard.putNumber("Target R", target.getRotation().getDegrees());
     }
 
     @Override
