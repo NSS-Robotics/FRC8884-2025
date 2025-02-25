@@ -118,9 +118,9 @@ public class Swerve extends SubsystemBase {
                         gyro.getRotation2d()
                     )
                     : ChassisSpeeds.fromFieldRelativeSpeeds(
-                        -translation.getX(),
-                        -translation.getY(),
-                        -rotation,
+                        translation.getX(),
+                        translation.getY(),
+                        rotation,
                         gyro.getRotation2d()
                     )
                 : new ChassisSpeeds(
@@ -232,8 +232,8 @@ public class Swerve extends SubsystemBase {
     public Rotation2d getGyroYaw() {
         double yaw = gyro.getYaw() * 360;
         return isRed()
-            ? Rotation2d.fromDegrees(-yaw)
-            : Rotation2d.fromDegrees(yaw >= 0 ? 180 - yaw : -180 - yaw);
+            ? Rotation2d.fromDegrees(yaw)
+            : Rotation2d.fromDegrees(yaw > 0 ? yaw - 180 : yaw + 180);
     }
 
     public Pose2d getLimelightBotPose() {
