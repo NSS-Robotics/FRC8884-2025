@@ -10,53 +10,52 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class LED extends SubsystemBase {
+    // private final AddressableLED leds;
+    // private final AddressableLEDBuffer ledBuffer;
+    // private final AddressableLEDBufferView left;
+    // private final AddressableLEDBufferView right;
+    // private LEDPattern colour = LEDPattern.solid(Color.kCrimson);
 
-    private final AddressableLED leds;
-    private final AddressableLEDBuffer ledBuffer;
-    private final AddressableLEDBufferView left;
-    private final AddressableLEDBufferView right;
-    private LEDPattern colour = LEDPattern.solid(Color.kCrimson);
+    // private RobotContainer robotContainer;
 
-    private RobotContainer robotContainer;
+    // public LED(RobotContainer robotContainer) {
+    //     this.robotContainer = robotContainer;
 
-    public LED(RobotContainer robotContainer) {
-        this.robotContainer = robotContainer;
+    //     leds = new AddressableLED(Constants.LEDConstants.channel);
+    //     ledBuffer = new AddressableLEDBuffer(64);
+    //     leds.setLength(ledBuffer.getLength());
+    //     leds.setData(ledBuffer);
+    //     leds.start();
+    //     left = ledBuffer.createView(0, ledBuffer.getLength() / 2);
+    //     right = ledBuffer.createView(
+    //         ledBuffer.getLength() / 2,
+    //         ledBuffer.getLength()
+    //     );
+    // }
 
-        leds = new AddressableLED(Constants.LEDConstants.channel);
-        ledBuffer = new AddressableLEDBuffer(64);
-        leds.setLength(ledBuffer.getLength());
-        leds.setData(ledBuffer);
-        leds.start();
-        left = ledBuffer.createView(0, ledBuffer.getLength() / 2);
-        right = ledBuffer.createView(
-            ledBuffer.getLength() / 2,
-            ledBuffer.getLength()
-        );
-    }
+    // // Turns on all the LEDs, just for testing.
+    // public void testLED() {
+    //     colour.applyTo(ledBuffer);
+    // }
 
-    // Turns on all the LEDs, just for testing.
-    public void testLED() {
-        colour.applyTo(ledBuffer);
-    }
+    // public void runLED() {
+    //     leds.start();
+    //     if (robotContainer.isCoral) {
+    //         colour = LEDPattern.solid(Color.kWhite);
+    //     } else {
+    //         colour = LEDPattern.solid(Color.kAqua);
+    //     }
 
-    public void runLED() {
-        leds.start();
-        if (robotContainer.isCoral) {
-            colour = LEDPattern.solid(Color.kWhite);
-        } else {
-            colour = LEDPattern.solid(Color.kAqua);
-        }
+    //     // FIXME: We have to check if we have a coral/algae in our robot before turning on lights
 
-        // FIXME: We have to check if we have a coral/algae in our robot before turning on lights
+    //     if (robotContainer.isLeft) {
+    //         colour.applyTo(left);
+    //     } else {
+    //         colour.applyTo(right);
+    //     }
+    // }
 
-        if (robotContainer.isLeft) {
-            colour.applyTo(left);
-        } else {
-            colour.applyTo(right);
-        }
-    }
-
-    public void stopLED() {
-        leds.stop();
-    }
+    // public void stopLED() {
+    //     leds.stop();
+    // }
 }

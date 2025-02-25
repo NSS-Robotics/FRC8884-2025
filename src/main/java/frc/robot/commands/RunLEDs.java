@@ -4,32 +4,31 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LED;
 
 public class RunLEDs extends Command {
+    // private final LED m_leds;
 
-    private final LED m_leds;
+    // public RunLEDs(LED leds) {
+    //     m_leds = leds;
 
-    public RunLEDs(LED leds) {
-        m_leds = leds;
+    //     addRequirements(m_leds);
+    // }
 
-        addRequirements(m_leds);
-    }
+    // // Called when the command is initially scheduled.
+    // @Override
+    // public void initialize() {}
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {}
+    // // Called every time the scheduler runs while the command is scheduled.
+    // @Override
+    // public void execute() {
+    //     m_leds.testLED();
+    // }
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
-        m_leds.testLED();
-    }
+    // // Called once the command ends or is interrupted%.
+    // @Override
+    // public void end(boolean interrupted) {}
 
-    // Called once the command ends or is interrupted%.
-    @Override
-    public void end(boolean interrupted) {}
-
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+    // // Returns true when the command should end.
+    // @Override
+    // public boolean isFinished() {
+    //     return false;
+    // }
 }

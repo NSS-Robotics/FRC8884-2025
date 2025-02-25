@@ -38,7 +38,7 @@ public class RobotContainer {
         this
     );
     private final Wrist m_wrist = new Wrist();
-    private final LED l_led = new LED(this);
+    // private final LED l_led = new LED(this);
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController =
@@ -143,8 +143,8 @@ public class RobotContainer {
                     m_indexer,
                     m_wrist,
                     m_endEffector,
-                    m_elevator,
-                    l_led
+                    m_elevator // ,
+                    // l_led
                 )
             );
 
@@ -187,8 +187,7 @@ public class RobotContainer {
             .onTrue(
                 new InstantCommand(() -> this.scoringLevel = RobotState.l1)
             );
-
-        m_operatorController.cross().whileTrue(new RunLEDs(l_led));
+        // m_operatorController.cross().whileTrue(new RunLEDs(l_led));
     }
 
     public Command setupRobot() {

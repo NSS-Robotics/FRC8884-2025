@@ -12,22 +12,23 @@ public class CoralIntake extends Command {
     private final Wrist m_wrist;
     private final Claw m_claw;
     private final Elevator m_elevator;
-    private final LED m_led;
+
+    // private final LED m_led;
 
     public CoralIntake(
         Intake m_intake,
         Indexer m_indexer,
         Wrist m_wrist,
         Claw m_claw,
-        Elevator m_elevator,
-        LED m_led
+        Elevator m_elevator
+        // LED m_led //,
     ) {
         this.m_intake = m_intake;
         this.m_indexer = m_indexer;
         this.m_wrist = m_wrist;
         this.m_claw = m_claw;
         this.m_elevator = m_elevator;
-        this.m_led = m_led;
+        // this.m_led = m_led;
 
         addRequirements(m_intake, m_indexer, m_wrist, m_claw);
     }
@@ -39,7 +40,7 @@ public class CoralIntake extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_led.runLED();
+        // m_led.runLED();
         if (
             m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
         ) {
@@ -62,7 +63,7 @@ public class CoralIntake extends Command {
         m_intake.stopIntake();
         m_indexer.stopIndexer();
         m_claw.stopClaw();
-        m_led.stopLED();
+        // m_led.stopLED();
     }
 
     // Returns true when the command should end.
