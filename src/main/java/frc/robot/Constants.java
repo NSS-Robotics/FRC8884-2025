@@ -233,7 +233,7 @@ public final class Constants {
         public static final double upThreshold = 0.1;
         public static final double wristDownSafeThreshold = 0.34;
         public static final double[] pos = {
-            0, // l1
+            1.1, // l1
             1.82, // l2
             2.8, // l3
             4.28, // l4
@@ -259,7 +259,7 @@ public final class Constants {
         public static final double kD = 0; // Why so much bad food
         // public static final double handoffPos = 0.02976171875;
         public static final double[] pos = {
-            0.5, // l1
+            0.63, // l1
             0.63, // l2
             0.63, // l3
             0.63, // l4
@@ -315,7 +315,7 @@ public final class Constants {
         public static final int pivotMotorID = 60;
         public static final int intakeMotorID = 61;
         public static final int encoderID = 62;
-        public static final double encoderOffset = 0.576171875;
+        public static final double encoderOffset = 0.1943359375;
         public static final double upKP = 8;
         public static final double upKI = 0;
         public static final double upKD = 2;
@@ -354,7 +354,7 @@ public final class Constants {
         public static final double elevatorUpMaxValue = 0.18;
         public static final double elevatorUpMinValue = -0.12;
         public static final double velocity = 5000;
-        public static final double outtakeVelocity = 1000;
+        public static final double outtakeVelocity = 750;
     }
 
     public static final class LEDConstants {

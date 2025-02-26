@@ -10,6 +10,8 @@ import frc.robot.subsystems.*;
 
 public class Align extends Command {
 
+    private static final double PRE_ALIGN_POS_OFFSET = 0.5;
+
     private RobotContainer rob;
     private Swerve m_swerve;
     private AlignPIDController pidController;
@@ -19,7 +21,11 @@ public class Align extends Command {
 
     private Pose2d[] redCoralPoses = {
         // 6
-        new Pose2d(13.651, 2.704, Rotation2d.fromDegrees(120)),
+        new Pose2d(
+            13.7138173692834,
+            2.6072262240858235,
+            Rotation2d.fromDegrees(120)
+        ),
         new Pose2d(
             14.00444650156854,
             2.834064075170478,
@@ -42,53 +48,7 @@ public class Align extends Command {
         new Pose2d(12.504, 2.744, Rotation2d.fromDegrees(60)),
     };
 
-    private Pose2d[] redPreAlignPoses = {
-        // 6
-        new Pose2d(13.651, 2.704, Rotation2d.fromDegrees(120)),
-        new Pose2d(
-            14.147359037689247,
-            2.6022610148074037,
-            Rotation2d.fromDegrees(120)
-        ),
-        // 7
-        new Pose2d(14.429, 3.860, Rotation2d.fromDegrees(180)),
-        new Pose2d(14.429, 4.140, Rotation2d.fromDegrees(180)),
-        // 8
-        new Pose2d(13.910, 5.197, Rotation2d.fromDegrees(-120)),
-        new Pose2d(13.621, 5.386, Rotation2d.fromDegrees(-120)),
-        // 9
-        new Pose2d(12.455, 5.316, Rotation2d.fromDegrees(-60)),
-        new Pose2d(12.155, 5.167, Rotation2d.fromDegrees(-60)),
-        // 10
-        new Pose2d(11.577, 4.160, Rotation2d.fromDegrees(0)),
-        new Pose2d(11.577, 3.831, Rotation2d.fromDegrees(0)),
-        // 11
-        new Pose2d(12.175, 2.903, Rotation2d.fromDegrees(60)),
-        new Pose2d(12.504, 2.744, Rotation2d.fromDegrees(60)),
-    };
-
     private Pose2d[] blueCoralPoses = {
-        // 17
-        new Pose2d(3.64, 2.863, Rotation2d.fromDegrees(60)),
-        new Pose2d(3.943, 2.664, Rotation2d.fromDegrees(60)),
-        // 18
-        new Pose2d(3.053, 4.111, Rotation2d.fromDegrees(0)),
-        new Pose2d(3.053, 3.84, Rotation2d.fromDegrees(0)),
-        // 19
-        new Pose2d(3.943, 5.359, Rotation2d.fromDegrees(-60)),
-        new Pose2d(3.64, 5.173, Rotation2d.fromDegrees(-60)),
-        // 20
-        new Pose2d(5.35, 5.173, Rotation2d.fromDegrees(-120)),
-        new Pose2d(5.098, 5.359, Rotation2d.fromDegrees(-120)),
-        // 21
-        new Pose2d(5.88, 3.84, Rotation2d.fromDegrees(180)),
-        new Pose2d(5.88, 4.111, Rotation2d.fromDegrees(180)),
-        // 22
-        new Pose2d(5.098, 2.664, Rotation2d.fromDegrees(120)),
-        new Pose2d(5.35, 2.863, Rotation2d.fromDegrees(120)),
-    };
-
-    private Pose2d[] bluePreAlignPoses = {
         // 17
         new Pose2d(3.64, 2.863, Rotation2d.fromDegrees(60)),
         new Pose2d(3.943, 2.664, Rotation2d.fromDegrees(60)),
@@ -141,9 +101,6 @@ public class Align extends Command {
         double minDist2 = Double.MAX_VALUE;
 
         Pose2d[] coralPoses = m_swerve.isRed() ? redCoralPoses : blueCoralPoses;
-        Pose2d[] preAlignPoses = m_swerve.isRed()
-            ? redPreAlignPoses
-            : bluePreAlignPoses;
 
         // find target with minimum distance
         for (Pose2d target : coralPoses) {
@@ -201,11 +158,13 @@ public class Align extends Command {
         }
 
         target = rob.isLeft ? left : right;
-        for (int i = 0; i < 12; i++) {
-            if (coralPoses[i].equals(target)) {
-                preAlignTarget = preAlignPoses[i];
-            }
-        }
+
+        Rotation2d rot = target.getRotation();
+        preAlignTarget = new Pose2d(
+            target.getX() - PRE_ALIGN_POS_OFFSET * rot.getCos(),
+            target.getY() - PRE_ALIGN_POS_OFFSET * rot.getSin(),
+            rot
+        );
     }
 
     @Override
@@ -214,7 +173,7 @@ public class Align extends Command {
             !preAligned &&
             Math.abs(pidController.getXError(preAlignTarget)) < 0.1 &&
             Math.abs(pidController.getYError(preAlignTarget)) < 0.1 &&
-            Math.abs(pidController.getAngleError(preAlignTarget)) < 0.25
+            Math.abs(pidController.getAngleError(preAlignTarget)) < 0.75
         ) {
             preAligned = true;
         }

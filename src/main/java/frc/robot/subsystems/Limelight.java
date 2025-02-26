@@ -17,7 +17,7 @@ public class Limelight extends SubsystemBase {
     public double ty = 0;
     public double tv = 0;
 
-    public Pose2d botPose = new Pose2d(0, 0, new Rotation2d());
+    public Pose2d botPose;
 
     public Limelight(String name) {
         this.name = "limelight-" + name;

@@ -53,13 +53,13 @@ public class AlignPIDController extends PIDController {
     }
 
     public double turnPID(Pose2d target) {
-        setPID(0.05, 0, 0);
+        setPID(0.1, 0, 0);
         double rx = calculate(getAngleError(target), 0);
         return rx;
     }
 
     public double[] translationPID(Pose2d target) {
-        setPID(2, 0, 0.00003);
+        setPID(2.5, 0, 0);
         double tx = calculate(getXError(target), 0);
         double ty = calculate(getYError(target), 0);
         return new double[] { tx, ty };

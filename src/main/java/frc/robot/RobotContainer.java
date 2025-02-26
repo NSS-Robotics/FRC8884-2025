@@ -52,6 +52,7 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kLeftX.value;
     public boolean isCoral = true;
     public boolean isLeft = true;
+    public boolean fieldCentric = false;
     public RobotState scoringLevel;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -64,9 +65,10 @@ public class RobotContainer {
                 () -> m_driverController.getRawAxis(translationAxis),
                 () -> m_driverController.getRawAxis(strafeAxis),
                 () -> m_driverController.getRawAxis(rotationAxis) * 0.75,
-                () -> false
+                () -> fieldCentric
             )
         );
+
         scoringLevel = RobotState.l2;
     }
 
@@ -114,6 +116,10 @@ public class RobotContainer {
         //             new DownClimb(m_climber)
         //         )
         //     );
+
+        m_driverController
+            .povDown()
+            .whileTrue(new InstantCommand(() -> this.fieldCentric = true));
         m_driverController
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
