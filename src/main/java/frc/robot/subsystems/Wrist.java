@@ -29,7 +29,6 @@ public class Wrist extends SubsystemBase {
     public Wrist() {
         encoder.clearStickyFaults();
         CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
-        canCoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
         canCoderConfig.MagnetSensor.SensorDirection =
             SensorDirectionValue.Clockwise_Positive;
         canCoderConfig.MagnetSensor.MagnetOffset =

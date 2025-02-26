@@ -99,18 +99,10 @@ public class RobotContainer {
         //                 new WaitCommand(0.75),
         //                 new RunServos(m_climber, false)
         //             ),
-        //             new UpClimb(m_climber)
+        //             new UpClimb(m_climber, m_wrist, m_intake, m_elevator)
         //         )
         //     );
-        // m_driverController
-        //     .pov(270)
-        //     .onTrue(
-        //         new RunIntakePivot(
-        //             m_intake,
-        //             Constants.IntakeConstants.intakePosition,
-        //             1
-        //         )
-        //     );
+
         // m_driverController
         //     .a()
         //     .onTrue(
@@ -130,9 +122,10 @@ public class RobotContainer {
         m_driverController
             .leftTrigger()
             .whileTrue(
-                new RunClaw(
+                new Outtake(
                     m_endEffector,
-                    -Constants.EndEffectorConstants.outtakeVelocity
+                    m_wrist,
+                    Constants.EndEffectorConstants.outtakeVelocity
                 )
             );
         m_driverController

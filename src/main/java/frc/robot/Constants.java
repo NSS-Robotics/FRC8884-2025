@@ -260,8 +260,8 @@ public final class Constants {
         // public static final double handoffPos = 0.02976171875;
         public static final double[] pos = {
             0.5, // l1
-            0.626, // l2
-            0.626, // l3
+            0.63, // l2
+            0.63, // l3
             0.63, // l4
             0.455810546875, // stationIntake
             0.03576171875, // handoff
@@ -275,6 +275,7 @@ public final class Constants {
         public static final double maxRotations = 0.72;
         public static final double minElevatorRaisedPos = 0.323;
         public static final double maxElevatorLoweredPos = 0.634;
+        public static final double minOuttakePos = 0.45;
     }
 
     public static final class ClimberConstants {
@@ -287,12 +288,12 @@ public final class Constants {
         public static final double upkI = 0;
         public static final double upkD = 0.020493;
         // public static final double downkP = 3.781;
-        public static final double downkP = 2.5;
+        public static final double downkP = 50;
         public static final double downkI = 0;
-        public static final double downkD = 0.062279;
-        public static final double maxRotations = -38.876953125;
-        public static final double restingRot = -23;
-        public static final double climbRot = -36.77490234375;
+        public static final double downkD = 0.020493;
+        public static final double maxRotations = 38.876953125;
+        public static final double restingRot = 23;
+        public static final double climbRot = 38.77490234375;
         public static final double minRot = 0;
     }
 
@@ -314,10 +315,10 @@ public final class Constants {
         public static final int pivotMotorID = 60;
         public static final int intakeMotorID = 61;
         public static final int encoderID = 62;
-        public static final double encoderOffset = -0.041015625;
-        public static final double upKP = 5.342;
+        public static final double encoderOffset = 0.576171875;
+        public static final double upKP = 8;
         public static final double upKI = 0;
-        public static final double upKD = 1;
+        public static final double upKD = 2;
         public static final double downKP = 2.7;
         public static final double downKI = 0;
         public static final double downKD = 0;

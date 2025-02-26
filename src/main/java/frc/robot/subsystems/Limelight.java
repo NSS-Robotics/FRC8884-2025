@@ -56,7 +56,7 @@ public class Limelight extends SubsystemBase {
         };
 
         for (int i = 0; i < names.length; i++) {
-            SmartDashboard.putNumber(names[i], pos[i]);
+            SmartDashboard.putNumber(name + ' ' + names[i], pos[i]);
         }
     }
 

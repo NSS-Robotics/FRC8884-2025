@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import com.reduxrobotics.canand.CanandEventLoop;
 import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -31,11 +33,9 @@ public class Swerve extends SubsystemBase {
     private SwerveModule[] mSwerveMods;
     private Canandgyro gyro;
 
-    private Pose2d m_pose;
     private Limelight l_limelightlow;
     private Limelight l_limelighthigh;
     private RobotContainer robotContainer;
-    public boolean wtfIsRunning = false;
 
     // WPILib
     StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
@@ -60,10 +60,7 @@ public class Swerve extends SubsystemBase {
         };
 
         swerveOdometry = createOdometry(new Pose2d(0, 0, new Rotation2d()));
-        m_pose = swerveOdometry.update(
-            gyro.getRotation2d(),
-            getModulePositions()
-        );
+        swerveOdometry.update(gyro.getRotation2d(), getModulePositions());
         // driveInvert = (isRed() ? 1 : -1);
         l_limelightlow = limelightlow;
         l_limelighthigh = limelighthigh;
@@ -231,13 +228,9 @@ public class Swerve extends SubsystemBase {
 
     public Rotation2d getGyroYaw() {
         double yaw = gyro.getYaw() * 360;
-        return isRed()
-            ? Rotation2d.fromDegrees(yaw)
-            : Rotation2d.fromDegrees(yaw > 0 ? yaw - 180 : yaw + 180);
-    }
-
-    public Pose2d getLimelightBotPose() {
-        return m_pose;
+        return Rotation2d.fromDegrees(
+            isRed() ? yaw : yaw > 0 ? yaw - 180 : yaw + 180
+        );
     }
 
     public void resetModulesToAbsolute() {
@@ -275,8 +268,6 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("isLeft", robotContainer.isLeft);
-        SmartDashboard.putBoolean("isCoral", robotContainer.isCoral);
         Limelight limelight = null;
 
         boolean htv = l_limelighthigh.tv > 0;
@@ -293,10 +284,14 @@ public class Swerve extends SubsystemBase {
         }
 
         if (limelight != null) {
-            swerveOdometry = createOdometry(limelight.botPose);
-            m_pose = limelight.botPose;
+            Pose2d pose = new Pose2d(
+                limelight.botPose.getX(),
+                limelight.botPose.getY(),
+                getGyroYaw()
+            );
+            swerveOdometry = createOdometry(pose);
         } else {
-            m_pose = swerveOdometry.update(getGyroYaw(), getModulePositions());
+            swerveOdometry.update(getGyroYaw(), getModulePositions());
         }
 
         for (SwerveModule mod : mSwerveMods) {
@@ -316,13 +311,12 @@ public class Swerve extends SubsystemBase {
 
         SmartDashboard.putNumber("Pos X", getPose().getX());
         SmartDashboard.putNumber("Pos Y", getPose().getY());
-        SmartDashboard.putNumber("Pos R", m_pose.getRotation().getDegrees());
+        SmartDashboard.putNumber("Pos R", getPose().getRotation().getDegrees());
         SmartDashboard.putNumber("Yaw", gyro.getYaw() * 360);
         SmartDashboard.putNumber(
             "gyro getrotation2d",
             gyro.getRotation2d().getDegrees()
         );
-
-        publisher.set(m_pose);
+        // publisher.set(m_pose);
     }
 }

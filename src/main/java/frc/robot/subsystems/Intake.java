@@ -66,7 +66,7 @@ public class Intake extends SubsystemBase {
             FeedbackSensorSourceValue.RemoteCANcoder;
 
         pivotSlot0Configs.kP = Constants.IntakeConstants.upKP;
-        pivotSlot0Configs.kI = Constants.IntakeConstants.upKP;
+        pivotSlot0Configs.kI = Constants.IntakeConstants.upKI;
         pivotSlot0Configs.kD = Constants.IntakeConstants.upKD;
         pivotSlot1Configs.kP = Constants.IntakeConstants.downKP;
         pivotSlot1Configs.kI = Constants.IntakeConstants.downKI;

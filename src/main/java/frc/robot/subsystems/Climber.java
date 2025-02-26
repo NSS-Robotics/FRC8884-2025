@@ -24,21 +24,17 @@ import frc.robot.Constants;
 public class Climber extends SubsystemBase {
 
     private static TalonFX lMotor = new TalonFX(
-        Constants.ClimberConstants.lMotorID
-    );
-    private static TalonFX rMotor = new TalonFX(
         Constants.ClimberConstants.rMotorID
     );
+
     private static Servo lServo = new Servo(
-        Constants.ClimberConstants.lChannel
-    );
-    private static Servo rServo = new Servo(
         Constants.ClimberConstants.rChannel
     );
-    private static Follower leader = new Follower(
-        Constants.ClimberConstants.lMotorID,
-        true
-    );
+
+    // private static Follower leader = new Follower(
+    //     Constants.ClimberConstants.lMotorID,
+    //     true
+    // );
     private static Slot0Configs upPID = new Slot0Configs();
     private static Slot1Configs downPID = new Slot1Configs();
     private static PositionVoltage positionPID;
@@ -46,12 +42,10 @@ public class Climber extends SubsystemBase {
 
     public Climber() {
         lMotor.clearStickyFaults();
-        rMotor.clearStickyFaults();
         resetEncoders();
         // Put these in Brake mode when running for real.
         lMotor.setNeutralMode(NeutralModeValue.Brake);
-        rMotor.setNeutralMode(NeutralModeValue.Brake);
-        rMotor.setControl(leader);
+        // rMotor.setControl(leader);
 
         upPID.kP = Constants.ClimberConstants.upkP;
         upPID.kI = Constants.ClimberConstants.upkI;
@@ -62,21 +56,21 @@ public class Climber extends SubsystemBase {
 
         lMotor.getConfigurator().apply(upPID);
         lMotor.getConfigurator().apply(downPID);
-        rMotor.getConfigurator().apply(upPID);
-        rMotor.getConfigurator().apply(downPID);
+        // rMotor.getConfigurator().apply(upPID);
+        // rMotor.getConfigurator().apply(downPID);
 
         engageLatch();
     }
 
     public void resetEncoders() {
         lMotor.setPosition(0);
-        rMotor.setPosition(0);
+        // rMotor.setPosition(0);
     }
 
     public void setClimber(double position, int slot) {
-        position = Math.min(
+        position = Math.max(
             0,
-            Math.max(Constants.ClimberConstants.maxRotations, position)
+            Math.min(Constants.ClimberConstants.maxRotations, position)
         );
         SmartDashboard.putNumber("Climber target pos", position);
         positionPID = new PositionVoltage(position).withSlot(slot);
@@ -85,7 +79,7 @@ public class Climber extends SubsystemBase {
 
     public void stopClimber() {
         lMotor.stopMotor();
-        rMotor.stopMotor();
+        // rMotor.stopMotor();
     }
 
     public double getPosition() {
@@ -93,29 +87,29 @@ public class Climber extends SubsystemBase {
     }
 
     public void engageLatch() {
-        lServo.set(0.5);
-        rServo.set(0.3);
+        lServo.set(0.3);
+        // rServo.set(0.5);
         latchEngaged = true;
     }
 
     public void disengageLatch() {
-        lServo.set(0.6);
-        rServo.set(0.2);
+        lServo.set(0.2);
+        // rServo.set(0.6);
         latchEngaged = false;
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("lServo", lServo.getPosition());
-        SmartDashboard.putNumber("rServo", rServo.getPosition());
+        // SmartDashboard.putNumber("rServo", rServo.getPosition());
         SmartDashboard.putNumber(
             "L Climber Pos",
             lMotor.getPosition().getValueAsDouble()
         );
-        SmartDashboard.putNumber(
-            "R Climber Pos",
-            rMotor.getPosition().getValueAsDouble()
-        );
+        // SmartDashboard.putNumber(
+        //     "R Climber Pos",
+        //     rMotor.getPosition().getValueAsDouble()
+        // );
         SmartDashboard.putBoolean("Latch Engaged", latchEngaged);
     }
 }
