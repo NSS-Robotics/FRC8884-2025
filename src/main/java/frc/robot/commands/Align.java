@@ -44,8 +44,16 @@ public class Align extends Command {
         new Pose2d(11.577, 4.160, Rotation2d.fromDegrees(0)),
         new Pose2d(11.577, 3.831, Rotation2d.fromDegrees(0)),
         // 11
-        new Pose2d(12.175, 2.903, Rotation2d.fromDegrees(60)),
-        new Pose2d(12.504, 2.744, Rotation2d.fromDegrees(60)),
+        new Pose2d(
+            12.165801050386174,
+            2.7832427673359215,
+            Rotation2d.fromDegrees(60)
+        ),
+        new Pose2d(
+            12.500078054561705,
+            2.662783290683802,
+            Rotation2d.fromDegrees(60)
+        ),
     };
 
     private Pose2d[] blueCoralPoses = {

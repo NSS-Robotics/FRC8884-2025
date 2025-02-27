@@ -121,8 +121,8 @@ public class Swerve extends SubsystemBase {
                         gyro.getRotation2d()
                     )
                 : new ChassisSpeeds(
-                    translation.getX(),
-                    translation.getY(),
+                    -translation.getX(),
+                    -translation.getY(),
                     rotation
                 ),
             isOpenLoop

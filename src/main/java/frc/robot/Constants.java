@@ -293,7 +293,7 @@ public final class Constants {
         public static final double downkD = 0.020493;
         public static final double maxRotations = 38.876953125;
         public static final double restingRot = 23;
-        public static final double climbRot = 38.77490234375;
+        public static final double climbRot = 36.77490234375;
         public static final double minRot = 0;
     }
 
@@ -315,7 +315,7 @@ public final class Constants {
         public static final int pivotMotorID = 60;
         public static final int intakeMotorID = 61;
         public static final int encoderID = 62;
-        public static final double encoderOffset = 0.1943359375;
+        public static final double encoderOffset = 0.42138671875;
         public static final double upKP = 8;
         public static final double upKI = 0;
         public static final double upKD = 2;

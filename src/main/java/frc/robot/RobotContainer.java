@@ -50,6 +50,7 @@ public class RobotContainer {
     private final int translationAxis = XboxController.Axis.kRightY.value;
     private final int strafeAxis = XboxController.Axis.kRightX.value;
     private final int rotationAxis = XboxController.Axis.kLeftX.value;
+    private final Trigger povDown = m_driverController.povDown();
     public boolean isCoral = true;
     public boolean isLeft = true;
     public boolean fieldCentric = false;
@@ -65,7 +66,7 @@ public class RobotContainer {
                 () -> m_driverController.getRawAxis(translationAxis),
                 () -> m_driverController.getRawAxis(strafeAxis),
                 () -> m_driverController.getRawAxis(rotationAxis) * 0.75,
-                () -> fieldCentric
+                () -> povDown.getAsBoolean()
             )
         );
 
@@ -116,17 +117,13 @@ public class RobotContainer {
         //             new DownClimb(m_climber)
         //         )
         //     );
-
-        m_driverController
-            .povDown()
-            .whileTrue(new InstantCommand(() -> this.fieldCentric = true));
         m_driverController
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
         m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
         m_driverController
-            .leftTrigger()
+            .rightTrigger()
             .whileTrue(
                 new Outtake(
                     m_endEffector,
@@ -135,7 +132,7 @@ public class RobotContainer {
                 )
             );
         m_driverController
-            .rightTrigger()
+            .leftTrigger()
             .whileTrue(
                 new CoralIntake(
                     m_intake,
