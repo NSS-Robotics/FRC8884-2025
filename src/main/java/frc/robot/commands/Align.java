@@ -41,12 +41,20 @@ public class Align extends Command {
         new Pose2d(12.455, 5.316, Rotation2d.fromDegrees(-60)),
         new Pose2d(12.155, 5.167, Rotation2d.fromDegrees(-60)),
         // 10
-        new Pose2d(11.577, 4.160, Rotation2d.fromDegrees(0)),
-        new Pose2d(11.577, 3.831, Rotation2d.fromDegrees(0)),
+        new Pose2d(
+            11.526372103301219,
+            4.125573777784979,
+            Rotation2d.fromDegrees(0)
+        ),
+        new Pose2d(
+            11.580483817838719,
+            3.803232806372717,
+            Rotation2d.fromDegrees(0)
+        ),
         // 11
         new Pose2d(
-            12.165801050386174,
-            2.7832427673359215,
+            12.188989154050477,
+            2.7611622551913717,
             Rotation2d.fromDegrees(60)
         ),
         new Pose2d(
