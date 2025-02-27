@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -55,8 +56,12 @@ public class RobotContainer {
     public boolean fieldCentric = false;
     public RobotState scoringLevel;
 
+    private AddressableLED leds;
+
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer() {
+    public RobotContainer(AddressableLED leds) {
+        this.leds = leds;
+
         // Configure the trigger bindings
         configureBindings();
         m_swerve.setDefaultCommand(
@@ -128,22 +133,28 @@ public class RobotContainer {
         m_driverController
             .leftTrigger()
             .whileTrue(
-                new Outtake(
-                    m_endEffector,
-                    m_wrist,
-                    Constants.EndEffectorConstants.outtakeVelocity
+                new SequentialCommandGroup(
+                    new InstantCommand(leds::stop),
+                    new Outtake(
+                        m_endEffector,
+                        m_wrist,
+                        Constants.EndEffectorConstants.outtakeVelocity
+                    )
                 )
             );
         m_driverController
             .rightTrigger()
             .whileTrue(
-                new CoralIntake(
-                    m_intake,
-                    m_indexer,
-                    m_wrist,
-                    m_endEffector,
-                    m_elevator // ,
-                    // l_led
+                new SequentialCommandGroup(
+                    new InstantCommand(leds::start),
+                    new CoralIntake(
+                        m_intake,
+                        m_indexer,
+                        m_wrist,
+                        m_endEffector,
+                        m_elevator // ,
+                        // l_led
+                    )
                 )
             );
 
