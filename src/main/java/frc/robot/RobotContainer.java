@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.reduxrobotics.canand.CanandDeviceDetails.Msg;
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -50,12 +52,18 @@ public class RobotContainer {
     private final int translationAxis = XboxController.Axis.kRightY.value;
     private final int strafeAxis = XboxController.Axis.kRightX.value;
     private final int rotationAxis = XboxController.Axis.kLeftX.value;
+    private final Trigger povDown = m_driverController.povDown();
     public boolean isCoral = true;
     public boolean isLeft = true;
+    public boolean fieldCentric = false;
     public RobotState scoringLevel;
 
+    private AddressableLED leds;
+
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer() {
+    public RobotContainer(AddressableLED leds) {
+        this.leds = leds;
+
         // Configure the trigger bindings
         configureBindings();
         m_swerve.setDefaultCommand(
@@ -64,9 +72,10 @@ public class RobotContainer {
                 () -> m_driverController.getRawAxis(translationAxis),
                 () -> m_driverController.getRawAxis(strafeAxis),
                 () -> m_driverController.getRawAxis(rotationAxis) * 0.75,
-                () -> false
+                () -> povDown.getAsBoolean()
             )
         );
+
         scoringLevel = RobotState.l2;
     }
 
@@ -91,28 +100,26 @@ public class RobotContainer {
                     Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
                 )
             );
+        m_driverController
+            .b()
+            .whileTrue(
+                new CoralOuttake(m_intake, m_indexer, m_wrist, m_elevator)
+            );
+
         // m_driverController
-        //     .b()
+        //     .povUp()
         //     .onTrue(
         //         new SequentialCommandGroup(
         //             new ParallelDeadlineGroup(
         //                 new WaitCommand(0.75),
         //                 new RunServos(m_climber, false)
         //             ),
-        //             new UpClimb(m_climber)
+        //             new UpClimb(m_climber, m_wrist, m_intake, m_elevator)
         //         )
         //     );
+
         // m_driverController
-        //     .pov(270)
-        //     .onTrue(
-        //         new RunIntakePivot(
-        //             m_intake,
-        //             Constants.IntakeConstants.intakePosition,
-        //             1
-        //         )
-        //     );
-        // m_driverController
-        //     .a()
+        //     .povDown()
         //     .onTrue(
         //         new SequentialCommandGroup(
         //             new ParallelDeadlineGroup(
@@ -128,23 +135,30 @@ public class RobotContainer {
 
         m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
         m_driverController
-            .leftTrigger()
+            .rightTrigger()
             .whileTrue(
-                new RunClaw(
-                    m_endEffector,
-                    -Constants.EndEffectorConstants.outtakeVelocity
+                new SequentialCommandGroup(
+                    new InstantCommand(leds::stop),
+                    new Outtake(
+                        m_endEffector,
+                        m_wrist,
+                        Constants.EndEffectorConstants.outtakeVelocity
+                    )
                 )
             );
         m_driverController
-            .rightTrigger()
+            .leftTrigger()
             .whileTrue(
-                new CoralIntake(
-                    m_intake,
-                    m_indexer,
-                    m_wrist,
-                    m_endEffector,
-                    m_elevator // ,
-                    // l_led
+                new SequentialCommandGroup(
+                    new InstantCommand(leds::start),
+                    new CoralIntake(
+                        m_intake,
+                        m_indexer,
+                        m_wrist,
+                        m_endEffector,
+                        m_elevator // ,
+                        // l_led
+                    )
                 )
             );
 

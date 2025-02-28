@@ -1,8 +1,13 @@
 package frc.robot;
 
 import au.grapplerobotics.CanBridge;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.AddressableLEDBufferView;
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -19,15 +24,43 @@ public class Robot extends TimedRobot {
 
     private static final CTREConfigs ctreConfigs = new CTREConfigs();
 
+    private AddressableLED m_led;
+    private AddressableLEDBuffer m_ledBuffer;
+    private AddressableLEDBufferView rightLed;
+    private AddressableLEDBufferView leftLed;
+    private LEDPattern pattern;
+
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
      */
     public Robot() {
+        CanBridge.runTCP();
+
+        // Must be a PWM header, not MXP or DIO
+        m_led = new AddressableLED(9);
+
+        // Reuse buffer
+        // Default to a length of 60, start empty output
+        // Length is expensive to set, so only set it once, then just update data
+        m_ledBuffer = new AddressableLEDBuffer(198);
+        rightLed = new AddressableLEDBufferView(m_ledBuffer, 64, 197);
+        leftLed = new AddressableLEDBufferView(m_ledBuffer, 0, 63);
+
+        m_led.setLength(m_ledBuffer.getLength());
+        pattern = LEDPattern.solid(Color.kRed);
+        pattern.applyTo(m_ledBuffer);
+
+        pattern.applyTo(m_ledBuffer);
+
+        // Set the data
+        m_led.setData(m_ledBuffer);
+
+        m_led.start();
+
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
-        m_robotContainer = new RobotContainer();
-        CanBridge.runTCP();
+        m_robotContainer = new RobotContainer(m_led);
     }
 
     /**
@@ -51,6 +84,18 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("Is Coral", m_robotContainer.isCoral);
         SmartDashboard.putBoolean("Is Left", m_robotContainer.isLeft);
+
+        if (m_robotContainer.isCoral) {
+            pattern = LEDPattern.solid(Color.kAliceBlue);
+        } else {
+            pattern = LEDPattern.solid(Color.kMediumAquamarine);
+        }
+        pattern.applyTo(m_ledBuffer);
+
+        pattern = LEDPattern.kOff;
+        pattern.applyTo(m_robotContainer.isLeft ? leftLed : rightLed);
+
+        m_led.setData(m_ledBuffer);
     }
 
     /** This function is called once each time the robot enters Disabled mode. */

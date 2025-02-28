@@ -10,34 +10,74 @@ import frc.robot.subsystems.*;
 
 public class Align extends Command {
 
+    private static final double PRE_ALIGN_POS_OFFSET = 0.2;
+
     private RobotContainer rob;
-    private Swerve swerve;
+    private Swerve m_swerve;
     private AlignPIDController pidController;
     private Pose2d target;
+    private Pose2d preAlignTarget;
+    private boolean preAligned;
 
     private Pose2d[] redCoralPoses = {
         // 6
-        new Pose2d(13.651, 2.704, Rotation2d.fromDegrees(120)),
         new Pose2d(
-            13.892115076650555,
-            2.77283229770283,
-            Rotation2d.fromDegrees(115)
+            13.7138173692834,
+            2.6072262240858235,
+            Rotation2d.fromDegrees(120)
+        ),
+        new Pose2d(
+            14.00444650156854,
+            2.834064075170478,
+            Rotation2d.fromDegrees(120)
         ),
         // 7
         new Pose2d(14.429, 3.860, Rotation2d.fromDegrees(180)),
         new Pose2d(14.429, 4.140, Rotation2d.fromDegrees(180)),
         // 8
-        new Pose2d(13.910, 5.197, Rotation2d.fromDegrees(-120)),
-        new Pose2d(13.621, 5.386, Rotation2d.fromDegrees(-120)),
+        new Pose2d(
+            14.106619145765423,
+            5.108999993725428,
+            Rotation2d.fromDegrees(-138.1602471700646)
+        ),
+        new Pose2d(
+            13.727696562268253,
+            5.473035028741587,
+            Rotation2d.fromDegrees(-120)
+        ),
         // 9
-        new Pose2d(12.455, 5.316, Rotation2d.fromDegrees(-60)),
-        new Pose2d(12.155, 5.167, Rotation2d.fromDegrees(-60)),
+        new Pose2d(
+            12.378918939421332,
+            5.403694350131616,
+            Rotation2d.fromDegrees(-60)
+        ),
+        new Pose2d(
+            12.113804902100801,
+            5.199988372031614,
+            Rotation2d.fromDegrees(-60)
+        ),
         // 10
-        new Pose2d(11.577, 4.160, Rotation2d.fromDegrees(0)),
-        new Pose2d(11.577, 3.831, Rotation2d.fromDegrees(0)),
+        new Pose2d(
+            11.526372103301219,
+            4.125573777784979,
+            Rotation2d.fromDegrees(0)
+        ),
+        new Pose2d(
+            11.580483817838719,
+            3.803232806372717,
+            Rotation2d.fromDegrees(0)
+        ),
         // 11
-        new Pose2d(12.175, 2.903, Rotation2d.fromDegrees(60)),
-        new Pose2d(12.504, 2.744, Rotation2d.fromDegrees(60)),
+        new Pose2d(
+            12.188989154050477,
+            2.7611622551913717,
+            Rotation2d.fromDegrees(60)
+        ),
+        new Pose2d(
+            12.500078054561705,
+            2.662783290683802,
+            Rotation2d.fromDegrees(60)
+        ),
     };
 
     private Pose2d[] blueCoralPoses = {
@@ -63,7 +103,7 @@ public class Align extends Command {
 
     public Align(RobotContainer rob, Swerve swerve) {
         this.rob = rob;
-        this.swerve = swerve;
+        this.m_swerve = swerve;
         pidController = new AlignPIDController(swerve);
 
         addRequirements(swerve);
@@ -83,7 +123,8 @@ public class Align extends Command {
 
     @Override
     public void initialize() {
-        Pose2d botPose = swerve.getPose();
+        preAligned = false;
+        Pose2d botPose = m_swerve.getPose();
 
         Pose2d min1 = new Pose2d();
         Pose2d min2 = new Pose2d();
@@ -91,7 +132,7 @@ public class Align extends Command {
         double minDist = Double.MAX_VALUE;
         double minDist2 = Double.MAX_VALUE;
 
-        Pose2d[] coralPoses = swerve.isRed() ? redCoralPoses : blueCoralPoses;
+        Pose2d[] coralPoses = m_swerve.isRed() ? redCoralPoses : blueCoralPoses;
 
         // find target with minimum distance
         for (Pose2d target : coralPoses) {
@@ -131,9 +172,11 @@ public class Align extends Command {
         double bY = min2.getY() - botPose.getY();
 
         double angleAL =
-            Math.acos((dot(aX, aY, lX, lY) / mag(aX, aY))) * signOfAngle(lX, lY, aX, aY);
+            Math.acos((dot(aX, aY, lX, lY) / mag(aX, aY))) *
+            signOfAngle(lX, lY, aX, aY);
         double angleBL =
-            Math.acos((dot(bX, bY, lX, lY) / mag(bX, bY))) * signOfAngle(lX, lY, bX, bY);
+            Math.acos((dot(bX, bY, lX, lY) / mag(bX, bY))) *
+            signOfAngle(lX, lY, bX, bY);
 
         Pose2d left;
         Pose2d right;
@@ -147,14 +190,40 @@ public class Align extends Command {
         }
 
         target = rob.isLeft ? left : right;
+
+        Rotation2d rot = target.getRotation();
+        preAlignTarget = new Pose2d(
+            target.getX() - PRE_ALIGN_POS_OFFSET * rot.getCos(),
+            target.getY() - PRE_ALIGN_POS_OFFSET * rot.getSin(),
+            rot
+        );
     }
 
     @Override
     public void execute() {
-        pidController.alignLimelight(target);
-        SmartDashboard.putNumber("Target X", target.getX());
-        SmartDashboard.putNumber("Target Y", target.getY());
-        SmartDashboard.putNumber("Target R", target.getRotation().getDegrees());
+        if (
+            !preAligned &&
+            Math.abs(pidController.getXError(preAlignTarget)) < 0.1 &&
+            Math.abs(pidController.getYError(preAlignTarget)) < 0.1 &&
+            Math.abs(pidController.getAngleError(preAlignTarget)) < 0.75
+        ) {
+            preAligned = true;
+        }
+
+        Pose2d curTarget = preAligned ? target : preAlignTarget;
+        if (
+            Math.abs(pidController.getXError(curTarget)) < 2 &&
+            Math.abs(pidController.getYError(curTarget)) < 2
+        ) {
+            pidController.alignLimelight(curTarget, preAligned);
+        }
+
+        SmartDashboard.putNumber("Cur Target X", curTarget.getX());
+        SmartDashboard.putNumber("Cur Target Y", curTarget.getY());
+        SmartDashboard.putNumber(
+            "Cur Target R",
+            curTarget.getRotation().getDegrees()
+        );
     }
 
     @Override
