@@ -4,10 +4,17 @@
 
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Rotation;
+import java.util.Optional;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.reduxrobotics.canand.CanandEventLoop;
 import com.reduxrobotics.sensors.canandgyro.Canandgyro;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -22,10 +29,11 @@ import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import java.util.Optional;
 
 public class Swerve extends SubsystemBase {
 
@@ -36,6 +44,7 @@ public class Swerve extends SubsystemBase {
     private Limelight l_limelightlow;
     private Limelight l_limelighthigh;
     private RobotContainer robotContainer;
+    private RobotConfig config;
 
     // WPILib
     StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
@@ -65,7 +74,73 @@ public class Swerve extends SubsystemBase {
         l_limelightlow = limelightlow;
         l_limelighthigh = limelighthigh;
         this.robotContainer = robotContainer;
+
+        
+        try{
+            config = RobotConfig.fromGUISettings();
+
+            // Configure AutoBuilder last
+            AutoBuilder.configure(
+                this::getPose, // Robot pose supplier
+                this::setPose, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getRobotRelativeChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                (speeds, feedforwards) -> driveFromSpeeds(speeds, true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+                new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                        new PIDConstants(Constants.Swerve.driveKP, Constants.Swerve.driveKI, Constants.Swerve.driveKD), // Translation PID constants
+                        new PIDConstants(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD) // Rotation PID constants
+                ),
+                config, // The robot configuration
+                () -> {
+                // Boolean supplier that controls when the path will be mirrored for the red alliance
+                // This will flip the path being followed to the red side of the field.
+                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+                },
+                this // Reference to this subsystem to set requirements
+            );
+        } catch (Exception e) {
+            // Handle exception as needed
+            e.printStackTrace();
+        }
     }
+
+    public Command followPathCommand(String pathName) {
+    try{
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+
+        return new FollowPathCommand(
+                path,
+                this::getPose, // Robot pose supplier
+                this::getRobotRelativeChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                (speeds, feedforwards) -> driveFromSpeeds(speeds, true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds, AND feedforwards
+                new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new PIDConstants(Constants.Swerve.driveKP, Constants.Swerve.driveKI, Constants.Swerve.driveKD), // Translation PID constants
+                    new PIDConstants(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD) // Rotation PID constants
+                ),
+                config, // The robot configuration
+                () -> {
+                  // Boolean supplier that controls when the path will be mirrored for the red alliance
+                  // This will flip the path being followed to the red side of the field.
+                  // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                  var alliance = DriverStation.getAlliance();
+                  if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                  }
+                  return false;
+                },
+                this // Reference to this subsystem to set requirements
+        );
+    } catch (Exception e) {
+        DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+        return Commands.none();
+    }
+  }
 
     public void autoDrive(ChassisSpeeds speed) {
         SwerveModuleState[] moduleStates =
