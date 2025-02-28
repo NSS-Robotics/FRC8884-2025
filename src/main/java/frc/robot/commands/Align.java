@@ -10,7 +10,7 @@ import frc.robot.subsystems.*;
 
 public class Align extends Command {
 
-    private static final double PRE_ALIGN_POS_OFFSET = 0.5;
+    private static final double PRE_ALIGN_POS_OFFSET = 0.2;
 
     private RobotContainer rob;
     private Swerve m_swerve;
@@ -35,11 +35,27 @@ public class Align extends Command {
         new Pose2d(14.429, 3.860, Rotation2d.fromDegrees(180)),
         new Pose2d(14.429, 4.140, Rotation2d.fromDegrees(180)),
         // 8
-        new Pose2d(13.910, 5.197, Rotation2d.fromDegrees(-120)),
-        new Pose2d(13.621, 5.386, Rotation2d.fromDegrees(-120)),
+        new Pose2d(
+            14.106619145765423,
+            5.108999993725428,
+            Rotation2d.fromDegrees(-138.1602471700646)
+        ),
+        new Pose2d(
+            13.727696562268253,
+            5.473035028741587,
+            Rotation2d.fromDegrees(-120)
+        ),
         // 9
-        new Pose2d(12.455, 5.316, Rotation2d.fromDegrees(-60)),
-        new Pose2d(12.155, 5.167, Rotation2d.fromDegrees(-60)),
+        new Pose2d(
+            12.378918939421332,
+            5.403694350131616,
+            Rotation2d.fromDegrees(-60)
+        ),
+        new Pose2d(
+            12.113804902100801,
+            5.199988372031614,
+            Rotation2d.fromDegrees(-60)
+        ),
         // 10
         new Pose2d(
             11.526372103301219,

@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.reduxrobotics.canand.CanandDeviceDetails.Msg;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -99,8 +100,14 @@ public class RobotContainer {
                     Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
                 )
             );
+        m_driverController
+            .b()
+            .whileTrue(
+                new CoralOuttake(m_intake, m_indexer, m_wrist, m_elevator)
+            );
+
         // m_driverController
-        //     .b()
+        //     .povUp()
         //     .onTrue(
         //         new SequentialCommandGroup(
         //             new ParallelDeadlineGroup(
@@ -112,7 +119,7 @@ public class RobotContainer {
         //     );
 
         // m_driverController
-        //     .a()
+        //     .povDown()
         //     .onTrue(
         //         new SequentialCommandGroup(
         //             new ParallelDeadlineGroup(

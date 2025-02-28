@@ -284,12 +284,7 @@ public class Swerve extends SubsystemBase {
         }
 
         if (limelight != null) {
-            Pose2d pose = new Pose2d(
-                limelight.botPose.getX(),
-                limelight.botPose.getY(),
-                getGyroYaw()
-            );
-            swerveOdometry = createOdometry(pose);
+            swerveOdometry = createOdometry(limelight.botPose);
         } else {
             swerveOdometry.update(getGyroYaw(), getModulePositions());
         }
