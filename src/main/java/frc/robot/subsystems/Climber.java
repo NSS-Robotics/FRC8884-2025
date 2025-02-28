@@ -87,13 +87,13 @@ public class Climber extends SubsystemBase {
     }
 
     public void engageLatch() {
-        lServo.set(0.3);
+        lServo.set(0.5);
         // rServo.set(0.5);
         latchEngaged = true;
     }
 
     public void disengageLatch() {
-        lServo.set(0.2);
+        lServo.set(0);
         // rServo.set(0.6);
         latchEngaged = false;
     }

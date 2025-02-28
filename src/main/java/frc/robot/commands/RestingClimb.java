@@ -21,9 +21,9 @@ public class RestingClimb extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // if (m_climber.getPosition() > -0.1) {
-        //     m_climber.setClimber(Constants.ClimberConstants.restingRot, 0);
-        // }
+        if (m_climber.getPosition() < 0.1) {
+            m_climber.setClimber(Constants.ClimberConstants.restingRot, 0);
+        }
     }
 
     // Called once the command ends or is interrupted%.

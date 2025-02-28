@@ -1,15 +1,15 @@
 package frc.robot;
 
 import au.grapplerobotics.CanBridge;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.LED;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -26,6 +26,8 @@ public class Robot extends TimedRobot {
 
     private AddressableLED m_led;
     private AddressableLEDBuffer m_ledBuffer;
+    private AddressableLEDBufferView rightLed;
+    private AddressableLEDBufferView leftLed;
     private LEDPattern pattern;
 
     /**
@@ -41,7 +43,9 @@ public class Robot extends TimedRobot {
         // Reuse buffer
         // Default to a length of 60, start empty output
         // Length is expensive to set, so only set it once, then just update data
-        m_ledBuffer = new AddressableLEDBuffer(19);
+        m_ledBuffer = new AddressableLEDBuffer(198);
+        rightLed = new AddressableLEDBufferView(m_ledBuffer, 64, 197);
+        leftLed = new AddressableLEDBufferView(m_ledBuffer, 0, 63);
 
         m_led.setLength(m_ledBuffer.getLength());
         pattern = LEDPattern.solid(Color.kRed);
@@ -57,7 +61,6 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer(m_led);
-
     }
 
     /**
@@ -88,6 +91,11 @@ public class Robot extends TimedRobot {
             pattern = LEDPattern.solid(Color.kMediumAquamarine);
         }
         pattern.applyTo(m_ledBuffer);
+
+        pattern = LEDPattern.kOff;
+        pattern.applyTo(m_robotContainer.isLeft ? leftLed : rightLed);
+
+        m_led.setData(m_ledBuffer);
     }
 
     /** This function is called once each time the robot enters Disabled mode. */

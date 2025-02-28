@@ -32,9 +32,6 @@ public class AlignPIDController extends PIDController {
     }
 
     public double getAngleError(Pose2d target) {
-        if (preAligned) {
-            return 0;
-        }
         double poseR = m_swerve.getPose().getRotation().getDegrees();
         double targetR = target.getRotation().getDegrees();
 
