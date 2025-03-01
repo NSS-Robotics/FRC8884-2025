@@ -269,7 +269,7 @@ public final class Constants {
             0.455810546875, // stationIntake
             0.03576171875, // handoff
             0.4111328125, // barge
-            0.61, // algaeGround
+            0.585, // algaeGround
             0.626, // algaeReefLow
             0.626, // algaeReefHigh
             0.61, // processor
@@ -350,7 +350,7 @@ public final class Constants {
         public static final double kS = 1.0274;
         public static final double kV = 1.16686;
         public static final double kA = 0.119518;
-        public static final double currentLimit = 20; // That's a very small current limit
+        public static final double currentLimit = 55; // That's a very small current limit
         public static final int motorID = 41;
         public static final int laserCANID = 43;
         public static final double climbPosition = 0.233;
@@ -359,6 +359,7 @@ public final class Constants {
         public static final double elevatorUpMinValue = -0.12;
         public static final double velocity = 5000;
         public static final double outtakeVelocity = 750;
+        public static final double holdingVelocity = 500;
     }
 
     public static final class LEDConstants {

@@ -98,6 +98,7 @@ public class GroundIntake extends Command {
             m_wrist.setWrist(
                 Constants.WristConstants.pos[RobotState.barge.ordinal()]
             );
+            m_claw.setClaw(Constants.EndEffectorConstants.holdingVelocity);
         }
         // m_led.stopLED();
         robotContainer.runningCommand = false;

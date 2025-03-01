@@ -131,6 +131,7 @@ public class Align extends Command {
 
     @Override
     public void initialize() {
+        if (!rob.isCoral) return;
         atSetpoint = false;
         Pose2d botPose = m_swerve.getPose();
 
@@ -209,6 +210,7 @@ public class Align extends Command {
 
     @Override
     public void execute() {
+        if (!rob.isCoral) return;
         if (
             !atSetpoint &&
             Math.abs(pidController.getXError(target)) < 0.01 &&
@@ -237,11 +239,13 @@ public class Align extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        if (!rob.isCoral) return;
         m_swerve.stopSwerve();
     }
 
     @Override
     public boolean isFinished() {
+        if (!rob.isCoral) return true;
         return atSetpoint;
     }
 }
