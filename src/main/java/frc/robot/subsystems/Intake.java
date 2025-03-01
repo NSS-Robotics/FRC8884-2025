@@ -55,7 +55,7 @@ public class Intake extends SubsystemBase {
     public Intake() {
         CANcoderConfiguration pivotCANcoderConfig = new CANcoderConfiguration();
         pivotCANcoderConfig.MagnetSensor.SensorDirection =
-            SensorDirectionValue.Clockwise_Positive;
+            SensorDirectionValue.CounterClockwise_Positive;
         pivotCANcoderConfig.MagnetSensor.MagnetOffset =
             Constants.IntakeConstants.encoderOffset;
         pivotEncoder.getConfigurator().apply(pivotCANcoderConfig);

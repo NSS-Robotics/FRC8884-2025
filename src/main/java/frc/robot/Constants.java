@@ -291,9 +291,9 @@ public final class Constants {
         public static final double downkP = 50;
         public static final double downkI = 0;
         public static final double downkD = 0.020493;
-        public static final double maxRotations = 38.876953125;
+        public static final double maxRotations = 38.88916015625;
         public static final double restingRot = 23;
-        public static final double climbRot = 36.77490234375;
+        public static final double climbRot = 40.5;
         public static final double minRot = 0;
     }
 
@@ -315,11 +315,11 @@ public final class Constants {
         public static final int pivotMotorID = 60;
         public static final int intakeMotorID = 61;
         public static final int encoderID = 62;
-        public static final double encoderOffset = 0.21240234375;
-        public static final double upKP = 5.342;
+        public static final double encoderOffset = -0.21240234375;
+        public static final double upKP = 9.842;
         public static final double upKI = 0;
         public static final double upKD = 2;
-        public static final double downKP = 2.7;
+        public static final double downKP = 6.7;
         public static final double downKI = 0;
         public static final double downKD = 0;
         public static final double maxRot = 0;
@@ -329,11 +329,11 @@ public final class Constants {
         public static final double intakeKS = 0.23712;
         public static final double intakeKV = 0.12479;
         public static final double intakeKA = 0.0070548;
-        public static final double pivotMaxRotations = -0.92871;
-        public static final double intakeStartPos = -0.7;
+        public static final double pivotMaxRotations = -0.4;
+        public static final double intakeStartPos = -0.3;
         public static final double algaePosition = 0;
-        public static final double upPosition = -0.05;
-        public static final double intakePosition = -0.8487109375;
+        public static final double upPosition = -0.0;
+        public static final double intakePosition = -0.356201171875;
         public static final double velocity = 2000;
         public static final double l1velocity = 1000;
     }
