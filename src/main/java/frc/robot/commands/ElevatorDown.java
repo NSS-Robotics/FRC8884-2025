@@ -2,24 +2,33 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.RobotState;
+import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
 
 public class ElevatorDown extends Command {
 
+    private final RobotContainer robotContainer;
     private final Elevator m_elevator;
     private final Wrist m_wrist;
+    private final Claw m_claw;
     private final double elevatorTargetPos = 
         Constants.ElevatorConstants.pos[RobotState.handoff.ordinal()];
     private final double outWristPos =
         Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
-    private final double wristHandoffPos =
+    private final double handoffWristPos =
         Constants.WristConstants.pos[RobotState.handoff.ordinal()];
+    private final double algaeHoldWristPos = 
+        Constants.WristConstants.pos[RobotState.barge.ordinal()];
 
-    public ElevatorDown(Elevator elevator, Wrist wrist) {
+    public ElevatorDown(RobotContainer robotContainer, Elevator elevator, Wrist wrist, Claw claw) {
+        this.robotContainer = robotContainer; 
         m_elevator = elevator;
         m_wrist = wrist;
+        m_claw = claw;
         addRequirements(m_elevator, m_wrist);
     }
 
@@ -30,15 +39,35 @@ public class ElevatorDown extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (m_elevator.getPosition() > Constants.ElevatorConstants.upThreshold) {
-            m_wrist.setWrist(outWristPos);
-        } else {
-            m_wrist.setWrist(wristHandoffPos);
+        if (robotContainer.isCoral) {
+            if (m_elevator.getPosition() > Constants.ElevatorConstants.upThreshold) {
+                m_wrist.setWrist(outWristPos);
+            } else {
+                m_wrist.setWrist(handoffWristPos);
+            }
+            if (m_wrist.getPosition() < Constants.WristConstants.maxElevatorLoweredPos) {
+                m_elevator.setElevator(elevatorTargetPos, Constants.ElevatorConstants.downSlot);
+            }
         }
 
-        if (m_wrist.getPosition() < Constants.WristConstants.maxElevatorLoweredPos) {
-            m_elevator.setElevator(elevatorTargetPos, Constants.ElevatorConstants.downSlot);
+        // algae
+        else {
+            m_wrist.setWrist(algaeHoldWristPos);
+            if (Math.abs
+                (m_wrist.getPosition() - 
+                algaeHoldWristPos) 
+                < Constants.WristConstants.posTolerance) {
+                m_elevator.setElevator(elevatorTargetPos, Constants.ElevatorConstants.downSlot);
+            }
+
+            if (!m_claw.gamepieceDetected()
+                && m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+            ) {
+                m_wrist.setWrist(handoffWristPos);
+            }
         }
+
+        
     }
 
     // Called once the command ends or is interrupted%.

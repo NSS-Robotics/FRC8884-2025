@@ -34,6 +34,7 @@ public final class Constants {
         algaeGround,
         algaeReefLow,
         algaeReefHigh,
+        processor,
         climb,
     }
 
@@ -232,6 +233,7 @@ public final class Constants {
         public static final int downSlot = 1;
         public static final double upThreshold = 0.1;
         public static final double wristDownSafeThreshold = 0.34;
+        public static final double posTolerance = 0.05;
         public static final double[] pos = {
             1.1, // l1
             1.82, // l2
@@ -243,6 +245,7 @@ public final class Constants {
             0, // algaeGround
             1.82, // algaeReefLow
             2.8, // algaeReefHigh
+            0, // processor
             0, // climb
         };
 
@@ -269,6 +272,7 @@ public final class Constants {
             0.61, // algaeGround
             0.626, // algaeReefLow
             0.626, // algaeReefHigh
+            0.61, // processor
             0.4, // climb
         };
         public static final double posTolerance = 0.05;
