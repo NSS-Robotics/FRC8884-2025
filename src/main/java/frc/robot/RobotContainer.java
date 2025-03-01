@@ -1,8 +1,11 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.reduxrobotics.canand.CanandDeviceDetails.Msg;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -27,6 +30,7 @@ import java.util.concurrent.CancellationException;
  */
 public class RobotContainer {
 
+    private final SendableChooser<Command> autoChooser;
     // The robot's subsystems and commands are defined here...
     private final Climber m_climber = new Climber();
     private final Elevator m_elevator = new Elevator();
@@ -35,11 +39,7 @@ public class RobotContainer {
     private final Intake m_intake = new Intake();
     private final Limelight l_limelightLow = new Limelight("low");
     private final Limelight l_limelightHigh = new Limelight("high");
-    private final Swerve m_swerve = new Swerve(
-        l_limelightLow,
-        l_limelightHigh,
-        this
-    );
+    private final Swerve m_swerve = new Swerve(l_limelightLow, l_limelightHigh);
     private final Wrist m_wrist = new Wrist();
     // private final LED l_led = new LED(this);
 
@@ -79,6 +79,28 @@ public class RobotContainer {
         );
 
         scoringLevel = RobotState.l2;
+
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+
+        NamedCommands.registerCommand(
+            "Coral Placing",
+            new Up(null, m_elevator, m_wrist, m_endEffector)
+        );
+        NamedCommands.registerCommand(
+            "Intake",
+            new SequentialCommandGroup(
+                new InstantCommand(leds::start),
+                new CoralIntake(
+                    this,
+                    m_intake,
+                    m_indexer,
+                    m_wrist,
+                    m_endEffector,
+                    m_elevator
+                )
+            )
+        );
     }
 
     /**
@@ -226,10 +248,20 @@ public class RobotContainer {
                         ? RobotState.l4
                         : RobotState.barge
                 )
+                new InstantCommand(() ->
+                    this.scoringLevel = isCoral
+                        ? RobotState.l4
+                        : RobotState.barge
+                )
             );
         m_operatorController
             .povRight()
             .onTrue(
+                new InstantCommand(() ->
+                    this.scoringLevel = isCoral
+                        ? RobotState.l3
+                        : RobotState.algaeReefHigh
+                )
                 new InstantCommand(() ->
                     this.scoringLevel = isCoral
                         ? RobotState.l3
@@ -244,10 +276,20 @@ public class RobotContainer {
                         ? RobotState.l2
                         : RobotState.algaeReefLow
                 )
+                new InstantCommand(() ->
+                    this.scoringLevel = isCoral
+                        ? RobotState.l2
+                        : RobotState.algaeReefLow
+                )
             );
         m_operatorController
             .povDown()
             .onTrue(
+                new InstantCommand(() ->
+                    this.scoringLevel = isCoral
+                        ? RobotState.l1
+                        : RobotState.processor
+                )
                 new InstantCommand(() ->
                     this.scoringLevel = isCoral
                         ? RobotState.l1
@@ -283,6 +325,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return Autos.exampleAuto(m_swerve);
+        return autoChooser.getSelected();
     }
 }
