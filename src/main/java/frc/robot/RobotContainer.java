@@ -159,18 +159,6 @@ public class RobotContainer {
 
         m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
         m_driverController
-            .rightTrigger()
-            .whileTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(leds::stop),
-                    new Outtake(
-                        m_endEffector,
-                        m_wrist,
-                        Constants.EndEffectorConstants.outtakeVelocity
-                    )
-                )
-            );
-        m_driverController
             .leftTrigger()
             .whileTrue(
                 new SequentialCommandGroup(
@@ -188,7 +176,7 @@ public class RobotContainer {
             );
 
         m_driverController
-            .rightBumper()
+            .rightTrigger()
             .onTrue(
                 new SequentialCommandGroup(
                     new Align(this, m_swerve),

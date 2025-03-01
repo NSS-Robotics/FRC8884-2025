@@ -5,10 +5,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.RobotState;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
 
 public class Align extends Command {
+
     private static final double RED_BLUE_OFFSET = 0;
 
     private RobotContainer rob;
@@ -20,14 +22,14 @@ public class Align extends Command {
     private final Pose2d[] redCoralPoses = {
         // 6
         new Pose2d(
-            13.470094323276639,
-            2.517555346596671,
-            Rotation2d.fromDegrees(101.72460218856601)
+            13.427346264776789,
+            2.515705824540677,
+            Rotation2d.fromDegrees(98.88435146986305)
         ),
         new Pose2d(
-            14.07885464698699,
-            2.857541453385015,
-            Rotation2d.fromDegrees(132.36679136152566)
+            14.19910430572695,
+            3.0641515335854375,
+            Rotation2d.fromDegrees(149.81445534558955)
         ),
         // 7
         new Pose2d(
@@ -42,14 +44,14 @@ public class Align extends Command {
         ),
         // 8
         new Pose2d(
-            14.102636158059832,
-            5.143072887067664,
-            Rotation2d.fromDegrees(-138.1602471700646)
+            14.21768773408878,
+            5.035340508559569,
+            Rotation2d.fromDegrees(-146.35153267274092)
         ),
         new Pose2d(
-            13.413457784785955,
-            5.524729964683903,
-            Rotation2d.fromDegrees(-97.19897392299187)
+            13.407790682074818,
+            5.488221076776056,
+            Rotation2d.fromDegrees(-96.29061063053797)
         ),
         // 9
         new Pose2d(
@@ -89,8 +91,8 @@ public class Align extends Command {
     private final Pose2d[] redAlgaePoses = {
         // 6
         new Pose2d(
-            13.470094323276639,
-            2.517555346596671,
+            13.372168987698355,
+            2.515705824540677,
             Rotation2d.fromDegrees(101.72460218856601)
         ),
         // 7
@@ -122,11 +124,14 @@ public class Align extends Command {
             11.936229220556926,
             3.023850285434846,
             Rotation2d.fromDegrees(32.357416721193864)
-        )
+        ),
     };
 
     private final Pose2d[] blueCoralPoses = new Pose2d[redCoralPoses.length];
     private final Pose2d[] blueAlgaePoses = new Pose2d[redAlgaePoses.length];
+
+    private final double redBargeX = 0;
+    private final double blueBargeX = 0;
 
     public Align(RobotContainer rob, Swerve swerve) {
         this.rob = rob;
@@ -144,7 +149,7 @@ public class Align extends Command {
         }
 
         for (int i = 0; i < blueAlgaePoses.length; i++) {
-            Pose2d pose = blueAlgaePoses[i];
+            Pose2d pose = redAlgaePoses[i];
 
             blueAlgaePoses[i] = new Pose2d(
                 pose.getX() - RED_BLUE_OFFSET,
@@ -170,6 +175,15 @@ public class Align extends Command {
 
     @Override
     public void initialize() {
+        if (rob.scoringLevel.equals(RobotState.barge)) {
+            target = new Pose2d(
+                m_swerve.isRed() ? redBargeX : blueBargeX,
+                m_swerve.getPose().getY(),
+                new Rotation2d(m_swerve.isRed() ? 180 : 0)
+            );
+            return;
+        }
+
         atSetpoint = false;
         Pose2d botPose = m_swerve.getPose();
 

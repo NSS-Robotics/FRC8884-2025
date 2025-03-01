@@ -47,6 +47,7 @@ public class GroundIntake extends Command {
     @Override
     public void execute() {
         // m_led.runLED();
+        // coral
         if (robotContainer.isCoral) {
             if (
                 m_elevator.getPosition() <
@@ -65,7 +66,9 @@ public class GroundIntake extends Command {
                 m_indexer.setIndexer(Constants.IndexerConstants.velocity);
                 m_claw.setClaw(Constants.EndEffectorConstants.velocity);
             }
-        } else {
+        }
+        // algae
+        else {
             if (
                 m_elevator.getPosition() <
                 Constants.ElevatorConstants.upThreshold
