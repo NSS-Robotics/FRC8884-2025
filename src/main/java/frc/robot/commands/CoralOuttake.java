@@ -13,25 +13,25 @@ public class CoralOuttake extends Command {
     private final Indexer m_indexer;
     private final Wrist m_wrist;
     private final Elevator m_elevator;
+    private final LED l_Led;
 
     // private final LED m_led;
 
     public CoralOuttake(
-        RobotContainer robotContainer,
-        Intake m_intake,
-        Indexer m_indexer,
-        Wrist m_wrist,
-        Elevator m_elevator
-        // LED m_led //,
-    ) {
+            RobotContainer robotContainer,
+            Intake m_intake,
+            Indexer m_indexer,
+            Wrist m_wrist,
+            Elevator m_elevator,
+            LED l_led) {
         this.robotContainer = robotContainer;
         this.m_intake = m_intake;
         this.m_indexer = m_indexer;
         this.m_wrist = m_wrist;
         this.m_elevator = m_elevator;
-        // this.m_led = m_led;
+        this.l_Led = l_led;
 
-        addRequirements(m_intake, m_indexer, m_wrist);
+        addRequirements(m_intake, m_indexer, m_wrist, l_led);
     }
 
     // Called when the command is initially scheduled.
@@ -43,13 +43,10 @@ public class CoralOuttake extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // m_led.runLED();
-        if (
-            m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
-        ) {
+        l_Led.Outtake();
+        if (m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold) {
             m_wrist.setWrist(
-                Constants.WristConstants.pos[RobotState.handoff.ordinal()]
-            );
+                    Constants.WristConstants.pos[RobotState.handoff.ordinal()]);
         }
         m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
         if (m_intake.getPosition() < Constants.IntakeConstants.intakeStartPos) {
@@ -64,7 +61,7 @@ public class CoralOuttake extends Command {
         m_intake.setPivot(Constants.IntakeConstants.upPosition, 0);
         m_intake.stopIntake();
         m_indexer.stopIndexer();
-        // m_led.stopLED();
+        l_Led.stop();
         robotContainer.runningCommand = false;
     }
 

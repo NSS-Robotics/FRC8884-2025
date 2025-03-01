@@ -13,8 +13,6 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.Map;
 
-import com.ctre.phoenix6.signals.Led1OffColorValue;
-
 public class LED extends SubsystemBase {
     private final AddressableLED leds;
     private final AddressableLEDBuffer ledBuffer;
@@ -34,8 +32,11 @@ public class LED extends SubsystemBase {
     // Flashing and Solid Patterns
     private LEDPattern flashing;
     private LEDPattern solid;
+    private LEDPattern breathe;
+    private LEDPattern gradient;
 
     private Color colour = Color.kBlack;
+    private Color colour2 = Color.kRed;
 
     private RobotContainer robotContainer;
 
@@ -69,6 +70,8 @@ public class LED extends SubsystemBase {
         // Solid and Blinking Patterns
         solid = LEDPattern.solid(colour);
         flashing = LEDPattern.solid(colour).blink(Seconds.of(0.5));
+        breathe = LEDPattern.solid(colour).breathe(Seconds.of(1));
+        gradient = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colour, colour2);
 
         leds.setData(ledBuffer);
 
@@ -92,47 +95,56 @@ public class LED extends SubsystemBase {
 
     public void L1() {
         checkStates();
+        leftL1Led.applyTo(leftLeds);
+        rightL1Led.applyTo(rightLeds);
+        leds.setData(ledBuffer);
 
     }
 
     public void L2() {
         checkStates();
+        leftL2Led.applyTo(leftLeds);
+        rightL2Led.applyTo(rightLeds);
+        leds.setData(ledBuffer);
 
     }
 
     public void L3() {
         checkStates();
+        leftL3Led.applyTo(leftLeds);
+        rightL3Led.applyTo(rightLeds);
+        leds.setData(ledBuffer);
 
     }
 
     public void L4() {
         checkStates();
-
+        leftL4Led.applyTo(leftLeds);
+        rightL4Led.applyTo(rightLeds);
+        leds.setData(ledBuffer);
     }
 
     public void Intake() {
-        checkStates();
-
+        colour = Color.kForestGreen;
+        breathe.applyTo(leftLeds, rightLeds);
+        leds.setData(ledBuffer);
     }
 
     public void Outtake() {
-        checkStates();
+        colour = Color.kCoral;
+        colour2 = Color.kRed;
+        gradient.applyTo(leftLeds, rightLeds);
+        leds.setData(ledBuffer);
+    }
+
+    public void score() {
 
     }
 
-    public void Score() {
+    public void climb() {
     }
 
-    public void LeftSide() {
-    }
-
-    public void RightSide() {
-    }
-
-    public void Stop() {
-    }
-
-    public void stopLED() {
+    public void stop() {
         leds.stop();
     }
 }
