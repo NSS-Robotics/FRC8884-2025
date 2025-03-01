@@ -9,17 +9,15 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
 
 public class Align extends Command {
-
-    private static final double PRE_ALIGN_POS_OFFSET = 0.2;
+    private static final double RED_BLUE_OFFSET = 0;
 
     private RobotContainer rob;
     private Swerve m_swerve;
     private AlignPIDController pidController;
     private Pose2d target;
-    private Pose2d preAlignTarget;
     private boolean atSetpoint;
 
-    private Pose2d[] redCoralPoses = {
+    private final Pose2d[] redCoralPoses = {
         // 6
         new Pose2d(
             13.470094323276639,
@@ -88,31 +86,72 @@ public class Align extends Command {
         ),
     };
 
-    private Pose2d[] blueCoralPoses = {
-        // 17
-        new Pose2d(3.64, 2.863, Rotation2d.fromDegrees(60)),
-        new Pose2d(3.943, 2.664, Rotation2d.fromDegrees(60)),
-        // 18
-        new Pose2d(3.053, 4.111, Rotation2d.fromDegrees(0)),
-        new Pose2d(3.053, 3.84, Rotation2d.fromDegrees(0)),
-        // 19
-        new Pose2d(3.943, 5.359, Rotation2d.fromDegrees(-60)),
-        new Pose2d(3.64, 5.173, Rotation2d.fromDegrees(-60)),
-        // 20
-        new Pose2d(5.35, 5.173, Rotation2d.fromDegrees(-120)),
-        new Pose2d(5.098, 5.359, Rotation2d.fromDegrees(-120)),
-        // 21
-        new Pose2d(5.88, 3.84, Rotation2d.fromDegrees(180)),
-        new Pose2d(5.88, 4.111, Rotation2d.fromDegrees(180)),
-        // 22
-        new Pose2d(5.098, 2.664, Rotation2d.fromDegrees(120)),
-        new Pose2d(5.35, 2.863, Rotation2d.fromDegrees(120)),
+    private final Pose2d[] redAlgaePoses = {
+        // 6
+        new Pose2d(
+            13.470094323276639,
+            2.517555346596671,
+            Rotation2d.fromDegrees(101.72460218856601)
+        ),
+        // 7
+        new Pose2d(
+            14.474698233432257,
+            3.511730009749397,
+            Rotation2d.fromDegrees(149.11166780153667)
+        ),
+        // 8
+        new Pose2d(
+            14.102636158059832,
+            5.143072887067664,
+            Rotation2d.fromDegrees(-138.1602471700646)
+        ),
+        // 9
+        new Pose2d(
+            12.741693919859538,
+            5.527083506044402,
+            Rotation2d.fromDegrees(-82.5972415409531)
+        ),
+        // 10
+        new Pose2d(
+            11.633289217372596,
+            4.562910020151264,
+            Rotation2d.fromDegrees(-29.400396067552148)
+        ),
+        // 11
+        new Pose2d(
+            11.936229220556926,
+            3.023850285434846,
+            Rotation2d.fromDegrees(32.357416721193864)
+        )
     };
+
+    private final Pose2d[] blueCoralPoses = new Pose2d[redCoralPoses.length];
+    private final Pose2d[] blueAlgaePoses = new Pose2d[redAlgaePoses.length];
 
     public Align(RobotContainer rob, Swerve swerve) {
         this.rob = rob;
         this.m_swerve = swerve;
         pidController = new AlignPIDController(swerve);
+
+        for (int i = 0; i < blueCoralPoses.length; i++) {
+            Pose2d pose = redCoralPoses[i];
+
+            blueCoralPoses[i] = new Pose2d(
+                pose.getX() - RED_BLUE_OFFSET,
+                pose.getY(),
+                pose.getRotation()
+            );
+        }
+
+        for (int i = 0; i < blueAlgaePoses.length; i++) {
+            Pose2d pose = blueAlgaePoses[i];
+
+            blueAlgaePoses[i] = new Pose2d(
+                pose.getX() - RED_BLUE_OFFSET,
+                pose.getY(),
+                pose.getRotation()
+            );
+        }
 
         addRequirements(swerve);
     }
@@ -131,7 +170,6 @@ public class Align extends Command {
 
     @Override
     public void initialize() {
-        if (!rob.isCoral) return;
         atSetpoint = false;
         Pose2d botPose = m_swerve.getPose();
 
@@ -141,10 +179,12 @@ public class Align extends Command {
         double minDist = Double.MAX_VALUE;
         double minDist2 = Double.MAX_VALUE;
 
-        Pose2d[] coralPoses = m_swerve.isRed() ? redCoralPoses : blueCoralPoses;
+        Pose2d[] poses = m_swerve.isRed()
+            ? rob.isCoral ? redCoralPoses : redAlgaePoses
+            : rob.isCoral ? blueCoralPoses : blueAlgaePoses;
 
         // find target with minimum distance
-        for (Pose2d target : coralPoses) {
+        for (Pose2d target : poses) {
             double dist = mag(
                 target.getX() - botPose.getX(),
                 target.getY() - botPose.getY()
@@ -157,60 +197,57 @@ public class Align extends Command {
         }
 
         // find target with second minimum distance
-        for (Pose2d target : coralPoses) {
-            double dist = mag(
-                target.getX() - botPose.getX(),
-                target.getY() - botPose.getY()
-            );
+        // and associated left/right positions only if scoring coral
+        if (rob.isCoral) {
+            for (Pose2d target : poses) {
+                double dist = mag(
+                    target.getX() - botPose.getX(),
+                    target.getY() - botPose.getY()
+                );
 
-            if (dist < minDist2 && !target.equals(min1)) {
-                minDist2 = dist;
-                min2 = target;
+                if (dist < minDist2 && !target.equals(min1)) {
+                    minDist2 = dist;
+                    min2 = target;
+                }
             }
-        }
 
-        double botRotation = botPose.getRotation().getRadians();
-        // line of sight vector
-        double lX = Math.cos(botRotation);
-        double lY = Math.sin(botRotation);
-        // vector a: closest target
-        double aX = min1.getX() - botPose.getX();
-        double aY = min1.getY() - botPose.getY();
-        // vector b: second closest target
-        double bX = min2.getX() - botPose.getX();
-        double bY = min2.getY() - botPose.getY();
+            double botRotation = botPose.getRotation().getRadians();
+            // line of sight vector
+            double lX = Math.cos(botRotation);
+            double lY = Math.sin(botRotation);
+            // vector a: closest target
+            double aX = min1.getX() - botPose.getX();
+            double aY = min1.getY() - botPose.getY();
+            // vector b: second closest target
+            double bX = min2.getX() - botPose.getX();
+            double bY = min2.getY() - botPose.getY();
 
-        double angleAL =
-            Math.acos((dot(aX, aY, lX, lY) / mag(aX, aY))) *
-            signOfAngle(lX, lY, aX, aY);
-        double angleBL =
-            Math.acos((dot(bX, bY, lX, lY) / mag(bX, bY))) *
-            signOfAngle(lX, lY, bX, bY);
+            double angleAL =
+                Math.acos((dot(aX, aY, lX, lY) / mag(aX, aY))) *
+                signOfAngle(lX, lY, aX, aY);
+            double angleBL =
+                Math.acos((dot(bX, bY, lX, lY) / mag(bX, bY))) *
+                signOfAngle(lX, lY, bX, bY);
 
-        Pose2d left;
-        Pose2d right;
+            Pose2d left;
+            Pose2d right;
 
-        if (angleAL > angleBL) {
-            left = min1;
-            right = min2;
+            if (angleAL > angleBL) {
+                left = min1;
+                right = min2;
+            } else {
+                left = min2;
+                right = min1;
+            }
+
+            target = rob.isLeft ? left : right;
         } else {
-            left = min2;
-            right = min1;
+            target = min1;
         }
-
-        target = rob.isLeft ? left : right;
-
-        Rotation2d rot = target.getRotation();
-        // preAlignTarget = new Pose2d(
-        //     target.getX() - PRE_ALIGN_POS_OFFSET * rot.getCos(),
-        //     target.getY() - PRE_ALIGN_POS_OFFSET * rot.getSin(),
-        //     rot
-        // );
     }
 
     @Override
     public void execute() {
-        if (!rob.isCoral) return;
         if (
             !atSetpoint &&
             Math.abs(pidController.getXError(target)) < 0.01 &&
@@ -239,13 +276,11 @@ public class Align extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        if (!rob.isCoral) return;
         m_swerve.stopSwerve();
     }
 
     @Override
     public boolean isFinished() {
-        if (!rob.isCoral) return true;
         return atSetpoint;
     }
 }
