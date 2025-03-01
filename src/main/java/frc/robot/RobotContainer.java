@@ -152,6 +152,7 @@ public class RobotContainer {
                 new SequentialCommandGroup(
                     new InstantCommand(leds::start),
                     new CoralIntake(
+                        this,
                         m_intake,
                         m_indexer,
                         m_wrist,
@@ -164,16 +165,48 @@ public class RobotContainer {
 
         m_driverController
             .rightBumper()
-            .onTrue(new Up(this, m_elevator, m_wrist));
+            .onTrue(new Up(this, m_elevator, m_wrist, m_endEffector));
         m_driverController
             .leftBumper()
-            .onTrue(new ElevatorDown(m_elevator, m_wrist));
+            .onTrue(new ElevatorDown(this, m_elevator, m_wrist, m_endEffector));
         m_operatorController
             .square()
-            .whileTrue(new InstantCommand(() -> this.isCoral = true));
+            .onTrue(new InstantCommand(() -> {
+                if(!m_endEffector.gamepieceDetected()){
+                    this.isCoral = true;
+                    if (scoringLevel.equals(RobotState.barge)){
+                        this.scoringLevel = RobotState.l4;
+                    }
+                    else if(scoringLevel.equals(RobotState.algaeReefHigh)){
+                        this.scoringLevel = RobotState.l3;
+                    }
+                    else if(scoringLevel.equals(RobotState.algaeReefLow)){
+                        this.scoringLevel = RobotState.l2;
+                    }
+                    else if(scoringLevel.equals(RobotState.processor)){
+                        this.scoringLevel = RobotState.l1;
+                    }
+                }
+            }));
         m_operatorController
             .circle()
-            .whileTrue(new InstantCommand(() -> this.isCoral = false));
+            .onTrue(new InstantCommand(() -> {
+                if(!m_endEffector.gamepieceDetected()){
+                    this.isCoral = false;
+                    if (scoringLevel.equals(RobotState.l4)){
+                        this.scoringLevel = RobotState.barge;
+                    }
+                    else if(scoringLevel.equals(RobotState.l3)){
+                        this.scoringLevel = RobotState.algaeReefHigh;
+                    }
+                    else if(scoringLevel.equals(RobotState.l2)){
+                        this.scoringLevel = RobotState.algaeReefLow;
+                    }
+                    else if(scoringLevel.equals(RobotState.l1)){
+                        this.scoringLevel = RobotState.processor;
+                    }
+                }
+            }));
         m_operatorController
             .L1()
             .whileTrue(new InstantCommand(() -> this.isLeft = true));
@@ -184,22 +217,23 @@ public class RobotContainer {
         m_operatorController
             .povUp()
             .onTrue(
-                new InstantCommand(() -> this.scoringLevel = RobotState.l4)
+                new InstantCommand(() -> 
+                    this.scoringLevel = isCoral ? RobotState.l4 : RobotState.barge)
             );
         m_operatorController
             .povRight()
             .onTrue(
-                new InstantCommand(() -> this.scoringLevel = RobotState.l3)
+                new InstantCommand(() -> this.scoringLevel = isCoral ? RobotState.l3 : RobotState.algaeReefHigh)
             );
         m_operatorController
             .povLeft()
             .onTrue(
-                new InstantCommand(() -> this.scoringLevel = RobotState.l2)
+                new InstantCommand(() -> this.scoringLevel = isCoral ? RobotState.l2 : RobotState.algaeReefLow)
             );
         m_operatorController
             .povDown()
             .onTrue(
-                new InstantCommand(() -> this.scoringLevel = RobotState.l1)
+                new InstantCommand(() -> this.scoringLevel = isCoral ? RobotState.l1 : RobotState.processor)
             );
         // m_operatorController.cross().whileTrue(new RunLEDs(l_led));
     }
