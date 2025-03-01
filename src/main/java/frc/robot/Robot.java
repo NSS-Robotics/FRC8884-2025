@@ -26,11 +26,7 @@ public class Robot extends TimedRobot {
 
     private static final CTREConfigs ctreConfigs = new CTREConfigs();
 
-    private AddressableLED m_led;
-    private AddressableLEDBuffer m_ledBuffer;
-    private AddressableLEDBufferView rightLed;
-    private AddressableLEDBufferView leftLed;
-    private LEDPattern pattern;
+    private AddressableLED l_led;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -64,7 +60,7 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
-        m_robotContainer = new RobotContainer(m_led);
+        m_robotContainer = new RobotContainer(l_led);
     }
 
     /**
@@ -100,17 +96,6 @@ public class Robot extends TimedRobot {
                 "Can Change Game Piece",
                 m_robotContainer.canChangeGamePiece());
 
-        if (m_robotContainer.isCoral) {
-            pattern = LEDPattern.solid(Color.kAliceBlue);
-        } else {
-            pattern = LEDPattern.solid(Color.kMediumAquamarine);
-        }
-        pattern.applyTo(m_ledBuffer);
-
-        pattern = LEDPattern.kOff;
-        pattern.applyTo(m_robotContainer.isLeft ? leftLed : rightLed);
-
-        m_led.setData(m_ledBuffer);
     }
 
     /** This function is called once each time the robot enters Disabled mode. */

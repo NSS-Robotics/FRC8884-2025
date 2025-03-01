@@ -164,7 +164,6 @@ public class RobotContainer {
                 .rightTrigger()
                 .whileTrue(
                         new SequentialCommandGroup(
-                                new InstantCommand(leds::stop),
                                 new Outtake(
                                         m_endEffector,
                                         m_wrist,
