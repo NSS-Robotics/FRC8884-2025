@@ -6,7 +6,7 @@ import frc.robot.Constants.RobotState;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
 
-public class CoralIntake extends Command {
+public class GroundIntake extends Command {
 
     private final Intake m_intake;
     private final Indexer m_indexer;
@@ -17,7 +17,7 @@ public class CoralIntake extends Command {
 
     // private final LED m_led;
 
-    public CoralIntake(
+    public GroundIntake(
         RobotContainer robotContainer,
         Intake m_intake,
         Indexer m_indexer,
@@ -92,7 +92,7 @@ public class CoralIntake extends Command {
         m_intake.setPivot(Constants.IntakeConstants.upPosition, 0);
         m_intake.stopIntake();
         m_indexer.stopIndexer();
-        if (robotContainer.isCoral) {
+        if (robotContainer.isCoral || !m_claw.gamePieceDetected()) {
             m_claw.stopClaw();
         } else {
             m_wrist.setWrist(

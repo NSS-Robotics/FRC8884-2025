@@ -91,7 +91,7 @@ public class RobotContainer {
             "Intake",
             new SequentialCommandGroup(
                 new InstantCommand(leds::start),
-                new CoralIntake(
+                new GroundIntake(
                     this,
                     m_intake,
                     m_indexer,
@@ -175,7 +175,7 @@ public class RobotContainer {
             .whileTrue(
                 new SequentialCommandGroup(
                     new InstantCommand(leds::start),
-                    new CoralIntake(
+                    new GroundIntake(
                         this,
                         m_intake,
                         m_indexer,
