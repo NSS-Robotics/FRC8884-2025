@@ -9,53 +9,130 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
+import static edu.wpi.first.units.Units.Seconds;
+
+import java.util.Map;
+
+import com.ctre.phoenix6.signals.Led1OffColorValue;
+
 public class LED extends SubsystemBase {
-    // private final AddressableLED leds;
-    // private final AddressableLEDBuffer ledBuffer;
-    // private final AddressableLEDBufferView left;
-    // private final AddressableLEDBufferView right;
-    // private LEDPattern colour = LEDPattern.solid(Color.kCrimson);
+    private final AddressableLED leds;
+    private final AddressableLEDBuffer ledBuffer;
+    private final AddressableLEDBufferView leftLeds;
+    private final AddressableLEDBufferView rightLeds;
 
-    // private RobotContainer robotContainer;
+    // Level Segments
+    private LEDPattern leftL1Led;
+    private LEDPattern rightL1Led;
+    private LEDPattern leftL2Led;
+    private LEDPattern rightL2Led;
+    private LEDPattern leftL3Led;
+    private LEDPattern rightL3Led;
+    private LEDPattern leftL4Led;
+    private LEDPattern rightL4Led;
 
-    // public LED(RobotContainer robotContainer) {
-    //     this.robotContainer = robotContainer;
+    // Flashing and Solid Patterns
+    private LEDPattern flashing;
+    private LEDPattern solid;
 
-    //     leds = new AddressableLED(Constants.LEDConstants.channel);
-    //     ledBuffer = new AddressableLEDBuffer(151);
-    //     leds.setLength(ledBuffer.getLength());
-    //     leds.setData(ledBuffer);
-    //     leds.start();
-    //     left = ledBuffer.createView(0, ledBuffer.getLength() / 2);
-    //     right = ledBuffer.createView(
-    //         ledBuffer.getLength() / 2,
-    //         ledBuffer.getLength()
-    //     );
-    // }
+    private Color colour = Color.kBlack;
 
-    // // Turns on all the LEDs, just for testing.
-    // public void testLED() {
-    //     colour.applyTo(ledBuffer);
-    // }
+    private RobotContainer robotContainer;
 
-    // public void runLED() {
-    //     leds.start();
-    //     if (robotContainer.isCoral) {
-    //         colour = LEDPattern.solid(Color.kWhite);
-    //     } else {
-    //         colour = LEDPattern.solid(Color.kAqua);
-    //     }
+    public LED(RobotContainer robotContainer) {
+        this.robotContainer = robotContainer;
 
-    //     // FIXME: We have to check if we have a coral/algae in our robot before turning on lights
+        leds = new AddressableLED(Constants.LEDConstants.channel);
+        ledBuffer = new AddressableLEDBuffer(Constants.LEDConstants.length);
+        leds.setLength(ledBuffer.getLength());
 
-    //     if (robotContainer.isLeft) {
-    //         colour.applyTo(left);
-    //     } else {
-    //         colour.applyTo(right);
-    //     }
-    // }
+        leftLeds = new AddressableLEDBufferView(ledBuffer, 0, 75);
+        rightLeds = new AddressableLEDBufferView(ledBuffer, 76, 150);
 
-    // public void stopLED() {
-    //     leds.stop();
-    // }
+        // L1 LEDs
+        leftL1Led = LEDPattern.steps(Map.of(0, colour, 0.25, Color.kBlack, 0.75, colour));
+        rightL1Led = LEDPattern.steps(Map.of(0, Color.kBlack, 0.25, colour, 0.75, Color.kBlack));
+
+        // L2 LEDs
+        leftL2Led = LEDPattern.steps(Map.of(0, colour, 0.4, Color.kBlack, 0.6, colour));
+        rightL2Led = LEDPattern.steps(Map.of(0, Color.kBlack, 0.4, colour, 0.6, Color.kBlack));
+
+        // L3 LEDs
+        leftL3Led = LEDPattern.steps(Map.of(0, colour, 0.6, Color.kBlack, 0.7, colour));
+        rightL3Led = LEDPattern.steps(Map.of(0, Color.kBlack, 0.6, colour,
+                0.7, Color.kBlack));
+
+        // L4 LEDs
+        leftL4Led = LEDPattern.steps(Map.of(1, colour));
+        rightL4Led = LEDPattern.steps(Map.of(1, Color.kBlack));
+
+        // Solid and Blinking Patterns
+        solid = LEDPattern.solid(colour);
+        flashing = LEDPattern.solid(colour).blink(Seconds.of(0.5));
+
+        leds.setData(ledBuffer);
+
+        leds.start();
+    }
+
+    public void checkStates() {
+        if (robotContainer.isCoral) {
+            colour = Color.kWhite;
+        } else {
+            colour = Color.kAqua;
+        }
+        if (robotContainer.isLeft) {
+            flashing.applyTo(leftLeds);
+            solid.applyTo(rightLeds);
+        } else {
+            flashing.applyTo(rightLeds);
+            solid.applyTo(rightLeds);
+        }
+    }
+
+    public void L1() {
+        checkStates();
+
+    }
+
+    public void L2() {
+        checkStates();
+
+    }
+
+    public void L3() {
+        checkStates();
+
+    }
+
+    public void L4() {
+        checkStates();
+
+    }
+
+    public void Intake() {
+        checkStates();
+
+    }
+
+    public void Outtake() {
+        checkStates();
+
+    }
+
+    public void Score() {
+    }
+
+    public void LeftSide() {
+    }
+
+    public void RightSide() {
+    }
+
+    public void Stop() {
+    }
+
+    public void stopLED() {
+        leds.stop();
+    }
 }
