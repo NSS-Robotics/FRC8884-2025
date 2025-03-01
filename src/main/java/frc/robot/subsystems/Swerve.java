@@ -213,6 +213,10 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public void stopSwerve() {
+        drive(new Translation2d(0, 0), 0, false, true);
+    }
+
     public void zeroGyro() {
         gyro.setYaw(0);
         setHeading(new Rotation2d(Units.degreesToRadians(isRed() ? 0 : 180)));

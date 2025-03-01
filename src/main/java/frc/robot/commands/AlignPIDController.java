@@ -8,7 +8,6 @@ import frc.robot.subsystems.*;
 public class AlignPIDController extends PIDController {
 
     private Swerve m_swerve;
-    boolean preAligned;
 
     public AlignPIDController(Swerve swerve) {
         super(0.01, 0.001, 0);
@@ -17,8 +16,7 @@ public class AlignPIDController extends PIDController {
         this.m_swerve = swerve;
     }
 
-    public void alignLimelight(Pose2d target, boolean preAligned) {
-        this.preAligned = preAligned;
+    public void alignLimelight(Pose2d target) {
         double[] translation = translationPID(target);
         SmartDashboard.putNumberArray(
             "target",

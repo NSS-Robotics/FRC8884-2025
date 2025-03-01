@@ -17,7 +17,7 @@ public class Align extends Command {
     private AlignPIDController pidController;
     private Pose2d target;
     private Pose2d preAlignTarget;
-    private boolean preAligned;
+    private boolean atSetpoint;
 
     private Pose2d[] redCoralPoses = {
         // 6
@@ -32,8 +32,16 @@ public class Align extends Command {
             Rotation2d.fromDegrees(132.36679136152566)
         ),
         // 7
-        new Pose2d(14.429, 3.860, Rotation2d.fromDegrees(180)),
-        new Pose2d(14.429, 4.140, Rotation2d.fromDegrees(180)),
+        new Pose2d(
+            14.474698233432257,
+            3.511730009749397,
+            Rotation2d.fromDegrees(149.11166780153667)
+        ),
+        new Pose2d(
+            14.510433090775525,
+            4.47864233717442,
+            Rotation2d.fromDegrees(-155.88179827623432)
+        ),
         // 8
         new Pose2d(
             14.102636158059832,
@@ -47,36 +55,36 @@ public class Align extends Command {
         ),
         // 9
         new Pose2d(
-            12.378918939421332,
-            5.403694350131616,
-            Rotation2d.fromDegrees(-60)
+            12.741693919859538,
+            5.527083506044402,
+            Rotation2d.fromDegrees(-82.5972415409531)
         ),
         new Pose2d(
-            12.113804902100801,
-            5.199988372031614,
-            Rotation2d.fromDegrees(-60)
+            12.009193989444643,
+            5.107374161108507,
+            Rotation2d.fromDegrees(-40.15473991942403)
         ),
         // 10
         new Pose2d(
-            11.526372103301219,
-            4.125573777784979,
-            Rotation2d.fromDegrees(0)
+            11.633289217372596,
+            4.562910020151264,
+            Rotation2d.fromDegrees(-29.400396067552148)
         ),
         new Pose2d(
-            11.580483817838719,
-            3.803232806372717,
-            Rotation2d.fromDegrees(0)
+            11.634745884926582,
+            3.552937500751069,
+            Rotation2d.fromDegrees(28.17598558596463)
         ),
         // 11
         new Pose2d(
-            12.188989154050477,
-            2.7611622551913717,
-            Rotation2d.fromDegrees(60)
+            11.936229220556926,
+            3.023850285434846,
+            Rotation2d.fromDegrees(32.357416721193864)
         ),
         new Pose2d(
-            12.500078054561705,
-            2.662783290683802,
-            Rotation2d.fromDegrees(60)
+            12.737658259261673,
+            2.567307667187257,
+            Rotation2d.fromDegrees(84.29466186011739)
         ),
     };
 
@@ -123,7 +131,7 @@ public class Align extends Command {
 
     @Override
     public void initialize() {
-        preAligned = false;
+        atSetpoint = false;
         Pose2d botPose = m_swerve.getPose();
 
         Pose2d min1 = new Pose2d();
@@ -192,30 +200,31 @@ public class Align extends Command {
         target = rob.isLeft ? left : right;
 
         Rotation2d rot = target.getRotation();
-        preAlignTarget = new Pose2d(
-            target.getX() - PRE_ALIGN_POS_OFFSET * rot.getCos(),
-            target.getY() - PRE_ALIGN_POS_OFFSET * rot.getSin(),
-            rot
-        );
+        // preAlignTarget = new Pose2d(
+        //     target.getX() - PRE_ALIGN_POS_OFFSET * rot.getCos(),
+        //     target.getY() - PRE_ALIGN_POS_OFFSET * rot.getSin(),
+        //     rot
+        // );
     }
 
     @Override
     public void execute() {
         if (
-            !preAligned &&
-            Math.abs(pidController.getXError(preAlignTarget)) < 0.1 &&
-            Math.abs(pidController.getYError(preAlignTarget)) < 0.1 &&
-            Math.abs(pidController.getAngleError(preAlignTarget)) < 0.75
+            !atSetpoint &&
+            Math.abs(pidController.getXError(target)) < 0.01 &&
+            Math.abs(pidController.getYError(target)) < 0.01 &&
+            Math.abs(pidController.getAngleError(target)) < 0.5
         ) {
-            preAligned = true;
+            atSetpoint = true;
         }
 
-        Pose2d curTarget = preAligned ? target : preAlignTarget;
+        Pose2d curTarget = target;
         if (
             Math.abs(pidController.getXError(curTarget)) < 2 &&
-            Math.abs(pidController.getYError(curTarget)) < 2
+            Math.abs(pidController.getYError(curTarget)) < 2 &&
+            !atSetpoint
         ) {
-            pidController.alignLimelight(curTarget, preAligned);
+            pidController.alignLimelight(curTarget);
         }
 
         SmartDashboard.putNumber("Cur Target X", curTarget.getX());
@@ -227,5 +236,12 @@ public class Align extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        m_swerve.stopSwerve();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return atSetpoint;
+    }
 }

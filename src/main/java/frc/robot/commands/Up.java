@@ -84,10 +84,11 @@ public class Up extends Command {
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
-                    timer.restart();
-                } else if (timer.hasElapsed(0.75)) {
-                    m_claw.stopClaw();
+                    timer.reset();
                 }
+            }
+            if (timer.hasElapsed(0.5)) {
+                m_claw.stopClaw();
             }
         }
         // ALGAE

@@ -34,7 +34,7 @@ public class ElevatorDown extends Command {
         m_elevator = elevator;
         m_wrist = wrist;
         m_claw = claw;
-        addRequirements(m_elevator, m_wrist);
+        addRequirements(m_elevator, m_wrist, m_claw);
     }
 
     // Called when the command is initially scheduled.
@@ -46,7 +46,9 @@ public class ElevatorDown extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        // coral
         if (robotContainer.isCoral) {
+            m_claw.stopClaw();
             if (
                 m_elevator.getPosition() >
                 Constants.ElevatorConstants.upThreshold
