@@ -248,20 +248,10 @@ public class RobotContainer {
                         ? RobotState.l4
                         : RobotState.barge
                 )
-                new InstantCommand(() ->
-                    this.scoringLevel = isCoral
-                        ? RobotState.l4
-                        : RobotState.barge
-                )
             );
         m_operatorController
             .povRight()
             .onTrue(
-                new InstantCommand(() ->
-                    this.scoringLevel = isCoral
-                        ? RobotState.l3
-                        : RobotState.algaeReefHigh
-                )
                 new InstantCommand(() ->
                     this.scoringLevel = isCoral
                         ? RobotState.l3
@@ -276,20 +266,10 @@ public class RobotContainer {
                         ? RobotState.l2
                         : RobotState.algaeReefLow
                 )
-                new InstantCommand(() ->
-                    this.scoringLevel = isCoral
-                        ? RobotState.l2
-                        : RobotState.algaeReefLow
-                )
             );
         m_operatorController
             .povDown()
             .onTrue(
-                new InstantCommand(() ->
-                    this.scoringLevel = isCoral
-                        ? RobotState.l1
-                        : RobotState.processor
-                )
                 new InstantCommand(() ->
                     this.scoringLevel = isCoral
                         ? RobotState.l1
