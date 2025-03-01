@@ -86,9 +86,9 @@ public class Up extends Command {
                     );
                     timer.reset();
                 }
-            }
-            if (timer.hasElapsed(0.5)) {
-                m_claw.stopClaw();
+                else if (timer.hasElapsed(0.5)) {
+                    m_claw.stopClaw();
+                }
             }
         }
         // ALGAE
