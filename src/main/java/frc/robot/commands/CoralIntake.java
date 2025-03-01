@@ -2,8 +2,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.RobotState;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
 
 public class CoralIntake extends Command {
@@ -14,7 +14,6 @@ public class CoralIntake extends Command {
     private final Claw m_claw;
     private final Elevator m_elevator;
     private final RobotContainer robotContainer;
-
 
     // private final LED m_led;
 
@@ -40,36 +39,48 @@ public class CoralIntake extends Command {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+        robotContainer.runningCommand = true;
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         // m_led.runLED();
-        if(robotContainer.isCoral){
+        if (robotContainer.isCoral) {
             if (
-                m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+                m_elevator.getPosition() <
+                Constants.ElevatorConstants.upThreshold
             ) {
                 m_wrist.setWrist(
                     Constants.WristConstants.pos[RobotState.handoff.ordinal()]
                 );
             }
             m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
-            if (m_intake.getPosition() < Constants.IntakeConstants.intakeStartPos) {
+            if (
+                m_intake.getPosition() <
+                Constants.IntakeConstants.intakeStartPos
+            ) {
                 m_intake.setIntake(Constants.IntakeConstants.velocity, false);
                 m_indexer.setIndexer(Constants.IndexerConstants.velocity);
                 m_claw.setClaw(Constants.EndEffectorConstants.velocity);
             }
-        }
-        else {
-            if(m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold){
-                m_wrist.setWrist(Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]);
-
+        } else {
+            if (
+                m_elevator.getPosition() <
+                Constants.ElevatorConstants.upThreshold
+            ) {
+                m_wrist.setWrist(
+                    Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
+                );
             }
-            if(Math.abs
-                    (m_wrist.getPosition() - 
-                    Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]) 
-                    < Constants.WristConstants.posTolerance) {
+            if (
+                Math.abs(
+                    m_wrist.getPosition() -
+                    Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
+                ) <
+                Constants.WristConstants.posTolerance
+            ) {
                 m_claw.setClaw(Constants.EndEffectorConstants.velocity);
             }
         }
@@ -84,9 +95,12 @@ public class CoralIntake extends Command {
         if (robotContainer.isCoral) {
             m_claw.stopClaw();
         } else {
-            m_wrist.setWrist(Constants.WristConstants.pos[RobotState.barge.ordinal()]);
+            m_wrist.setWrist(
+                Constants.WristConstants.pos[RobotState.barge.ordinal()]
+            );
         }
         // m_led.stopLED();
+        robotContainer.runningCommand = false;
     }
 
     // Returns true when the command should end.

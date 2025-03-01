@@ -22,7 +22,7 @@ public class LED extends SubsystemBase {
     //     this.robotContainer = robotContainer;
 
     //     leds = new AddressableLED(Constants.LEDConstants.channel);
-    //     ledBuffer = new AddressableLEDBuffer(64);
+    //     ledBuffer = new AddressableLEDBuffer(151);
     //     leds.setLength(ledBuffer.getLength());
     //     leds.setData(ledBuffer);
     //     leds.start();

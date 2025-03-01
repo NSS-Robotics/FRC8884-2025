@@ -17,6 +17,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.RobotState;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import java.util.concurrent.CancellationException;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -55,6 +56,7 @@ public class RobotContainer {
     private final Trigger povDown = m_driverController.povDown();
     public boolean isCoral = true;
     public boolean isLeft = true;
+    public boolean runningCommand = false;
     public boolean fieldCentric = false;
     public RobotState scoringLevel;
 
@@ -103,7 +105,7 @@ public class RobotContainer {
         m_driverController
             .b()
             .whileTrue(
-                new CoralOuttake(m_intake, m_indexer, m_wrist, m_elevator)
+                new CoralOuttake(this, m_intake, m_indexer, m_wrist, m_elevator)
             );
 
         // m_driverController
@@ -171,42 +173,44 @@ public class RobotContainer {
             .onTrue(new ElevatorDown(this, m_elevator, m_wrist, m_endEffector));
         m_operatorController
             .square()
-            .onTrue(new InstantCommand(() -> {
-                if(!m_endEffector.gamepieceDetected()){
-                    this.isCoral = true;
-                    if (scoringLevel.equals(RobotState.barge)){
-                        this.scoringLevel = RobotState.l4;
+            .onTrue(
+                new InstantCommand(() -> {
+                    if (canChangeGamePiece()) {
+                        this.isCoral = true;
+                        if (scoringLevel.equals(RobotState.barge)) {
+                            this.scoringLevel = RobotState.l4;
+                        } else if (
+                            scoringLevel.equals(RobotState.algaeReefHigh)
+                        ) {
+                            this.scoringLevel = RobotState.l3;
+                        } else if (
+                            scoringLevel.equals(RobotState.algaeReefLow)
+                        ) {
+                            this.scoringLevel = RobotState.l2;
+                        } else if (scoringLevel.equals(RobotState.processor)) {
+                            this.scoringLevel = RobotState.l1;
+                        }
                     }
-                    else if(scoringLevel.equals(RobotState.algaeReefHigh)){
-                        this.scoringLevel = RobotState.l3;
-                    }
-                    else if(scoringLevel.equals(RobotState.algaeReefLow)){
-                        this.scoringLevel = RobotState.l2;
-                    }
-                    else if(scoringLevel.equals(RobotState.processor)){
-                        this.scoringLevel = RobotState.l1;
-                    }
-                }
-            }));
+                })
+            );
         m_operatorController
             .circle()
-            .onTrue(new InstantCommand(() -> {
-                if(!m_endEffector.gamepieceDetected()){
-                    this.isCoral = false;
-                    if (scoringLevel.equals(RobotState.l4)){
-                        this.scoringLevel = RobotState.barge;
+            .onTrue(
+                new InstantCommand(() -> {
+                    if (canChangeGamePiece()) {
+                        this.isCoral = false;
+                        if (scoringLevel.equals(RobotState.l4)) {
+                            this.scoringLevel = RobotState.barge;
+                        } else if (scoringLevel.equals(RobotState.l3)) {
+                            this.scoringLevel = RobotState.algaeReefHigh;
+                        } else if (scoringLevel.equals(RobotState.l2)) {
+                            this.scoringLevel = RobotState.algaeReefLow;
+                        } else if (scoringLevel.equals(RobotState.l1)) {
+                            this.scoringLevel = RobotState.processor;
+                        }
                     }
-                    else if(scoringLevel.equals(RobotState.l3)){
-                        this.scoringLevel = RobotState.algaeReefHigh;
-                    }
-                    else if(scoringLevel.equals(RobotState.l2)){
-                        this.scoringLevel = RobotState.algaeReefLow;
-                    }
-                    else if(scoringLevel.equals(RobotState.l1)){
-                        this.scoringLevel = RobotState.processor;
-                    }
-                }
-            }));
+                })
+            );
         m_operatorController
             .L1()
             .whileTrue(new InstantCommand(() -> this.isLeft = true));
@@ -217,25 +221,44 @@ public class RobotContainer {
         m_operatorController
             .povUp()
             .onTrue(
-                new InstantCommand(() -> 
-                    this.scoringLevel = isCoral ? RobotState.l4 : RobotState.barge)
+                new InstantCommand(() ->
+                    this.scoringLevel = isCoral
+                        ? RobotState.l4
+                        : RobotState.barge
+                )
             );
         m_operatorController
             .povRight()
             .onTrue(
-                new InstantCommand(() -> this.scoringLevel = isCoral ? RobotState.l3 : RobotState.algaeReefHigh)
+                new InstantCommand(() ->
+                    this.scoringLevel = isCoral
+                        ? RobotState.l3
+                        : RobotState.algaeReefHigh
+                )
             );
         m_operatorController
             .povLeft()
             .onTrue(
-                new InstantCommand(() -> this.scoringLevel = isCoral ? RobotState.l2 : RobotState.algaeReefLow)
+                new InstantCommand(() ->
+                    this.scoringLevel = isCoral
+                        ? RobotState.l2
+                        : RobotState.algaeReefLow
+                )
             );
         m_operatorController
             .povDown()
             .onTrue(
-                new InstantCommand(() -> this.scoringLevel = isCoral ? RobotState.l1 : RobotState.processor)
+                new InstantCommand(() ->
+                    this.scoringLevel = isCoral
+                        ? RobotState.l1
+                        : RobotState.processor
+                )
             );
         // m_operatorController.cross().whileTrue(new RunLEDs(l_led));
+    }
+
+    public boolean canChangeGamePiece() {
+        return !m_endEffector.gamePieceDetected() && !runningCommand;
     }
 
     public Command setupRobot() {

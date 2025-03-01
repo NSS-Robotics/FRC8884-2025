@@ -86,9 +86,8 @@ public class Claw extends SubsystemBase {
         motor.setPosition(0);
     }
 
-    public double gamepieceDetected() {
-        double measurement = lasercan.getMeasurement().distance_mm;
-        return measurement;
+    public boolean gamePieceDetected() {
+        return lasercan.getMeasurement().distance_mm < 160;
     }
 
     @Override
@@ -97,9 +96,9 @@ public class Claw extends SubsystemBase {
             "Claw Velocity",
             motor.getVelocity().getValueAsDouble()
         );
-        SmartDashboard.putNumber(
+        SmartDashboard.putBoolean(
             "Claw Game Piece Detected",
-            gamepieceDetected()
+            gamePieceDetected()
         );
 
         SmartDashboard.putNumber(

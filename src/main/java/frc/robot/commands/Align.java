@@ -22,14 +22,14 @@ public class Align extends Command {
     private Pose2d[] redCoralPoses = {
         // 6
         new Pose2d(
-            13.7138173692834,
-            2.6072262240858235,
-            Rotation2d.fromDegrees(120)
+            13.470094323276639,
+            2.517555346596671,
+            Rotation2d.fromDegrees(101.72460218856601)
         ),
         new Pose2d(
-            14.00444650156854,
-            2.834064075170478,
-            Rotation2d.fromDegrees(120)
+            14.07885464698699,
+            2.857541453385015,
+            Rotation2d.fromDegrees(132.36679136152566)
         ),
         // 7
         new Pose2d(14.429, 3.860, Rotation2d.fromDegrees(180)),

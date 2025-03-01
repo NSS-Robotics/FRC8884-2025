@@ -84,6 +84,14 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("Is Coral", m_robotContainer.isCoral);
         SmartDashboard.putBoolean("Is Left", m_robotContainer.isLeft);
+        SmartDashboard.putBoolean(
+            "Is Running Command",
+            m_robotContainer.runningCommand
+        );
+        SmartDashboard.putBoolean(
+            "Can Change Game Piece",
+            m_robotContainer.canChangeGamePiece()
+        );
 
         if (m_robotContainer.isCoral) {
             pattern = LEDPattern.solid(Color.kAliceBlue);

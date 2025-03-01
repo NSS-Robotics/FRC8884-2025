@@ -2,9 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotState;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.RobotState;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
@@ -15,17 +15,22 @@ public class ElevatorDown extends Command {
     private final Elevator m_elevator;
     private final Wrist m_wrist;
     private final Claw m_claw;
-    private final double elevatorTargetPos = 
+    private final double elevatorTargetPos =
         Constants.ElevatorConstants.pos[RobotState.handoff.ordinal()];
     private final double outWristPos =
         Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
     private final double handoffWristPos =
         Constants.WristConstants.pos[RobotState.handoff.ordinal()];
-    private final double algaeHoldWristPos = 
+    private final double algaeHoldWristPos =
         Constants.WristConstants.pos[RobotState.barge.ordinal()];
 
-    public ElevatorDown(RobotContainer robotContainer, Elevator elevator, Wrist wrist, Claw claw) {
-        this.robotContainer = robotContainer; 
+    public ElevatorDown(
+        RobotContainer robotContainer,
+        Elevator elevator,
+        Wrist wrist,
+        Claw claw
+    ) {
+        this.robotContainer = robotContainer;
         m_elevator = elevator;
         m_wrist = wrist;
         m_claw = claw;
@@ -34,40 +39,63 @@ public class ElevatorDown extends Command {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+        robotContainer.runningCommand = true;
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         if (robotContainer.isCoral) {
-            if (m_elevator.getPosition() > Constants.ElevatorConstants.upThreshold) {
+            if (
+                m_elevator.getPosition() >
+                Constants.ElevatorConstants.upThreshold
+            ) {
                 m_wrist.setWrist(outWristPos);
             } else {
                 m_wrist.setWrist(handoffWristPos);
+
+                // when elevator down, cmd doesn't end but is effectively over.
+                if (robotContainer.runningCommand) {
+                    robotContainer.runningCommand = false;
+                }
             }
-            if (m_wrist.getPosition() < Constants.WristConstants.maxElevatorLoweredPos) {
-                m_elevator.setElevator(elevatorTargetPos, Constants.ElevatorConstants.downSlot);
+            if (
+                m_wrist.getPosition() <
+                Constants.WristConstants.maxElevatorLoweredPos
+            ) {
+                m_elevator.setElevator(
+                    elevatorTargetPos,
+                    Constants.ElevatorConstants.downSlot
+                );
             }
         }
-
         // algae
         else {
             m_wrist.setWrist(algaeHoldWristPos);
-            if (Math.abs
-                (m_wrist.getPosition() - 
-                algaeHoldWristPos) 
-                < Constants.WristConstants.posTolerance) {
-                m_elevator.setElevator(elevatorTargetPos, Constants.ElevatorConstants.downSlot);
+            if (
+                Math.abs(m_wrist.getPosition() - algaeHoldWristPos) <
+                Constants.WristConstants.posTolerance
+            ) {
+                m_elevator.setElevator(
+                    elevatorTargetPos,
+                    Constants.ElevatorConstants.downSlot
+                );
             }
 
-            if (!m_claw.gamepieceDetected()
-                && m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+            if (
+                m_elevator.getPosition() <
+                Constants.ElevatorConstants.upThreshold
             ) {
-                m_wrist.setWrist(handoffWristPos);
+                if (!m_claw.gamePieceDetected()) {
+                    m_wrist.setWrist(handoffWristPos);
+                }
+                // when elevator down, cmd doesn't end but is effectively over.
+                if (robotContainer.runningCommand) {
+                    robotContainer.runningCommand = false;
+                }
             }
         }
-
-        
     }
 
     // Called once the command ends or is interrupted%.
