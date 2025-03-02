@@ -116,6 +116,38 @@ public class Up extends Command {
                     // need delay
                 }
             }
+            else if(targetState.equals(RobotState.barge)){
+                if (
+                    m_wrist.getPosition() >
+                    Constants.WristConstants.minElevatorRaisedPos
+                ) {
+                    m_elevator.setElevator(
+                        targetElevatorPos,
+                        Constants.ElevatorConstants.upSlot
+                    );
+                }
+                if (
+                    Math.abs(m_elevator.getPosition() - targetElevatorPos) <
+                    Constants.ElevatorConstants.posTolerance
+                ) {
+                    if(
+                        m_claw.gamePieceDetected()
+                    ) {
+                        m_wrist.setWrist(targetWristPos);
+                        if(Math.abs(m_wrist.getPosition()-targetWristPos) < Constants.WristConstants.posTolerance){
+                            m_claw.setClaw(
+                                -Constants.EndEffectorConstants.outtakeVelocity
+                            );
+                        }
+                    }
+                }
+                if (
+                    !m_claw.gamePieceDetected() &&
+                    targetState.equals(RobotState.barge)
+                ) {
+                    m_claw.stopClaw();
+                }
+            }
             // for things we need elevator for
             else {
                 if (
@@ -127,7 +159,7 @@ public class Up extends Command {
                     ); // safe position for elev to move up
                 } else if (
                     m_elevator.getPosition() >
-                    Constants.ElevatorConstants.wristDownSafeThreshold
+                    Constants.ElevatorConstants.wristDownSafeThreshold 
                 ) {
                     m_wrist.setWrist(targetWristPos); // only move wrist down when elevator up (prevents wrist/bumper collision)
                 }
@@ -144,20 +176,8 @@ public class Up extends Command {
                     Math.abs(m_elevator.getPosition() - targetElevatorPos) <
                     Constants.ElevatorConstants.posTolerance
                 ) {
-                    if (
-                        targetState.equals(RobotState.algaeReefHigh) ||
-                        targetState.equals(RobotState.algaeReefLow)
-                    ) {
-                        m_claw.setClaw(Constants.EndEffectorConstants.velocity);
-                    } else if (
-                        m_claw.gamePieceDetected() &&
-                        targetState.equals(RobotState.barge)
-                    ) {
-                        m_claw.setClaw(
-                            -Constants.EndEffectorConstants.outtakeVelocity
-                        );
-                    }
-                }
+                    m_claw.setClaw(Constants.EndEffectorConstants.velocity);
+                    } 
                 if (
                     !m_claw.gamePieceDetected() &&
                     targetState.equals(RobotState.barge)

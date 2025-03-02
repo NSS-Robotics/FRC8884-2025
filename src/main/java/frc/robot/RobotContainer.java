@@ -98,7 +98,8 @@ public class RobotContainer {
                     m_indexer,
                     m_wrist,
                     m_endEffector,
-                    m_elevator
+                    m_elevator,
+                    m_driverController
                 )
             )
         );
@@ -183,7 +184,8 @@ public class RobotContainer {
                         m_indexer,
                         m_wrist,
                         m_endEffector,
-                        m_elevator
+                        m_elevator,
+                        m_driverController
                     )
                 )
             );
@@ -199,7 +201,8 @@ public class RobotContainer {
                         m_indexer,
                         m_wrist,
                         m_endEffector,
-                        m_elevator // ,
+                        m_elevator,
+                        m_driverController // ,
                         // l_led
                     )
                 )
