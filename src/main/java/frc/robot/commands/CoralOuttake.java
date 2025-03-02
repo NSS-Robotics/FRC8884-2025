@@ -43,7 +43,7 @@ public class CoralOuttake extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        l_Led.Outtake();
+        l_Led.outtakeLeds();
         if (m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold) {
             m_wrist.setWrist(
                     Constants.WristConstants.pos[RobotState.handoff.ordinal()]);

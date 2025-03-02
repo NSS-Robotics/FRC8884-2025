@@ -44,7 +44,7 @@ public class CoralIntake extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        l_led.Intake();
+        l_led.intakeLeds();
         if (robotContainer.isCoral) {
             if (m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold) {
                 m_wrist.setWrist(

@@ -61,9 +61,10 @@ public class LED extends SubsystemBase {
 
         leds.setData(ledBuffer);
         leds.start();
+
     }
 
-    public void checkStates() {
+    private void checkStates() {
         if (robotContainer.isCoral) {
             colour = Color.kWhite;
         } else {
@@ -78,7 +79,7 @@ public class LED extends SubsystemBase {
         }
     }
 
-    public void L1() {
+    public void L1Leds() {
         checkStates();
         leftL1Led = LEDPattern.steps(Map.of(0, colour, 0.25, Color.kBlack, 0.75, colour));
         rightL1Led = LEDPattern.steps(Map.of(0, Color.kBlack, 0.25, colour, 0.75, Color.kBlack));
@@ -89,7 +90,7 @@ public class LED extends SubsystemBase {
 
     }
 
-    public void L2() {
+    public void L2Leds() {
         checkStates();
         leftL2Led = LEDPattern.steps(Map.of(0, colour, 0.4, Color.kBlack, 0.6, colour));
         rightL2Led = LEDPattern.steps(Map.of(0, Color.kBlack, 0.4, colour, 0.6, Color.kBlack));
@@ -100,7 +101,7 @@ public class LED extends SubsystemBase {
 
     }
 
-    public void L3() {
+    public void L3Leds() {
         checkStates();
         leftL3Led = LEDPattern.steps(Map.of(0, colour, 0.6, Color.kBlack, 0.7, colour));
         rightL3Led = LEDPattern.steps(Map.of(0, Color.kBlack, 0.6, colour,
@@ -112,7 +113,7 @@ public class LED extends SubsystemBase {
 
     }
 
-    public void L4() {
+    public void L4Leds() {
         checkStates();
         leftL4Led = LEDPattern.steps(Map.of(1, colour));
         rightL4Led = LEDPattern.steps(Map.of(1, colour));
@@ -122,13 +123,13 @@ public class LED extends SubsystemBase {
         leds.setData(ledBuffer);
     }
 
-    public void Intake() {
+    public void intakeLeds() {
         colour = Color.kForestGreen;
         breathe.applyTo(leftLeds, rightLeds);
         leds.setData(ledBuffer);
     }
 
-    public void Outtake() {
+    public void outtakeLeds() {
         colour = Color.kCoral;
         colour2 = Color.kRed;
         gradient.applyTo(leftLeds, rightLeds);

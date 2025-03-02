@@ -234,7 +234,7 @@ public class RobotContainer {
               this.scoringLevel = isCoral
                   ? RobotState.l4
                   : RobotState.barge;
-              l_leds.L4();
+              l_leds.L4Leds();
             }));
     m_operatorController
         .povRight()
@@ -243,7 +243,7 @@ public class RobotContainer {
               this.scoringLevel = isCoral
                   ? RobotState.l3
                   : RobotState.algaeReefHigh;
-              l_leds.L3();
+              l_leds.L3Leds();
             }));
     m_operatorController
         .povLeft()
@@ -252,7 +252,7 @@ public class RobotContainer {
               this.scoringLevel = isCoral
                   ? RobotState.l2
                   : RobotState.algaeReefLow;
-              l_leds.L2();
+              l_leds.L2Leds();
             }));
     m_operatorController
         .povDown()
@@ -261,7 +261,7 @@ public class RobotContainer {
               this.scoringLevel = isCoral
                   ? RobotState.l1
                   : RobotState.processor;
-              l_leds.L1();
+              l_leds.L1Leds();
             }));
   }
 
