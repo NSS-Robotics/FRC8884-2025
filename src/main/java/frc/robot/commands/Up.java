@@ -85,8 +85,7 @@ public class Up extends Command {
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
                     timer.reset();
-                }
-                else if (timer.hasElapsed(0.5)) {
+                } else if (timer.hasElapsed(0.5)) {
                     m_claw.stopClaw();
                 }
             }
@@ -132,7 +131,6 @@ public class Up extends Command {
                 ) {
                     m_wrist.setWrist(targetWristPos); // only move wrist down when elevator up (prevents wrist/bumper collision)
                 }
-
                 if (
                     m_wrist.getPosition() >
                     Constants.WristConstants.minElevatorRaisedPos

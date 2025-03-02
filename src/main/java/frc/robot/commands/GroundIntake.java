@@ -85,6 +85,7 @@ public class GroundIntake extends Command {
                 Constants.WristConstants.posTolerance
             ) {
                 m_claw.setClaw(Constants.EndEffectorConstants.velocity);
+                m_elevator.setElevator(0.2, Constants.ElevatorConstants.upSlot);
             }
         }
     }
