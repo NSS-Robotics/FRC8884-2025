@@ -44,6 +44,7 @@ public class RobotContainer {
     private final Limelight l_limelightHigh = new Limelight("high");
     private final Swerve m_swerve = new Swerve(l_limelightLow, l_limelightHigh);
     private final Wrist m_wrist = new Wrist();
+    private final LED l_leds = new LED(this);
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController =
@@ -65,9 +66,9 @@ public class RobotContainer {
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
-    public RobotContainer(LED l_leds) {
+    public RobotContainer() {
         // Configure the trigger bindings
-        configureBindings(l_leds);
+        configureBindings();
         m_swerve.setDefaultCommand(
             new TeleopSwerve(
                 m_swerve,
@@ -117,7 +118,7 @@ public class RobotContainer {
      * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
      * joysticks}.
      */
-    private void configureBindings(LED l_leds) {
+    private void configureBindings() {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is
         // pressed,
         // cancelling on release.
@@ -203,7 +204,7 @@ public class RobotContainer {
             .leftTrigger()
             .whileTrue(
                 new SequentialCommandGroup(
-                    new InstantCommand(leds::start),
+                    new InstantCommand(() -> l_leds.outtakeLeds()),
                     new GroundIntake(
                         this,
                         m_intake,

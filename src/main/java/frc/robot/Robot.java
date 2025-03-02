@@ -25,8 +25,6 @@ public class Robot extends TimedRobot {
 
     private final RobotContainer m_robotContainer;
 
-    private LED l_leds;
-
     private static final CTREConfigs ctreConfigs = new CTREConfigs();
 
     /**
@@ -36,13 +34,10 @@ public class Robot extends TimedRobot {
      */
     public Robot() {
         CanBridge.runTCP();
-        l_leds = new LED();
-
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
-        m_robotContainer = new RobotContainer(l_leds);
-
+        m_robotContainer = new RobotContainer();
     }
 
     /**
@@ -66,28 +61,28 @@ public class Robot extends TimedRobot {
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
         SmartDashboard.putString(
-                "Scoring Level",
-                m_robotContainer.scoringLevel.name());
+            "Scoring Level",
+            m_robotContainer.scoringLevel.name()
+        );
 
         SmartDashboard.putBoolean("Is Coral", m_robotContainer.isCoral);
         SmartDashboard.putBoolean("Is Left", m_robotContainer.isLeft);
         SmartDashboard.putBoolean(
-                "Is Running Command",
-                m_robotContainer.runningCommand);
+            "Is Running Command",
+            m_robotContainer.runningCommand
+        );
         SmartDashboard.putBoolean(
-                "Can Change Game Piece",
-                m_robotContainer.canChangeGamePiece());
-
+            "Can Change Game Piece",
+            m_robotContainer.canChangeGamePiece()
+        );
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
     @Override
-    public void disabledInit() {
-    }
+    public void disabledInit() {}
 
     @Override
-    public void disabledPeriodic() {
-    }
+    public void disabledPeriodic() {}
 
     /**
      * This autonomous runs the autonomous command selected by your
@@ -105,8 +100,7 @@ public class Robot extends TimedRobot {
 
     /** This function is called periodically during autonomous. */
     @Override
-    public void autonomousPeriodic() {
-    }
+    public void autonomousPeriodic() {}
 
     @Override
     public void teleopInit() {
@@ -122,8 +116,7 @@ public class Robot extends TimedRobot {
 
     /** This function is called periodically during operator control. */
     @Override
-    public void teleopPeriodic() {
-    }
+    public void teleopPeriodic() {}
 
     @Override
     public void testInit() {
@@ -133,16 +126,13 @@ public class Robot extends TimedRobot {
 
     /** This function is called periodically during test mode. */
     @Override
-    public void testPeriodic() {
-    }
+    public void testPeriodic() {}
 
     /** This function is called once when the robot is first started up. */
     @Override
-    public void simulationInit() {
-    }
+    public void simulationInit() {}
 
     /** This function is called periodically whilst in simulation. */
     @Override
-    public void simulationPeriodic() {
-    }
+    public void simulationPeriodic() {}
 }
