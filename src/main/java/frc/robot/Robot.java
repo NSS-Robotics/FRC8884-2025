@@ -10,10 +10,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.LED;
 
 /**
- * The methods in this class are called automatically corresponding to each mode, as described in
- * the TimedRobot documentation. If you change the name of this class or the package after creating
+ * The methods in this class are called automatically corresponding to each
+ * mode, as described in
+ * the TimedRobot documentation. If you change the name of this class or the
+ * package after creating
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
@@ -22,98 +25,74 @@ public class Robot extends TimedRobot {
 
     private final RobotContainer m_robotContainer;
 
+    private LED l_leds;
+
     private static final CTREConfigs ctreConfigs = new CTREConfigs();
 
-    private AddressableLED m_led;
-    private AddressableLEDBuffer m_ledBuffer;
-    private AddressableLEDBufferView rightLed;
-    private AddressableLEDBufferView leftLed;
-    private LEDPattern pattern;
-
     /**
-     * This function is run when the robot is first started up and should be used for any
+     * This function is run when the robot is first started up and should be used
+     * for any
      * initialization code.
      */
     public Robot() {
         CanBridge.runTCP();
+        l_leds = new LED();
 
-        // Must be a PWM header, not MXP or DIO
-        m_led = new AddressableLED(9);
-
-        // Reuse buffer
-        // Default to a length of 60, start empty output
-        // Length is expensive to set, so only set it once, then just update data
-        m_ledBuffer = new AddressableLEDBuffer(198);
-        rightLed = new AddressableLEDBufferView(m_ledBuffer, 64, 197);
-        leftLed = new AddressableLEDBufferView(m_ledBuffer, 0, 63);
-
-        m_led.setLength(m_ledBuffer.getLength());
-        pattern = LEDPattern.solid(Color.kRed);
-        pattern.applyTo(m_ledBuffer);
-
-        pattern.applyTo(m_ledBuffer);
-
-        // Set the data
-        m_led.setData(m_ledBuffer);
-
-        m_led.start();
-
-        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+        // Instantiate our RobotContainer. This will perform all our button bindings,
+        // and put our
         // autonomous chooser on the dashboard.
-        m_robotContainer = new RobotContainer(m_led);
+        m_robotContainer = new RobotContainer(l_leds);
+
     }
 
     /**
-     * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
+     * This function is called every 20 ms, no matter the mode. Use this for items
+     * like diagnostics
      * that you want ran during disabled, autonomous, teleoperated and test.
      *
-     * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+     * <p>
+     * This runs after the mode specific periodic functions, but before LiveWindow
+     * and
      * SmartDashboard integrated updating.
      */
     @Override
     public void robotPeriodic() {
-        // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-        // commands, running already-scheduled commands, removing finished or interrupted commands,
-        // and running subsystem periodic() methods.  This must be called from the robot's periodic
+        // Runs the Scheduler. This is responsible for polling buttons, adding
+        // newly-scheduled
+        // commands, running already-scheduled commands, removing finished or
+        // interrupted commands,
+        // and running subsystem periodic() methods. This must be called from the
+        // robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
         SmartDashboard.putString(
-            "Scoring Level",
-            m_robotContainer.scoringLevel.name()
-        );
+                "Scoring Level",
+                m_robotContainer.scoringLevel.name());
 
         SmartDashboard.putBoolean("Is Coral", m_robotContainer.isCoral);
         SmartDashboard.putBoolean("Is Left", m_robotContainer.isLeft);
         SmartDashboard.putBoolean(
-            "Is Running Command",
-            m_robotContainer.runningCommand
-        );
+                "Is Running Command",
+                m_robotContainer.runningCommand);
         SmartDashboard.putBoolean(
-            "Can Change Game Piece",
-            m_robotContainer.canChangeGamePiece()
-        );
+                "Can Change Game Piece",
+                m_robotContainer.canChangeGamePiece());
 
-        if (m_robotContainer.isCoral) {
-            pattern = LEDPattern.solid(Color.kAliceBlue);
-        } else {
-            pattern = LEDPattern.solid(Color.kMediumAquamarine);
-        }
-        pattern.applyTo(m_ledBuffer);
-
-        pattern = LEDPattern.kOff;
-        pattern.applyTo(m_robotContainer.isLeft ? leftLed : rightLed);
-
-        m_led.setData(m_ledBuffer);
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+    }
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+    }
 
-    /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+    /**
+     * This autonomous runs the autonomous command selected by your
+     * {@link RobotContainer} class.
+     */
     @Override
     public void autonomousInit() {
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -126,7 +105,8 @@ public class Robot extends TimedRobot {
 
     /** This function is called periodically during autonomous. */
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+    }
 
     @Override
     public void teleopInit() {
@@ -142,7 +122,8 @@ public class Robot extends TimedRobot {
 
     /** This function is called periodically during operator control. */
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+    }
 
     @Override
     public void testInit() {
@@ -152,13 +133,16 @@ public class Robot extends TimedRobot {
 
     /** This function is called periodically during test mode. */
     @Override
-    public void testPeriodic() {}
+    public void testPeriodic() {
+    }
 
     /** This function is called once when the robot is first started up. */
     @Override
-    public void simulationInit() {}
+    public void simulationInit() {
+    }
 
     /** This function is called periodically whilst in simulation. */
     @Override
-    public void simulationPeriodic() {}
+    public void simulationPeriodic() {
+    }
 }

@@ -364,6 +364,7 @@ public final class Constants {
 
     public static final class LEDConstants {
 
+        public static final int length = 151;
         public static final int channel = 9;
     }
 }

@@ -23,9 +23,12 @@ import frc.robot.subsystems.*;
 import java.util.concurrent.CancellationException;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
@@ -41,7 +44,6 @@ public class RobotContainer {
     private final Limelight l_limelightHigh = new Limelight("high");
     private final Swerve m_swerve = new Swerve(l_limelightLow, l_limelightHigh);
     private final Wrist m_wrist = new Wrist();
-    // private final LED l_led = new LED(this);
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController =
@@ -60,14 +62,12 @@ public class RobotContainer {
     public boolean fieldCentric = false;
     public RobotState scoringLevel;
 
-    private AddressableLED leds;
-
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer(AddressableLED leds) {
-        this.leds = leds;
-
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer(LED l_leds) {
         // Configure the trigger bindings
-        configureBindings();
+        configureBindings(l_leds);
         m_swerve.setDefaultCommand(
             new TeleopSwerve(
                 m_swerve,
@@ -90,7 +90,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "Intake",
             new SequentialCommandGroup(
-                new InstantCommand(leds::start),
+                new InstantCommand(l_leds::stop),
                 new GroundIntake(
                     this,
                     m_intake,
@@ -104,16 +104,22 @@ public class RobotContainer {
     }
 
     /**
-     * Use this method to define your trigger->command mappings. Triggers can be created via the
-     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+     * Use this method to define your trigger->command mappings. Triggers can be
+     * created via the
+     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+     * an arbitrary
      * predicate, or via the named factories in {@link
-     * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-     * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-     * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+     * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+     * {@link
+     * CommandXboxController
+     * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+     * PS4} controllers or
+     * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
      * joysticks}.
      */
-    private void configureBindings() {
-        // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    private void configureBindings(LED l_leds) {
+        // Schedule `exampleMethodCommand` when the Xbox controller's B button is
+        // pressed,
         // cancelling on release.
         m_driverController
             .povRight()
@@ -127,36 +133,71 @@ public class RobotContainer {
         m_driverController
             .b()
             .whileTrue(
-                new CoralOuttake(this, m_intake, m_indexer, m_wrist, m_elevator)
+                new CoralOuttake(
+                    this,
+                    m_intake,
+                    m_indexer,
+                    m_wrist,
+                    m_elevator,
+                    l_leds
+                )
             );
 
         // m_driverController
-        //     .povUp()
-        //     .onTrue(
-        //         new SequentialCommandGroup(
-        //             new ParallelDeadlineGroup(
-        //                 new WaitCommand(0.75),
-        //                 new RunServos(m_climber, false)
-        //             ),
-        //             new UpClimb(m_climber, m_wrist, m_intake, m_elevator)
-        //         )
-        //     );
+        // .povUp()
+        // .onTrue(
+        // new SequentialCommandGroup(
+        // new ParallelDeadlineGroup(
+        // new WaitCommand(0.75),
+        // new RunServos(m_climber, false)
+        // ),
+        // new UpClimb(m_climber, m_wrist, m_intake, m_elevator)
+        // )
+        // );
 
         // m_driverController
-        //     .povDown()
-        //     .onTrue(
-        //         new SequentialCommandGroup(
-        //             new ParallelDeadlineGroup(
-        //                 new WaitCommand(0.5),
-        //                 new RunServos(m_climber, true)
-        //             ),
-        //             new DownClimb(m_climber)
-        //         )
-        //     );
+        // .povDown()
+        // .onTrue(
+        // new SequentialCommandGroup(
+        // new ParallelDeadlineGroup(
+        // new WaitCommand(0.5),
+        // new RunServos(m_climber, true)
+        // ),
+        // new DownClimb(m_climber)
+        // )
+        // );
         m_driverController
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
+        m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
+        m_driverController
+            .rightTrigger()
+            .whileTrue(
+                new SequentialCommandGroup(
+                    new InstantCommand(l_leds::stop),
+                    new Outtake(
+                        m_endEffector,
+                        m_wrist,
+                        Constants.EndEffectorConstants.outtakeVelocity
+                    )
+                )
+            );
+        m_driverController
+            .leftTrigger()
+            .whileTrue(
+                new SequentialCommandGroup(
+                    new InstantCommand(l_leds::intakeLeds),
+                    new GroundIntake(
+                        this,
+                        m_intake,
+                        m_indexer,
+                        m_wrist,
+                        m_endEffector,
+                        m_elevator
+                    )
+                )
+            );
         m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
         m_driverController
             .leftTrigger()
@@ -176,16 +217,22 @@ public class RobotContainer {
             );
 
         m_driverController
-            .rightTrigger()
+            .rightBumper()
             .onTrue(
                 new SequentialCommandGroup(
-                    //new Align(this, m_swerve),
+                    new Align(this, m_swerve),
+                    new InstantCommand(() -> l_leds.score(m_elevator)),
                     new Up(this, m_elevator, m_wrist, m_endEffector)
                 )
             );
         m_driverController
             .leftBumper()
-            .onTrue(new ElevatorDown(this, m_elevator, m_wrist, m_endEffector));
+            .onTrue(
+                new SequentialCommandGroup(
+                    new ElevatorDown(this, m_elevator, m_wrist, m_endEffector),
+                    new InstantCommand(l_leds::stop)
+                )
+            );
         m_operatorController
             .square()
             .onTrue(
@@ -236,40 +283,43 @@ public class RobotContainer {
         m_operatorController
             .povUp()
             .onTrue(
-                new InstantCommand(() ->
+                new InstantCommand(() -> {
                     this.scoringLevel = isCoral
                         ? RobotState.l4
-                        : RobotState.barge
-                )
+                        : RobotState.barge;
+                    l_leds.L4Leds();
+                })
             );
         m_operatorController
             .povRight()
             .onTrue(
-                new InstantCommand(() ->
+                new InstantCommand(() -> {
                     this.scoringLevel = isCoral
                         ? RobotState.l3
-                        : RobotState.algaeReefHigh
-                )
+                        : RobotState.algaeReefHigh;
+                    l_leds.L3Leds();
+                })
             );
         m_operatorController
             .povLeft()
             .onTrue(
-                new InstantCommand(() ->
+                new InstantCommand(() -> {
                     this.scoringLevel = isCoral
                         ? RobotState.l2
-                        : RobotState.algaeReefLow
-                )
+                        : RobotState.algaeReefLow;
+                    l_leds.L2Leds();
+                })
             );
         m_operatorController
             .povDown()
             .onTrue(
-                new InstantCommand(() ->
+                new InstantCommand(() -> {
                     this.scoringLevel = isCoral
                         ? RobotState.l1
-                        : RobotState.processor
-                )
+                        : RobotState.processor;
+                    l_leds.L1Leds();
+                })
             );
-        // m_operatorController.cross().whileTrue(new RunLEDs(l_led));
     }
 
     public boolean canChangeGamePiece() {
@@ -279,8 +329,8 @@ public class RobotContainer {
     public Command setupRobot() {
         return new SequentialCommandGroup(
             // new ParallelDeadlineGroup(
-            //     new WaitCommand(0.5),
-            //     new RunServos(m_climber, true)
+            // new WaitCommand(0.5),
+            // new RunServos(m_climber, true)
             // ),
             // new RestingClimb(m_climber)
         );
@@ -288,7 +338,7 @@ public class RobotContainer {
 
     // public RobotState getRobotState() {
 
-    //     return RobotState.l2;
+    // return RobotState.l2;
     // }
 
     /**
