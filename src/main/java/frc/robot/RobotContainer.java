@@ -33,265 +33,266 @@ import java.util.concurrent.CancellationException;
  */
 public class RobotContainer {
 
-    private final SendableChooser<Command> autoChooser;
-    // The robot's subsystems and commands are defined here...
-    private final Climber m_climber = new Climber();
-    private final Elevator m_elevator = new Elevator();
-    private final Claw m_endEffector = new Claw();
-    private final Indexer m_indexer = new Indexer();
-    private final Intake m_intake = new Intake();
-    private final Limelight l_limelightLow = new Limelight("low");
-    private final Limelight l_limelightHigh = new Limelight("high");
-    private final Swerve m_swerve = new Swerve(l_limelightLow, l_limelightHigh);
-    private final Wrist m_wrist = new Wrist();
-    private final LED l_led = new LED(this);
+        private final SendableChooser<Command> autoChooser;
+        // The robot's subsystems and commands are defined here...
+        private final Climber m_climber = new Climber();
+        private final Elevator m_elevator = new Elevator();
+        private final Claw m_endEffector = new Claw();
+        private final Indexer m_indexer = new Indexer();
+        private final Intake m_intake = new Intake();
+        private final Limelight l_limelightLow = new Limelight("low");
+        private final Limelight l_limelightHigh = new Limelight("high");
+        private final Swerve m_swerve = new Swerve(l_limelightLow, l_limelightHigh);
+        private final Wrist m_wrist = new Wrist();
+        private final LED l_led = new LED(this);
 
-    // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController m_driverController = new CommandXboxController(
-            OperatorConstants.kDriverControllerPort);
+        // Replace with CommandPS4Controller or CommandJoystick if needed
+        private final CommandXboxController m_driverController = new CommandXboxController(
+                        OperatorConstants.kDriverControllerPort);
 
-    private final CommandPS4Controller m_operatorController = new CommandPS4Controller(
-            OperatorConstants.kOperatorControllerPort);
+        private final CommandPS4Controller m_operatorController = new CommandPS4Controller(
+                        OperatorConstants.kOperatorControllerPort);
 
-    private final int translationAxis = XboxController.Axis.kRightY.value;
-    private final int strafeAxis = XboxController.Axis.kRightX.value;
-    private final int rotationAxis = XboxController.Axis.kLeftX.value;
-    private final Trigger povDown = m_driverController.povDown();
-    public boolean isCoral = true;
-    public boolean isLeft = true;
-    public boolean runningCommand = false;
-    public boolean fieldCentric = false;
-    public RobotState scoringLevel;
+        private final int translationAxis = XboxController.Axis.kRightY.value;
+        private final int strafeAxis = XboxController.Axis.kRightX.value;
+        private final int rotationAxis = XboxController.Axis.kLeftX.value;
+        private final Trigger povDown = m_driverController.povDown();
+        public boolean isCoral = true;
+        public boolean isLeft = true;
+        public boolean runningCommand = false;
+        public boolean fieldCentric = false;
+        public RobotState scoringLevel;
 
-    private AddressableLED leds;
+        /**
+         * The container for the robot. Contains subsystems, OI devices, and commands.
+         */
+        public RobotContainer(LED l_led) {
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer(AddressableLED leds) {
-        this.leds = leds;
+                // Configure the trigger bindings
+                configureBindings();
+                m_swerve.setDefaultCommand(
+                                new TeleopSwerve(
+                                                m_swerve,
+                                                () -> m_driverController.getRawAxis(translationAxis),
+                                                () -> m_driverController.getRawAxis(strafeAxis),
+                                                () -> m_driverController.getRawAxis(rotationAxis) * 0.75,
+                                                () -> povDown.getAsBoolean()));
 
-        // Configure the trigger bindings
-        configureBindings();
-        m_swerve.setDefaultCommand(
-                new TeleopSwerve(
-                        m_swerve,
-                        () -> m_driverController.getRawAxis(translationAxis),
-                        () -> m_driverController.getRawAxis(strafeAxis),
-                        () -> m_driverController.getRawAxis(rotationAxis) * 0.75,
-                        () -> povDown.getAsBoolean()));
+                scoringLevel = RobotState.l2;
 
-        scoringLevel = RobotState.l2;
+                autoChooser = AutoBuilder.buildAutoChooser();
+                SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+                NamedCommands.registerCommand(
+                                "Coral Placing",
+                                new Up(null, m_elevator, m_wrist, m_endEffector));
+                NamedCommands.registerCommand(
+                                "Intake",
+                                new SequentialCommandGroup(
+                                                new CoralIntake(
+                                                                this,
+                                                                m_intake,
+                                                                m_indexer,
+                                                                m_wrist,
+                                                                m_endEffector,
+                                                                m_elevator,
+                                                                l_led)));
+        }
 
-        NamedCommands.registerCommand(
-                "Coral Placing",
-                new Up(null, m_elevator, m_wrist, m_endEffector));
-        NamedCommands.registerCommand(
-                "Intake",
-                new SequentialCommandGroup(
-                        new CoralIntake(
-                                this,
-                                m_intake,
-                                m_indexer,
-                                m_wrist,
-                                m_endEffector,
-                                m_elevator,
-                                l_led)));
-    }
+        /**
+         * Use this method to define your trigger->command mappings. Triggers can be
+         * created via the
+         * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+         * an arbitrary
+         * predicate, or via the named factories in {@link
+         * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+         * {@link
+         * CommandXboxController
+         * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+         * PS4} controllers or
+         * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+         * joysticks}.
+         */
+        private void configureBindings() {
+                // Schedule `exampleMethodCommand` when the Xbox controller's B button is
+                // pressed,
+                // cancelling on release.
+                m_driverController
+                                .povRight()
+                                .whileTrue(
+                                                new RunWrist(
+                                                                m_wrist,
+                                                                m_elevator,
+                                                                Constants.WristConstants.pos[RobotState.algaeGround
+                                                                                .ordinal()]));
+                m_driverController
+                                .b()
+                                .whileTrue(
+                                                new CoralOuttake(this, m_intake, m_indexer, m_wrist, m_elevator,
+                                                                l_led));
 
-    /**
-     * Use this method to define your trigger->command mappings. Triggers can be
-     * created via the
-     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-     * an arbitrary
-     * predicate, or via the named factories in {@link
-     * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-     * {@link
-     * CommandXboxController
-     * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-     * PS4} controllers or
-     * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-     * joysticks}.
-     */
-    private void configureBindings() {
-        // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-        // pressed,
-        // cancelling on release.
-        m_driverController
-                .povRight()
-                .whileTrue(
-                        new RunWrist(
-                                m_wrist,
-                                m_elevator,
-                                Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]));
-        m_driverController
-                .b()
-                .whileTrue(
-                        new CoralOuttake(this, m_intake, m_indexer, m_wrist, m_elevator, l_led));
+                // m_driverController
+                // .povUp()
+                // .onTrue(
+                // new SequentialCommandGroup(
+                // new ParallelDeadlineGroup(
+                // new WaitCommand(0.75),
+                // new RunServos(m_climber, false)
+                // ),
+                // new UpClimb(m_climber, m_wrist, m_intake, m_elevator)
+                // )
+                // );
 
-        // m_driverController
-        // .povUp()
-        // .onTrue(
-        // new SequentialCommandGroup(
-        // new ParallelDeadlineGroup(
-        // new WaitCommand(0.75),
-        // new RunServos(m_climber, false)
-        // ),
-        // new UpClimb(m_climber, m_wrist, m_intake, m_elevator)
-        // )
-        // );
+                // m_driverController
+                // .povDown()
+                // .onTrue(
+                // new SequentialCommandGroup(
+                // new ParallelDeadlineGroup(
+                // new WaitCommand(0.5),
+                // new RunServos(m_climber, true)
+                // ),
+                // new DownClimb(m_climber)
+                // )
+                // );
+                m_driverController
+                                .y()
+                                .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
-        // m_driverController
-        // .povDown()
-        // .onTrue(
-        // new SequentialCommandGroup(
-        // new ParallelDeadlineGroup(
-        // new WaitCommand(0.5),
-        // new RunServos(m_climber, true)
-        // ),
-        // new DownClimb(m_climber)
-        // )
-        // );
-        m_driverController
-                .y()
-                .whileTrue(new InstantCommand(m_swerve::zeroGyro));
+                m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
+                m_driverController
+                                .rightTrigger()
+                                .whileTrue(
+                                                new SequentialCommandGroup(
+                                                                new Outtake(
+                                                                                m_endEffector,
+                                                                                m_wrist,
+                                                                                Constants.EndEffectorConstants.outtakeVelocity)));
+                m_driverController
+                                .leftTrigger()
+                                .whileTrue(
+                                                new SequentialCommandGroup(
+                                                                new CoralIntake(
+                                                                                this,
+                                                                                m_intake,
+                                                                                m_indexer,
+                                                                                m_wrist,
+                                                                                m_endEffector,
+                                                                                m_elevator,
+                                                                                l_led)));
 
-        m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
-        m_driverController
-                .rightTrigger()
-                .whileTrue(
-                        new SequentialCommandGroup(
-                                new Outtake(
-                                        m_endEffector,
-                                        m_wrist,
-                                        Constants.EndEffectorConstants.outtakeVelocity)));
-        m_driverController
-                .leftTrigger()
-                .whileTrue(
-                        new SequentialCommandGroup(
-                                new CoralIntake(
-                                        this,
-                                        m_intake,
-                                        m_indexer,
-                                        m_wrist,
-                                        m_endEffector,
-                                        m_elevator,
-                                        l_led)));
+                m_driverController
+                                .rightBumper()
+                                .onTrue(new Up(this, m_elevator, m_wrist, m_endEffector));
+                m_driverController
+                                .leftBumper()
+                                .onTrue(new ElevatorDown(this, m_elevator, m_wrist, m_endEffector));
+                m_operatorController
+                                .square()
+                                .onTrue(
+                                                new InstantCommand(() -> {
+                                                        if (canChangeGamePiece()) {
+                                                                this.isCoral = true;
+                                                                if (scoringLevel.equals(RobotState.barge)) {
+                                                                        this.scoringLevel = RobotState.l4;
+                                                                } else if (scoringLevel
+                                                                                .equals(RobotState.algaeReefHigh)) {
+                                                                        this.scoringLevel = RobotState.l3;
+                                                                } else if (scoringLevel
+                                                                                .equals(RobotState.algaeReefLow)) {
+                                                                        this.scoringLevel = RobotState.l2;
+                                                                } else if (scoringLevel.equals(RobotState.processor)) {
+                                                                        this.scoringLevel = RobotState.l1;
+                                                                }
+                                                        }
+                                                }));
+                m_operatorController
+                                .circle()
+                                .onTrue(
+                                                new InstantCommand(() -> {
+                                                        if (canChangeGamePiece()) {
+                                                                this.isCoral = false;
+                                                                if (scoringLevel.equals(RobotState.l4)) {
+                                                                        this.scoringLevel = RobotState.barge;
+                                                                } else if (scoringLevel.equals(RobotState.l3)) {
+                                                                        this.scoringLevel = RobotState.algaeReefHigh;
+                                                                } else if (scoringLevel.equals(RobotState.l2)) {
+                                                                        this.scoringLevel = RobotState.algaeReefLow;
+                                                                } else if (scoringLevel.equals(RobotState.l1)) {
+                                                                        this.scoringLevel = RobotState.processor;
+                                                                }
+                                                        }
+                                                }));
+                m_operatorController
+                                .L1()
+                                .whileTrue(new InstantCommand(() -> this.isLeft = true));
+                m_operatorController
+                                .R1()
+                                .whileTrue(new InstantCommand(() -> this.isLeft = false));
 
-        m_driverController
-                .rightBumper()
-                .onTrue(new Up(this, m_elevator, m_wrist, m_endEffector));
-        m_driverController
-                .leftBumper()
-                .onTrue(new ElevatorDown(this, m_elevator, m_wrist, m_endEffector));
-        m_operatorController
-                .square()
-                .onTrue(
-                        new InstantCommand(() -> {
-                            if (canChangeGamePiece()) {
-                                this.isCoral = true;
-                                if (scoringLevel.equals(RobotState.barge)) {
-                                    this.scoringLevel = RobotState.l4;
-                                } else if (scoringLevel.equals(RobotState.algaeReefHigh)) {
-                                    this.scoringLevel = RobotState.l3;
-                                } else if (scoringLevel.equals(RobotState.algaeReefLow)) {
-                                    this.scoringLevel = RobotState.l2;
-                                } else if (scoringLevel.equals(RobotState.processor)) {
-                                    this.scoringLevel = RobotState.l1;
-                                }
-                            }
-                        }));
-        m_operatorController
-                .circle()
-                .onTrue(
-                        new InstantCommand(() -> {
-                            if (canChangeGamePiece()) {
-                                this.isCoral = false;
-                                if (scoringLevel.equals(RobotState.l4)) {
-                                    this.scoringLevel = RobotState.barge;
-                                } else if (scoringLevel.equals(RobotState.l3)) {
-                                    this.scoringLevel = RobotState.algaeReefHigh;
-                                } else if (scoringLevel.equals(RobotState.l2)) {
-                                    this.scoringLevel = RobotState.algaeReefLow;
-                                } else if (scoringLevel.equals(RobotState.l1)) {
-                                    this.scoringLevel = RobotState.processor;
-                                }
-                            }
-                        }));
-        m_operatorController
-                .L1()
-                .whileTrue(new InstantCommand(() -> this.isLeft = true));
-        m_operatorController
-                .R1()
-                .whileTrue(new InstantCommand(() -> this.isLeft = false));
+                m_operatorController
+                                .povUp()
+                                .onTrue(
+                                                new InstantCommand(() -> {
+                                                        this.scoringLevel = isCoral
+                                                                        ? RobotState.l4
+                                                                        : RobotState.barge;
+                                                        l_led.L4();
+                                                }));
+                m_operatorController
+                                .povRight()
+                                .onTrue(
+                                                new InstantCommand(() -> {
+                                                        this.scoringLevel = isCoral
+                                                                        ? RobotState.l3
+                                                                        : RobotState.algaeReefHigh;
+                                                        l_led.L3();
+                                                }));
+                m_operatorController
+                                .povLeft()
+                                .onTrue(
+                                                new InstantCommand(() -> {
+                                                        this.scoringLevel = isCoral
+                                                                        ? RobotState.l2
+                                                                        : RobotState.algaeReefLow;
+                                                        l_led.L2();
+                                                }));
+                m_operatorController
+                                .povDown()
+                                .onTrue(
+                                                new InstantCommand(() -> {
+                                                        this.scoringLevel = isCoral
+                                                                        ? RobotState.l1
+                                                                        : RobotState.processor;
+                                                        l_led.L1();
+                                                }));
+        }
 
-        m_operatorController
-                .povUp()
-                .onTrue(
-                        new InstantCommand(() -> {
-                            this.scoringLevel = isCoral
-                                    ? RobotState.l4
-                                    : RobotState.barge;
-                            l_led.L4();
-                        }));
-        m_operatorController
-                .povRight()
-                .onTrue(
-                        new InstantCommand(() -> {
-                            this.scoringLevel = isCoral
-                                    ? RobotState.l3
-                                    : RobotState.algaeReefHigh;
-                            l_led.L3();
-                        }));
-        m_operatorController
-                .povLeft()
-                .onTrue(
-                        new InstantCommand(() -> {
-                            this.scoringLevel = isCoral
-                                    ? RobotState.l2
-                                    : RobotState.algaeReefLow;
-                            l_led.L2();
-                        }));
-        m_operatorController
-                .povDown()
-                .onTrue(
-                        new InstantCommand(() -> {
-                            this.scoringLevel = isCoral
-                                    ? RobotState.l1
-                                    : RobotState.processor;
-                            l_led.L1();
-                        }));
-    }
+        public boolean canChangeGamePiece() {
+                return !m_endEffector.gamePieceDetected() && !runningCommand;
+        }
 
-    public boolean canChangeGamePiece() {
-        return !m_endEffector.gamePieceDetected() && !runningCommand;
-    }
+        public Command setupRobot() {
+                return new SequentialCommandGroup(
+                // new ParallelDeadlineGroup(
+                // new WaitCommand(0.5),
+                // new RunServos(m_climber, true)
+                // ),
+                // new RestingClimb(m_climber)
+                );
+        }
 
-    public Command setupRobot() {
-        return new SequentialCommandGroup(
-        // new ParallelDeadlineGroup(
-        // new WaitCommand(0.5),
-        // new RunServos(m_climber, true)
-        // ),
-        // new RestingClimb(m_climber)
-        );
-    }
+        // public RobotState getRobotState() {
 
-    // public RobotState getRobotState() {
+        // return RobotState.l2;
+        // }
 
-    // return RobotState.l2;
-    // }
-
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        // An example command will be run in autonomous
-        return autoChooser.getSelected();
-    }
+        /**
+         * Use this to pass the autonomous command to the main {@link Robot} class.
+         *
+         * @return the command to run in autonomous
+         */
+        public Command getAutonomousCommand() {
+                // An example command will be run in autonomous
+                return autoChooser.getSelected();
+        }
 }

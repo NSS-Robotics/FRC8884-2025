@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.LED;
 
 /**
  * The methods in this class are called automatically corresponding to each
@@ -26,7 +27,7 @@ public class Robot extends TimedRobot {
 
     private static final CTREConfigs ctreConfigs = new CTREConfigs();
 
-    private AddressableLED l_led;
+    private LED l_led;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -34,9 +35,7 @@ public class Robot extends TimedRobot {
      * initialization code.
      */
     public Robot() {
-        CanBridge.runTCP();
-
-        // // Must be a PWM header, not MXP or DIO
+        CanBridge.runTCP(); // // Must be a PWM header, not MXP or DIO
         // m_led = new AddressableLED(9);
 
         // // Reuse buffer
@@ -61,6 +60,8 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer(l_led);
+        l_led = new LED(m_robotContainer);
+
     }
 
     /**

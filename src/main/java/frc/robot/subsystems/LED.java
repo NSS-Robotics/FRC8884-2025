@@ -98,7 +98,6 @@ public class LED extends SubsystemBase {
         leftL1Led.applyTo(leftLeds);
         rightL1Led.applyTo(rightLeds);
         leds.setData(ledBuffer);
-        System.out.println("CLICKED");
 
     }
 
