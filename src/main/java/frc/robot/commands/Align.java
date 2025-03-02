@@ -177,10 +177,13 @@ public class Align extends Command {
     @Override
     public void initialize() {
         if (rob.scoringLevel.equals(RobotState.barge)) {
+            Pose2d pose = m_swerve.getPose();
+            boolean isRed = Math.abs(pose.getX() - redBargeX) < Math.abs(pose.getX() - blueBargeX);
+
             target = new Pose2d(
-                m_swerve.isRed() ? redBargeX : blueBargeX,
-                m_swerve.getPose().getY(),
-                new Rotation2d(m_swerve.isRed() ? 180 : 0)
+                isRed ? redBargeX : blueBargeX,
+                pose.getY(),
+                new Rotation2d(isRed ? 180 : 0)
             );
             return;
         }
@@ -272,20 +275,19 @@ public class Align extends Command {
             atSetpoint = true;
         }
 
-        Pose2d curTarget = target;
         if (
-            Math.abs(pidController.getXError(curTarget)) < 2 &&
-            Math.abs(pidController.getYError(curTarget)) < 2 &&
-            !atSetpoint
+            !atSetpoint &&
+            Math.abs(pidController.getXError(target)) < 2 &&
+            Math.abs(pidController.getYError(target)) < 2
         ) {
-            pidController.alignLimelight(curTarget);
+            pidController.alignLimelight(target);
         }
 
-        SmartDashboard.putNumber("Cur Target X", curTarget.getX());
-        SmartDashboard.putNumber("Cur Target Y", curTarget.getY());
+        SmartDashboard.putNumber("Cur Target X", target.getX());
+        SmartDashboard.putNumber("Cur Target Y", target.getY());
         SmartDashboard.putNumber(
             "Cur Target R",
-            curTarget.getRotation().getDegrees()
+            target.getRotation().getDegrees()
         );
     }
 
