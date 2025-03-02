@@ -136,14 +136,18 @@ public class LED extends SubsystemBase {
         leds.setData(ledBuffer);
     }
 
+    public void alignLeds() {
+    }
+
     public void score() {
 
     }
 
     public void climb() {
+
     }
 
     public void stop() {
-        // leds.stop();
+        leds.stop();
     }
 }
