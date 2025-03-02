@@ -25,9 +25,9 @@ public class Robot extends TimedRobot {
 
     private final RobotContainer m_robotContainer;
 
-    private static final CTREConfigs ctreConfigs = new CTREConfigs();
+    private LED l_leds;
 
-    private LED l_led;
+    private static final CTREConfigs ctreConfigs = new CTREConfigs();
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -35,7 +35,8 @@ public class Robot extends TimedRobot {
      * initialization code.
      */
     public Robot() {
-        CanBridge.runTCP(); // // Must be a PWM header, not MXP or DIO
+        CanBridge.runTCP();
+        l_leds = new LED();
         // m_led = new AddressableLED(9);
 
         // // Reuse buffer
@@ -59,8 +60,7 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
-        m_robotContainer = new RobotContainer(l_led);
-        l_led = new LED(m_robotContainer);
+        m_robotContainer = new RobotContainer(l_leds);
 
     }
 

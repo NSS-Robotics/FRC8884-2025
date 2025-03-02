@@ -30,18 +30,19 @@ public class LED extends SubsystemBase {
     private LEDPattern rightL4Led;
 
     // Flashing and Solid Patterns
+    private LEDPattern initPattern;
     private LEDPattern flashing;
     private LEDPattern solid;
     private LEDPattern breathe;
     private LEDPattern gradient;
 
+    private Color initColour = Color.kGreen;
     private Color colour = Color.kBlack;
     private Color colour2 = Color.kRed;
 
     private RobotContainer robotContainer;
 
-    public LED(RobotContainer robotContainer) {
-        this.robotContainer = robotContainer;
+    public LED() {
 
         leds = new AddressableLED(Constants.LEDConstants.channel);
         ledBuffer = new AddressableLEDBuffer(Constants.LEDConstants.length);
@@ -49,6 +50,8 @@ public class LED extends SubsystemBase {
 
         leftLeds = new AddressableLEDBufferView(ledBuffer, 0, 75);
         rightLeds = new AddressableLEDBufferView(ledBuffer, 76, 150);
+
+        initPattern = LEDPattern.solid(initColour);
 
         // L1 LEDs
         leftL1Led = LEDPattern.steps(Map.of(0, colour, 0.25, Color.kBlack, 0.75, colour));
@@ -73,8 +76,9 @@ public class LED extends SubsystemBase {
         breathe = LEDPattern.solid(colour).breathe(Seconds.of(1));
         gradient = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colour, colour2);
 
-        leds.setData(ledBuffer);
+        initPattern.applyTo(leftLeds, rightLeds);
 
+        leds.setData(ledBuffer);
         leds.start();
     }
 
