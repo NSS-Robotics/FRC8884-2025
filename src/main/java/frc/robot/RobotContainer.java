@@ -85,6 +85,10 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         NamedCommands.registerCommand(
+            "Zero Gyro",
+            new InstantCommand(m_swerve::zeroGyro)
+        );
+        NamedCommands.registerCommand(
             "Coral Placing",
             new Up(this, m_elevator, m_wrist, m_endEffector, m_driverController)
         );
@@ -209,7 +213,13 @@ public class RobotContainer {
                 new SequentialCommandGroup(
                     // new Align(this, m_swerve),
                     new InstantCommand(() -> l_leds.score(m_elevator)),
-                    new Up(this, m_elevator, m_wrist, m_endEffector, m_driverController)
+                    new Up(
+                        this,
+                        m_elevator,
+                        m_wrist,
+                        m_endEffector,
+                        m_driverController
+                    )
                 )
             );
         m_driverController
