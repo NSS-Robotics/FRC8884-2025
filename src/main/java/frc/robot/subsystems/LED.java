@@ -148,6 +148,7 @@ public class LED extends SubsystemBase {
     }
 
     public void score(Elevator m_elevator) {
+        // ! Change to use max position not rotations
         elevatorProgress = LEDPattern
                 .progressMaskLayer(() -> m_elevator.getPosition() / Constants.ElevatorConstants.maxRotations);
 
