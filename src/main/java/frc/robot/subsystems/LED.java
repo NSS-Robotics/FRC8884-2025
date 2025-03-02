@@ -16,8 +16,10 @@ import java.util.Map;
 public class LED extends SubsystemBase {
     private final AddressableLED leds;
     private final AddressableLEDBuffer ledBuffer;
-    private final AddressableLEDBufferView leftLeds;
-    private final AddressableLEDBufferView rightLeds;
+    private final AddressableLEDBufferView leftFrontLeds;
+    private final AddressableLEDBufferView leftBackLeds;
+    private final AddressableLEDBufferView rightFrontLeds;
+    private final AddressableLEDBufferView rightBackLeds;
 
     // Level Segments
     private LEDPattern leftL1Led;
@@ -35,6 +37,10 @@ public class LED extends SubsystemBase {
     private LEDPattern breathe;
     private LEDPattern gradient;
 
+    // Elevator Progress
+    private LEDPattern elevatorProgress;
+    private LEDPattern reversedElevatorProgress;
+
     private Color colour;
     private Color colour2;
 
@@ -46,8 +52,10 @@ public class LED extends SubsystemBase {
         ledBuffer = new AddressableLEDBuffer(Constants.LEDConstants.length);
         leds.setLength(ledBuffer.getLength());
 
-        leftLeds = new AddressableLEDBufferView(ledBuffer, 0, 75);
-        rightLeds = new AddressableLEDBufferView(ledBuffer, 76, 150);
+        leftFrontLeds = new AddressableLEDBufferView(ledBuffer, 0, 37);
+        leftBackLeds = new AddressableLEDBufferView(ledBuffer, 38, 75);
+        rightFrontLeds = new AddressableLEDBufferView(ledBuffer, 76, 114);
+        rightBackLeds = new AddressableLEDBufferView(ledBuffer, 114, 150);
 
         colour = Color.kViolet;
 
@@ -71,11 +79,11 @@ public class LED extends SubsystemBase {
             colour = Color.kAqua;
         }
         if (robotContainer.isLeft) {
-            flashing.applyTo(leftLeds);
-            solid.applyTo(rightLeds);
+            flashing.applyTo(leftFrontLeds, leftBackLeds);
+            solid.applyTo(rightFrontLeds, rightBackLeds);
         } else {
-            flashing.applyTo(rightLeds);
-            solid.applyTo(rightLeds);
+            flashing.applyTo(rightFrontLeds, rightBackLeds);
+            solid.applyTo(leftFrontLeds, leftBackLeds);
         }
     }
 
@@ -84,8 +92,8 @@ public class LED extends SubsystemBase {
         leftL1Led = LEDPattern.steps(Map.of(0, colour, 0.25, Color.kBlack, 0.75, colour));
         rightL1Led = LEDPattern.steps(Map.of(0, Color.kBlack, 0.25, colour, 0.75, Color.kBlack));
 
-        leftL1Led.applyTo(leftLeds);
-        rightL1Led.applyTo(rightLeds);
+        leftL1Led.applyTo(leftFrontLeds, leftBackLeds);
+        rightL1Led.applyTo(rightFrontLeds, rightBackLeds);
         leds.setData(ledBuffer);
 
     }
@@ -95,8 +103,8 @@ public class LED extends SubsystemBase {
         leftL2Led = LEDPattern.steps(Map.of(0, colour, 0.4, Color.kBlack, 0.6, colour));
         rightL2Led = LEDPattern.steps(Map.of(0, Color.kBlack, 0.4, colour, 0.6, Color.kBlack));
 
-        leftL2Led.applyTo(leftLeds);
-        rightL2Led.applyTo(rightLeds);
+        leftL2Led.applyTo(leftFrontLeds, leftBackLeds);
+        rightL2Led.applyTo(rightFrontLeds, rightBackLeds);
         leds.setData(ledBuffer);
 
     }
@@ -107,8 +115,8 @@ public class LED extends SubsystemBase {
         rightL3Led = LEDPattern.steps(Map.of(0, Color.kBlack, 0.6, colour,
                 0.7, Color.kBlack));
 
-        leftL3Led.applyTo(leftLeds);
-        rightL3Led.applyTo(rightLeds);
+        leftL3Led.applyTo(leftFrontLeds, leftBackLeds);
+        rightL3Led.applyTo(rightFrontLeds, rightBackLeds);
         leds.setData(ledBuffer);
 
     }
@@ -118,38 +126,47 @@ public class LED extends SubsystemBase {
         leftL4Led = LEDPattern.steps(Map.of(1, colour));
         rightL4Led = LEDPattern.steps(Map.of(1, colour));
 
-        leftL4Led.applyTo(leftLeds);
-        rightL4Led.applyTo(rightLeds);
+        leftL4Led.applyTo(leftFrontLeds, leftBackLeds);
+        rightL4Led.applyTo(rightFrontLeds, rightBackLeds);
         leds.setData(ledBuffer);
     }
 
     public void intakeLeds() {
         colour = Color.kForestGreen;
-        breathe.applyTo(leftLeds, rightLeds);
+        breathe.applyTo(ledBuffer);
         leds.setData(ledBuffer);
     }
 
     public void outtakeLeds() {
         colour = Color.kCoral;
         colour2 = Color.kRed;
-        gradient.applyTo(leftLeds, rightLeds);
+        gradient.applyTo(ledBuffer);
         leds.setData(ledBuffer);
     }
 
     public void alignLeds() {
     }
 
-    public void score() {
+    public void score(Elevator m_elevator) {
+        elevatorProgress = LEDPattern
+                .progressMaskLayer(() -> m_elevator.getPosition() / Constants.ElevatorConstants.maxRotations);
 
+        reversedElevatorProgress = elevatorProgress.reversed();
+
+        elevatorProgress.applyTo(leftBackLeds, rightBackLeds);
+        reversedElevatorProgress.applyTo(leftFrontLeds, rightFrontLeds);
+        leds.setData(ledBuffer);
     }
 
     public void climb() {
-
+        colour = Color.kYellow;
+        solid.applyTo(ledBuffer);
+        leds.setData(ledBuffer);
     }
 
     public void stop() {
         colour = Color.kBlack;
-        solid.applyTo(leftLeds, rightLeds);
+        solid.applyTo(ledBuffer);
         leds.setData(ledBuffer);
     }
 }
