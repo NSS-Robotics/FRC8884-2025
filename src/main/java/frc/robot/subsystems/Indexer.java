@@ -74,9 +74,8 @@ public class Indexer extends SubsystemBase {
   }
 
   public boolean gamepieceDetected() {
-    // double measurement = lasercan.getMeasurement().distance_mm;
-    // return measurement < 20;
-    return 4 < 20;
+    double measurement = lasercan.getMeasurement().distance_mm;
+    return measurement < 20;
   }
 
   public void stopIndexer() {
