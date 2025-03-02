@@ -11,33 +11,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Coral Placing"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Left Red2"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Left Red3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Coral Placing"
           }
         }
       ]

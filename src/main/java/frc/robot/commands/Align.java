@@ -11,7 +11,7 @@ import frc.robot.subsystems.*;
 
 public class Align extends Command {
 
-    private static final double RED_BLUE_OFFSET = 0;
+    private static final double RED_BLUE_OFFSET = 8.57;
 
     private RobotContainer rob;
     private Swerve m_swerve;
@@ -75,8 +75,9 @@ public class Align extends Command {
             3.552937500751069,
             Rotation2d.fromDegrees(28.17598558596463)
         ),
-        // 11
+        // 11 Fix Left
         new Pose2d(
+            //TODO: WE NEED TO FIX THIS GUYS GUYS GUYS GUYS
             11.936229220556926,
             3.023850285434846,
             Rotation2d.fromDegrees(32.357416721193864)

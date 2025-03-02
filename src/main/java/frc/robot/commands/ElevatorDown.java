@@ -90,7 +90,7 @@ public class ElevatorDown extends Command {
                 Constants.ElevatorConstants.upThreshold
             ) {
                 if (!m_claw.gamePieceDetected()) {
-                    m_wrist.setWrist(handoffWristPos);
+                    m_claw.stopClaw();
                 }
                 // when elevator down, cmd doesn't end but is effectively over.
                 if (robotContainer.runningCommand) {

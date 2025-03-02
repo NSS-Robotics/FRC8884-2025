@@ -179,7 +179,7 @@ public class RobotContainer {
             .rightTrigger()
             .onTrue(
                 new SequentialCommandGroup(
-                    new Align(this, m_swerve),
+                    //new Align(this, m_swerve),
                     new Up(this, m_elevator, m_wrist, m_endEffector)
                 )
             );

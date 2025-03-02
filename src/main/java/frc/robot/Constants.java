@@ -269,7 +269,7 @@ public final class Constants {
             0.455810546875, // stationIntake
             0.03576171875, // handoff
             0.4111328125, // barge
-            0.585, // algaeGround
+            0.60, // algaeGround
             0.626, // algaeReefLow
             0.626, // algaeReefHigh
             0.61, // processor
@@ -344,7 +344,7 @@ public final class Constants {
 
     public static final class EndEffectorConstants {
 
-        public static final double kP = 5;
+        public static final double kP = 8;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kS = 1.0274;
@@ -357,9 +357,9 @@ public final class Constants {
         public static final double intakePosition = 0.49;
         public static final double elevatorUpMaxValue = 0.18;
         public static final double elevatorUpMinValue = -0.12;
-        public static final double velocity = 5000;
+        public static final double velocity = 9000;
         public static final double outtakeVelocity = 750;
-        public static final double holdingVelocity = 500;
+        public static final double holdingVelocity = 3000;
     }
 
     public static final class LEDConstants {
