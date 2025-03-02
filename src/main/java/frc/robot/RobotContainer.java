@@ -88,14 +88,14 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "Intake",
         new SequentialCommandGroup(
-            new CoralIntake(
+            new InstantCommand(leds::start),
+            new GroundIntake(
                 this,
                 m_intake,
                 m_indexer,
                 m_wrist,
                 m_endEffector,
-                m_elevator,
-                l_leds)));
+                m_elevator)));
   }
 
   /**
@@ -161,6 +161,7 @@ public class RobotContainer {
         .rightTrigger()
         .whileTrue(
             new SequentialCommandGroup(
+                new InstantCommand(leds::stop),
                 new Outtake(
                     m_endEffector,
                     m_wrist,
@@ -169,18 +170,23 @@ public class RobotContainer {
         .leftTrigger()
         .whileTrue(
             new SequentialCommandGroup(
-                new CoralIntake(
+                new InstantCommand(leds::start),
+                new GroundIntake(
                     this,
                     m_intake,
                     m_indexer,
                     m_wrist,
                     m_endEffector,
-                    m_elevator,
-                    l_leds)));
+                    m_elevator // ,
+                // l_led
+                )));
 
     m_driverController
         .rightBumper()
-        .onTrue(new Up(this, m_elevator, m_wrist, m_endEffector));
+        .onTrue(
+            new SequentialCommandGroup(
+                new Align(this, m_swerve),
+                new Up(this, m_elevator, m_wrist, m_endEffector)));
     m_driverController
         .leftBumper()
         .onTrue(new ElevatorDown(this, m_elevator, m_wrist, m_endEffector));
@@ -192,11 +198,9 @@ public class RobotContainer {
                 this.isCoral = true;
                 if (scoringLevel.equals(RobotState.barge)) {
                   this.scoringLevel = RobotState.l4;
-                } else if (scoringLevel
-                    .equals(RobotState.algaeReefHigh)) {
+                } else if (scoringLevel.equals(RobotState.algaeReefHigh)) {
                   this.scoringLevel = RobotState.l3;
-                } else if (scoringLevel
-                    .equals(RobotState.algaeReefLow)) {
+                } else if (scoringLevel.equals(RobotState.algaeReefLow)) {
                   this.scoringLevel = RobotState.l2;
                 } else if (scoringLevel.equals(RobotState.processor)) {
                   this.scoringLevel = RobotState.l1;

@@ -84,8 +84,9 @@ public class Up extends Command {
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
-                    timer.restart();
-                } else if (timer.hasElapsed(0.75)) {
+                    timer.reset();
+                }
+                else if (timer.hasElapsed(0.5)) {
                     m_claw.stopClaw();
                 }
             }

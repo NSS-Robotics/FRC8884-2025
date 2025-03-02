@@ -6,33 +6,35 @@ import frc.robot.Constants.RobotState;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
 
-public class CoralIntake extends Command {
+public class GroundIntake extends Command {
 
     private final Intake m_intake;
     private final Indexer m_indexer;
     private final Wrist m_wrist;
     private final Claw m_claw;
     private final Elevator m_elevator;
-    private final LED l_led;
     private final RobotContainer robotContainer;
 
-    public CoralIntake(
+    // private final LED m_led;
+
+    public GroundIntake(
             RobotContainer robotContainer,
             Intake m_intake,
             Indexer m_indexer,
             Wrist m_wrist,
             Claw m_claw,
-            Elevator m_elevator,
-            LED l_led) {
+            Elevator m_elevator
+    // LED m_led //,
+    ) {
         this.robotContainer = robotContainer;
         this.m_intake = m_intake;
         this.m_indexer = m_indexer;
         this.m_wrist = m_wrist;
         this.m_claw = m_claw;
         this.m_elevator = m_elevator;
-        this.l_led = l_led;
+        // this.m_led = m_led;
 
-        addRequirements(m_intake, m_indexer, m_wrist, m_claw, l_led);
+        addRequirements(m_intake, m_indexer, m_wrist, m_claw);
     }
 
     // Called when the command is initially scheduled.
@@ -44,7 +46,7 @@ public class CoralIntake extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        l_led.intakeLeds();
+        // m_led.runLED();
         if (robotContainer.isCoral) {
             if (m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold) {
                 m_wrist.setWrist(
@@ -76,13 +78,14 @@ public class CoralIntake extends Command {
         m_intake.setPivot(Constants.IntakeConstants.upPosition, 0);
         m_intake.stopIntake();
         m_indexer.stopIndexer();
-        if (robotContainer.isCoral) {
+        if (robotContainer.isCoral || !m_claw.gamePieceDetected()) {
             m_claw.stopClaw();
         } else {
             m_wrist.setWrist(
                     Constants.WristConstants.pos[RobotState.barge.ordinal()]);
+            m_claw.setClaw(Constants.EndEffectorConstants.holdingVelocity);
         }
-        l_led.stop();
+        // m_led.stopLED();
         robotContainer.runningCommand = false;
     }
 
