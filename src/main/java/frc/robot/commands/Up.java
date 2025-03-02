@@ -1,8 +1,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotState;
 import frc.robot.RobotContainer;
@@ -17,6 +20,7 @@ public class Up extends Command {
     private final Elevator m_elevator;
     private final Wrist m_wrist;
     private final Claw m_claw;
+    private final CommandXboxController m_driverController;
     private final Timer timer;
     private RobotState targetState;
     private double targetElevatorPos;
@@ -28,12 +32,14 @@ public class Up extends Command {
         RobotContainer robotContainer,
         Elevator elevator,
         Wrist wrist,
-        Claw claw
+        Claw claw,
+        CommandXboxController driverController
     ) {
         this.robotContainer = robotContainer;
         m_elevator = elevator;
         m_wrist = wrist;
         m_claw = claw;
+        m_driverController = driverController;
         timer = new Timer();
         addRequirements(m_elevator, m_wrist, m_claw);
     }
@@ -183,6 +189,10 @@ public class Up extends Command {
                     targetState.equals(RobotState.barge)
                 ) {
                     m_claw.stopClaw();
+                    m_driverController.setRumble(RumbleType.kBothRumble, 0);
+                }
+                if(m_claw.gamePieceDetected()){
+                    m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
                 }
             }
         }
@@ -192,6 +202,7 @@ public class Up extends Command {
     @Override
     public void end(boolean interrupted) {
         robotContainer.runningCommand = false;
+        m_driverController.setRumble(RumbleType.kBothRumble, 0);
     }
 
     // Returns true when the command should end.
