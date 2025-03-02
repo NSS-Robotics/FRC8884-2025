@@ -169,6 +169,9 @@ public class RobotContainer {
         // )
         // );
         m_driverController
+            .x()
+            .onTrue(new StationIntake(m_elevator, m_wrist, m_endEffector));
+        m_driverController
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
@@ -212,7 +215,7 @@ public class RobotContainer {
             .rightTrigger()
             .onTrue(
                 new SequentialCommandGroup(
-                    //new Align(this, m_swerve),
+                    // new Align(this, m_swerve),
                     new InstantCommand(() -> l_leds.score(m_elevator)),
                     new Up(this, m_elevator, m_wrist, m_endEffector)
                 )
@@ -225,6 +228,8 @@ public class RobotContainer {
                     new InstantCommand(l_leds::stop)
                 )
             );
+
+        // operator controls
         m_operatorController
             .square()
             .onTrue(

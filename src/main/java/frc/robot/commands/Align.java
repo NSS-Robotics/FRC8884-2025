@@ -75,12 +75,11 @@ public class Align extends Command {
             3.552937500751069,
             Rotation2d.fromDegrees(28.17598558596463)
         ),
-        // 11 Fix Left
+        // 11
         new Pose2d(
-            //TODO: WE NEED TO FIX THIS GUYS GUYS GUYS GUYS
-            11.936229220556926,
-            3.023850285434846,
-            Rotation2d.fromDegrees(32.357416721193864)
+            11.93383383675274,
+            3.032111893217508,
+            Rotation2d.fromDegrees(35.029174811110195)
         ),
         new Pose2d(
             12.737658259261673,
