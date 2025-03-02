@@ -37,25 +37,6 @@ public class Robot extends TimedRobot {
     public Robot() {
         CanBridge.runTCP();
         l_leds = new LED();
-        // m_led = new AddressableLED(9);
-
-        // // Reuse buffer
-        // // Default to a length of 60, start empty output
-        // // Length is expensive to set, so only set it once, then just update data
-        // m_ledBuffer = new AddressableLEDBuffer(198);
-        // rightLed = new AddressableLEDBufferView(m_ledBuffer, 64, 197);
-        // leftLed = new AddressableLEDBufferView(m_ledBuffer, 0, 63);
-
-        // m_led.setLength(m_ledBuffer.getLength());
-        // pattern = LEDPattern.solid(Color.kRed);
-        // pattern.applyTo(m_ledBuffer);
-
-        // pattern.applyTo(m_ledBuffer);
-
-        // // Set the data
-        // m_led.setData(m_ledBuffer);
-
-        // m_led.start();
 
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
