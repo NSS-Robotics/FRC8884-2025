@@ -82,7 +82,7 @@ public class Swerve extends SubsystemBase {
                     new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
                 ),
                 config, // The robot configuration
-                this::isRed,
+                () -> !isRed(),
                 this // Reference to this subsystem to set requirements
             );
         } catch (Exception e) {

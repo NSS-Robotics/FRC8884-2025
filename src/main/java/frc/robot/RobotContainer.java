@@ -79,28 +79,20 @@ public class RobotContainer {
             )
         );
 
-        scoringLevel = RobotState.l2;
+        scoringLevel = RobotState.l4;
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         NamedCommands.registerCommand(
             "Coral Placing",
-            new Up(null, m_elevator, m_wrist, m_endEffector)
+            new Up(this, m_elevator, m_wrist, m_endEffector)
         );
         NamedCommands.registerCommand(
             "Intake",
             new SequentialCommandGroup(
                 new InstantCommand(l_leds::stop),
-                new GroundIntake(
-                    this,
-                    m_intake,
-                    m_indexer,
-                    m_wrist,
-                    m_endEffector,
-                    m_elevator,
-                    m_driverController
-                )
+                new StationIntake(m_elevator, m_wrist, m_endEffector)
             )
         );
     }
