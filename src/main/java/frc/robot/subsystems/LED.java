@@ -145,6 +145,9 @@ public class LED extends SubsystemBase {
     }
 
     public void alignLeds() {
+        colour = Color.kBlue;
+        flashing.applyTo(ledBuffer);
+        leds.setData(ledBuffer);
     }
 
     public void score(Elevator m_elevator) {
