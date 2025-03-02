@@ -86,7 +86,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
             "Coral Placing",
-            new Up(this, m_elevator, m_wrist, m_endEffector)
+            new Up(this, m_elevator, m_wrist, m_endEffector, m_driverController)
         );
         NamedCommands.registerCommand(
             "Intake",
@@ -209,7 +209,7 @@ public class RobotContainer {
                 new SequentialCommandGroup(
                     // new Align(this, m_swerve),
                     new InstantCommand(() -> l_leds.score(m_elevator)),
-                    new Up(this, m_elevator, m_wrist, m_endEffector)
+                    new Up(this, m_elevator, m_wrist, m_endEffector, m_driverController)
                 )
             );
         m_driverController
