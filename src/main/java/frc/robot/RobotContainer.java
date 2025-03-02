@@ -184,10 +184,14 @@ public class RobotContainer {
         .onTrue(
             new SequentialCommandGroup(
                 new Align(this, m_swerve),
+                new InstantCommand(l_leds::score),
                 new Up(this, m_elevator, m_wrist, m_endEffector)));
     m_driverController
         .leftBumper()
-        .onTrue(new ElevatorDown(this, m_elevator, m_wrist, m_endEffector));
+        .onTrue(
+            new SequentialCommandGroup(
+                new ElevatorDown(this, m_elevator, m_wrist, m_endEffector),
+                new InstantCommand(l_leds::stop)));
     m_operatorController
         .square()
         .onTrue(
