@@ -18,13 +18,13 @@ public class GroundIntake extends Command {
     // private final LED m_led;
 
     public GroundIntake(
-        RobotContainer robotContainer,
-        Intake m_intake,
-        Indexer m_indexer,
-        Wrist m_wrist,
-        Claw m_claw,
-        Elevator m_elevator
-        // LED m_led //,
+            RobotContainer robotContainer,
+            Intake m_intake,
+            Indexer m_indexer,
+            Wrist m_wrist,
+            Claw m_claw,
+            Elevator m_elevator
+    // LED m_led //,
     ) {
         this.robotContainer = robotContainer;
         this.m_intake = m_intake;
@@ -48,39 +48,25 @@ public class GroundIntake extends Command {
     public void execute() {
         // m_led.runLED();
         if (robotContainer.isCoral) {
-            if (
-                m_elevator.getPosition() <
-                Constants.ElevatorConstants.upThreshold
-            ) {
+            if (m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold) {
                 m_wrist.setWrist(
-                    Constants.WristConstants.pos[RobotState.handoff.ordinal()]
-                );
+                        Constants.WristConstants.pos[RobotState.handoff.ordinal()]);
             }
             m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
-            if (
-                m_intake.getPosition() <
-                Constants.IntakeConstants.intakeStartPos
-            ) {
+            if (m_intake.getPosition() < Constants.IntakeConstants.intakeStartPos) {
                 m_intake.setIntake(Constants.IntakeConstants.velocity, false);
                 m_indexer.setIndexer(Constants.IndexerConstants.velocity);
                 m_claw.setClaw(Constants.EndEffectorConstants.velocity);
             }
         } else {
-            if (
-                m_elevator.getPosition() <
-                Constants.ElevatorConstants.upThreshold
-            ) {
+            if (m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold) {
                 m_wrist.setWrist(
-                    Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
-                );
+                        Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]);
             }
-            if (
-                Math.abs(
+            if (Math.abs(
                     m_wrist.getPosition() -
-                    Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
-                ) <
-                Constants.WristConstants.posTolerance
-            ) {
+                            Constants.WristConstants.pos[RobotState.algaeGround
+                                    .ordinal()]) < Constants.WristConstants.posTolerance) {
                 m_claw.setClaw(Constants.EndEffectorConstants.velocity);
             }
         }
@@ -96,8 +82,7 @@ public class GroundIntake extends Command {
             m_claw.stopClaw();
         } else {
             m_wrist.setWrist(
-                Constants.WristConstants.pos[RobotState.barge.ordinal()]
-            );
+                    Constants.WristConstants.pos[RobotState.barge.ordinal()]);
             m_claw.setClaw(Constants.EndEffectorConstants.holdingVelocity);
         }
         // m_led.stopLED();

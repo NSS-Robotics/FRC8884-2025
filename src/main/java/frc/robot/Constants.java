@@ -52,54 +52,42 @@ public final class Constants {
         public static final int gyroID = 13;
         public static final boolean invertGyro = true;
 
-        public static final COTSTalonFXSwerveConstants chosenModuleDRIVE =
-            COTSTalonFXSwerveConstants.SDS.MK4n.KrakenX60(
-                COTSTalonFXSwerveConstants.SDS.MK4n.driveRatios.L2_plus
-            );
-        public static final COTSTalonFXSwerveConstants chosenModuleTURN =
-            COTSTalonFXSwerveConstants.SDS.MK4n.KrakenX60(
-                COTSTalonFXSwerveConstants.SDS.MK4n.driveRatios.L2_plus
-            );
+        public static final COTSTalonFXSwerveConstants chosenModuleDRIVE = COTSTalonFXSwerveConstants.SDS.MK4n
+                .KrakenX60(
+                        COTSTalonFXSwerveConstants.SDS.MK4n.driveRatios.L2_plus);
+        public static final COTSTalonFXSwerveConstants chosenModuleTURN = COTSTalonFXSwerveConstants.SDS.MK4n.KrakenX60(
+                COTSTalonFXSwerveConstants.SDS.MK4n.driveRatios.L2_plus);
 
         public static final double angleKP = 100;
         public static final double angleKI = 0.0;
         public static final double angleKD = 0.0;
 
-        public static final InvertedValue driveMotorInvert =
-            InvertedValue.CounterClockwise_Positive;
-        public static final InvertedValue angleMotorInvert =
-            InvertedValue.Clockwise_Positive;
-        public static final SensorDirectionValue cancoderInvert =
-            SensorDirectionValue.CounterClockwise_Positive;
+        public static final InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
+        public static final InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
+        public static final SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
 
         public static final double stickDeadband = 0.1;
 
         /* Drivetrain Constants */
         public static final double trackWidth = 0.32;
         public static final double wheelBase = 0.32;
-        public static final double wheelCircumference =
-            chosenModuleDRIVE.wheelCircumference;
-        public static final double driveBaseRadius =
-            Math.sqrt(trackWidth * trackWidth + wheelBase * wheelBase) / 2;
+        public static final double wheelCircumference = chosenModuleDRIVE.wheelCircumference;
+        public static final double driveBaseRadius = Math.sqrt(trackWidth * trackWidth + wheelBase * wheelBase) / 2;
 
         /*
          * Swerve Kinematics
          * No need to ever change this unless you are not doing a traditional
          * rectangular/square 4 module swerve
          */
-        public static final SwerveDriveKinematics swerveKinematics =
-            new SwerveDriveKinematics(
+        public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
                 new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
                 new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
                 new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0)
-            );
+                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
 
         /* Module Gear Ratios */
-        public static final double driveGearRatio =
-            chosenModuleDRIVE.driveGearRatio;
-        public static final double angleGearRatio =
-            chosenModuleTURN.angleGearRatio;
+        public static final double driveGearRatio = chosenModuleDRIVE.driveGearRatio;
+        public static final double angleGearRatio = chosenModuleTURN.angleGearRatio;
 
         /* Swerve Current Limiting */
         public static final int angleCurrentLimit = 25;
@@ -138,10 +126,8 @@ public final class Constants {
         public static final double maxAngularVelocity = 10.0;
 
         /* Neutral Modes */
-        public static final NeutralModeValue angleNeutralMode =
-            NeutralModeValue.Coast;
-        public static final NeutralModeValue driveNeutralMode =
-            NeutralModeValue.Brake;
+        public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Coast;
+        public static final NeutralModeValue driveNeutralMode = NeutralModeValue.Brake;
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
@@ -151,15 +137,12 @@ public final class Constants {
             public static final int angleMotorID = 2;
             public static final int canCoderID = 3;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(
-                -142.3828125 + 180
-            ); // was -148.5
-            public static final SwerveModuleConstants constants =
-                new SwerveModuleConstants(
+                    -142.3828125 + 180); // was -148.5
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(
                     driveMotorID,
                     angleMotorID,
                     canCoderID,
-                    angleOffset
-                );
+                    angleOffset);
         }
 
         /* Front Right Module - Module 1 */
@@ -169,15 +152,12 @@ public final class Constants {
             public static final int angleMotorID = 5;
             public static final int canCoderID = 6;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(
-                -82.08984375
-            ); // was -111.55
-            public static final SwerveModuleConstants constants =
-                new SwerveModuleConstants(
+                    -82.08984375); // was -111.55
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(
                     driveMotorID,
                     angleMotorID,
                     canCoderID,
-                    angleOffset
-                );
+                    angleOffset);
         }
 
         /* Back Left Module - Module 2 */
@@ -187,15 +167,12 @@ public final class Constants {
             public static final int angleMotorID = 11;
             public static final int canCoderID = 12;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(
-                93.779296875 + 180
-            ); // was 162.25
-            public static final SwerveModuleConstants constants =
-                new SwerveModuleConstants(
+                    93.779296875 + 180); // was 162.25
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(
                     driveMotorID,
                     angleMotorID,
                     canCoderID,
-                    angleOffset
-                );
+                    angleOffset);
         }
 
         /* Back Right Module - Module 3 */
@@ -205,15 +182,12 @@ public final class Constants {
             public static final int angleMotorID = 8;
             public static final int canCoderID = 9;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(
-                -11.6015625
-            ); // was -141.5
-            public static final SwerveModuleConstants constants =
-                new SwerveModuleConstants(
+                    -11.6015625); // was -141.5
+            public static final SwerveModuleConstants constants = new SwerveModuleConstants(
                     driveMotorID,
                     angleMotorID,
                     canCoderID,
-                    angleOffset
-                );
+                    angleOffset);
         }
     }
 
@@ -235,18 +209,18 @@ public final class Constants {
         public static final double wristDownSafeThreshold = 0.34;
         public static final double posTolerance = 0.05;
         public static final double[] pos = {
-            1.1, // l1
-            1.82, // l2
-            2.8, // l3
-            4.28, // l4
-            0.984619140625, // stationIntake
-            0, // handoff
-            4.28, // bargex
-            0, // algaeGround
-            1.82, // algaeReefLow
-            2.8, // algaeReefHigh
-            0, // processor
-            0, // climb
+                1.1, // l1
+                1.82, // l2
+                2.8, // l3
+                4.28, // l4
+                0.984619140625, // stationIntake
+                0, // handoff
+                4.28, // bargex
+                0, // algaeGround
+                1.82, // algaeReefLow
+                2.8, // algaeReefHigh
+                0, // processor
+                0, // climb
         };
 
         public static final double maxRotations = 4.28;
@@ -262,18 +236,18 @@ public final class Constants {
         public static final double kD = 0; // Why so much bad food
         // public static final double handoffPos = 0.02976171875;
         public static final double[] pos = {
-            0.63, // l1
-            0.63, // l2
-            0.63, // l3
-            0.63, // l4
-            0.455810546875, // stationIntake
-            0.03576171875, // handoff
-            0.4111328125, // barge
-            0.585, // algaeGround
-            0.626, // algaeReefLow
-            0.626, // algaeReefHigh
-            0.61, // processor
-            0.4, // climb
+                0.63, // l1
+                0.63, // l2
+                0.63, // l3
+                0.63, // l4
+                0.455810546875, // stationIntake
+                0.03576171875, // handoff
+                0.4111328125, // barge
+                0.585, // algaeGround
+                0.626, // algaeReefLow
+                0.626, // algaeReefHigh
+                0.61, // processor
+                0.4, // climb
         };
         public static final double posTolerance = 0.05;
         public static final double maxRotations = 0.72;
@@ -364,6 +338,7 @@ public final class Constants {
 
     public static final class LEDConstants {
 
+        public static final int length = 151;
         public static final int channel = 9;
     }
 }
