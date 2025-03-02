@@ -17,7 +17,8 @@ public class Up extends Command {
     private final Elevator m_elevator;
     private final Wrist m_wrist;
     private final Claw m_claw;
-    private final Timer timer;
+    private final Timer timer1;
+    private final Timer timer2;
     private RobotState targetState;
     private double targetElevatorPos;
     private double targetWristPos;
@@ -34,7 +35,8 @@ public class Up extends Command {
         m_elevator = elevator;
         m_wrist = wrist;
         m_claw = claw;
-        timer = new Timer();
+        timer1 = new Timer();
+        timer2 = new Timer();
         addRequirements(m_elevator, m_wrist, m_claw);
     }
 
@@ -81,11 +83,13 @@ public class Up extends Command {
                 Constants.ElevatorConstants.posTolerance
             ) {
                 if (m_claw.gamePieceDetected()) {
+                    if (!timer1.isRunning()) {
+                        timer1.restart();
+                    }
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
-                    timer.reset();
-                } else if (timer.hasElapsed(0.5)) {
+                } else if (timer1.hasElapsed(1)) {
                     m_claw.stopClaw();
                 }
             }
@@ -107,16 +111,15 @@ public class Up extends Command {
                         m_claw.setClaw(
                             -Constants.EndEffectorConstants.outtakeVelocity
                         );
-                        Timer.delay(2);
+                        if (!timer1.isRunning()) {
+                            timer1.restart();
+                        }
+                    }
+                    if (!m_claw.gamePieceDetected() && timer1.hasElapsed(0.5)) {
                         m_claw.stopClaw();
                     }
-                    // if (!m_claw.gamePieceDetected()) {
-                    //     m_claw.stopClaw();
-                    // }
-                    // need delay
                 }
-            }
-            else if(targetState.equals(RobotState.barge)){
+            } else if (targetState.equals(RobotState.barge)) {
                 if (
                     m_wrist.getPosition() >
                     Constants.WristConstants.minElevatorRaisedPos
@@ -130,23 +133,38 @@ public class Up extends Command {
                     Math.abs(m_elevator.getPosition() - targetElevatorPos) <
                     Constants.ElevatorConstants.posTolerance
                 ) {
-                    if(
-                        m_claw.gamePieceDetected()
-                    ) {
-                        m_wrist.setWrist(targetWristPos);
-                        if(Math.abs(m_wrist.getPosition()-targetWristPos) < Constants.WristConstants.posTolerance){
-                            m_claw.setClaw(
-                                -Constants.EndEffectorConstants.outtakeVelocity
-                            );
+                    if (m_claw.gamePieceDetected()) {
+                        if (!timer2.isRunning()) {
+                            timer2.restart();
                         }
+                        m_wrist.setWrist(targetWristPos);
+                    }
+                    if (
+                        m_claw.gamePieceDetected() &&
+                        Math.abs(m_wrist.getPosition() - targetWristPos) <
+                        Constants.WristConstants.posTolerance &&
+                        timer2.hasElapsed(1)
+                    ) {
+                        System.out.println(
+                            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                        );
+                        if (!timer1.isRunning()) {
+                            timer1.restart();
+                        }
+                        m_claw.setClaw(
+                            -Constants.EndEffectorConstants.outtakeVelocity
+                        );
+                    }
+                    if (timer1.hasElapsed(0.75)) {
+                        m_claw.stopClaw();
                     }
                 }
-                if (
-                    !m_claw.gamePieceDetected() &&
-                    targetState.equals(RobotState.barge)
-                ) {
-                    m_claw.stopClaw();
-                }
+                // if (
+                //     !m_claw.gamePieceDetected() &&
+                //     targetState.equals(RobotState.barge)
+                // ) {
+                //     m_claw.stopClaw();
+                // }
             }
             // for things we need elevator for
             else {
@@ -159,7 +177,7 @@ public class Up extends Command {
                     ); // safe position for elev to move up
                 } else if (
                     m_elevator.getPosition() >
-                    Constants.ElevatorConstants.wristDownSafeThreshold 
+                    Constants.ElevatorConstants.wristDownSafeThreshold
                 ) {
                     m_wrist.setWrist(targetWristPos); // only move wrist down when elevator up (prevents wrist/bumper collision)
                 }
@@ -177,7 +195,7 @@ public class Up extends Command {
                     Constants.ElevatorConstants.posTolerance
                 ) {
                     m_claw.setClaw(Constants.EndEffectorConstants.velocity);
-                    } 
+                }
                 if (
                     !m_claw.gamePieceDetected() &&
                     targetState.equals(RobotState.barge)

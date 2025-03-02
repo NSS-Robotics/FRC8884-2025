@@ -25,11 +25,13 @@ import frc.robot.Constants;
 public class Claw extends SubsystemBase {
 
     private final TalonFX motor = new TalonFX(
-            Constants.EndEffectorConstants.motorID); // The motor in the End Effector.
+        Constants.EndEffectorConstants.motorID
+    ); // The motor in the End Effector.
     private VelocityVoltage velocityVoltage;
     private VoltageOut voltageOut;
     private final Slot0Configs slot0Configs = new Slot0Configs();
-    private final CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
+    private final CurrentLimitsConfigs currentLimitsConfigs =
+        new CurrentLimitsConfigs();
     private final LaserCan lasercan = new LaserCan(43);
 
     public Claw() {
@@ -40,7 +42,8 @@ public class Claw extends SubsystemBase {
         slot0Configs.kA = Constants.EndEffectorConstants.kA;
         slot0Configs.kV = Constants.EndEffectorConstants.kV;
 
-        currentLimitsConfigs.SupplyCurrentLimit = Constants.EndEffectorConstants.currentLimit;
+        currentLimitsConfigs.SupplyCurrentLimit =
+            Constants.EndEffectorConstants.currentLimit;
         currentLimitsConfigs.SupplyCurrentLimitEnable = true;
 
         motor.getConfigurator().apply(slot0Configs);
@@ -50,7 +53,8 @@ public class Claw extends SubsystemBase {
         try {
             lasercan.setRangingMode(LaserCan.RangingMode.SHORT);
             lasercan.setRegionOfInterest(
-                    new LaserCan.RegionOfInterest(8, 8, 16, 16));
+                new LaserCan.RegionOfInterest(8, 8, 16, 16)
+            );
             lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         } catch (ConfigurationFailedException e) {
             System.out.println("Configuration failed! " + e);
@@ -83,20 +87,23 @@ public class Claw extends SubsystemBase {
     }
 
     public boolean gamePieceDetected() {
-        return lasercan.getMeasurement().distance_mm < 160;
+        return lasercan.getMeasurement().distance_mm < 140;
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber(
-                "Claw Velocity",
-                motor.getVelocity().getValueAsDouble());
+            "Claw Velocity",
+            motor.getVelocity().getValueAsDouble()
+        );
         SmartDashboard.putBoolean(
-                "Claw Game Piece Detected",
-                gamePieceDetected());
+            "Claw Game Piece Detected",
+            gamePieceDetected()
+        );
 
         SmartDashboard.putNumber(
-                "Claw Current",
-                motor.getStatorCurrent().getValueAsDouble());
+            "Claw Current",
+            motor.getStatorCurrent().getValueAsDouble()
+        );
     }
 }
