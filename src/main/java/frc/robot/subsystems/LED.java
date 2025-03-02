@@ -148,6 +148,8 @@ public class LED extends SubsystemBase {
     }
 
     public void stop() {
-        leds.stop();
+        colour = Color.kBlack;
+        solid.applyTo(leftLeds, rightLeds);
+        leds.setData(ledBuffer);
     }
 }
