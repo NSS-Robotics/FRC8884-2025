@@ -122,14 +122,15 @@ public class RobotContainer {
                                 Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]));
         m_driverController
                 .b()
-                .whileTrue(
+                .whileTrue(new SequentialCommandGroup(
+                        new InstantCommand(l_leds::outtakeLeds),
                         new CoralOuttake(
                                 this,
                                 m_intake,
                                 m_indexer,
                                 m_wrist,
                                 m_elevator,
-                                l_leds));
+                                l_leds)));
 
         // m_driverController
         // .povUp()
