@@ -75,12 +75,11 @@ public class Align extends Command {
             3.552937500751069,
             Rotation2d.fromDegrees(28.17598558596463)
         ),
-        // 11 Fix Left
+        // 11
         new Pose2d(
-            //TODO: WE NEED TO FIX THIS GUYS GUYS GUYS GUYS
-            11.936229220556926,
-            3.023850285434846,
-            Rotation2d.fromDegrees(32.357416721193864)
+            11.93383383675274,
+            3.032111893217508,
+            Rotation2d.fromDegrees(35.029174811110195)
         ),
         new Pose2d(
             12.737658259261673,
@@ -92,39 +91,39 @@ public class Align extends Command {
     private final Pose2d[] redAlgaePoses = {
         // 6
         new Pose2d(
-            13.372168987698355,
-            2.515705824540677,
-            Rotation2d.fromDegrees(101.72460218856601)
+            13.9058840710117,
+            2.589065008965157,
+            Rotation2d.fromDegrees(120)
         ),
         // 7
         new Pose2d(
-            14.474698233432257,
-            3.511730009749397,
-            Rotation2d.fromDegrees(149.11166780153667)
+            14.924302814848982,
+            4.150537615247084,
+            Rotation2d.fromDegrees(180)
         ),
         // 8
         new Pose2d(
-            14.102636158059832,
-            5.143072887067664,
-            Rotation2d.fromDegrees(-138.1602471700646)
+            13.855123749362358,
+            5.4322932277611455,
+            Rotation2d.fromDegrees(-120)
         ),
         // 9
         new Pose2d(
-            12.741693919859538,
-            5.527083506044402,
-            Rotation2d.fromDegrees(-82.5972415409531)
+            12.215237734878354,
+            5.41132468625061,
+            Rotation2d.fromDegrees(-60)
         ),
         // 10
         new Pose2d(
-            11.633289217372596,
-            4.562910020151264,
-            Rotation2d.fromDegrees(-29.400396067552148)
+            11.37581442204965,
+            3.990139793686492,
+            Rotation2d.fromDegrees(0)
         ),
         // 11
         new Pose2d(
-            11.936229220556926,
-            3.023850285434846,
-            Rotation2d.fromDegrees(32.357416721193864)
+            12.267215685543233,
+            2.5672275681612033,
+            Rotation2d.fromDegrees(60)
         ),
     };
 
@@ -177,10 +176,15 @@ public class Align extends Command {
     @Override
     public void initialize() {
         if (rob.scoringLevel.equals(RobotState.barge)) {
+            Pose2d pose = m_swerve.getPose();
+            boolean isRed =
+                Math.abs(pose.getX() - redBargeX) <
+                Math.abs(pose.getX() - blueBargeX);
+
             target = new Pose2d(
-                m_swerve.isRed() ? redBargeX : blueBargeX,
-                m_swerve.getPose().getY(),
-                new Rotation2d(m_swerve.isRed() ? 180 : 0)
+                isRed ? redBargeX : blueBargeX,
+                pose.getY(),
+                new Rotation2d(isRed ? 180 : 0)
             );
             return;
         }
@@ -272,26 +276,25 @@ public class Align extends Command {
             atSetpoint = true;
         }
 
-        Pose2d curTarget = target;
         if (
-            Math.abs(pidController.getXError(curTarget)) < 2 &&
-            Math.abs(pidController.getYError(curTarget)) < 2 &&
-            !atSetpoint
+            !atSetpoint &&
+            Math.abs(pidController.getXError(target)) < 2 &&
+            Math.abs(pidController.getYError(target)) < 2
         ) {
-            pidController.alignLimelight(curTarget);
+            pidController.alignLimelight(target);
         }
 
-        SmartDashboard.putNumber("Cur Target X", curTarget.getX());
-        SmartDashboard.putNumber("Cur Target Y", curTarget.getY());
+        SmartDashboard.putNumber("Cur Target X", target.getX());
+        SmartDashboard.putNumber("Cur Target Y", target.getY());
         SmartDashboard.putNumber(
             "Cur Target R",
-            curTarget.getRotation().getDegrees()
+            target.getRotation().getDegrees()
         );
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_swerve.stopSwerve();
+        if (rob.isCoral) m_swerve.stopSwerve();
     }
 
     @Override

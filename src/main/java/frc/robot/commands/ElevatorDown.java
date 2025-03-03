@@ -18,11 +18,11 @@ public class ElevatorDown extends Command {
     private final double elevatorTargetPos =
         Constants.ElevatorConstants.pos[RobotState.handoff.ordinal()];
     private final double outWristPos =
-        Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
+        Constants.WristConstants.pos[RobotState.processor.ordinal()];
     private final double handoffWristPos =
         Constants.WristConstants.pos[RobotState.handoff.ordinal()];
     private final double algaeHoldWristPos =
-        Constants.WristConstants.pos[RobotState.barge.ordinal()];
+        Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
 
     public ElevatorDown(
         RobotContainer robotContainer,

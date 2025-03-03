@@ -18,12 +18,13 @@ public class CoralOuttake extends Command {
     // private final LED m_led;
 
     public CoralOuttake(
-            RobotContainer robotContainer,
-            Intake m_intake,
-            Indexer m_indexer,
-            Wrist m_wrist,
-            Elevator m_elevator,
-            LED l_led) {
+        RobotContainer robotContainer,
+        Intake m_intake,
+        Indexer m_indexer,
+        Wrist m_wrist,
+        Elevator m_elevator,
+        LED l_led
+    ) {
         this.robotContainer = robotContainer;
         this.m_intake = m_intake;
         this.m_indexer = m_indexer;
@@ -44,9 +45,12 @@ public class CoralOuttake extends Command {
     @Override
     public void execute() {
         l_Led.outtakeLeds();
-        if (m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold) {
+        if (
+            m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+        ) {
             m_wrist.setWrist(
-                    Constants.WristConstants.pos[RobotState.handoff.ordinal()]);
+                Constants.WristConstants.pos[RobotState.handoff.ordinal()]
+            );
         }
         m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
         if (m_intake.getPosition() < Constants.IntakeConstants.intakeStartPos) {

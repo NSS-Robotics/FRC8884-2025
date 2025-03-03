@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotState;
 import frc.robot.RobotContainer;
@@ -14,6 +16,7 @@ public class GroundIntake extends Command {
     private final Claw m_claw;
     private final Elevator m_elevator;
     private final RobotContainer robotContainer;
+    private final CommandXboxController m_driverController;
 
     // private final LED m_led;
 
@@ -23,7 +26,8 @@ public class GroundIntake extends Command {
         Indexer m_indexer,
         Wrist m_wrist,
         Claw m_claw,
-        Elevator m_elevator
+        Elevator m_elevator,
+        CommandXboxController driverController
         // LED m_led //,
     ) {
         this.robotContainer = robotContainer;
@@ -32,9 +36,10 @@ public class GroundIntake extends Command {
         this.m_wrist = m_wrist;
         this.m_claw = m_claw;
         this.m_elevator = m_elevator;
+        this.m_driverController = driverController;
         // this.m_led = m_led;
 
-        addRequirements(m_intake, m_indexer, m_wrist, m_claw);
+        addRequirements(m_intake, m_indexer, m_wrist, m_claw, m_elevator);
     }
 
     // Called when the command is initially scheduled.
@@ -48,7 +53,19 @@ public class GroundIntake extends Command {
     public void execute() {
         // m_led.runLED();
         // coral
+        if(m_claw.gamePieceDetected()){
+            m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
+        }
         if (robotContainer.isCoral) {
+            if (
+                m_wrist.getPosition() <
+                Constants.WristConstants.maxElevatorLoweredPos
+            ) {
+                m_elevator.setElevator(
+                    Constants.ElevatorConstants.pos[RobotState.handoff.ordinal()],
+                    Constants.ElevatorConstants.downSlot
+                );
+            }
             if (
                 m_elevator.getPosition() <
                 Constants.ElevatorConstants.upThreshold
@@ -85,6 +102,7 @@ public class GroundIntake extends Command {
                 Constants.WristConstants.posTolerance
             ) {
                 m_claw.setClaw(Constants.EndEffectorConstants.velocity);
+                m_elevator.setElevator(Constants.ElevatorConstants.pos[RobotState.algaeGround.ordinal()], Constants.ElevatorConstants.upSlot);
             }
         }
     }
@@ -95,12 +113,13 @@ public class GroundIntake extends Command {
         m_intake.setPivot(Constants.IntakeConstants.upPosition, 0);
         m_intake.stopIntake();
         m_indexer.stopIndexer();
+        m_driverController.setRumble(RumbleType.kBothRumble, 0);
         if (robotContainer.isCoral || !m_claw.gamePieceDetected()) {
             m_claw.stopClaw();
         } else {
-            m_wrist.setWrist(
-                Constants.WristConstants.pos[RobotState.barge.ordinal()]
-            );
+            // m_wrist.setWrist(
+            //     Constants.WristConstants.pos[RobotState.barge.ordinal()]
+            // );
             m_claw.setClaw(Constants.EndEffectorConstants.holdingVelocity);
         }
         // m_led.stopLED();
