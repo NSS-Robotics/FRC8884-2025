@@ -18,7 +18,7 @@ public class ElevatorDown extends Command {
     private final double elevatorTargetPos =
         Constants.ElevatorConstants.pos[RobotState.handoff.ordinal()];
     private final double outWristPos =
-        Constants.WristConstants.pos[RobotState.processor.ordinal()];
+        Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
     private final double handoffWristPos =
         Constants.WristConstants.pos[RobotState.handoff.ordinal()];
     private final double algaeHoldWristPos =
@@ -80,7 +80,7 @@ public class ElevatorDown extends Command {
                 Constants.WristConstants.posTolerance
             ) {
                 m_elevator.setElevator(
-                    elevatorTargetPos,
+                    Constants.ElevatorConstants.pos[RobotState.algaeGround.ordinal()],
                     Constants.ElevatorConstants.downSlot
                 );
             }

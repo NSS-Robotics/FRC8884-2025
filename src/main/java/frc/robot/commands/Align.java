@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,7 +10,7 @@ import frc.robot.subsystems.*;
 
 public class Align extends Command {
 
-    private static final double RED_BLUE_OFFSET = 8.57;
+    private static final double RED_BLUE_OFFSET = 8.569576;
 
     private RobotContainer rob;
     private Swerve m_swerve;
