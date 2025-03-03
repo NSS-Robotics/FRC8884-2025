@@ -67,12 +67,12 @@ public class LED extends SubsystemBase {
 
         // Solid and Blinking Patterns
         solid = LEDPattern.solid(colour).atBrightness(Percent.of(20));
-        flashing = LEDPattern.solid(colour).blink(Seconds.of(0.5));
-        breathe = LEDPattern.solid(colour).breathe(Seconds.of(3));
+        flashing = LEDPattern.solid(colour).blink(Seconds.of(0.5)).atBrightness(Percent.of(20));
+        breathe = LEDPattern.solid(colour).breathe(Seconds.of(3)).atBrightness(Percent.of(20));
         gradient = LEDPattern.gradient(
                 LEDPattern.GradientType.kDiscontinuous,
                 colour,
-                colour2);
+                colour2).atBrightness(Percent.of(20));
 
         solid.applyTo(ledBuffer);
 
@@ -138,7 +138,6 @@ public class LED extends SubsystemBase {
     public void L4Leds() {
         checkGamepiece();
 
-        System.out.println(colour);
         leftL4Led = LEDPattern.steps(Map.of(0, colour, 1, colour));
         rightL4Led = LEDPattern.steps(Map.of(0, colour, 1, colour));
 
