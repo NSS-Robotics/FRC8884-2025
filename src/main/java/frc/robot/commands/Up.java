@@ -63,18 +63,21 @@ public class Up extends Command {
         if (robotContainer.isCoral) {
             // Wrist logic
             if (
-                m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+                m_elevator.getPosition() <
+                Constants.ElevatorConstants.upThreshold
             ) {
                 m_wrist.setWrist(outWristPos); // safe position for elev to move up
             } else if (
-                m_elevator.getPosition() > Constants.ElevatorConstants.wristDownSafeThreshold
+                m_elevator.getPosition() >
+                Constants.ElevatorConstants.wristDownSafeThreshold
             ) {
                 m_wrist.setWrist(targetWristPos); // only move wrist down when elevator up (prevents wrist/bumper collision)
             }
 
             // only move elevator when wrist out (prevents dismembering)
             if (
-                m_wrist.getPosition() > Constants.WristConstants.minElevatorRaisedPos
+                m_wrist.getPosition() >
+                Constants.WristConstants.minElevatorRaisedPos
             ) {
                 m_elevator.setElevator(
                     targetElevatorPos,
@@ -82,7 +85,8 @@ public class Up extends Command {
                 );
             }
             if (
-                Math.abs(m_elevator.getPosition() - targetElevatorPos) < Constants.ElevatorConstants.posTolerance
+                Math.abs(m_elevator.getPosition() - targetElevatorPos) <
+                Constants.ElevatorConstants.posTolerance
             ) {
                 if (m_claw.gamePieceDetected()) {
                     // if (!timer1.isRunning()) {
@@ -101,26 +105,26 @@ public class Up extends Command {
         else {
             // dont need to move elevator
             if (targetState.equals(RobotState.processor)) {
-                
-                    m_wrist.setWrist(targetWristPos);
-                    if (
-                        Math.abs(m_wrist.getPosition() - targetWristPos) < Constants.WristConstants.posTolerance &&
-                        m_claw.gamePieceDetected()
-                    ) {
-                        m_claw.setClaw(
-                            -Constants.EndEffectorConstants.outtakeVelocity
-                        );
-                        // if (!timer1.isRunning()) {
-                        //     timer1.restart();
-                        // }
-                    }
-                    // if (!m_claw.gamePieceDetected() && timer1.hasElapsed(0.5)) {
-                    //     m_claw.stopClaw();
+                m_wrist.setWrist(targetWristPos);
+                if (
+                    Math.abs(m_wrist.getPosition() - targetWristPos) <
+                        Constants.WristConstants.posTolerance &&
+                    m_claw.gamePieceDetected()
+                ) {
+                    m_claw.setClaw(
+                        -Constants.EndEffectorConstants.outtakeVelocity
+                    );
+                    // if (!timer1.isRunning()) {
+                    //     timer1.restart();
                     // }
                 }
+                // if (!m_claw.gamePieceDetected() && timer1.hasElapsed(0.5)) {
+                //     m_claw.stopClaw();
+                // }
             } else if (targetState.equals(RobotState.barge)) {
                 if (
-                    m_wrist.getPosition() > Constants.WristConstants.minElevatorRaisedPos
+                    m_wrist.getPosition() >
+                    Constants.WristConstants.minElevatorRaisedPos
                 ) {
                     System.out.println(
                         "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
@@ -131,7 +135,8 @@ public class Up extends Command {
                     );
                 }
                 if (
-                    Math.abs(m_elevator.getPosition() - targetElevatorPos) < Constants.ElevatorConstants.posTolerance
+                    Math.abs(m_elevator.getPosition() - targetElevatorPos) <
+                    Constants.ElevatorConstants.posTolerance
                 ) {
                     if (m_claw.gamePieceDetected()) {
                         if (!timer2.isRunning()) {
@@ -141,7 +146,8 @@ public class Up extends Command {
                     }
                     if (
                         m_claw.gamePieceDetected() &&
-                        Math.abs(m_wrist.getPosition() - targetWristPos) < Constants.WristConstants.posTolerance &&
+                        Math.abs(m_wrist.getPosition() - targetWristPos) <
+                        Constants.WristConstants.posTolerance &&
                         timer2.hasElapsed(1)
                     ) {
                         System.out.println(
@@ -166,18 +172,21 @@ public class Up extends Command {
             // for things we need elevator for
             else {
                 if (
-                    m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+                    m_elevator.getPosition() <
+                    Constants.ElevatorConstants.upThreshold
                 ) {
                     m_wrist.setWrist(
                         Constants.WristConstants.pos[RobotState.barge.ordinal()]
                     ); // safe position for elev to move up
                 } else if (
-                    m_elevator.getPosition() > Constants.ElevatorConstants.wristDownSafeThreshold
+                    m_elevator.getPosition() >
+                    Constants.ElevatorConstants.wristDownSafeThreshold
                 ) {
                     m_wrist.setWrist(targetWristPos); // only move wrist down when elevator up (prevents wrist/bumper collision)
                 }
                 if (
-                    m_wrist.getPosition() > Constants.WristConstants.minElevatorRaisedPos
+                    m_wrist.getPosition() >
+                    Constants.WristConstants.minElevatorRaisedPos
                 ) {
                     m_elevator.setElevator(
                         targetElevatorPos,
@@ -185,7 +194,8 @@ public class Up extends Command {
                     );
                 }
                 if (
-                    Math.abs(m_elevator.getPosition() - targetElevatorPos) < Constants.ElevatorConstants.posTolerance
+                    Math.abs(m_elevator.getPosition() - targetElevatorPos) <
+                    Constants.ElevatorConstants.posTolerance
                 ) {
                     m_claw.setClaw(Constants.EndEffectorConstants.velocity);
                 }
@@ -202,7 +212,6 @@ public class Up extends Command {
             }
         }
     }
-
 
     // Called once the command ends or is interrupted%.
     @Override
