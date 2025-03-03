@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -40,12 +41,13 @@ public class LED extends SubsystemBase {
     // Elevator Progress
     private LEDPattern elevatorProgress;
 
-    private Color colour = Color.kViolet;
+    private Color colour = Color.kAliceBlue;
     private Color colour2 = Color.kAquamarine;
 
     private RobotContainer robotContainer;
 
     public LED(RobotContainer robotContainer) {
+
         this.robotContainer = robotContainer;
 
         leds = new AddressableLED(Constants.LEDConstants.channel);
@@ -64,7 +66,7 @@ public class LED extends SubsystemBase {
         rightBackLeds = ledBuffer.createView(113, 150);
 
         // Solid and Blinking Patterns
-        solid = LEDPattern.solid(colour);
+        solid = LEDPattern.solid(colour).atBrightness(Percent.of(20));
         flashing = LEDPattern.solid(colour).blink(Seconds.of(0.5));
         breathe = LEDPattern.solid(colour).breathe(Seconds.of(3));
         gradient = LEDPattern.gradient(
@@ -72,7 +74,7 @@ public class LED extends SubsystemBase {
                 colour,
                 colour2);
 
-        gradient.applyTo(ledBuffer);
+        solid.applyTo(ledBuffer);
 
         leds.setData(ledBuffer);
         leds.start();
