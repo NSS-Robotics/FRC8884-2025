@@ -41,7 +41,7 @@ public class LED extends SubsystemBase {
     private LEDPattern elevatorProgress;
 
     private Color colour = Color.kViolet;
-    private Color colour2 = Color.kGreen;
+    private Color colour2 = Color.kAquamarine;
 
     private RobotContainer robotContainer;
 
@@ -72,13 +72,10 @@ public class LED extends SubsystemBase {
                 colour,
                 colour2);
 
-        solid.applyTo(ledBuffer);
+        gradient.applyTo(ledBuffer);
 
         leds.setData(ledBuffer);
         leds.start();
-
-        L1Leds();
-
     }
 
     private void checkGamepiece() {
@@ -90,7 +87,6 @@ public class LED extends SubsystemBase {
     }
 
     public void setLeds(LEDPattern leftPattern, LEDPattern rightPattern) {
-
         stop();
 
         if (robotContainer.isLeft) {
@@ -161,7 +157,6 @@ public class LED extends SubsystemBase {
     }
 
     public void alignLeds() {
-        colour = Color.kBlue;
         flashing.applyTo(ledBuffer);
         leds.setData(ledBuffer);
     }
