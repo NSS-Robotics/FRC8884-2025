@@ -83,20 +83,16 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         NamedCommands.registerCommand(
-            "Zero Gyro",
-            new InstantCommand(m_swerve::zeroGyro)
-        );
+                "Zero Gyro",
+                new InstantCommand(m_swerve::zeroGyro));
         NamedCommands.registerCommand(
-            "Coral Placing",
-            new Up(this, m_elevator, m_wrist, m_endEffector, m_driverController)
-        );
+                "Coral Placing",
+                new Up(this, m_elevator, m_wrist, m_endEffector, m_driverController));
         NamedCommands.registerCommand(
-            "Intake",
-            new SequentialCommandGroup(
-                new InstantCommand(l_leds::stop),
-                new StationIntake(m_elevator, m_wrist, m_endEffector)
-            )
-        );
+                "Intake",
+                new SequentialCommandGroup(
+                        new InstantCommand(l_leds::stop),
+                        new StationIntake(m_elevator, m_wrist, m_endEffector)));
     }
 
     /**
@@ -159,71 +155,61 @@ public class RobotContainer {
         // )
         // );
         m_driverController
-            .x()
-            .onTrue(new StationIntake(m_elevator, m_wrist, m_endEffector));
+                .x()
+                .onTrue(new StationIntake(m_elevator, m_wrist, m_endEffector));
         m_driverController
-            .y()
-            .whileTrue(new InstantCommand(m_swerve::zeroGyro));
+                .y()
+                .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
         m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
         m_driverController
-            .leftTrigger()
-            .whileTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(l_leds::intakeLeds),
-                    new GroundIntake(
-                        this,
-                        m_intake,
-                        m_indexer,
-                        m_wrist,
-                        m_endEffector,
-                        m_elevator,
-                        m_driverController
-                    )
-                )
-            );
+                .leftTrigger()
+                .whileTrue(
+                        new SequentialCommandGroup(
+                                new InstantCommand(l_leds::intakeLeds),
+                                new GroundIntake(
+                                        this,
+                                        m_intake,
+                                        m_indexer,
+                                        m_wrist,
+                                        m_endEffector,
+                                        m_elevator,
+                                        m_driverController)));
         m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
         m_driverController
-            .leftTrigger()
-            .whileTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(() -> l_leds.outtakeLeds()),
-                    new GroundIntake(
-                        this,
-                        m_intake,
-                        m_indexer,
-                        m_wrist,
-                        m_endEffector,
-                        m_elevator,
-                        m_driverController // ,
-                        // l_led
-                    )
-                )
-            );
+                .leftTrigger()
+                .whileTrue(
+                        new SequentialCommandGroup(
+                                new InstantCommand(l_leds::outtakeLeds),
+                                new GroundIntake(
+                                        this,
+                                        m_intake,
+                                        m_indexer,
+                                        m_wrist,
+                                        m_endEffector,
+                                        m_elevator,
+                                        m_driverController // ,
+                                // l_led
+                                )));
 
         m_driverController
-            .rightTrigger()
-            .onTrue(
-                new SequentialCommandGroup(
-                    // new Align(this, m_swerve),
-                    new InstantCommand(() -> l_leds.score(m_elevator)),
-                    new Up(
-                        this,
-                        m_elevator,
-                        m_wrist,
-                        m_endEffector,
-                        m_driverController
-                    )
-                )
-            );
+                .rightTrigger()
+                .onTrue(
+                        new SequentialCommandGroup(
+                                // new Align(this, m_swerve),
+                                new InstantCommand(() -> l_leds.score(m_elevator)),
+                                new Up(
+                                        this,
+                                        m_elevator,
+                                        m_wrist,
+                                        m_endEffector,
+                                        m_driverController)));
         m_driverController
-            .leftBumper()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new ElevatorDown(this, m_elevator, m_wrist, m_endEffector),
-                    new InstantCommand(l_leds::stop)
-                )
-            );
+                .leftBumper()
+                .onTrue(
+                        new SequentialCommandGroup(
+                                new ElevatorDown(this, m_elevator, m_wrist, m_endEffector),
+                                new InstantCommand(l_leds::stop)));
 
         // operator controls
         m_operatorController

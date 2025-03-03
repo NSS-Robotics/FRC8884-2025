@@ -84,9 +84,9 @@ public class LED extends SubsystemBase {
     private void checkStates() {
         stop();
         if (robotContainer.isCoral) {
-            colour = Color.kWhite;
+            colour = Color.kAliceBlue;
         } else {
-            colour = Color.kAqua;
+            colour = Color.kMediumAquamarine;
         }
         if (robotContainer.isLeft) {
             flashing.applyTo(leftFrontLeds, leftBackLeds);
