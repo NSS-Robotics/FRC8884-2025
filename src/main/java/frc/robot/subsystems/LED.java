@@ -70,10 +70,11 @@ public class LED extends SubsystemBase {
             colour2
         );
 
-        breathe.applyTo(ledBuffer);
+        // breathe.applyTo(ledBuffer);
+        solid.applyTo(ledBuffer);
 
         leds.setData(ledBuffer);
-        leds.start();
+        // leds.start();
     }
 
     private void checkStates() {

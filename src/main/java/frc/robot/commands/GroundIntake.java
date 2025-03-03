@@ -53,7 +53,7 @@ public class GroundIntake extends Command {
     public void execute() {
         // m_led.runLED();
         // coral
-        if(m_claw.gamePieceDetected()){
+        if (m_claw.gamePieceDetected()) {
             m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
         }
         if (robotContainer.isCoral) {
@@ -102,7 +102,10 @@ public class GroundIntake extends Command {
                 Constants.WristConstants.posTolerance
             ) {
                 m_claw.setClaw(Constants.EndEffectorConstants.velocity);
-                m_elevator.setElevator(Constants.ElevatorConstants.pos[RobotState.algaeGround.ordinal()], Constants.ElevatorConstants.upSlot);
+                m_elevator.setElevator(
+                    Constants.ElevatorConstants.pos[RobotState.algaeGround.ordinal()],
+                    Constants.ElevatorConstants.upSlot
+                );
             }
         }
     }
@@ -121,6 +124,10 @@ public class GroundIntake extends Command {
             //     Constants.WristConstants.pos[RobotState.barge.ordinal()]
             // );
             m_claw.setClaw(Constants.EndEffectorConstants.holdingVelocity);
+            m_elevator.setElevator(
+                Constants.ElevatorConstants.pos[RobotState.processor.ordinal()],
+                Constants.ElevatorConstants.upSlot
+            );
         }
         // m_led.stopLED();
         robotContainer.runningCommand = false;

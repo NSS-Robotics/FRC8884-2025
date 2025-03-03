@@ -245,7 +245,7 @@ public final class Constants {
             0.2, // algaeGround
             1.82, // algaeReefLow
             2.8, // algaeReefHigh
-            0, // processor
+            0.7, // processor
             0, // climb
         };
 
@@ -272,7 +272,7 @@ public final class Constants {
             0.618, // algaeGround
             0.626, // algaeReefLow
             0.626, // algaeReefHigh
-            0.61, // processor
+            0.618, // processor
             0.4, // climb
         };
         public static final double posTolerance = 0.05;
@@ -344,7 +344,8 @@ public final class Constants {
 
     public static final class EndEffectorConstants {
 
-        public static final double kP = 8;
+        // public static final double kP = 8;
+        public static final double kP = 4;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kS = 1.0274;

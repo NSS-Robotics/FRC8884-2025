@@ -107,20 +107,28 @@ public class Up extends Command {
             if (targetState.equals(RobotState.processor)) {
                 m_wrist.setWrist(targetWristPos);
                 if (
-                    Math.abs(m_wrist.getPosition() - targetWristPos) <
-                        Constants.WristConstants.posTolerance &&
-                    m_claw.gamePieceDetected()
+                    m_wrist.getPosition() >
+                    Constants.WristConstants.minElevatorRaisedPos
+                ) {
+                    m_elevator.setElevator(
+                        targetElevatorPos,
+                        Constants.ElevatorConstants.upSlot
+                    );
+                }
+                if (
+                    Math.abs(m_elevator.getPosition() - targetElevatorPos) <
+                    Constants.ElevatorConstants.posTolerance
                 ) {
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
-                    // if (!timer1.isRunning()) {
-                    //     timer1.restart();
-                    // }
+                    if (!timer1.isRunning()) {
+                        timer1.restart();
+                    }
                 }
-                // if (!m_claw.gamePieceDetected() && timer1.hasElapsed(0.5)) {
-                //     m_claw.stopClaw();
-                // }
+                if (!m_claw.gamePieceDetected() && timer1.hasElapsed(1)) {
+                    m_claw.stopClaw();
+                }
             } else if (targetState.equals(RobotState.barge)) {
                 if (
                     m_wrist.getPosition() >
