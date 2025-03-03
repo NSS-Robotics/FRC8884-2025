@@ -91,7 +91,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "Intake",
                 new SequentialCommandGroup(
-                        new InstantCommand(l_leds::stop),
+                        new InstantCommand(l_leds::intakeLeds),
                         new StationIntake(m_elevator, m_wrist, m_endEffector)));
     }
 
@@ -176,21 +176,6 @@ public class RobotContainer {
                                         m_elevator,
                                         m_driverController)));
         m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
-        m_driverController
-                .leftTrigger()
-                .whileTrue(
-                        new SequentialCommandGroup(
-                                new InstantCommand(l_leds::outtakeLeds),
-                                new GroundIntake(
-                                        this,
-                                        m_intake,
-                                        m_indexer,
-                                        m_wrist,
-                                        m_endEffector,
-                                        m_elevator,
-                                        m_driverController // ,
-                                // l_led
-                                )));
 
         m_driverController
                 .rightTrigger()
