@@ -77,7 +77,7 @@ public class LED extends SubsystemBase {
         leds.setData(ledBuffer);
         leds.start();
 
-        L2Leds();
+        L1Leds();
 
     }
 
@@ -91,6 +91,8 @@ public class LED extends SubsystemBase {
 
     public void setLeds(LEDPattern leftPattern, LEDPattern rightPattern) {
 
+        stop();
+
         if (robotContainer.isLeft) {
             leftPattern.blink(Seconds.of(0.5)).applyTo(leftFrontLeds, leftBackLeds);
             rightPattern.applyTo(rightFrontLeds, rightBackLeds);
@@ -103,41 +105,45 @@ public class LED extends SubsystemBase {
     }
 
     public void L1Leds() {
+        checkGamepiece();
+
         leftL1Led = LEDPattern.steps(
                 Map.of(0, colour, 0.25, Color.kBlack, 0.75, colour));
         rightL1Led = LEDPattern.steps(
                 Map.of(0, colour, 0.25, Color.kBlack, 0.75, colour));
 
-        checkGamepiece();
         setLeds(leftL1Led, rightL1Led);
     }
 
     public void L2Leds() {
+        checkGamepiece();
+
         leftL2Led = LEDPattern.steps(
                 Map.of(0, colour, 0.4, Color.kBlack, 0.6, colour));
         rightL2Led = LEDPattern.steps(
                 Map.of(0, colour, 0.4, Color.kBlack, 0.6, colour));
 
-        checkGamepiece();
         setLeds(leftL2Led, rightL2Led);
     }
 
     public void L3Leds() {
+        checkGamepiece();
+
         leftL3Led = LEDPattern.steps(
                 Map.of(0, colour, 0.6, Color.kBlack, 0.7, colour));
         rightL3Led = LEDPattern.steps(
                 Map.of(0, colour, 0.6, Color.kBlack, 0.7, colour));
 
-        checkGamepiece();
         setLeds(leftL3Led, rightL3Led);
     }
 
     public void L4Leds() {
+        checkGamepiece();
+
         System.out.println(colour);
         leftL4Led = LEDPattern.steps(Map.of(0, colour, 1, colour));
         rightL4Led = LEDPattern.steps(Map.of(0, colour, 1, colour));
 
-        checkGamepiece();
         setLeds(leftL4Led, rightL4Led);
     }
 
