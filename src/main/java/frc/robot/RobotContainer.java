@@ -175,8 +175,8 @@ public class RobotContainer {
                                         m_endEffector,
                                         m_elevator,
                                         m_driverController)));
-        m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
-
+        m_driverController.povLeft().whileTrue(
+                new SequentialCommandGroup(new InstantCommand(l_leds::alignLeds), new Align(this, m_swerve)));
         m_driverController
                 .rightTrigger()
                 .onTrue(
@@ -193,8 +193,9 @@ public class RobotContainer {
                 .leftBumper()
                 .onTrue(
                         new SequentialCommandGroup(
-                                new ElevatorDown(this, m_elevator, m_wrist, m_endEffector),
-                                new InstantCommand(l_leds::stop)));
+                                new InstantCommand(() -> l_leds.score(m_elevator)), // score() just tracks the elevator
+                                                                                    // position and sets the LEDs
+                                new ElevatorDown(this, m_elevator, m_wrist, m_endEffector)));
 
         // operator controls
         m_operatorController
