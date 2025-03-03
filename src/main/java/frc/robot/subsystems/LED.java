@@ -41,7 +41,7 @@ public class LED extends SubsystemBase {
     private LEDPattern elevatorProgress;
 
     private Color colour = Color.kViolet;
-    private Color colour2;
+    private Color colour2 = Color.kGreen;
 
     private RobotContainer robotContainer;
 
@@ -77,82 +77,68 @@ public class LED extends SubsystemBase {
         leds.setData(ledBuffer);
         leds.start();
 
-        L4Leds();
+        L2Leds();
 
     }
 
-    private void checkStates() {
-        stop();
+    private void checkGamepiece() {
         if (robotContainer.isCoral) {
             colour = Color.kAliceBlue;
         } else {
             colour = Color.kMediumAquamarine;
         }
+    }
+
+    public void setLeds(LEDPattern leftPattern, LEDPattern rightPattern) {
+
         if (robotContainer.isLeft) {
-            flashing.applyTo(leftFrontLeds, leftBackLeds);
-            solid.applyTo(rightFrontLeds, rightBackLeds);
+            leftPattern.blink(Seconds.of(0.5)).applyTo(leftFrontLeds, leftBackLeds);
+            rightPattern.applyTo(rightFrontLeds, rightBackLeds);
             leds.setData(ledBuffer);
         } else {
-            flashing.applyTo(rightFrontLeds, rightBackLeds);
-            solid.applyTo(leftFrontLeds, leftBackLeds);
+            rightPattern.blink(Seconds.of(0.5)).applyTo(rightFrontLeds, rightBackLeds);
+            leftPattern.applyTo(leftFrontLeds, leftBackLeds);
             leds.setData(ledBuffer);
         }
     }
 
-    // private LEDPattern solid(Color colour) {
-    // System.out.println(colour);
-    // return LEDPattern.solid(colour);
-    // }
-
-    // private LEDPattern flash(Color colour) {
-    // return LEDPattern.solid(colour).blink(Seconds.of(0.5));
-    // }
-
     public void L1Leds() {
-        checkStates();
         leftL1Led = LEDPattern.steps(
                 Map.of(0, colour, 0.25, Color.kBlack, 0.75, colour));
         rightL1Led = LEDPattern.steps(
                 Map.of(0, colour, 0.25, Color.kBlack, 0.75, colour));
 
-        leftL1Led.applyTo(leftFrontLeds, leftBackLeds);
-        rightL1Led.applyTo(rightFrontLeds, rightBackLeds);
-        leds.setData(ledBuffer);
+        checkGamepiece();
+        setLeds(leftL1Led, rightL1Led);
     }
 
     public void L2Leds() {
-        checkStates();
         leftL2Led = LEDPattern.steps(
                 Map.of(0, colour, 0.4, Color.kBlack, 0.6, colour));
         rightL2Led = LEDPattern.steps(
                 Map.of(0, colour, 0.4, Color.kBlack, 0.6, colour));
 
-        leftL2Led.applyTo(leftFrontLeds, leftBackLeds);
-        rightL2Led.applyTo(rightFrontLeds, rightBackLeds);
-        leds.setData(ledBuffer);
+        checkGamepiece();
+        setLeds(leftL2Led, rightL2Led);
     }
 
     public void L3Leds() {
-        checkStates();
         leftL3Led = LEDPattern.steps(
                 Map.of(0, colour, 0.6, Color.kBlack, 0.7, colour));
         rightL3Led = LEDPattern.steps(
                 Map.of(0, colour, 0.6, Color.kBlack, 0.7, colour));
 
-        leftL3Led.applyTo(leftFrontLeds, leftBackLeds);
-        rightL3Led.applyTo(rightFrontLeds, rightBackLeds);
-        leds.setData(ledBuffer);
+        checkGamepiece();
+        setLeds(leftL3Led, rightL3Led);
     }
 
     public void L4Leds() {
-        checkStates();
         System.out.println(colour);
         leftL4Led = LEDPattern.steps(Map.of(0, colour, 1, colour));
         rightL4Led = LEDPattern.steps(Map.of(0, colour, 1, colour));
 
-        leftL4Led.applyTo(leftFrontLeds, leftBackLeds);
-        rightL4Led.applyTo(rightFrontLeds, rightBackLeds);
-        leds.setData(ledBuffer);
+        checkGamepiece();
+        setLeds(leftL4Led, rightL4Led);
     }
 
     public void intakeLeds() {
