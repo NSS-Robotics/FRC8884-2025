@@ -53,17 +53,17 @@ public class LED extends SubsystemBase {
         leds = new AddressableLED(Constants.LEDConstants.channel);
         ledBuffer = new AddressableLEDBuffer(Constants.LEDConstants.length);
 
-        if (ledBuffer.getLength() < 151) {
-            throw new IllegalArgumentException("LED buffer length must be at least 151");
+        if (ledBuffer.getLength() < 154) {
+            throw new IllegalArgumentException("LED buffer length must be at least 154");
         }
 
         leds.setLength(ledBuffer.getLength());
 
-        leftFrontLeds = ledBuffer.createView(0, 37).reversed();
-        leftBackLeds = ledBuffer.createView(38, 75);
-        rightFrontLeds = ledBuffer.createView(76, 112).reversed(); // Throws an error when it's more than 112 but I have
+        rightBackLeds = ledBuffer.createView(0, 37);
+        rightFrontLeds = ledBuffer.createView(38, 75).reversed(); // Throws an error when it's more than 112 but I have
                                                                    // no idea why
-        rightBackLeds = ledBuffer.createView(113, 150);
+        leftFrontLeds = ledBuffer.createView(76, 115).reversed();
+        leftBackLeds = ledBuffer.createView(116, 153);
 
         // Solid and Blinking Patterns
         solid = LEDPattern.solid(colour).atBrightness(Percent.of(20));
