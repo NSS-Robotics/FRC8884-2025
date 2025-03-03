@@ -81,17 +81,25 @@ public class RobotContainer {
 
         scoringLevel = RobotState.l4;
 
-        autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Chooser", autoChooser);
-
         NamedCommands.registerCommand(
             "Zero Gyro",
             new InstantCommand(m_swerve::zeroGyro)
+        );
+
+        NamedCommands.registerCommand("Align", new Align(this, m_swerve));
+        NamedCommands.registerCommand(
+            "Align To Right Station",
+            new AlignToStation(this, m_swerve, false)
         );
         NamedCommands.registerCommand(
             "Coral Placing",
             new Up(this, m_elevator, m_wrist, m_endEffector, m_driverController)
         );
+        NamedCommands.registerCommand(
+            "Down Elevator",
+            new ElevatorDown(this, m_elevator, m_wrist, m_endEffector)
+        );
+
         NamedCommands.registerCommand(
             "Intake",
             new SequentialCommandGroup(
@@ -99,6 +107,9 @@ public class RobotContainer {
                 new StationIntake(m_elevator, m_wrist, m_endEffector)
             )
         );
+
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     /**
@@ -188,30 +199,26 @@ public class RobotContainer {
                     )
                 )
             );
-        m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
-        m_driverController
-            .leftTrigger()
-            .whileTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(() -> l_leds.outtakeLeds()),
-                    new GroundIntake(
-                        this,
-                        m_intake,
-                        m_indexer,
-                        m_wrist,
-                        m_endEffector,
-                        m_elevator,
-                        m_driverController // ,
-                        // l_led
-                    )
-                )
-            );
 
         m_driverController
             .rightTrigger()
             .onTrue(
                 new SequentialCommandGroup(
-                    // new Align(this, m_swerve),
+                    new Align(this, m_swerve),
+                    new InstantCommand(() -> l_leds.score(m_elevator)),
+                    new Up(
+                        this,
+                        m_elevator,
+                        m_wrist,
+                        m_endEffector,
+                        m_driverController
+                    )
+                )
+            );
+        m_driverController
+            .rightBumper()
+            .onTrue(
+                new SequentialCommandGroup(
                     new InstantCommand(() -> l_leds.score(m_elevator)),
                     new Up(
                         this,
@@ -260,6 +267,7 @@ public class RobotContainer {
                 new InstantCommand(() -> {
                     if (canChangeGamePiece()) {
                         this.isCoral = false;
+
                         if (scoringLevel.equals(RobotState.l4)) {
                             this.scoringLevel = RobotState.barge;
                         } else if (scoringLevel.equals(RobotState.l3)) {

@@ -89,15 +89,16 @@ public class Up extends Command {
                 Constants.ElevatorConstants.posTolerance
             ) {
                 if (m_claw.gamePieceDetected()) {
-                    if (!timer1.isRunning()) {
-                        timer1.restart();
-                    }
+                    // if (!timer1.isRunning()) {
+                    //     timer1.restart();
+                    // }
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
-                } else if (timer1.hasElapsed(1)) {
-                    m_claw.stopClaw();
                 }
+                //else if (timer1.hasElapsed(1.5)) {
+                //     m_claw.stopClaw();
+                // }
             }
         }
         // ALGAE
@@ -117,19 +118,22 @@ public class Up extends Command {
                         m_claw.setClaw(
                             -Constants.EndEffectorConstants.outtakeVelocity
                         );
-                        if (!timer1.isRunning()) {
-                            timer1.restart();
-                        }
+                        // if (!timer1.isRunning()) {
+                        //     timer1.restart();
+                        // }
                     }
-                    if (!m_claw.gamePieceDetected() && timer1.hasElapsed(0.5)) {
-                        m_claw.stopClaw();
-                    }
+                    // if (!m_claw.gamePieceDetected() && timer1.hasElapsed(0.5)) {
+                    //     m_claw.stopClaw();
+                    // }
                 }
             } else if (targetState.equals(RobotState.barge)) {
                 if (
                     m_wrist.getPosition() >
                     Constants.WristConstants.minElevatorRaisedPos
                 ) {
+                    System.out.println(
+                        "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+                    );
                     m_elevator.setElevator(
                         targetElevatorPos,
                         Constants.ElevatorConstants.upSlot
@@ -154,9 +158,7 @@ public class Up extends Command {
                         System.out.println(
                             "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
                         );
-                        if (!timer1.isRunning()) {
-                            timer1.restart();
-                        }
+                        // `
                         m_claw.setClaw(
                             -Constants.EndEffectorConstants.outtakeVelocity
                         );
@@ -221,6 +223,8 @@ public class Up extends Command {
     public void end(boolean interrupted) {
         robotContainer.runningCommand = false;
         m_driverController.setRumble(RumbleType.kBothRumble, 0);
+        timer1.reset();
+        timer2.reset();
     }
 
     // Returns true when the command should end.

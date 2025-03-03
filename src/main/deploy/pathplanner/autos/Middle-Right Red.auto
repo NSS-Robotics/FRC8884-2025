@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Middle-Right Red1"
+            "name": "Zero Gyro"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align"
           }
         },
         {
@@ -17,9 +23,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Down Elevator"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Middle-Right Red2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align To Right Station"
           }
         },
         {
@@ -32,6 +50,12 @@
           "type": "path",
           "data": {
             "pathName": "Middle-Right Red3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align"
           }
         },
         {
