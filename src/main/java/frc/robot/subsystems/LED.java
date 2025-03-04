@@ -158,9 +158,9 @@ public class LED extends SubsystemBase {
         checkGamepiece();
 
         leftL2Led = LEDPattern.steps(
-                Map.of(0, colour, 0.4, Color.kBlack)).atBrightness(Percent.of(20));
+                Map.of(0, colour, 0.5, Color.kBlack)).atBrightness(Percent.of(20));
         rightL2Led = LEDPattern.steps(
-                Map.of(0, colour, 0.4, Color.kBlack)).atBrightness(Percent.of(20));
+                Map.of(0, colour, 0.5, Color.kBlack)).atBrightness(Percent.of(20));
 
         setLeds(leftL2Led, rightL2Led);
     }
@@ -169,9 +169,9 @@ public class LED extends SubsystemBase {
         checkGamepiece();
 
         leftL3Led = LEDPattern.steps(
-                Map.of(0, colour, 0.6, Color.kBlack)).atBrightness(Percent.of(20));
+                Map.of(0, colour, 0.75, Color.kBlack)).atBrightness(Percent.of(20));
         rightL3Led = LEDPattern.steps(
-                Map.of(0, colour, 0.6, Color.kBlack)).atBrightness(Percent.of(20));
+                Map.of(0, colour, 0.75, Color.kBlack)).atBrightness(Percent.of(20));
 
         setLeds(leftL3Led, rightL3Led);
     }
