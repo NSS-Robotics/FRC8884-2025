@@ -31,8 +31,8 @@ public class AlignToStation extends Command {
     public void execute() {
         if (
             !atSetpoint &&
-            Math.abs(pidController.getXError(target)) < 0.5 &&
-            Math.abs(pidController.getYError(target)) < 0.5 &&
+            Math.abs(pidController.getXError(target)) < 0.1 &&
+            Math.abs(pidController.getYError(target)) < 0.1 &&
             Math.abs(pidController.getAngleError(target)) < 0.5
         ) {
             atSetpoint = true;
@@ -45,13 +45,28 @@ public class AlignToStation extends Command {
         ) {
             pidController.alignLimelight(target);
         }
+
+        SmartDashboard.putNumber("Station Target X", target.getX());
+        SmartDashboard.putNumber("Station Target Y", target.getY());
+        SmartDashboard.putNumber(
+            "Station Target R",
+            target.getRotation().getDegrees()
+        );
     }
 
     @Override
     public void initialize() {
+        atSetpoint = false;
         target = m_swerve.isRed()
-            ? new Pose2d(16.23, 6.9, new Rotation2d(45))
-            : new Pose2d(1.27, 6.9, new Rotation2d(135));
+            ? new Pose2d(
+                16.333905334503033,
+                1.17987787819051,
+                Rotation2d.fromDegrees(-55)
+            )
+            : new Pose2d(1.27, 6.9, Rotation2d.fromDegrees(-125));
+        // target = m_swerve.isRed()
+        //     ? new Pose2d(16.23, 6.9, Rotation2d.fromDegrees(45))
+        //     : new Pose2d(1.27, 6.9, Rotation2d.fromDegrees(135));
     }
 
     @Override

@@ -176,6 +176,9 @@ public class RobotContainer {
         // )
         // );
         m_driverController
+            .a()
+            .whileTrue(new AlignToStation(this, m_swerve, false));
+        m_driverController
             .x()
             .onTrue(new StationIntake(m_elevator, m_wrist, m_endEffector));
         m_driverController
