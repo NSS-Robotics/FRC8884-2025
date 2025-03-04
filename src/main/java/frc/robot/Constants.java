@@ -268,7 +268,7 @@ public final class Constants {
             0.63, // l4
             0.445810546875, // stationIntake
             0.03576171875, // handoff
-            0.411, // barge
+            0.39, // barge
             0.618, // algaeGround
             0.626, // algaeReefLow
             0.626, // algaeReefHigh
@@ -280,6 +280,7 @@ public final class Constants {
         public static final double minElevatorRaisedPos = 0.323;
         public static final double maxElevatorLoweredPos = 0.634;
         public static final double minOuttakePos = 0.45;
+        public static final double pedroDoIt = 30;
     }
 
     public static final class ClimberConstants {
@@ -296,7 +297,7 @@ public final class Constants {
         public static final double downkI = 0;
         public static final double downkD = 0.020493;
         public static final double maxRotations = 40.88916015625;
-        public static final double restingRot = 23;
+        public static final double restingRot = 26;
         public static final double climbRot = 40.5;
         public static final double minRot = 0;
     }
@@ -360,7 +361,7 @@ public final class Constants {
         public static final double elevatorUpMinValue = -0.12;
         public static final double velocity = 9000;
         public static final double outtakeVelocity = 750;
-        public static final double holdingVelocity = 3000;
+        public static final double holdingVelocity = 3500;
     }
 
     public static final class LEDConstants {

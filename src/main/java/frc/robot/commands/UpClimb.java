@@ -39,7 +39,7 @@ public class UpClimb extends Command {
             m_wrist.setWrist(
                 Constants.WristConstants.pos[Constants.RobotState.algaeGround.ordinal()]
             );
-            m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
+            // m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
         }
     }
 

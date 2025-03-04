@@ -24,54 +24,58 @@ import frc.robot.Constants;
 
 public class Indexer extends SubsystemBase {
 
-  private final SparkMax motor = new SparkMax(
-      Constants.IndexerConstants.motorID,
-      MotorType.kBrushless);
-  private final SparkMaxConfig motorConfig;
-  private final LaserCan lasercan;
-  private final SimpleMotorFeedforward ff = new SimpleMotorFeedforward(
-      Constants.IndexerConstants.kS,
-      Constants.IndexerConstants.kV,
-      Constants.IndexerConstants.kA);
+    private final SparkMax motor = new SparkMax(
+        Constants.IndexerConstants.motorID,
+        MotorType.kBrushless
+    );
+    private final SparkMaxConfig motorConfig;
+    private final LaserCan lasercan;
+    private final SimpleMotorFeedforward ff = new SimpleMotorFeedforward(
+        Constants.IndexerConstants.kS,
+        Constants.IndexerConstants.kV,
+        Constants.IndexerConstants.kA
+    );
 
-  public Indexer() {
-    motorConfig = new SparkMaxConfig();
-    lasercan = new LaserCan(Constants.IndexerConstants.laserCANID);
+    public Indexer() {
+        motorConfig = new SparkMaxConfig();
+        lasercan = new LaserCan(Constants.IndexerConstants.laserCANID);
 
-    // motorConfig.closedLoop
-    // .p(Constants.IndexerConstants.kP)
-    // .i(Constants.IndexerConstants.kI)
-    // .d(Constants.IndexerConstants.kD);
+        // motorConfig.closedLoop
+        // .p(Constants.IndexerConstants.kP)
+        // .i(Constants.IndexerConstants.kI)
+        // .d(Constants.IndexerConstants.kD);
 
-    motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast);
-    motor.configure(
-        motorConfig,
-        ResetMode.kResetSafeParameters,
-        PersistMode.kNoPersistParameters);
+        motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast);
+        motor.configure(
+            motorConfig,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kNoPersistParameters
+        );
 
-    try {
-      lasercan.setRangingMode(LaserCan.RangingMode.SHORT);
-      lasercan.setRegionOfInterest(
-          new LaserCan.RegionOfInterest(8, 8, 16, 16));
-      lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
-    } catch (ConfigurationFailedException e) {
-      System.out.println("Configuration failed! " + e);
+        try {
+            lasercan.setRangingMode(LaserCan.RangingMode.SHORT);
+            lasercan.setRegionOfInterest(
+                new LaserCan.RegionOfInterest(8, 8, 16, 16)
+            );
+            lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+        } catch (ConfigurationFailedException e) {
+            System.out.println("Configuration failed! " + e);
+        }
     }
-  }
 
-  // public void setIndexer(double velocity) {
-  // motor
-  // .getClosedLoopController()
-  // .setReference(ff.calculate(velocity / 60), ControlType.kVelocity);
-  // }
+    // public void setIndexer(double velocity) {
+    // motor
+    // .getClosedLoopController()
+    // .setReference(ff.calculate(velocity / 60), ControlType.kVelocity);
+    // }
 
-  public void setIndexer(double speed) {
-    motor.set(speed);
-  }
+    public void setIndexer(double speed) {
+        motor.set(speed);
+    }
 
-  public void resetEncoders() {
-    motor.getEncoder().setPosition(0);
-  }
+    public void resetEncoders() {
+        motor.getEncoder().setPosition(0);
+    }
 
   public boolean gamepieceDetected() {
     // double measurement = lasercan.getMeasurement().distance_mm;
@@ -79,18 +83,19 @@ public class Indexer extends SubsystemBase {
     return 4 < 20;
   }
 
-  public void stopIndexer() {
-    motor.stopMotor();
-  }
+    public void stopIndexer() {
+        motor.stopMotor();
+    }
 
-  @Override
-  public void periodic() {
-    SmartDashboard.putNumber(
-        "Indexer Velocity",
-        motor.getEncoder().getVelocity());
-    // SmartDashboard.putBoolean(
-    // "Indexer Game Piece Detected",
-    // gamepieceDetected()
-    // );
-  }
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber(
+            "Indexer Velocity",
+            motor.getEncoder().getVelocity()
+        );
+        // SmartDashboard.putBoolean(
+        // "Indexer Game Piece Detected",
+        // gamepieceDetected()
+        // );
+    }
 }
