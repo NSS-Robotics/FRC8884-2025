@@ -13,6 +13,7 @@ public class CoralOuttake extends Command {
     private final Indexer m_indexer;
     private final Wrist m_wrist;
     private final Elevator m_elevator;
+    private final Claw m_claw;
     private final LED l_Led;
 
     // private final LED m_led;
@@ -23,6 +24,7 @@ public class CoralOuttake extends Command {
         Indexer m_indexer,
         Wrist m_wrist,
         Elevator m_elevator,
+        Claw m_claw,
         LED l_led
     ) {
         this.robotContainer = robotContainer;
@@ -31,8 +33,9 @@ public class CoralOuttake extends Command {
         this.m_wrist = m_wrist;
         this.m_elevator = m_elevator;
         this.l_Led = l_led;
+        this.m_claw = m_claw;
 
-        addRequirements(m_intake, m_indexer, m_wrist, l_led);
+        addRequirements(m_intake, m_indexer, m_wrist, m_claw, l_led);
     }
 
     // Called when the command is initially scheduled.
@@ -45,17 +48,33 @@ public class CoralOuttake extends Command {
     @Override
     public void execute() {
         l_Led.outtakeLeds();
-        if (
-            m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
-        ) {
-            m_wrist.setWrist(
-                Constants.WristConstants.pos[RobotState.handoff.ordinal()]
-            );
+        // coral
+        if(robotContainer.isCoral){
+            if (
+                m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+            ) {
+                m_wrist.setWrist(
+                    Constants.WristConstants.pos[RobotState.handoff.ordinal()]
+                );
+            }
+            m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
+            if (m_intake.getPosition() < Constants.IntakeConstants.intakeStartPos) {
+                m_intake.setIntake(-Constants.IntakeConstants.velocity, false);
+                m_indexer.setIndexer(-Constants.IndexerConstants.velocity);
+            }
         }
-        m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
-        if (m_intake.getPosition() < Constants.IntakeConstants.intakeStartPos) {
-            m_intake.setIntake(-Constants.IntakeConstants.velocity, false);
-            m_indexer.setIndexer(-Constants.IndexerConstants.velocity);
+        // algae 
+        else {
+            if (
+                m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+            ) {
+                m_wrist.setWrist(
+                    Constants.WristConstants.pos[RobotState.processor.ordinal()]
+                );
+            }
+            if(Math.abs(m_wrist.getPosition() - Constants.WristConstants.pos[RobotState.processor.ordinal()]) < Constants.WristConstants.posTolerance){
+                m_claw.setClaw(Constants.EndEffectorConstants.outtakeVelocity);
+            }
         }
     }
 
@@ -66,6 +85,7 @@ public class CoralOuttake extends Command {
         m_intake.stopIntake();
         m_indexer.stopIndexer();
         l_Led.stop();
+        m_claw.stopClaw();
         robotContainer.runningCommand = false;
     }
 

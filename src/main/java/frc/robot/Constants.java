@@ -245,7 +245,7 @@ public final class Constants {
             0.2, // algaeGround
             1.82, // algaeReefLow
             2.8, // algaeReefHigh
-            0.55, // processor
+            0.6, // processor // changed
             0, // climb
         };
 
@@ -269,10 +269,10 @@ public final class Constants {
             0.445810546875, // stationIntake
             0.03576171875, // handoff
             0.39, // barge
-            0.618, // algaeGround
+            0.622, // algaeGround // changed
             0.626, // algaeReefLow
             0.626, // algaeReefHigh
-            0.618, // processor
+            0.622, // processor // changed
             0.4, // climb
         };
         public static final double posTolerance = 0.05;
@@ -280,7 +280,8 @@ public final class Constants {
         public static final double minElevatorRaisedPos = 0.323;
         public static final double maxElevatorLoweredPos = 0.634;
         public static final double minOuttakePos = 0.45;
-        public static final double pedroDoIt = 30;
+        // barge wrist current limit
+        public static final double pedroDoIt = 20; // change
     }
 
     public static final class ClimberConstants {

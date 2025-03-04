@@ -134,7 +134,11 @@ public class Align extends Command {
     private final double redBargeX = 10.253391158244787;
     private final double blueBargeX = 0;
 
-    private Timer timer = new Timer();
+
+    private final Pose2d redProcessorPose = new Pose2d();
+    private final Pose2d blueProcessorPose = new Pose2d();
+
+    private Timer timer;
 
     public Align(RobotContainer rob, Swerve swerve) {
         this.rob = rob;
@@ -179,9 +183,10 @@ public class Align extends Command {
     @Override
     public void initialize() {
         atSetpoint = false;
-        timer = new Timer();
 
         if (rob.scoringLevel.equals(RobotState.barge)) {
+            timer = new Timer();
+
             Pose2d pose = m_swerve.getPose();
             boolean isRed =
                 Math.abs(pose.getX() - redBargeX) <
@@ -192,6 +197,11 @@ public class Align extends Command {
                 pose.getY(),
                 Rotation2d.fromDegrees(isRed ? 180 : 0)
             );
+            return;
+        }
+
+        if (rob.scoringLevel.equals(RobotState.processor)) {
+            target = m_swerve.isRed() ? redProcessorPose : blueProcessorPose;
             return;
         }
 
@@ -303,14 +313,17 @@ public class Align extends Command {
 
     @Override
     public boolean isFinished() {
-        if (!timer.isRunning()) {
+        boolean isBarge = rob.scoringLevel.equals(Constants.RobotState.barge);
+
+        if (isBarge && !timer.isRunning()) {
             timer.restart();
         }
+
         return (
-                timer.hasElapsed(2) ||
-                !rob.scoringLevel.equals(Constants.RobotState.barge)
-            )
-            ? atSetpoint
-            : false;
+            timer.hasElapsed(2) ||
+            !isBarge
+        )
+        ? atSetpoint
+        : false;
     }
 }
