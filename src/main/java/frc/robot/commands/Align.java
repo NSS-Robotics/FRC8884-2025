@@ -2,8 +2,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Constants.RobotState;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
@@ -129,8 +131,10 @@ public class Align extends Command {
     private final Pose2d[] blueCoralPoses = new Pose2d[redCoralPoses.length];
     private final Pose2d[] blueAlgaePoses = new Pose2d[redAlgaePoses.length];
 
-    private final double redBargeX = 0;
+    private final double redBargeX = 10.253391158244787;
     private final double blueBargeX = 0;
+
+    private Timer timer = new Timer();
 
     public Align(RobotContainer rob, Swerve swerve) {
         this.rob = rob;
@@ -174,6 +178,9 @@ public class Align extends Command {
 
     @Override
     public void initialize() {
+        atSetpoint = false;
+        timer = new Timer();
+
         if (rob.scoringLevel.equals(RobotState.barge)) {
             Pose2d pose = m_swerve.getPose();
             boolean isRed =
@@ -183,12 +190,11 @@ public class Align extends Command {
             target = new Pose2d(
                 isRed ? redBargeX : blueBargeX,
                 pose.getY(),
-                new Rotation2d(isRed ? 180 : 0)
+                Rotation2d.fromDegrees(isRed ? 180 : 0)
             );
             return;
         }
 
-        atSetpoint = false;
         Pose2d botPose = m_swerve.getPose();
 
         Pose2d min1 = new Pose2d();
@@ -273,6 +279,7 @@ public class Align extends Command {
             Math.abs(pidController.getAngleError(target)) < 0.5
         ) {
             atSetpoint = true;
+            m_swerve.stopSwerve();
         }
 
         if (
@@ -292,12 +299,18 @@ public class Align extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {
-        if (rob.isCoral) m_swerve.stopSwerve();
-    }
+    public void end(boolean interrupted) {}
 
     @Override
     public boolean isFinished() {
-        return atSetpoint;
+        if (!timer.isRunning()) {
+            timer.restart();
+        }
+        return (
+                timer.hasElapsed(2) ||
+                !rob.scoringLevel.equals(Constants.RobotState.barge)
+            )
+            ? atSetpoint
+            : false;
     }
 }

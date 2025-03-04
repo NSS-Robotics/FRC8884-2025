@@ -153,9 +153,9 @@ public class Up extends Command {
                         m_wrist.setWrist(targetWristPos);
                     }
                     if (
-                        m_claw.gamePieceDetected() &&
+                        // m_claw.gamePieceDetected() &&
                         Math.abs(m_wrist.getPosition() - targetWristPos) <
-                        Constants.WristConstants.posTolerance &&
+                            Constants.WristConstants.posTolerance &&
                         timer2.hasElapsed(1)
                     ) {
                         System.out.println(

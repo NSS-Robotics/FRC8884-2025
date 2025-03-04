@@ -15,6 +15,7 @@ public class GroundIntake extends Command {
     private final Wrist m_wrist;
     private final Claw m_claw;
     private final Elevator m_elevator;
+    private final Climber m_climber;
     private final RobotContainer robotContainer;
     private final CommandXboxController m_driverController;
 
@@ -27,9 +28,11 @@ public class GroundIntake extends Command {
         Wrist m_wrist,
         Claw m_claw,
         Elevator m_elevator,
-        CommandXboxController driverController
+        CommandXboxController driverController,
+        Climber climber
         // LED m_led //,
     ) {
+        this.m_climber = climber;
         this.robotContainer = robotContainer;
         this.m_intake = m_intake;
         this.m_indexer = m_indexer;
@@ -39,7 +42,14 @@ public class GroundIntake extends Command {
         this.m_driverController = driverController;
         // this.m_led = m_led;
 
-        addRequirements(m_intake, m_indexer, m_wrist, m_claw, m_elevator);
+        addRequirements(
+            m_intake,
+            m_indexer,
+            m_wrist,
+            m_claw,
+            m_elevator,
+            m_climber
+        );
     }
 
     // Called when the command is initially scheduled.
@@ -56,7 +66,20 @@ public class GroundIntake extends Command {
         if (m_claw.gamePieceDetected()) {
             m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
         }
-        if (robotContainer.isCoral) {
+        if (
+            m_climber.getPosition() <
+                Constants.ClimberConstants.restingRot - 5 &&
+            robotContainer.isCoral
+        ) {
+            m_wrist.setWrist(0.1);
+            if (m_wrist.getPosition() > 0.08) {
+                m_climber.setClimber(Constants.ClimberConstants.restingRot, 0);
+            }
+        }
+        if (
+            robotContainer.isCoral &&
+            m_climber.getPosition() > Constants.ClimberConstants.restingRot - 5
+        ) {
             if (
                 m_wrist.getPosition() <
                 Constants.WristConstants.maxElevatorLoweredPos
