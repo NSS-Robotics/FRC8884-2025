@@ -26,8 +26,10 @@ public class LED extends SubsystemBase {
     private final AddressableLEDBufferView rightBackLeds;
 
     // Left and Right Patterns
-    private LEDPattern leftPattern = LEDPattern.solid(Color.kBlack);
-    private LEDPattern rightPattern = LEDPattern.solid(Color.kBlack);
+    private LEDPattern leftFrontPattern = LEDPattern.solid(Color.kBlack);
+    private LEDPattern leftBackPattern = LEDPattern.solid(Color.kBlack);
+    private LEDPattern rightFrontPattern = LEDPattern.solid(Color.kBlack);
+    private LEDPattern rightBackPattern = LEDPattern.solid(Color.kBlack);
 
     // Level Segments
     private LEDPattern leftL1Led;
@@ -39,8 +41,8 @@ public class LED extends SubsystemBase {
     private LEDPattern leftL4Led;
     private LEDPattern rightL4Led;
 
-    // Flashing and Solid Patterns
-    private LEDPattern flashing;
+    // strobe and Solid Patterns
+    private LEDPattern strobe;
     private LEDPattern solid;
     private LEDPattern breathe;
     private LEDPattern gradient;
@@ -73,7 +75,7 @@ public class LED extends SubsystemBase {
 
         // Solid and Blinking Patterns
         solid = LEDPattern.solid(colour).atBrightness(Percent.of(20));
-        flashing = LEDPattern.solid(colour).blink(Seconds.of(0.5)).atBrightness(Percent.of(20));
+        strobe = LEDPattern.solid(colour).blink(Seconds.of(0.5)).atBrightness(Percent.of(20));
         breathe = LEDPattern.solid(colour).breathe(Seconds.of(3)).atBrightness(Percent.of(20));
         gradient = LEDPattern.gradient(
                 LEDPattern.GradientType.kDiscontinuous,
@@ -81,6 +83,11 @@ public class LED extends SubsystemBase {
                 colour2).atBrightness(Percent.of(20));
 
         leds.start();
+
+        leftFrontPattern = LEDPattern.solid(Color.kViolet);
+        leftBackPattern = LEDPattern.solid(Color.kViolet);
+        rightFrontPattern = LEDPattern.solid(Color.kViolet);
+        rightBackPattern = LEDPattern.solid(Color.kViolet);
 
     }
 
@@ -116,11 +123,15 @@ public class LED extends SubsystemBase {
 
     private void setLeds(LEDPattern leftPatternToSet, LEDPattern rightPatternToSet) {
         if (robotContainer.isLeft) {
-            leftPattern = leftPatternToSet.blink(Seconds.of(0.2));
-            rightPattern = rightPatternToSet;
+            leftFrontPattern = leftPatternToSet.blink(Seconds.of(0.1));
+            leftBackPattern = leftPatternToSet.blink(Seconds.of(0.1));
+            rightFrontPattern = rightPatternToSet;
+            rightBackPattern = rightPatternToSet;
         } else {
-            rightPattern = rightPatternToSet.blink(Seconds.of(0.2));
-            leftPatternToSet = leftPattern;
+            rightFrontPattern = rightPatternToSet.blink(Seconds.of(0.2));
+            rightBackPattern = rightPatternToSet.blink(Seconds.of(0.2));
+            leftBackPattern = leftPatternToSet;
+            leftFrontPattern = leftPatternToSet;
 
         }
     }
@@ -129,9 +140,9 @@ public class LED extends SubsystemBase {
         checkGamepiece();
 
         leftL1Led = LEDPattern.steps(
-                Map.of(0, colour, 0.25, Color.kBlack, 0.75, colour));
+                Map.of(0, colour, 0.25, Color.kBlack));
         rightL1Led = LEDPattern.steps(
-                Map.of(0, colour, 0.25, Color.kBlack, 0.75, colour));
+                Map.of(0, colour, 0.25, Color.kBlack));
 
         setLeds(leftL1Led, rightL1Led);
     }
@@ -140,9 +151,9 @@ public class LED extends SubsystemBase {
         checkGamepiece();
 
         leftL2Led = LEDPattern.steps(
-                Map.of(0, colour, 0.4, Color.kBlack, 0.6, colour));
+                Map.of(0, colour, 0.4, Color.kBlack));
         rightL2Led = LEDPattern.steps(
-                Map.of(0, colour, 0.4, Color.kBlack, 0.6, colour));
+                Map.of(0, colour, 0.4, Color.kBlack));
 
         setLeds(leftL2Led, rightL2Led);
     }
@@ -151,9 +162,9 @@ public class LED extends SubsystemBase {
         checkGamepiece();
 
         leftL3Led = LEDPattern.steps(
-                Map.of(0, colour, 0.6, Color.kBlack, 0.7, colour));
+                Map.of(0, colour, 0.6, Color.kBlack));
         rightL3Led = LEDPattern.steps(
-                Map.of(0, colour, 0.6, Color.kBlack, 0.7, colour));
+                Map.of(0, colour, 0.6, Color.kBlack));
 
         setLeds(leftL3Led, rightL3Led);
     }
@@ -161,29 +172,36 @@ public class LED extends SubsystemBase {
     public void L4Leds() {
         checkGamepiece();
 
-        leftL4Led = LEDPattern.steps(Map.of(0, colour, 1, colour));
-        rightL4Led = LEDPattern.steps(Map.of(0, colour, 1, colour));
+        leftL4Led = LEDPattern.solid(colour);
+        rightL4Led = LEDPattern.solid(colour);
 
         setLeds(leftL4Led, rightL4Led);
     }
 
     public void intakeLeds() {
         colour = Color.kForestGreen;
-        leftPattern = breathe;
-        rightPattern = breathe;
+
+        leftFrontPattern = breathe;
+        leftBackPattern = breathe;
+        rightFrontPattern = breathe;
+        rightBackPattern = breathe;
     }
 
     public void outtakeLeds() {
         colour = Color.kCoral;
         colour2 = Color.kRed;
 
-        leftPattern = gradient;
-        rightPattern = gradient;
+        leftFrontPattern = gradient;
+        leftBackPattern = gradient;
+        rightFrontPattern = gradient;
+        rightBackPattern = gradient;
     }
 
     public void alignLeds() {
-        leftPattern = flashing;
-        rightPattern = flashing;
+        leftFrontPattern = strobe;
+        leftBackPattern = strobe;
+        rightFrontPattern = strobe;
+        rightBackPattern = strobe;
     }
 
     public void score(Elevator m_elevator) {
@@ -192,7 +210,11 @@ public class LED extends SubsystemBase {
                 () -> m_elevator.getPosition() /
                         Constants.ElevatorConstants.maxRotations);
 
-        elevatorProgress.applyTo(ledBuffer);
+        leftFrontPattern = elevatorProgress;
+        leftBackPattern = elevatorProgress;
+        rightFrontPattern = elevatorProgress;
+        rightBackPattern = elevatorProgress;
+
     }
 
     public void climb() {
@@ -208,10 +230,10 @@ public class LED extends SubsystemBase {
 
     @Override
     public void periodic() {
-        leftPattern.applyTo(leftFrontLeds);
-        leftPattern.applyTo(leftBackLeds);
-        rightPattern.applyTo(rightFrontLeds);
-        rightPattern.applyTo(rightBackLeds);
+        leftFrontPattern.applyTo(leftFrontLeds);
+        leftBackPattern.applyTo(leftBackLeds);
+        rightFrontPattern.applyTo(rightFrontLeds);
+        rightBackPattern.applyTo(rightBackLeds);
         leds.setData(ledBuffer);
     }
 }
