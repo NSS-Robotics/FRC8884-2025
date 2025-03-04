@@ -122,6 +122,7 @@ public class Up extends Command {
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
+                    robotContainer.runningCommand = false;
                     if (!timer1.isRunning()) {
                         timer1.restart();
                     }

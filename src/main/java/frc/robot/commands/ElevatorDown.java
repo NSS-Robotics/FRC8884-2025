@@ -80,7 +80,7 @@ public class ElevatorDown extends Command {
                 Constants.WristConstants.posTolerance
             ) {
                 m_elevator.setElevator(
-                    Constants.ElevatorConstants.pos[RobotState.algaeGround.ordinal()],
+                    Constants.ElevatorConstants.pos[RobotState.processor.ordinal()],
                     Constants.ElevatorConstants.downSlot
                 );
             }

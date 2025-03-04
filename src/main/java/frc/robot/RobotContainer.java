@@ -139,31 +139,30 @@ public class RobotContainer {
                     Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
                 )
             );
-        m_driverController
-            .b()
-            .whileTrue(
-                new CoralOuttake(
-                    this,
-                    m_intake,
-                    m_indexer,
-                    m_wrist,
-                    m_elevator,
-                    m_endEffector,
-                    l_leds
-                )
-            );
-
-        m_driverController
-            .povUp()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new ParallelDeadlineGroup(
-                        new WaitCommand(0.75),
-                        new RunServos(m_climber, false)
-                    ),
-                    new UpClimb(m_climber, m_wrist, m_intake, m_elevator)
-                )
-            );
+        // m_driverController
+        //     .b()
+        //     .whileTrue(
+        //         new CoralOuttake(
+        //             this,
+        //             m_intake,
+        //             m_indexer,
+        //             m_wrist,
+        //             m_elevator,
+        //             m_endEffector,
+        //             l_leds
+        //         )
+        //     );
+        // m_driverController
+        //     .povUp()
+        //     .onTrue(
+        //         new SequentialCommandGroup(
+        //             new ParallelDeadlineGroup(
+        //                 new WaitCommand(0.75),
+        //                 new RunServos(m_climber, false)
+        //             ),
+        //             new UpClimb(m_climber, m_wrist, m_intake, m_elevator, () -> m_operatorController.cross().getAsBoolean())
+        //         )
+        //     );
 
         m_driverController
             .povDown()
@@ -173,7 +172,7 @@ public class RobotContainer {
                         new WaitCommand(0.5),
                         new RunServos(m_climber, true)
                     ),
-                    new DownClimb(m_climber)
+                    new DownClimb(m_climber, () -> m_operatorController.cross().getAsBoolean())
                 )
             );
         m_driverController
@@ -186,24 +185,24 @@ public class RobotContainer {
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
-        // m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
-        m_driverController
-            .leftTrigger()
-            .whileTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(l_leds::intakeLeds),
-                    new GroundIntake(
-                        this,
-                        m_intake,
-                        m_indexer,
-                        m_wrist,
-                        m_endEffector,
-                        m_elevator,
-                        m_driverController,
-                        m_climber
-                    )
-                )
-            );
+        m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
+        // m_driverController
+        //     .leftTrigger()
+        //     .whileTrue(
+        //         new SequentialCommandGroup(
+        //             new InstantCommand(l_leds::intakeLeds),
+        //             new GroundIntake(
+        //                 this,
+        //                 m_intake,
+        //                 m_indexer,
+        //                 m_wrist,
+        //                 m_endEffector,
+        //                 m_elevator,
+        //                 m_driverController,
+        //                 m_climber
+        //             )
+        //         )
+        //     );
 
         m_driverController
             .rightTrigger()

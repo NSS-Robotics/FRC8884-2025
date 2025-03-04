@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
@@ -10,17 +12,20 @@ public class UpClimb extends Command {
     private final Wrist m_wrist;
     private final Intake m_intake;
     private final Elevator m_elevator;
+    private BooleanSupplier operatorSaysYes;
 
     public UpClimb(
         Climber m_climber,
         Wrist m_wrist,
         Intake m_intake,
-        Elevator m_elevator
+        Elevator m_elevator,
+        BooleanSupplier operatorSaysYes
     ) {
         this.m_climber = m_climber;
         this.m_wrist = m_wrist;
         this.m_intake = m_intake;
         this.m_elevator = m_elevator;
+        this.operatorSaysYes = operatorSaysYes;
 
         addRequirements(m_climber, m_wrist, m_intake);
     }
@@ -32,14 +37,16 @@ public class UpClimb extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_climber.setClimber(0, 0);
-        if (
-            m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
-        ) {
-            m_wrist.setWrist(
-                Constants.WristConstants.pos[Constants.RobotState.algaeGround.ordinal()]
-            );
-            // m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
+        if(operatorSaysYes.getAsBoolean()) {
+            m_climber.setClimber(0, 0);
+            if (
+                m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+            ) {
+                m_wrist.setWrist(
+                    Constants.WristConstants.pos[Constants.RobotState.algaeGround.ordinal()]
+                );
+                // m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
+            }
         }
     }
 

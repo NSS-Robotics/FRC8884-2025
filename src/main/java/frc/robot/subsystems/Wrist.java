@@ -66,7 +66,7 @@ public class Wrist extends SubsystemBase {
             0,
             Math.min(Constants.WristConstants.maxRotations, position)
         );
-        if (!rob.scoringLevel.equals(Constants.RobotState.barge)) {
+        if (rob.scoringLevel.equals(Constants.RobotState.barge)) {
             pivotCurrentLimitsConfigs.StatorCurrentLimit =
                 Constants.WristConstants.pedroDoIt;
         } else {
