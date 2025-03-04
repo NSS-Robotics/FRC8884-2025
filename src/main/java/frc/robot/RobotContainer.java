@@ -80,30 +80,25 @@ public class RobotContainer {
         scoringLevel = RobotState.l4;
 
         NamedCommands.registerCommand(
-            "Zero Gyro",
-            new InstantCommand(m_swerve::zeroGyro)
-        );
+                "Zero Gyro",
+                new InstantCommand(m_swerve::zeroGyro));
 
         NamedCommands.registerCommand("Align", new Align(this, m_swerve));
         NamedCommands.registerCommand(
-            "Align To Right Station",
-            new AlignToStation(this, m_swerve, false)
-        );
+                "Align To Right Station",
+                new AlignToStation(this, m_swerve, false));
         NamedCommands.registerCommand(
                 "Coral Placing",
                 new Up(this, m_elevator, m_wrist, m_endEffector, m_driverController));
         NamedCommands.registerCommand(
-            "Down Elevator",
-            new ElevatorDown(this, m_elevator, m_wrist, m_endEffector)
-        );
+                "Down Elevator",
+                new ElevatorDown(this, m_elevator, m_wrist, m_endEffector));
 
         NamedCommands.registerCommand(
-            "Intake",
-            new SequentialCommandGroup(
-                new InstantCommand(l_leds::stop),
-                new StationIntake(m_elevator, m_wrist, m_endEffector)
-            )
-        );
+                "Intake",
+                new SequentialCommandGroup(
+                        new InstantCommand(l_leds::stop),
+                        new StationIntake(m_elevator, m_wrist, m_endEffector)));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -147,31 +142,25 @@ public class RobotContainer {
                                 l_leds)));
 
         m_driverController
-            .povUp()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new ParallelDeadlineGroup(
-                        new WaitCommand(0.75),
-                        new RunServos(m_climber, false)
-                    ),
-                    new UpClimb(m_climber, m_wrist, m_intake, m_elevator)
-                )
-            );
+                .povUp()
+                .onTrue(
+                        new SequentialCommandGroup(
+                                new ParallelDeadlineGroup(
+                                        new WaitCommand(0.75),
+                                        new RunServos(m_climber, false)),
+                                new UpClimb(m_climber, m_wrist, m_intake, m_elevator)));
 
         m_driverController
-            .povDown()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new ParallelDeadlineGroup(
-                        new WaitCommand(0.5),
-                        new RunServos(m_climber, true)
-                    ),
-                    new DownClimb(m_climber)
-                )
-            );
+                .povDown()
+                .onTrue(
+                        new SequentialCommandGroup(
+                                new ParallelDeadlineGroup(
+                                        new WaitCommand(0.5),
+                                        new RunServos(m_climber, true)),
+                                new DownClimb(m_climber)));
         m_driverController
-            .a()
-            .whileTrue(new AlignToStation(this, m_swerve, false));
+                .a()
+                .whileTrue(new AlignToStation(this, m_swerve, false));
         m_driverController
                 .x()
                 .onTrue(new StationIntake(m_elevator, m_wrist, m_endEffector));
@@ -181,52 +170,43 @@ public class RobotContainer {
 
         // m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
         m_driverController
-            .leftTrigger()
-            .whileTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(l_leds::intakeLeds),
-                    new GroundIntake(
-                        this,
-                        m_intake,
-                        m_indexer,
-                        m_wrist,
-                        m_endEffector,
-                        m_elevator,
-                        m_driverController,
-                        m_climber
-                    )
-                )
-            );
+                .leftTrigger()
+                .whileTrue(
+                        new SequentialCommandGroup(
+                                new InstantCommand(l_leds::intakeLeds),
+                                new GroundIntake(
+                                        this,
+                                        m_intake,
+                                        m_indexer,
+                                        m_wrist,
+                                        m_endEffector,
+                                        m_elevator,
+                                        m_driverController,
+                                        m_climber)));
 
         m_driverController
-            .rightTrigger()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new Align(this, m_swerve),
-                    new InstantCommand(() -> l_leds.score(m_elevator)),
-                    new Up(
-                        this,
-                        m_elevator,
-                        m_wrist,
-                        m_endEffector,
-                        m_driverController
-                    )
-                )
-            );
+                .rightTrigger()
+                .onTrue(
+                        new SequentialCommandGroup(
+                                new Align(this, m_swerve),
+                                new InstantCommand(() -> l_leds.score(m_elevator)),
+                                new Up(
+                                        this,
+                                        m_elevator,
+                                        m_wrist,
+                                        m_endEffector,
+                                        m_driverController)));
         m_driverController
-            .rightBumper()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(() -> l_leds.score(m_elevator)),
-                    new Up(
-                        this,
-                        m_elevator,
-                        m_wrist,
-                        m_endEffector,
-                        m_driverController
-                    )
-                )
-            );
+                .rightBumper()
+                .onTrue(
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> l_leds.score(m_elevator)),
+                                new Up(
+                                        this,
+                                        m_elevator,
+                                        m_wrist,
+                                        m_endEffector,
+                                        m_driverController)));
         m_driverController
                 .leftBumper()
                 .onTrue(
@@ -242,6 +222,7 @@ public class RobotContainer {
                         new InstantCommand(() -> {
                             if (canChangeGamePiece()) {
                                 this.isCoral = true;
+                                l_leds.updateGamePiece();
                                 if (scoringLevel.equals(RobotState.barge)) {
                                     this.scoringLevel = RobotState.l4;
                                 } else if (scoringLevel.equals(RobotState.algaeReefHigh)) {
@@ -254,24 +235,23 @@ public class RobotContainer {
                             }
                         }));
         m_operatorController
-            .circle()
-            .onTrue(
-                new InstantCommand(() -> {
-                    if (canChangeGamePiece()) {
-                        this.isCoral = false;
-
-                        if (scoringLevel.equals(RobotState.l4)) {
-                            this.scoringLevel = RobotState.barge;
-                        } else if (scoringLevel.equals(RobotState.l3)) {
-                            this.scoringLevel = RobotState.algaeReefHigh;
-                        } else if (scoringLevel.equals(RobotState.l2)) {
-                            this.scoringLevel = RobotState.algaeReefLow;
-                        } else if (scoringLevel.equals(RobotState.l1)) {
-                            this.scoringLevel = RobotState.processor;
-                        }
-                    }
-                })
-            );
+                .circle()
+                .onTrue(
+                        new InstantCommand(() -> {
+                            if (canChangeGamePiece()) {
+                                this.isCoral = false;
+                                l_leds.updateGamePiece();
+                                if (scoringLevel.equals(RobotState.l4)) {
+                                    this.scoringLevel = RobotState.barge;
+                                } else if (scoringLevel.equals(RobotState.l3)) {
+                                    this.scoringLevel = RobotState.algaeReefHigh;
+                                } else if (scoringLevel.equals(RobotState.l2)) {
+                                    this.scoringLevel = RobotState.algaeReefLow;
+                                } else if (scoringLevel.equals(RobotState.l1)) {
+                                    this.scoringLevel = RobotState.processor;
+                                }
+                            }
+                        }));
         m_operatorController
                 .L1()
                 .whileTrue(new InstantCommand(() -> this.isLeft = true));
@@ -323,12 +303,10 @@ public class RobotContainer {
 
     public Command setupRobot() {
         return new SequentialCommandGroup(
-            new ParallelDeadlineGroup(
-                new WaitCommand(0.5),
-                new RunServos(m_climber, true)
-            ),
-            new RestingClimb(m_climber)
-        );
+                new ParallelDeadlineGroup(
+                        new WaitCommand(0.5),
+                        new RunServos(m_climber, true)),
+                new RestingClimb(m_climber));
     }
 
     // public RobotState getRobotState() {

@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.RobotState;
+
 import java.util.Map;
 
 public class LED extends SubsystemBase {
@@ -87,24 +89,44 @@ public class LED extends SubsystemBase {
 
         leds.start();
 
-        L1Leds();
-
     }
 
     private void checkGamepiece() {
         if (robotContainer.isCoral) {
             colour = Color.kAliceBlue;
         } else {
-            colour = Color.kMediumAquamarine;
+            colour = Color.kAquamarine;
+        }
+    }
+
+    public void updateGamePiece() {
+        checkGamepiece();
+        // Check the current level and recall the corresponding level
+        if (robotContainer.scoringLevel == RobotState.l1) {
+            L1Leds();
+        } else if (robotContainer.scoringLevel == RobotState.l2) {
+            L2Leds();
+        } else if (robotContainer.scoringLevel == RobotState.l3) {
+            L3Leds();
+        } else if (robotContainer.scoringLevel == RobotState.l4) {
+            L4Leds();
+        } else if (robotContainer.scoringLevel == RobotState.processor) {
+            L1Leds();
+        } else if (robotContainer.scoringLevel == RobotState.algaeReefLow) {
+            L2Leds();
+        } else if (robotContainer.scoringLevel == RobotState.algaeReefHigh) {
+            L3Leds();
+        } else if (robotContainer.scoringLevel == RobotState.barge) {
+            L4Leds();
         }
     }
 
     private void setLeds(LEDPattern leftPatternToSet, LEDPattern rightPatternToSet) {
         if (robotContainer.isLeft) {
-            leftPattern = leftPatternToSet.blink(Seconds.of(0.5));
+            leftPattern = leftPatternToSet.blink(Seconds.of(0.2));
             rightPattern = rightPatternToSet;
         } else {
-            rightPattern = rightPatternToSet.blink(Seconds.of(0.5));
+            rightPattern = rightPatternToSet.blink(Seconds.of(0.2));
             leftPatternToSet = leftPattern;
 
         }
