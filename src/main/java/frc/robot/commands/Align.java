@@ -132,8 +132,7 @@ public class Align extends Command {
     private final Pose2d[] blueAlgaePoses = new Pose2d[redAlgaePoses.length];
 
     private final double redBargeX = 10.253391158244787;
-    private final double blueBargeX = 0;
-
+    private final double blueBargeX = 8.24660884176;
 
     private final Pose2d redProcessorPose = new Pose2d();
     private final Pose2d blueProcessorPose = new Pose2d();
@@ -298,6 +297,12 @@ public class Align extends Command {
             Math.abs(pidController.getXError(target)) < 2 &&
             Math.abs(pidController.getYError(target)) < 2
         ) {
+            double botX = m_swerve.getPose().getX();
+
+            if (rob.scoringLevel.equals(RobotState.barge) && (blueBargeX < botX && botX < redBargeX)) {
+                return;
+            }
+
             pidController.alignLimelight(target);
         }
 
@@ -310,9 +315,6 @@ public class Align extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {}
-
-    @Override
     public boolean isFinished() {
         boolean isBarge = rob.scoringLevel.equals(Constants.RobotState.barge);
 
@@ -321,10 +323,9 @@ public class Align extends Command {
         }
 
         return (
-            timer.hasElapsed(2) ||
-            !isBarge
+            !timer.hasElapsed(2) && isBarge
         )
-        ? atSetpoint
-        : false;
+        ? false
+        : atSetpoint;
     }
 }

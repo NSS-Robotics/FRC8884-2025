@@ -89,7 +89,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Align", new Align(this, m_swerve));
         NamedCommands.registerCommand(
             "Align To Right Station",
-            new AlignToStation(this, m_swerve, false)
+            new AlignToStation(m_swerve)
         );
         NamedCommands.registerCommand(
             "Coral Placing",
@@ -142,7 +142,7 @@ public class RobotContainer {
         // m_driverController
         //     .b()
         //     .whileTrue(
-        //         new CoralOuttake(
+        //         new Outtake(
         //             this,
         //             m_intake,
         //             m_indexer,
@@ -175,12 +175,7 @@ public class RobotContainer {
                     new DownClimb(m_climber, () -> m_operatorController.cross().getAsBoolean())
                 )
             );
-        m_driverController
-            .a()
-            .whileTrue(new AlignToStation(this, m_swerve, false));
-        m_driverController
-            .x()
-            .onTrue(new StationIntake(m_elevator, m_wrist, m_endEffector));
+        
         m_driverController
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
@@ -203,6 +198,15 @@ public class RobotContainer {
         //             )
         //         )
         //     );
+
+        m_driverController
+            .x()
+            .onTrue(
+                new SequentialCommandGroup(
+                    new AlignToStation(m_swerve),
+                    new StationIntake(m_elevator, m_wrist, m_endEffector)
+                )
+            );
 
         m_driverController
             .rightTrigger()

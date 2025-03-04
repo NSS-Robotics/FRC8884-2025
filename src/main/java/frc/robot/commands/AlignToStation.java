@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import com.reduxrobotics.canand.CanandDeviceDetails.Msg;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,21 +12,34 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
 
 public class AlignToStation extends Command {
-
-    private RobotContainer rob;
     private Swerve m_swerve;
     private AlignPIDController pidController;
     private Pose2d target;
     private boolean atSetpoint;
-    private boolean isLeft;
 
-    public AlignToStation(RobotContainer rob, Swerve swerve, boolean isLeft) {
-        this.rob = rob;
+    private final Pose2d[] redStations = {
+        new Pose2d(
+            16.333905334503033,
+            1.17987787819051,
+            Rotation2d.fromDegrees(-55)
+        ),
+        new Pose2d(16.23, 6.9, Rotation2d.fromDegrees(55))
+    };
+
+    private final Pose2d[] blueStations = {
+        new Pose2d(1.27, 1.17987787819051, Rotation2d.fromDegrees(-125)),
+        new Pose2d(1.27, 6.9, Rotation2d.fromDegrees(125)),
+    };
+
+    public AlignToStation(Swerve swerve) {
         this.m_swerve = swerve;
-        this.isLeft = isLeft;
         pidController = new AlignPIDController(swerve);
 
         addRequirements(swerve);
+    }
+
+    public double mag(double x, double y) {
+        return Math.sqrt(x * x + y * y);
     }
 
     @Override
@@ -57,21 +72,25 @@ public class AlignToStation extends Command {
     @Override
     public void initialize() {
         atSetpoint = false;
-        target = m_swerve.isRed()
-            ? new Pose2d(
-                16.333905334503033,
-                1.17987787819051,
-                Rotation2d.fromDegrees(-55)
-            )
-            : new Pose2d(1.27, 6.9, Rotation2d.fromDegrees(-125));
-        // target = m_swerve.isRed()
-        //     ? new Pose2d(16.23, 6.9, Rotation2d.fromDegrees(45))
-        //     : new Pose2d(1.27, 6.9, Rotation2d.fromDegrees(135));
+        
+        Pose2d[] poses = m_swerve.isRed() ? redStations : blueStations;
+
+        Pose2d botPose = m_swerve.getPose();
+
+        double dist1 = mag(
+            poses[0].getX() - botPose.getX(),
+            poses[0].getY() - botPose.getY()
+        );
+        double dist2 = mag(
+            poses[1].getX() - botPose.getX(),
+            poses[1].getY() - botPose.getY()
+        );
+        target = dist1 < dist2 ? poses[0] : poses[1];
     }
 
     @Override
     public void end(boolean interrupted) {
-        if (rob.isCoral) m_swerve.stopSwerve();
+        m_swerve.stopSwerve();
     }
 
     @Override
