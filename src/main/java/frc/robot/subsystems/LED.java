@@ -69,14 +69,14 @@ public class LED extends SubsystemBase {
         leds.setLength(ledBuffer.getLength());
 
         rightBackLeds = ledBuffer.createView(0, 37);
-        rightFrontLeds = ledBuffer.createView(38, 75).reversed();
-        leftFrontLeds = ledBuffer.createView(76, 115);
+        rightFrontLeds = ledBuffer.createView(38, 74).reversed();
+        leftFrontLeds = ledBuffer.createView(75, 115);
         leftBackLeds = ledBuffer.createView(116, 153).reversed();
 
         // Solid and Blinking Patterns
-        solid = LEDPattern.solid(colour).atBrightness(Percent.of(20));
+        solid = LEDPattern.solid(colour).atBrightness(Percent.of(20)).atBrightness(Percent.of(20));
         strobe = LEDPattern.solid(colour).blink(Seconds.of(0.5)).atBrightness(Percent.of(20));
-        breathe = LEDPattern.solid(colour).breathe(Seconds.of(3)).atBrightness(Percent.of(20));
+        breathe = LEDPattern.solid(colour).breathe(Seconds.of(0.5)).atBrightness(Percent.of(20));
         gradient = LEDPattern.gradient(
                 LEDPattern.GradientType.kDiscontinuous,
                 colour,
@@ -84,12 +84,10 @@ public class LED extends SubsystemBase {
 
         leds.start();
 
-        leftFrontPattern = LEDPattern.solid(Color.kViolet);
-        leftBackPattern = LEDPattern.solid(Color.kViolet);
-        rightFrontPattern = LEDPattern.solid(Color.kViolet);
-        rightBackPattern = LEDPattern.solid(Color.kViolet);
-
-        L1Leds();
+        leftFrontPattern = LEDPattern.solid(Color.kViolet).atBrightness(Percent.of(30));
+        leftBackPattern = LEDPattern.solid(Color.kViolet).atBrightness(Percent.of(30));
+        rightFrontPattern = LEDPattern.solid(Color.kViolet).atBrightness(Percent.of(30));
+        rightBackPattern = LEDPattern.solid(Color.kViolet).atBrightness(Percent.of(30));
 
     }
 
@@ -97,28 +95,28 @@ public class LED extends SubsystemBase {
         if (robotContainer.isCoral) {
             colour = Color.kAliceBlue;
         } else {
-            colour = Color.kAquamarine;
+            colour = Color.kBlue;
         }
     }
 
     public void updateGamePiece() {
         checkGamepiece();
         // Check the current level and recall the corresponding level
-        if (robotContainer.scoringLevel == RobotState.l1) {
+        if (robotContainer.scoringLevel.equals(RobotState.l1)) {
             L1Leds();
-        } else if (robotContainer.scoringLevel == RobotState.l2) {
+        } else if (robotContainer.scoringLevel.equals(RobotState.l2)) {
             L2Leds();
-        } else if (robotContainer.scoringLevel == RobotState.l3) {
+        } else if (robotContainer.scoringLevel.equals(RobotState.l3)) {
             L3Leds();
-        } else if (robotContainer.scoringLevel == RobotState.l4) {
+        } else if (robotContainer.scoringLevel.equals(RobotState.l4)) {
             L4Leds();
-        } else if (robotContainer.scoringLevel == RobotState.processor) {
+        } else if (robotContainer.scoringLevel.equals(RobotState.processor)) {
             L1Leds();
-        } else if (robotContainer.scoringLevel == RobotState.algaeReefLow) {
+        } else if (robotContainer.scoringLevel.equals(RobotState.algaeReefLow)) {
             L2Leds();
-        } else if (robotContainer.scoringLevel == RobotState.algaeReefHigh) {
+        } else if (robotContainer.scoringLevel.equals(RobotState.algaeReefHigh)) {
             L3Leds();
-        } else if (robotContainer.scoringLevel == RobotState.barge) {
+        } else if (robotContainer.scoringLevel.equals(RobotState.barge)) {
             L4Leds();
         }
     }
@@ -130,8 +128,8 @@ public class LED extends SubsystemBase {
             rightFrontPattern = rightPatternToSet;
             rightBackPattern = rightPatternToSet;
         } else {
-            rightFrontPattern = rightPatternToSet.blink(Seconds.of(0.2));
-            rightBackPattern = rightPatternToSet.blink(Seconds.of(0.2));
+            rightFrontPattern = rightPatternToSet.blink(Seconds.of(0.1));
+            rightBackPattern = rightPatternToSet.blink(Seconds.of(0.1));
             leftBackPattern = leftPatternToSet;
             leftFrontPattern = leftPatternToSet;
 
@@ -142,9 +140,9 @@ public class LED extends SubsystemBase {
         checkGamepiece();
 
         leftL1Led = LEDPattern.steps(
-                Map.of(0, colour, 0.25, Color.kBlack));
+                Map.of(0, colour, 0.25, Color.kBlack)).atBrightness(Percent.of(20));
         rightL1Led = LEDPattern.steps(
-                Map.of(0, colour, 0.25, Color.kBlack));
+                Map.of(0, colour, 0.25, Color.kBlack)).atBrightness(Percent.of(20));
 
         setLeds(leftL1Led, rightL1Led);
     }
@@ -153,9 +151,9 @@ public class LED extends SubsystemBase {
         checkGamepiece();
 
         leftL2Led = LEDPattern.steps(
-                Map.of(0, colour, 0.4, Color.kBlack));
+                Map.of(0, colour, 0.4, Color.kBlack)).atBrightness(Percent.of(20));
         rightL2Led = LEDPattern.steps(
-                Map.of(0, colour, 0.4, Color.kBlack));
+                Map.of(0, colour, 0.4, Color.kBlack)).atBrightness(Percent.of(20));
 
         setLeds(leftL2Led, rightL2Led);
     }
@@ -164,9 +162,9 @@ public class LED extends SubsystemBase {
         checkGamepiece();
 
         leftL3Led = LEDPattern.steps(
-                Map.of(0, colour, 0.6, Color.kBlack));
+                Map.of(0, colour, 0.6, Color.kBlack)).atBrightness(Percent.of(20));
         rightL3Led = LEDPattern.steps(
-                Map.of(0, colour, 0.6, Color.kBlack));
+                Map.of(0, colour, 0.6, Color.kBlack)).atBrightness(Percent.of(20));
 
         setLeds(leftL3Led, rightL3Led);
     }
@@ -174,8 +172,8 @@ public class LED extends SubsystemBase {
     public void L4Leds() {
         checkGamepiece();
 
-        leftL4Led = LEDPattern.solid(colour);
-        rightL4Led = LEDPattern.solid(colour);
+        leftL4Led = LEDPattern.solid(colour).atBrightness(Percent.of(20));
+        rightL4Led = LEDPattern.solid(colour).atBrightness(Percent.of(20));
 
         setLeds(leftL4Led, rightL4Led);
     }
@@ -200,6 +198,7 @@ public class LED extends SubsystemBase {
     }
 
     public void alignLeds() {
+        colour = Color.kLimeGreen;
         leftFrontPattern = strobe;
         leftBackPattern = strobe;
         rightFrontPattern = strobe;
@@ -210,7 +209,8 @@ public class LED extends SubsystemBase {
         // ! Change to use max position not rotations
         elevatorProgress = LEDPattern.progressMaskLayer(
                 () -> m_elevator.getPosition() /
-                        Constants.ElevatorConstants.maxRotations);
+                        Constants.ElevatorConstants.maxRotations)
+                .atBrightness(Percent.of(20));
 
         leftFrontPattern = elevatorProgress;
         leftBackPattern = elevatorProgress;

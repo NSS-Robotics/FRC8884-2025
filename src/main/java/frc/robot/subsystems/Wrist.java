@@ -19,11 +19,9 @@ import frc.robot.RobotContainer;
 public class Wrist extends SubsystemBase {
 
     private static TalonFX motor = new TalonFX(
-        Constants.WristConstants.motorID
-    );
+            Constants.WristConstants.motorID);
 
-    private static TalonFXConfiguration motorConfig =
-        new TalonFXConfiguration();
+    private static TalonFXConfiguration motorConfig = new TalonFXConfiguration();
     private static Slot0Configs slot0Configs = motorConfig.Slot0;
 
     private static PositionVoltage pivotPositionVoltage;
@@ -35,10 +33,8 @@ public class Wrist extends SubsystemBase {
         this.rob = rob;
         encoder.clearStickyFaults();
         CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
-        canCoderConfig.MagnetSensor.SensorDirection =
-            SensorDirectionValue.Clockwise_Positive;
-        canCoderConfig.MagnetSensor.MagnetOffset =
-            Constants.WristConstants.magnetSensorOffset;
+        canCoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        canCoderConfig.MagnetSensor.MagnetOffset = Constants.WristConstants.magnetSensorOffset;
         encoder.getConfigurator().apply(canCoderConfig);
 
         slot0Configs.kP = Constants.WristConstants.kP;
@@ -46,8 +42,7 @@ public class Wrist extends SubsystemBase {
         slot0Configs.kD = Constants.WristConstants.kD;
 
         motorConfig.Feedback.FeedbackRemoteSensorID = encoder.getDeviceID();
-        motorConfig.Feedback.FeedbackSensorSource =
-            FeedbackSensorSourceValue.RemoteCANcoder;
+        motorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
         pivotCurrentLimitsConfigs = new CurrentLimitsConfigs();
         pivotCurrentLimitsConfigs.StatorCurrentLimitEnable = true;
 
@@ -63,12 +58,10 @@ public class Wrist extends SubsystemBase {
     public void setWrist(double position) {
         pivotCurrentLimitsConfigs.StatorCurrentLimitEnable = true;
         position = Math.max(
-            0,
-            Math.min(Constants.WristConstants.maxRotations, position)
-        );
-        if (!rob.scoringLevel.equals(Constants.RobotState.barge)) {
-            pivotCurrentLimitsConfigs.StatorCurrentLimit =
-                Constants.WristConstants.pedroDoIt;
+                0,
+                Math.min(Constants.WristConstants.maxRotations, position));
+        if (rob.scoringLevel.equals(Constants.RobotState.barge)) {
+            pivotCurrentLimitsConfigs.StatorCurrentLimit = Constants.WristConstants.pedroDoIt;
         } else {
             pivotCurrentLimitsConfigs.StatorCurrentLimitEnable = false;
         }
@@ -89,18 +82,15 @@ public class Wrist extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber(
-            "Claw Pivot Encoder",
-            encoder.getPosition().getValueAsDouble()
-        );
+                "Claw Pivot Encoder",
+                encoder.getPosition().getValueAsDouble());
 
         SmartDashboard.putNumber(
-            "Claw Pivot Motor",
-            motor.getPosition().getValueAsDouble()
-        );
+                "Claw Pivot Motor",
+                motor.getPosition().getValueAsDouble());
 
         SmartDashboard.putNumber(
-            "Claw Pivot Current",
-            motor.getStatorCurrent().getValueAsDouble()
-        );
+                "Claw Pivot Current",
+                motor.getStatorCurrent().getValueAsDouble());
     }
 }

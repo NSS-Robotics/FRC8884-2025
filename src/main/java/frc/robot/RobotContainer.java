@@ -97,7 +97,6 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "Intake",
                 new SequentialCommandGroup(
-                        new InstantCommand(l_leds::stop),
                         new StationIntake(m_elevator, m_wrist, m_endEffector)));
 
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -157,6 +156,7 @@ public class RobotContainer {
                                 new ParallelDeadlineGroup(
                                         new WaitCommand(0.5),
                                         new RunServos(m_climber, true)),
+                                new InstantCommand(l_leds::climb),
                                 new DownClimb(m_climber)));
         m_driverController
                 .a()
@@ -168,7 +168,7 @@ public class RobotContainer {
                 .y()
                 .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
-        // m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
+        m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
         m_driverController
                 .leftTrigger()
                 .whileTrue(
@@ -182,12 +182,14 @@ public class RobotContainer {
                                         m_endEffector,
                                         m_elevator,
                                         m_driverController,
-                                        m_climber)));
+                                        m_climber),
+                                new InstantCommand(l_leds::stop)));
 
         m_driverController
                 .rightTrigger()
                 .onTrue(
                         new SequentialCommandGroup(
+                                new InstantCommand(l_leds::alignLeds),
                                 new Align(this, m_swerve),
                                 new InstantCommand(() -> l_leds.score(m_elevator)),
                                 new Up(
@@ -213,7 +215,8 @@ public class RobotContainer {
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> l_leds.score(m_elevator)), // score() just tracks the elevator
                                                                                     // position and sets the LEDs
-                                new ElevatorDown(this, m_elevator, m_wrist, m_endEffector)));
+                                new ElevatorDown(this, m_elevator, m_wrist, m_endEffector),
+                                new InstantCommand(l_leds::stop)));
 
         // operator controls
         m_operatorController
@@ -254,10 +257,16 @@ public class RobotContainer {
                         }));
         m_operatorController
                 .L1()
-                .whileTrue(new InstantCommand(() -> this.isLeft = true));
+                .whileTrue(new InstantCommand(() -> {
+                    this.isLeft = true;
+                    l_leds.updateGamePiece();
+                }));
         m_operatorController
                 .R1()
-                .whileTrue(new InstantCommand(() -> this.isLeft = false));
+                .whileTrue(new InstantCommand(() -> {
+                    this.isLeft = false;
+                    l_leds.updateGamePiece();
+                }));
 
         m_operatorController
                 .povUp()
