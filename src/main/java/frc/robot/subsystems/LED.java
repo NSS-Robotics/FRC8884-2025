@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -17,10 +18,16 @@ public class LED extends SubsystemBase {
 
     private final AddressableLED leds;
     private final AddressableLEDBuffer ledBuffer;
-    private final AddressableLEDBufferView leftFrontLeds;
-    private final AddressableLEDBufferView leftBackLeds;
-    private final AddressableLEDBufferView rightFrontLeds;
-    private final AddressableLEDBufferView rightBackLeds;
+    // private final AddressableLEDBufferView leftFrontLeds;
+    // private final AddressableLEDBufferView leftBackLeds;
+    // private final AddressableLEDBufferView rightFrontLeds;
+    // private final AddressableLEDBufferView rightBackLeds;
+    private final AddressableLEDBufferView leftLeds;
+    private final AddressableLEDBufferView rightLeds;
+
+    // Left and Right Patterns
+    private LEDPattern leftPattern = LEDPattern.solid(Color.kBlack);
+    private LEDPattern rightPattern = LEDPattern.solid(Color.kBlack);
 
     // Level Segments
     private LEDPattern leftL1Led;
@@ -59,11 +66,15 @@ public class LED extends SubsystemBase {
 
         leds.setLength(ledBuffer.getLength());
 
-        rightBackLeds = ledBuffer.createView(0, 37);
-        rightFrontLeds = ledBuffer.createView(38, 75).reversed(); // Throws an error when it's more than 112 but I have
-                                                                   // no idea why
-        leftFrontLeds = ledBuffer.createView(76, 115).reversed();
-        leftBackLeds = ledBuffer.createView(116, 153);
+        // rightBackLeds = ledBuffer.createView(0, 37);
+        // rightFrontLeds = ledBuffer.createView(38, 75).reversed(); // Throws an error
+        // when it's more than 112 but I have
+        // // no idea why
+        // leftFrontLeds = ledBuffer.createView(76, 115).reversed();
+        // leftBackLeds = ledBuffer.createView(116, 153);
+
+        leftLeds = ledBuffer.createView(0, 75).reversed();
+        rightLeds = ledBuffer.createView(76, 153);
 
         // Solid and Blinking Patterns
         solid = LEDPattern.solid(colour).atBrightness(Percent.of(20));
@@ -74,10 +85,10 @@ public class LED extends SubsystemBase {
                 colour,
                 colour2).atBrightness(Percent.of(20));
 
-        solid.applyTo(ledBuffer);
-
-        leds.setData(ledBuffer);
         leds.start();
+
+        L1Leds();
+
     }
 
     private void checkGamepiece() {
@@ -88,17 +99,14 @@ public class LED extends SubsystemBase {
         }
     }
 
-    public void setLeds(LEDPattern leftPattern, LEDPattern rightPattern) {
-        stop();
-
+    private void setLeds(LEDPattern leftPatternToSet, LEDPattern rightPatternToSet) {
         if (robotContainer.isLeft) {
-            leftPattern.blink(Seconds.of(0.5)).applyTo(leftFrontLeds, leftBackLeds);
-            rightPattern.applyTo(rightFrontLeds, rightBackLeds);
-            leds.setData(ledBuffer);
+            leftPattern = leftPatternToSet.blink(Seconds.of(0.5));
+            rightPattern = rightPatternToSet;
         } else {
-            rightPattern.blink(Seconds.of(0.5)).applyTo(rightFrontLeds, rightBackLeds);
-            leftPattern.applyTo(leftFrontLeds, leftBackLeds);
-            leds.setData(ledBuffer);
+            rightPattern = rightPatternToSet.blink(Seconds.of(0.5));
+            leftPatternToSet = leftPattern;
+
         }
     }
 
@@ -146,20 +154,21 @@ public class LED extends SubsystemBase {
 
     public void intakeLeds() {
         colour = Color.kForestGreen;
-        breathe.applyTo(ledBuffer);
-        leds.setData(ledBuffer);
+        leftPattern = breathe;
+        rightPattern = breathe;
     }
 
     public void outtakeLeds() {
         colour = Color.kCoral;
         colour2 = Color.kRed;
-        gradient.applyTo(ledBuffer);
-        leds.setData(ledBuffer);
+
+        leftPattern = gradient;
+        rightPattern = gradient;
     }
 
     public void alignLeds() {
-        flashing.applyTo(ledBuffer);
-        leds.setData(ledBuffer);
+        leftPattern = flashing;
+        rightPattern = flashing;
     }
 
     public void score(Elevator m_elevator) {
@@ -169,7 +178,6 @@ public class LED extends SubsystemBase {
                         Constants.ElevatorConstants.maxRotations);
 
         elevatorProgress.applyTo(ledBuffer);
-        leds.setData(ledBuffer);
     }
 
     public void climb() {
@@ -180,6 +188,13 @@ public class LED extends SubsystemBase {
 
     public void stop() {
         LEDPattern.solid(Color.kBlack).applyTo(ledBuffer);
+        leds.setData(ledBuffer);
+    }
+
+    @Override
+    public void periodic() {
+        leftPattern.applyTo(leftLeds);
+        rightPattern.applyTo(rightLeds);
         leds.setData(ledBuffer);
     }
 }
