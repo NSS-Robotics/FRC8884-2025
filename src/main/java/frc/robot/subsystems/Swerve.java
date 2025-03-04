@@ -78,7 +78,7 @@ public class Swerve extends SubsystemBase {
                 (speeds, feedforwards) -> driveFromSpeeds(speeds, true), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
                 new PPHolonomicDriveController(
                     // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(0.12, 0.0, 0.0), // Translation PID constants
                     new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
                 ),
                 config, // The robot configuration
@@ -254,13 +254,6 @@ public class Swerve extends SubsystemBase {
         );
     }
 
-    public Rotation2d getGyroYaw() {
-        double yaw = gyro.getYaw() * 360;
-        return Rotation2d.fromDegrees(
-            isRed() ? yaw : yaw > 0 ? yaw - 180 : yaw + 180
-        );
-    }
-
     public void resetModulesToAbsolute() {
         for (SwerveModule mod : mSwerveMods) {
             mod.resetToAbsolute();
@@ -314,7 +307,7 @@ public class Swerve extends SubsystemBase {
         if (limelight != null) {
             swerveOdometry = createOdometry(limelight.botPose);
         } else {
-            swerveOdometry.update(getGyroYaw(), getModulePositions());
+            swerveOdometry.update(gyro.getRotation2d(), getModulePositions());
         }
 
         for (SwerveModule mod : mSwerveMods) {

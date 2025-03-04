@@ -89,47 +89,54 @@ public class Up extends Command {
                 Constants.ElevatorConstants.posTolerance
             ) {
                 if (m_claw.gamePieceDetected()) {
-                    if (!timer1.isRunning()) {
-                        timer1.restart();
-                    }
+                    // if (!timer1.isRunning()) {
+                    //     timer1.restart();
+                    // }
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
-                } else if (timer1.hasElapsed(1)) {
-                    m_claw.stopClaw();
                 }
+                //else if (timer1.hasElapsed(1.5)) {
+                //     m_claw.stopClaw();
+                // }
             }
         }
         // ALGAE
         else {
             // dont need to move elevator
             if (targetState.equals(RobotState.processor)) {
+                m_wrist.setWrist(targetWristPos);
                 if (
-                    m_elevator.getPosition() <
-                    Constants.ElevatorConstants.upThreshold
+                    m_wrist.getPosition() >
+                    Constants.WristConstants.minElevatorRaisedPos
                 ) {
-                    m_wrist.setWrist(targetWristPos);
-                    if (
-                        Math.abs(m_wrist.getPosition() - targetWristPos) <
-                            Constants.WristConstants.posTolerance &&
-                        m_claw.gamePieceDetected()
-                    ) {
-                        m_claw.setClaw(
-                            -Constants.EndEffectorConstants.outtakeVelocity
-                        );
-                        if (!timer1.isRunning()) {
-                            timer1.restart();
-                        }
+                    m_elevator.setElevator(
+                        targetElevatorPos,
+                        Constants.ElevatorConstants.upSlot
+                    );
+                }
+                if (
+                    Math.abs(m_elevator.getPosition() - targetElevatorPos) <
+                    Constants.ElevatorConstants.posTolerance
+                ) {
+                    m_claw.setClaw(
+                        -Constants.EndEffectorConstants.outtakeVelocity
+                    );
+                    if (!timer1.isRunning()) {
+                        timer1.restart();
                     }
-                    if (!m_claw.gamePieceDetected() && timer1.hasElapsed(0.5)) {
-                        m_claw.stopClaw();
-                    }
+                }
+                if (!m_claw.gamePieceDetected() && timer1.hasElapsed(1)) {
+                    m_claw.stopClaw();
                 }
             } else if (targetState.equals(RobotState.barge)) {
                 if (
                     m_wrist.getPosition() >
                     Constants.WristConstants.minElevatorRaisedPos
                 ) {
+                    System.out.println(
+                        "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+                    );
                     m_elevator.setElevator(
                         targetElevatorPos,
                         Constants.ElevatorConstants.upSlot
@@ -154,9 +161,7 @@ public class Up extends Command {
                         System.out.println(
                             "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
                         );
-                        if (!timer1.isRunning()) {
-                            timer1.restart();
-                        }
+                        // `
                         m_claw.setClaw(
                             -Constants.EndEffectorConstants.outtakeVelocity
                         );
@@ -221,6 +226,8 @@ public class Up extends Command {
     public void end(boolean interrupted) {
         robotContainer.runningCommand = false;
         m_driverController.setRumble(RumbleType.kBothRumble, 0);
+        timer1.stop();
+        timer2.stop();
     }
 
     // Returns true when the command should end.

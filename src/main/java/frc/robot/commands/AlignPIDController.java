@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
 
@@ -26,23 +27,27 @@ public class AlignPIDController extends PIDController {
                 target.getRotation().getDegrees(),
             }
         );
-        m_swerve.turnStates(turnPID(target), translation[0], translation[1]);
+
+        if (m_swerve.isRed()) {
+            m_swerve.turnStates(
+                turnPID(target),
+                translation[0],
+                translation[1]
+            );
+        } else {
+            m_swerve.turnStates(
+                turnPID(target),
+                -translation[0],
+                -translation[1]
+            );
+        }
     }
 
     public double getAngleError(Pose2d target) {
-        double poseR = m_swerve.getPose().getRotation().getDegrees();
-        double targetR = target.getRotation().getDegrees();
+        Rotation2d poseR = m_swerve.getPose().getRotation();
+        Rotation2d targetR = target.getRotation();
 
-        if (targetR > 90 || targetR < -90) {
-            if (poseR < 0) {
-                poseR += 360;
-            }
-            if (targetR < 0) {
-                targetR += 360;
-            }
-        }
-
-        double errorR = poseR - targetR;
+        double errorR = poseR.plus(targetR.unaryMinus()).getDegrees();
         SmartDashboard.putNumber("angle error", errorR);
         return errorR;
     }
