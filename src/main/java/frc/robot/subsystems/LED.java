@@ -20,12 +20,10 @@ public class LED extends SubsystemBase {
 
     private final AddressableLED leds;
     private final AddressableLEDBuffer ledBuffer;
-    // private final AddressableLEDBufferView leftFrontLeds;
-    // private final AddressableLEDBufferView leftBackLeds;
-    // private final AddressableLEDBufferView rightFrontLeds;
-    // private final AddressableLEDBufferView rightBackLeds;
-    private final AddressableLEDBufferView leftLeds;
-    private final AddressableLEDBufferView rightLeds;
+    private final AddressableLEDBufferView leftFrontLeds;
+    private final AddressableLEDBufferView leftBackLeds;
+    private final AddressableLEDBufferView rightFrontLeds;
+    private final AddressableLEDBufferView rightBackLeds;
 
     // Left and Right Patterns
     private LEDPattern leftPattern = LEDPattern.solid(Color.kBlack);
@@ -68,15 +66,10 @@ public class LED extends SubsystemBase {
 
         leds.setLength(ledBuffer.getLength());
 
-        // rightBackLeds = ledBuffer.createView(0, 37);
-        // rightFrontLeds = ledBuffer.createView(38, 75).reversed(); // Throws an error
-        // when it's more than 112 but I have
-        // // no idea why
-        // leftFrontLeds = ledBuffer.createView(76, 115).reversed();
-        // leftBackLeds = ledBuffer.createView(116, 153);
-
-        leftLeds = ledBuffer.createView(0, 75).reversed();
-        rightLeds = ledBuffer.createView(76, 153);
+        rightBackLeds = ledBuffer.createView(0, 37);
+        rightFrontLeds = ledBuffer.createView(38, 75).reversed();
+        leftFrontLeds = ledBuffer.createView(76, 115).reversed();
+        leftBackLeds = ledBuffer.createView(116, 153);
 
         // Solid and Blinking Patterns
         solid = LEDPattern.solid(colour).atBrightness(Percent.of(20));
@@ -215,8 +208,10 @@ public class LED extends SubsystemBase {
 
     @Override
     public void periodic() {
-        leftPattern.applyTo(leftLeds);
-        rightPattern.applyTo(rightLeds);
+        leftPattern.applyTo(leftFrontLeds);
+        leftPattern.applyTo(leftBackLeds);
+        rightPattern.applyTo(rightFrontLeds);
+        rightPattern.applyTo(rightBackLeds);
         leds.setData(ledBuffer);
     }
 }
