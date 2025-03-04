@@ -70,8 +70,8 @@ public class LED extends SubsystemBase {
 
         rightBackLeds = ledBuffer.createView(0, 37);
         rightFrontLeds = ledBuffer.createView(38, 75).reversed();
-        leftFrontLeds = ledBuffer.createView(76, 115).reversed();
-        leftBackLeds = ledBuffer.createView(116, 153);
+        leftFrontLeds = ledBuffer.createView(76, 115);
+        leftBackLeds = ledBuffer.createView(116, 153).reversed();
 
         // Solid and Blinking Patterns
         solid = LEDPattern.solid(colour).atBrightness(Percent.of(20));
@@ -88,6 +88,8 @@ public class LED extends SubsystemBase {
         leftBackPattern = LEDPattern.solid(Color.kViolet);
         rightFrontPattern = LEDPattern.solid(Color.kViolet);
         rightBackPattern = LEDPattern.solid(Color.kViolet);
+
+        L1Leds();
 
     }
 
