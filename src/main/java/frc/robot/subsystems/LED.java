@@ -122,17 +122,24 @@ public class LED extends SubsystemBase {
     }
 
     private void setLeds(LEDPattern leftPatternToSet, LEDPattern rightPatternToSet) {
-        if (robotContainer.isLeft) {
-            leftFrontPattern = leftPatternToSet.blink(Seconds.of(0.1));
-            leftBackPattern = leftPatternToSet.blink(Seconds.of(0.1));
+        if (robotContainer.isCoral) {
+            if (robotContainer.isLeft) {
+                leftFrontPattern = leftPatternToSet.blink(Seconds.of(0.1));
+                leftBackPattern = leftPatternToSet.blink(Seconds.of(0.1));
+                rightFrontPattern = rightPatternToSet;
+                rightBackPattern = rightPatternToSet;
+            } else {
+                rightFrontPattern = rightPatternToSet.blink(Seconds.of(0.1));
+                rightBackPattern = rightPatternToSet.blink(Seconds.of(0.1));
+                leftBackPattern = leftPatternToSet;
+                leftFrontPattern = leftPatternToSet;
+
+            }
+        } else {
+            leftFrontPattern = leftPatternToSet;
+            leftBackPattern = leftPatternToSet;
             rightFrontPattern = rightPatternToSet;
             rightBackPattern = rightPatternToSet;
-        } else {
-            rightFrontPattern = rightPatternToSet.blink(Seconds.of(0.1));
-            rightBackPattern = rightPatternToSet.blink(Seconds.of(0.1));
-            leftBackPattern = leftPatternToSet;
-            leftFrontPattern = leftPatternToSet;
-
         }
     }
 
