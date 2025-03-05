@@ -174,7 +174,7 @@ public class RobotContainer {
                         new WaitCommand(0.5),
                         new RunServos(m_climber, true)
                     ),
-                    new InstantCommand(l_leds::climb),
+                    new InstantCommand(l_leds::climbLeds),
                     new DownClimb(m_climber)
                 )
             );
