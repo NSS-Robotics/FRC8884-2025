@@ -41,13 +41,6 @@ public class LED extends SubsystemBase {
     private LEDPattern leftL4Led;
     private LEDPattern rightL4Led;
 
-    // strobe and Solid Patterns
-    private LEDPattern strobe;
-    private LEDPattern solid;
-    private LEDPattern breathe;
-    private LEDPattern gradient;
-    private LEDPattern gradientStrobe;
-
     // Elevator Progress
     private LEDPattern elevatorProgress;
 
@@ -74,41 +67,22 @@ public class LED extends SubsystemBase {
         leftFrontLeds = ledBuffer.createView(75, 115);
         leftBackLeds = ledBuffer.createView(116, 153).reversed();
 
-        // Solid and Blinking Patterns
-        solid = LEDPattern.solid(colour)
-                .atBrightness(Percent.of(20))
-                .atBrightness(Percent.of(20));
-        strobe = LEDPattern.solid(colour)
-                .blink(Seconds.of(0.5))
-                .atBrightness(Percent.of(20));
-        breathe = LEDPattern.solid(colour)
-                .breathe(Seconds.of(0.25))
-                .atBrightness(Percent.of(20));
-        gradient = LEDPattern.gradient(
-                LEDPattern.GradientType.kDiscontinuous,
-                colour,
-                colour2).atBrightness(Percent.of(20));
-        gradientStrobe = LEDPattern.gradient(
-                LEDPattern.GradientType.kDiscontinuous,
-                colour,
-                colour2).blink(Seconds.of(0.5)).atBrightness(Percent.of(20));
-
         leds.start();
 
         leftFrontPattern = LEDPattern.solid(Color.kViolet)
-                .breathe(Seconds.of(0.75))
+                .breathe(Seconds.of(3))
                 .atBrightness(Percent.of(30));
         leftBackPattern = LEDPattern.solid(Color.kViolet)
-                .breathe(Seconds.of(0.75))
+                .breathe(Seconds.of(3))
                 .atBrightness(Percent.of(30));
         rightFrontPattern = LEDPattern.solid(Color.kViolet)
-                .breathe(Seconds.of(0.75))
+                .breathe(Seconds.of(3))
                 .atBrightness(Percent.of(30));
         rightBackPattern = LEDPattern.solid(Color.kViolet)
-                .breathe(Seconds.of(0.75))
+                .breathe(Seconds.of(3))
                 .atBrightness(Percent.of(30));
 
-        intakeLeds();
+        climb();
     }
 
     private void checkGamepiece() {
@@ -207,16 +181,25 @@ public class LED extends SubsystemBase {
     }
 
     public void intakeLeds() {
-        colour = Color.kLimeGreen;
+        colour = Color.kBlue;
+
+        LEDPattern breathe = LEDPattern.solid(colour)
+                .breathe(Seconds.of(.25))
+                .atBrightness(Percent.of(20));
 
         leftFrontPattern = breathe;
         leftBackPattern = breathe;
         rightFrontPattern = breathe;
         rightBackPattern = breathe;
+
     }
 
     public void intakeCompleteLeds() {
         colour = Color.kViolet;
+
+        LEDPattern strobe = LEDPattern.solid(colour)
+                .blink(Seconds.of(0.5))
+                .atBrightness(Percent.of(20));
 
         leftFrontPattern = strobe;
         leftBackPattern = strobe;
@@ -228,6 +211,13 @@ public class LED extends SubsystemBase {
         colour = Color.kCoral;
         colour2 = Color.kAliceBlue;
 
+        LEDPattern gradientStrobe = LEDPattern.gradient(
+                LEDPattern.GradientType.kDiscontinuous,
+                colour,
+                colour2)
+                .blink(Seconds.of(0.5))
+                .atBrightness(Percent.of(20));
+
         leftFrontPattern = gradientStrobe;
         leftBackPattern = gradientStrobe;
         rightFrontPattern = gradientStrobe;
@@ -236,6 +226,11 @@ public class LED extends SubsystemBase {
 
     public void alignLeds() {
         colour = Color.kLimeGreen;
+
+        LEDPattern strobe = LEDPattern.solid(colour)
+                .blink(Seconds.of(0.5))
+                .atBrightness(Percent.of(20));
+
         leftFrontPattern = strobe;
         leftBackPattern = strobe;
         rightFrontPattern = strobe;
@@ -256,14 +251,30 @@ public class LED extends SubsystemBase {
     }
 
     public void climb() {
-        colour = Color.kYellow;
-        solid.applyTo(ledBuffer);
-        leds.setData(ledBuffer);
+        colour = Color.kAliceBlue;
+        colour2 = Color.kViolet;
+
+        LEDPattern gradientStrobe = LEDPattern.gradient(
+                LEDPattern.GradientType.kDiscontinuous,
+                colour,
+                colour2)
+                .blink(Seconds.of(0.5))
+                .atBrightness(Percent.of(20));
+
+        leftFrontPattern = gradientStrobe;
+        leftBackPattern = gradientStrobe;
+        rightFrontPattern = gradientStrobe;
+        rightBackPattern = gradientStrobe;
     }
 
     public void stop() {
-        LEDPattern.solid(Color.kBlack).applyTo(ledBuffer);
-        leds.setData(ledBuffer);
+        LEDPattern off = LEDPattern.solid(Color.kBlack);
+
+        leftFrontPattern = off;
+        leftBackPattern = off;
+        rightFrontPattern = off;
+        rightBackPattern = off;
+
     }
 
     @Override
