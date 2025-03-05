@@ -103,7 +103,6 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "Intake",
             new SequentialCommandGroup(
-                new InstantCommand(l_leds::stop),
                 new StationIntake(m_elevator, m_wrist, m_endEffector)
             )
         );
@@ -172,6 +171,7 @@ public class RobotContainer {
         //                 new WaitCommand(0.5),
         //                 new RunServos(m_climber, true)
         //             ),
+        //            new InstantCommand(l_leds::climbLeds),
         //             new DownClimb(m_climber, () ->
         //                 m_operatorController.cross().getAsBoolean()
         //             )
@@ -199,8 +199,10 @@ public class RobotContainer {
         //                 m_endEffector,
         //                 m_elevator,
         //                 m_driverController,
-        //                 m_climber
-        //             )
+        //                 m_climber,
+        //                 l_leds
+        //             ),
+        //             new InstantCommand(l_leds::stop)
         //         )
         //     );
 
@@ -217,6 +219,7 @@ public class RobotContainer {
         //     .rightTrigger()
         //     .onTrue(
         //         new SequentialCommandGroup(
+        //            new InstantCommand(l_leds::alignLeds),
         //             new Align(this, m_swerve),
         //             new InstantCommand(() -> l_leds.score(m_elevator)),
         //             new Up(
@@ -246,6 +249,16 @@ public class RobotContainer {
             .leftBumper()
             .onTrue(
                 new SequentialCommandGroup(
+                    new InstantCommand(() -> l_leds.score(m_elevator)), // score()
+                    // just
+                    // tracks
+                    // the
+                    // elevator
+                    // position
+                    // and
+                    // sets
+                    // the
+                    // LEDs
                     new ElevatorDown(this, m_elevator, m_wrist, m_endEffector),
                     new InstantCommand(l_leds::stop)
                 )
@@ -258,6 +271,7 @@ public class RobotContainer {
                 new InstantCommand(() -> {
                     if (canChangeGamePiece()) {
                         this.isCoral = true;
+                        l_leds.updateGamePiece();
                         if (scoringLevel.equals(RobotState.barge)) {
                             this.scoringLevel = RobotState.l4;
                         } else if (
@@ -280,7 +294,7 @@ public class RobotContainer {
                 new InstantCommand(() -> {
                     if (canChangeGamePiece()) {
                         this.isCoral = false;
-
+                        l_leds.updateGamePiece();
                         if (scoringLevel.equals(RobotState.l4)) {
                             this.scoringLevel = RobotState.barge;
                         } else if (scoringLevel.equals(RobotState.l3)) {
@@ -295,10 +309,20 @@ public class RobotContainer {
             );
         m_operatorController
             .L1()
-            .whileTrue(new InstantCommand(() -> this.isLeft = true));
+            .whileTrue(
+                new InstantCommand(() -> {
+                    this.isLeft = true;
+                    l_leds.updateGamePiece();
+                })
+            );
         m_operatorController
             .R1()
-            .whileTrue(new InstantCommand(() -> this.isLeft = false));
+            .whileTrue(
+                new InstantCommand(() -> {
+                    this.isLeft = false;
+                    l_leds.updateGamePiece();
+                })
+            );
 
         m_operatorController
             .povUp()
