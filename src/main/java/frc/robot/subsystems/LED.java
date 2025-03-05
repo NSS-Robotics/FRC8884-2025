@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Percent;
+import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -45,6 +46,7 @@ public class LED extends SubsystemBase {
     private LEDPattern solid;
     private LEDPattern breathe;
     private LEDPattern gradient;
+    private LEDPattern gradientStrobe;
 
     // Elevator Progress
     private LEDPattern elevatorProgress;
@@ -86,6 +88,10 @@ public class LED extends SubsystemBase {
                 LEDPattern.GradientType.kDiscontinuous,
                 colour,
                 colour2).atBrightness(Percent.of(20));
+        gradientStrobe = LEDPattern.gradient(
+                LEDPattern.GradientType.kDiscontinuous,
+                colour,
+                colour2).blink(Seconds.of(0.5)).atBrightness(Percent.of(20));
 
         leds.start();
 
@@ -220,12 +226,12 @@ public class LED extends SubsystemBase {
 
     public void outtakeLeds() {
         colour = Color.kCoral;
-        colour2 = Color.kRed;
+        colour2 = Color.kAliceBlue;
 
-        leftFrontPattern = gradient;
-        leftBackPattern = gradient;
-        rightFrontPattern = gradient;
-        rightBackPattern = gradient;
+        leftFrontPattern = gradientStrobe;
+        leftBackPattern = gradientStrobe;
+        rightFrontPattern = gradientStrobe;
+        rightBackPattern = gradientStrobe;
     }
 
     public void alignLeds() {
