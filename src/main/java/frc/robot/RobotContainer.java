@@ -86,9 +86,18 @@ public class RobotContainer {
             new InstantCommand(m_swerve::zeroGyro)
         );
 
+        NamedCommands.registerCommand(
+            "Target Left",
+            new InstantCommand(() -> isLeft = true)
+        );
+        NamedCommands.registerCommand(
+            "Target Right",
+            new InstantCommand(() -> isLeft = false)
+        );
+
         NamedCommands.registerCommand("Align", new Align(this, m_swerve));
         NamedCommands.registerCommand(
-            "Align To Right Station",
+            "Align To Station",
             new AlignToStation(m_swerve)
         );
         NamedCommands.registerCommand(

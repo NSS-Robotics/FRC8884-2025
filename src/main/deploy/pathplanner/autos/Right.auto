@@ -13,6 +13,18 @@
         {
           "type": "named",
           "data": {
+            "name": "Target Left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Red1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Align"
           }
         },
@@ -31,13 +43,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle-Right Red2"
+            "pathName": "Right Red2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Align To Right Station"
+            "name": "Align To Station"
           }
         },
         {

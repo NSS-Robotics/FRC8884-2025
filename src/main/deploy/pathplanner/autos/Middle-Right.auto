@@ -1,0 +1,85 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Target Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero Gyro"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Placing"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Down Elevator"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle-Right Red2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align To Station"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle-Right Red3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Placing"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Down Elevator"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
