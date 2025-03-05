@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -12,7 +11,6 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
-import java.lang.invoke.ConstantCallSite;
 
 public class Up extends Command {
 
@@ -28,6 +26,7 @@ public class Up extends Command {
     private double targetWristPos;
     private double outWristPos =
         Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
+    private double timerDelay = 1;
 
     public Up(
         RobotContainer robotContainer,
@@ -99,7 +98,7 @@ public class Up extends Command {
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
-                } else if (timer1.hasElapsed(1)) {
+                } else if (timer1.hasElapsed(timerDelay)) {
                     m_claw.stopClaw();
                 }
             }
@@ -130,7 +129,9 @@ public class Up extends Command {
                         timer1.restart();
                     }
                 }
-                if (!m_claw.gamePieceDetected() && timer1.hasElapsed(0.75)) {
+                if (
+                    !m_claw.gamePieceDetected() && timer1.hasElapsed(timerDelay)
+                ) {
                     m_claw.stopClaw();
                 }
             } else if (targetState.equals(RobotState.barge)) {
@@ -160,7 +161,7 @@ public class Up extends Command {
                         // m_claw.gamePieceDetected() &&
                         Math.abs(m_wrist.getPosition() - targetWristPos) <
                             Constants.WristConstants.posTolerance &&
-                        timer2.hasElapsed(1)
+                        timer2.hasElapsed(timerDelay)
                     ) {
                         System.out.println(
                             "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -170,16 +171,10 @@ public class Up extends Command {
                             -Constants.EndEffectorConstants.outtakeVelocity
                         );
                     }
-                    if (timer1.hasElapsed(1)) {
+                    if (timer1.hasElapsed(timerDelay)) {
                         m_claw.stopClaw();
                     }
                 }
-                // if (
-                //     !m_claw.gamePieceDetected() &&
-                //     targetState.equals(RobotState.barge)
-                // ) {
-                //     m_claw.stopClaw();
-                // }
             }
             // for things we need elevator for
             else {
@@ -237,6 +232,6 @@ public class Up extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return robotContainer.isCoral && timer1.hasElapsed(1);
+        return robotContainer.isCoral && timer1.hasElapsed(timerDelay);
     }
 }
