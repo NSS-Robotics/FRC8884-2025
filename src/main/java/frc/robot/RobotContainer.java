@@ -177,9 +177,7 @@ public class RobotContainer {
         //             )
         //         )
         //     );
-        // m_driverController
-        //     .a()
-        //     .whileTrue(new AlignToStation(this, m_swerve, false));
+        m_driverController.a().whileTrue(new AlignToStation(m_swerve));
         m_driverController
             .x()
             .onTrue(new StationIntake(m_elevator, m_wrist, m_endEffector));
@@ -206,14 +204,14 @@ public class RobotContainer {
         //         )
         //     );
 
-        m_driverController
-            .x()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new AlignToStation(m_swerve),
-                    new StationIntake(m_elevator, m_wrist, m_endEffector)
-                )
-            );
+        // m_driverController
+        //     .x()
+        //     .onTrue(
+        //         new SequentialCommandGroup(
+        //             new AlignToStation(m_swerve),
+        //             new StationIntake(m_elevator, m_wrist, m_endEffector)
+        //         )
+        //     );
 
         // m_driverController
         //     .rightTrigger()

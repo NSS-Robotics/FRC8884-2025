@@ -111,6 +111,11 @@ public class ElevatorDown extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return (
+            robotContainer.isCoral &&
+            m_elevator.getPosition() < 0.05 &&
+            Math.abs(m_wrist.getPosition() - handoffWristPos) <
+            Constants.WristConstants.posTolerance
+        );
     }
 }

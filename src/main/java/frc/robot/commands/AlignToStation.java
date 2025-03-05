@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import com.reduxrobotics.canand.CanandDeviceDetails.Msg;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,6 +11,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
 
 public class AlignToStation extends Command {
+
     private Swerve m_swerve;
     private AlignPIDController pidController;
     private Pose2d target;
@@ -23,12 +23,20 @@ public class AlignToStation extends Command {
             1.17987787819051,
             Rotation2d.fromDegrees(-55)
         ),
-        new Pose2d(16.23, 6.9, Rotation2d.fromDegrees(55))
+        new Pose2d(16.23, 6.9, Rotation2d.fromDegrees(55)),
     };
 
     private final Pose2d[] blueStations = {
-        new Pose2d(1.27, 1.17987787819051, Rotation2d.fromDegrees(-125)),
-        new Pose2d(1.27, 6.9, Rotation2d.fromDegrees(125)),
+        new Pose2d(
+            1.2692396853783483,
+            1.1844133124895877,
+            Rotation2d.fromDegrees(-128.7191925970513)
+        ),
+        new Pose2d(
+            1.263248021566995,
+            6.815782900461778,
+            Rotation2d.fromDegrees(123.32251262148702)
+        ),
     };
 
     public AlignToStation(Swerve swerve) {
@@ -46,8 +54,8 @@ public class AlignToStation extends Command {
     public void execute() {
         if (
             !atSetpoint &&
-            Math.abs(pidController.getXError(target)) < 0.1 &&
-            Math.abs(pidController.getYError(target)) < 0.1 &&
+            Math.abs(pidController.getXError(target)) < 0.05 &&
+            Math.abs(pidController.getYError(target)) < 0.05 &&
             Math.abs(pidController.getAngleError(target)) < 0.5
         ) {
             atSetpoint = true;
@@ -72,7 +80,7 @@ public class AlignToStation extends Command {
     @Override
     public void initialize() {
         atSetpoint = false;
-        
+
         Pose2d[] poses = m_swerve.isRed() ? redStations : blueStations;
 
         Pose2d botPose = m_swerve.getPose();
