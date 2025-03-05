@@ -80,7 +80,7 @@ public class ElevatorDown extends Command {
                 Constants.WristConstants.posTolerance
             ) {
                 m_elevator.setElevator(
-                    Constants.ElevatorConstants.pos[RobotState.algaeGround.ordinal()],
+                    Constants.ElevatorConstants.pos[RobotState.processor.ordinal()],
                     Constants.ElevatorConstants.downSlot
                 );
             }
@@ -111,6 +111,11 @@ public class ElevatorDown extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return (
+            robotContainer.isCoral &&
+            m_elevator.getPosition() < 0.05 &&
+            Math.abs(m_wrist.getPosition() - handoffWristPos) <
+            Constants.WristConstants.posTolerance
+        );
     }
 }

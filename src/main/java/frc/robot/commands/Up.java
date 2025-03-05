@@ -21,8 +21,8 @@ public class Up extends Command {
     private final Wrist m_wrist;
     private final Claw m_claw;
     private final CommandXboxController m_driverController;
-    private final Timer timer1;
-    private final Timer timer2;
+    private Timer timer1;
+    private Timer timer2;
     private RobotState targetState;
     private double targetElevatorPos;
     private double targetWristPos;
@@ -49,6 +49,8 @@ public class Up extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        timer1 = new Timer();
+        timer2 = new Timer();
         robotContainer.runningCommand = true;
         targetState = robotContainer.scoringLevel;
         targetElevatorPos =
@@ -59,6 +61,8 @@ public class Up extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        SmartDashboard.putNumber("timer 1", timer1.get());
+        SmartDashboard.putNumber("timer 2", timer2.get());
         // CORAL
         if (robotContainer.isCoral) {
             // Wrist logic
@@ -89,16 +93,15 @@ public class Up extends Command {
                 Constants.ElevatorConstants.posTolerance
             ) {
                 if (m_claw.gamePieceDetected()) {
-                    // if (!timer1.isRunning()) {
-                    //     timer1.restart();
-                    // }
+                    if (!timer1.isRunning()) {
+                        timer1.restart();
+                    }
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
+                } else if (timer1.hasElapsed(1)) {
+                    m_claw.stopClaw();
                 }
-                //else if (timer1.hasElapsed(1.5)) {
-                //     m_claw.stopClaw();
-                // }
             }
         }
         // ALGAE
@@ -122,11 +125,12 @@ public class Up extends Command {
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
+                    robotContainer.runningCommand = false;
                     if (!timer1.isRunning()) {
                         timer1.restart();
                     }
                 }
-                if (!m_claw.gamePieceDetected() && timer1.hasElapsed(1)) {
+                if (!m_claw.gamePieceDetected() && timer1.hasElapsed(0.75)) {
                     m_claw.stopClaw();
                 }
             } else if (targetState.equals(RobotState.barge)) {
@@ -166,7 +170,7 @@ public class Up extends Command {
                             -Constants.EndEffectorConstants.outtakeVelocity
                         );
                     }
-                    if (timer1.hasElapsed(0.75)) {
+                    if (timer1.hasElapsed(1)) {
                         m_claw.stopClaw();
                     }
                 }
@@ -233,6 +237,6 @@ public class Up extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return robotContainer.isCoral && timer1.hasElapsed(1);
     }
 }

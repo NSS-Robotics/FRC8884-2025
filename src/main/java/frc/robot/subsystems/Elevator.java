@@ -83,6 +83,7 @@ public class Elevator extends SubsystemBase {
             0,
             Math.min(Constants.ElevatorConstants.maxRotations, position)
         );
+        SmartDashboard.putNumber("elevator setpoint", position);
 
         elevatorPositionVoltage = new PositionVoltage(position).withSlot(slot);
 
