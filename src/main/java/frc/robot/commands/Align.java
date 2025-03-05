@@ -20,6 +20,7 @@ public class Align extends Command {
     private Pose2d target;
     private boolean atSetpoint;
 
+    // RED CORAL
     private final Pose2d[] redCoralPoses = {
         // 6
         new Pose2d(
@@ -89,6 +90,77 @@ public class Align extends Command {
         ),
     };
 
+    // BLUE CORAL
+    private final Pose2d[] blueCoralPoses = {
+        // 17
+        new Pose2d(
+            3.4262242976656996,
+            2.919854276977841,
+            Rotation2d.fromDegrees(40.88202068828051)
+        ),
+        new Pose2d(
+            4.231882968245696,
+            2.5333526571604104,
+            Rotation2d.fromDegrees(89.57861213295725)
+        ),
+        // 18
+        new Pose2d(
+            2.9951088752426487,
+            4.4084558948742885,
+            Rotation2d.fromDegrees(-19.667031946761643)
+        ),
+        new Pose2d(
+            3.0535927099289584,
+            3.50306401578839,
+            Rotation2d.fromDegrees(29.57005577056487)
+        ),
+        // 19
+        new Pose2d(
+            4.085112465590101,
+            5.513184762437938,
+            Rotation2d.fromDegrees(-79.09741439099274)
+        ),
+        new Pose2d(
+            3.3148819377449614,
+            4.999087951557525,
+            Rotation2d.fromDegrees(-30.72914539869436)
+        ),
+        // 20
+        new Pose2d(
+            5.5671103940629765,
+            5.125866653006128,
+            Rotation2d.fromDegrees(-139.247780993426)
+        ),
+        new Pose2d(
+            4.725074687581623,
+            5.536871238624893,
+            Rotation2d.fromDegrees(-90.59682516308365)
+        ),
+        // 21
+        new Pose2d(
+            5.98140383441108,
+            3.646841125383143,
+            Rotation2d.fromDegrees(160.5931605707581)
+        ),
+        new Pose2d(
+            5.912799104870625,
+            4.572151931157451,
+            Rotation2d.fromDegrees(-150.0842691212723)
+        ),
+        // 22
+        new Pose2d(
+            4.905252041858879,
+            2.5448529264687982,
+            Rotation2d.fromDegrees(100.86324577638341)
+        ),
+        new Pose2d(
+            5.673102655617341,
+            3.062575736600282,
+            Rotation2d.fromDegrees(149.41473467519194)
+        ),
+    };
+
+    // RED ALGAE
     private final Pose2d[] redAlgaePoses = {
         // 6
         new Pose2d(
@@ -128,12 +200,11 @@ public class Align extends Command {
         ),
     };
 
-    private final Pose2d[] blueCoralPoses = new Pose2d[redCoralPoses.length];
+    // BLUE ALGAE
     private final Pose2d[] blueAlgaePoses = new Pose2d[redAlgaePoses.length];
 
     private final double redBargeX = 10.253391158244787;
     private final double blueBargeX = 0;
-
 
     private final Pose2d redProcessorPose = new Pose2d();
     private final Pose2d blueProcessorPose = new Pose2d();
@@ -141,20 +212,9 @@ public class Align extends Command {
     private Timer timer;
 
     public Align(RobotContainer rob, Swerve swerve) {
-
         this.rob = rob;
         this.m_swerve = swerve;
         pidController = new AlignPIDController(swerve);
-
-        for (int i = 0; i < blueCoralPoses.length; i++) {
-            Pose2d pose = redCoralPoses[i];
-
-            blueCoralPoses[i] = new Pose2d(
-                pose.getX() - RED_BLUE_OFFSET,
-                pose.getY(),
-                pose.getRotation()
-            );
-        }
 
         for (int i = 0; i < blueAlgaePoses.length; i++) {
             Pose2d pose = redAlgaePoses[i];
@@ -320,11 +380,6 @@ public class Align extends Command {
             timer.restart();
         }
 
-        return (
-            timer.hasElapsed(2) ||
-            !isBarge
-        )
-        ? atSetpoint
-        : false;
+        return (!isBarge || timer.hasElapsed(2)) ? atSetpoint : false;
     }
 }

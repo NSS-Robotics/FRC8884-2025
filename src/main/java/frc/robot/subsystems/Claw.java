@@ -87,7 +87,7 @@ public class Claw extends SubsystemBase {
     }
 
     public boolean gamePieceDetected() {
-        return lasercan.getMeasurement().distance_mm < 140;
+        return lasercan.getMeasurement().distance_mm < 120;
     }
 
     @Override
