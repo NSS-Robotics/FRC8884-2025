@@ -89,7 +89,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Align", new Align(this, m_swerve));
         NamedCommands.registerCommand(
             "Align To Right Station",
-            new AlignToStation(this, m_swerve, false)
+            new AlignToStation(m_swerve)
         );
         NamedCommands.registerCommand(
             "Coral Placing",
@@ -142,7 +142,7 @@ public class RobotContainer {
         // m_driverController
         //     .b()
         //     .whileTrue(
-        //         new CoralOuttake(
+        //         new Outtake(
         //             this,
         //             m_intake,
         //             m_indexer,
@@ -205,6 +205,15 @@ public class RobotContainer {
         //             )
         //         )
         //     );
+
+        m_driverController
+            .x()
+            .onTrue(
+                new SequentialCommandGroup(
+                    new AlignToStation(m_swerve),
+                    new StationIntake(m_elevator, m_wrist, m_endEffector)
+                )
+            );
 
         // m_driverController
         //     .rightTrigger()
