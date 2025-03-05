@@ -23,14 +23,16 @@ public class GroundIntake extends Command {
     // private final LED m_led;
 
     public GroundIntake(
-            RobotContainer robotContainer,
-            Intake m_intake,
-            Indexer m_indexer,
-            Wrist m_wrist,
-            Claw m_claw,
-            Elevator m_elevator,
-            CommandXboxController driverController,
-            Climber climber, LED l_leds) {
+        RobotContainer robotContainer,
+        Intake m_intake,
+        Indexer m_indexer,
+        Wrist m_wrist,
+        Claw m_claw,
+        Elevator m_elevator,
+        CommandXboxController driverController,
+        Climber climber,
+        LED l_leds
+    ) {
         this.m_climber = climber;
         this.robotContainer = robotContainer;
         this.m_intake = m_intake;
@@ -42,13 +44,14 @@ public class GroundIntake extends Command {
         this.l_leds = l_leds;
 
         addRequirements(
-                m_intake,
-                m_indexer,
-                m_wrist,
-                m_claw,
-                m_elevator,
-                m_climber,
-                l_leds);
+            m_intake,
+            m_indexer,
+            m_wrist,
+            m_claw,
+            m_elevator,
+            m_climber,
+            l_leds
+        );
     }
 
     // Called when the command is initially scheduled.
@@ -66,26 +69,42 @@ public class GroundIntake extends Command {
             m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
             l_leds.intakeCompleteLeds();
         }
-        if (m_climber.getPosition() < Constants.ClimberConstants.restingRot - 5 &&
-                robotContainer.isCoral) {
+        if (
+            m_climber.getPosition() <
+                Constants.ClimberConstants.restingRot - 5 &&
+            robotContainer.isCoral
+        ) {
             m_wrist.setWrist(0.1);
             if (m_wrist.getPosition() > 0.08) {
                 m_climber.setClimber(Constants.ClimberConstants.restingRot, 0);
             }
         }
-        if (robotContainer.isCoral &&
-                m_climber.getPosition() > Constants.ClimberConstants.restingRot - 5) {
-            if (m_wrist.getPosition() < Constants.WristConstants.maxElevatorLoweredPos) {
+        if (
+            robotContainer.isCoral &&
+            m_climber.getPosition() > Constants.ClimberConstants.restingRot - 5
+        ) {
+            if (
+                m_wrist.getPosition() <
+                Constants.WristConstants.maxElevatorLoweredPos
+            ) {
                 m_elevator.setElevator(
-                        Constants.ElevatorConstants.pos[RobotState.handoff.ordinal()],
-                        Constants.ElevatorConstants.downSlot);
+                    Constants.ElevatorConstants.pos[RobotState.handoff.ordinal()],
+                    Constants.ElevatorConstants.downSlot
+                );
             }
-            if (m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold) {
+            if (
+                m_elevator.getPosition() <
+                Constants.ElevatorConstants.upThreshold
+            ) {
                 m_wrist.setWrist(
-                        Constants.WristConstants.pos[RobotState.handoff.ordinal()]);
+                    Constants.WristConstants.pos[RobotState.handoff.ordinal()]
+                );
             }
             m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
-            if (m_intake.getPosition() < Constants.IntakeConstants.intakeStartPos) {
+            if (
+                m_intake.getPosition() <
+                Constants.IntakeConstants.intakeStartPos
+            ) {
                 m_intake.setIntake(Constants.IntakeConstants.velocity, false);
                 m_indexer.setIndexer(Constants.IndexerConstants.velocity);
                 m_claw.setClaw(Constants.EndEffectorConstants.velocity);
@@ -93,18 +112,26 @@ public class GroundIntake extends Command {
         }
         // algae
         else {
-            if (m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold) {
+            if (
+                m_elevator.getPosition() <
+                Constants.ElevatorConstants.upThreshold
+            ) {
                 m_wrist.setWrist(
-                        Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]);
+                    Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
+                );
             }
-            if (Math.abs(
+            if (
+                Math.abs(
                     m_wrist.getPosition() -
-                            Constants.WristConstants.pos[RobotState.algaeGround
-                                    .ordinal()]) < Constants.WristConstants.posTolerance) {
+                    Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
+                ) <
+                Constants.WristConstants.posTolerance
+            ) {
                 m_claw.setClaw(Constants.EndEffectorConstants.velocity);
                 m_elevator.setElevator(
-                        Constants.ElevatorConstants.pos[RobotState.algaeGround.ordinal()],
-                        Constants.ElevatorConstants.upSlot);
+                    Constants.ElevatorConstants.pos[RobotState.algaeGround.ordinal()],
+                    Constants.ElevatorConstants.upSlot
+                );
             }
         }
     }
@@ -121,13 +148,11 @@ public class GroundIntake extends Command {
             // Reset the leds to their appropritate resting state
             l_leds.updateGamePiece();
         } else {
-            // m_wrist.setWrist(
-            // Constants.WristConstants.pos[RobotState.barge.ordinal()]
-            // );
             m_claw.setClaw(Constants.EndEffectorConstants.holdingVelocity);
             m_elevator.setElevator(
-                    Constants.ElevatorConstants.pos[RobotState.processor.ordinal()],
-                    Constants.ElevatorConstants.upSlot);
+                Constants.ElevatorConstants.pos[RobotState.processor.ordinal()],
+                Constants.ElevatorConstants.upSlot
+            );
         }
         // m_led.stopLED();
         robotContainer.runningCommand = false;

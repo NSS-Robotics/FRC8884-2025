@@ -19,6 +19,9 @@ public class Align extends Command {
     private AlignPIDController pidController;
     private Pose2d target;
     private boolean atSetpoint;
+    private double xTolerance;
+    private double yTolerance;
+    private double rTolerance;
 
     // RED CORAL
     private final Pose2d[] redCoralPoses = {
@@ -204,10 +207,18 @@ public class Align extends Command {
     private final Pose2d[] blueAlgaePoses = new Pose2d[redAlgaePoses.length];
 
     private final double redBargeX = 10.253391158244787;
-    private final double blueBargeX = 8.24660884176;
+    private final double blueBargeX = 7.3377792414058485;
 
-    private final Pose2d redProcessorPose = new Pose2d();
-    private final Pose2d blueProcessorPose = new Pose2d();
+    private final Pose2d redProcessorPose = new Pose2d(
+        11.584401479408479,
+        7.454700444315582,
+        Rotation2d.fromDegrees(90)
+    );
+    private final Pose2d blueProcessorPose = new Pose2d(
+        5.940399864994866,
+        0.5292682158376304,
+        Rotation2d.fromDegrees(-90)
+    );
 
     private Timer timer;
 
@@ -247,6 +258,9 @@ public class Align extends Command {
 
         if (rob.scoringLevel.equals(RobotState.barge)) {
             timer = new Timer();
+            xTolerance = 0.01;
+            yTolerance = 0.05;
+            rTolerance = 0.5;
 
             Pose2d pose = m_swerve.getPose();
             boolean isRed =
@@ -262,9 +276,16 @@ public class Align extends Command {
         }
 
         if (rob.scoringLevel.equals(RobotState.processor)) {
+            xTolerance = 0.08;
+            yTolerance = 0.08;
+            rTolerance = 0.5;
             target = m_swerve.isRed() ? redProcessorPose : blueProcessorPose;
             return;
         }
+
+        xTolerance = 0.01;
+        yTolerance = 0.01;
+        rTolerance = 0.5;
 
         Pose2d botPose = m_swerve.getPose();
 
@@ -345,9 +366,9 @@ public class Align extends Command {
     public void execute() {
         if (
             !atSetpoint &&
-            Math.abs(pidController.getXError(target)) < 0.01 &&
-            Math.abs(pidController.getYError(target)) < 0.01 &&
-            Math.abs(pidController.getAngleError(target)) < 0.5
+            Math.abs(pidController.getXError(target)) < xTolerance &&
+            Math.abs(pidController.getYError(target)) < yTolerance &&
+            Math.abs(pidController.getAngleError(target)) < rTolerance
         ) {
             atSetpoint = true;
             m_swerve.stopSwerve();

@@ -82,8 +82,6 @@ public class LED extends SubsystemBase {
         rightBackPattern = LEDPattern.solid(Color.kViolet)
             .breathe(Seconds.of(3))
             .atBrightness(Percent.of(30));
-
-        alignLeds();
     }
 
     private void checkGamepiece() {
@@ -209,7 +207,7 @@ public class LED extends SubsystemBase {
         colour = Color.kViolet;
 
         LEDPattern strobe = LEDPattern.solid(colour)
-            .blink(Seconds.of(0.5))
+            .blink(Seconds.of(0.2))
             .atBrightness(Percent.of(20));
 
         leftFrontPattern = strobe;

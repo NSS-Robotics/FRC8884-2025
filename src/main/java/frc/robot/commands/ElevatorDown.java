@@ -85,17 +85,12 @@ public class ElevatorDown extends Command {
                 );
             }
 
-            if (
-                m_elevator.getPosition() <
-                Constants.ElevatorConstants.upThreshold
-            ) {
-                if (!m_claw.gamePieceDetected()) {
-                    m_claw.stopClaw();
-                }
-                // when elevator down, cmd doesn't end but is effectively over.
-                if (robotContainer.runningCommand) {
-                    robotContainer.runningCommand = false;
-                }
+            // when elevator down, cmd doesn't end but is effectively over.
+            if (!m_claw.gamePieceDetected()) {
+                m_claw.stopClaw();
+            }
+            if (robotContainer.runningCommand) {
+                robotContainer.runningCommand = false;
             }
         }
     }

@@ -245,7 +245,7 @@ public final class Constants {
             0.2, // algaeGround
             1.82, // algaeReefLow
             2.8, // algaeReefHigh
-            0.6, // processor // changed
+            0.66, // processor // changed
             0, // climb
         };
 

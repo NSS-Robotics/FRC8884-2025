@@ -147,45 +147,47 @@ public class RobotContainer {
                     Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
                 )
             );
-        // m_driverController
-        //     .b()
-        //     .whileTrue(
-        //         new Outtake(
-        //             this,
-        //             m_intake,
-        //             m_indexer,
-        //             m_wrist,
-        //             m_elevator,
-        //             m_endEffector,
-        //             l_leds
-        //         )
-        //     );
-        // m_driverController
-        //     .povUp()
-        //     .onTrue(
-        //         new SequentialCommandGroup(
-        //             new ParallelDeadlineGroup(
-        //                 new WaitCommand(0.75),
-        //                 new RunServos(m_climber, false)
-        //             ),
-        //             new UpClimb(m_climber, m_wrist, m_intake, m_elevator, () -> m_operatorController.cross().getAsBoolean())
-        //         )
-        //     );
+        m_driverController
+            .b()
+            .whileTrue(
+                new Outtake(
+                    this,
+                    m_intake,
+                    m_indexer,
+                    m_wrist,
+                    m_elevator,
+                    m_endEffector,
+                    l_leds
+                )
+            );
+        m_driverController
+            .povUp()
+            .onTrue(
+                new SequentialCommandGroup(
+                    new ParallelDeadlineGroup(
+                        new WaitCommand(0.75),
+                        new RunServos(m_climber, false)
+                    ),
+                    new UpClimb(m_climber, m_wrist, m_intake, m_elevator, () ->
+                        m_operatorController.cross().getAsBoolean()
+                    )
+                )
+            );
 
-        // m_driverController
-        //     .povDown()
-        //     .onTrue(
-        //         new SequentialCommandGroup(
-        //             new ParallelDeadlineGroup(
-        //                 new WaitCommand(0.5),
-        //                 new RunServos(m_climber, true)
-        //             ),
-        //            new InstantCommand(l_leds::climbLeds),
-        //             new DownClimb(m_climber, () ->
-        //                 m_operatorController.cross().getAsBoolean()
-        //             )
-        //         )
-        //     );
+        m_driverController
+            .povDown()
+            .onTrue(
+                new SequentialCommandGroup(
+                    new ParallelDeadlineGroup(
+                        new WaitCommand(0.5),
+                        new RunServos(m_climber, true)
+                    ),
+                    new InstantCommand(l_leds::climbLeds),
+                    new DownClimb(m_climber, () ->
+                        m_operatorController.cross().getAsBoolean()
+                    )
+                )
+            );
         m_driverController.a().whileTrue(new AlignToStation(m_swerve));
         m_driverController
             .x()
@@ -195,51 +197,51 @@ public class RobotContainer {
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
         m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
-        // m_driverController
-        //     .leftTrigger()
-        //     .whileTrue(
-        //         new SequentialCommandGroup(
-        //             new InstantCommand(l_leds::intakeLeds),
-        //             new GroundIntake(
-        //                 this,
-        //                 m_intake,
-        //                 m_indexer,
-        //                 m_wrist,
-        //                 m_endEffector,
-        //                 m_elevator,
-        //                 m_driverController,
-        //                 m_climber,
-        //                 l_leds
-        //             ),
-        //             new InstantCommand(l_leds::stop)
-        //         )
-        //     );
+        m_driverController
+            .leftTrigger()
+            .whileTrue(
+                new SequentialCommandGroup(
+                    new InstantCommand(l_leds::intakeLeds),
+                    new GroundIntake(
+                        this,
+                        m_intake,
+                        m_indexer,
+                        m_wrist,
+                        m_endEffector,
+                        m_elevator,
+                        m_driverController,
+                        m_climber,
+                        l_leds
+                    ),
+                    new InstantCommand(l_leds::stop)
+                )
+            );
 
-        // m_driverController
-        //     .x()
-        //     .onTrue(
-        //         new SequentialCommandGroup(
-        //             new AlignToStation(m_swerve),
-        //             new StationIntake(m_elevator, m_wrist, m_endEffector)
-        //         )
-        //     );
+        m_driverController
+            .x()
+            .onTrue(
+                new SequentialCommandGroup(
+                    new AlignToStation(m_swerve),
+                    new StationIntake(m_elevator, m_wrist, m_endEffector)
+                )
+            );
 
-        // m_driverController
-        //     .rightTrigger()
-        //     .onTrue(
-        //         new SequentialCommandGroup(
-        //            new InstantCommand(l_leds::alignLeds),
-        //             new Align(this, m_swerve),
-        //             new InstantCommand(() -> l_leds.score(m_elevator)),
-        //             new Up(
-        //                 this,
-        //                 m_elevator,
-        //                 m_wrist,
-        //                 m_endEffector,
-        //                 m_driverController
-        //             )
-        //         )
-        //     );
+        m_driverController
+            .rightTrigger()
+            .onTrue(
+                new SequentialCommandGroup(
+                    new InstantCommand(l_leds::alignLeds),
+                    new Align(this, m_swerve).asProxy(),
+                    new InstantCommand(() -> l_leds.score(m_elevator)),
+                    new Up(
+                        this,
+                        m_elevator,
+                        m_wrist,
+                        m_endEffector,
+                        m_driverController
+                    )
+                )
+            );
         m_driverController
             .rightBumper()
             .onTrue(
@@ -381,11 +383,20 @@ public class RobotContainer {
 
     public Command setupRobot() {
         return new SequentialCommandGroup(
-            // new ParallelDeadlineGroup(
-            //     // new WaitCommand(0.5),
-            //     // new RunServos(m_climber, true)
-            // ),
-            // new RestingClimb(m_climber)
+            new RunWrist(m_wrist, m_elevator, 0.1),
+            new ParallelDeadlineGroup(
+                new WaitCommand(0.5),
+                new RunServos(m_climber, true)
+            ),
+            new ParallelDeadlineGroup(
+                new WaitCommand(0.5),
+                new RestingClimb(m_climber)
+            ),
+            new RunWrist(
+                m_wrist,
+                m_elevator,
+                Constants.WristConstants.pos[RobotState.handoff.ordinal()]
+            )
         );
     }
 

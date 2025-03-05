@@ -139,9 +139,6 @@ public class Up extends Command {
                     m_wrist.getPosition() >
                     Constants.WristConstants.minElevatorRaisedPos
                 ) {
-                    System.out.println(
-                        "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
-                    );
                     m_elevator.setElevator(
                         targetElevatorPos,
                         Constants.ElevatorConstants.upSlot
@@ -163,10 +160,9 @@ public class Up extends Command {
                             Constants.WristConstants.posTolerance &&
                         timer2.hasElapsed(timerDelay)
                     ) {
-                        System.out.println(
-                            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                        );
-                        // `
+                        if (!timer1.isRunning()) {
+                            timer1.restart();
+                        }
                         m_claw.setClaw(
                             -Constants.EndEffectorConstants.outtakeVelocity
                         );

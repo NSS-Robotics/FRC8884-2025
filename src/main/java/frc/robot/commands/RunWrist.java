@@ -7,7 +7,7 @@ import frc.robot.subsystems.*;
 /** An example command that uses an example subsystem. */
 public class RunWrist extends Command {
 
-    private final Wrist m_clawPivot;
+    private final Wrist m_wrist;
     private final Elevator m_elevator;
     private final double pos;
 
@@ -17,11 +17,11 @@ public class RunWrist extends Command {
      * @param subsystem The subsystem used by this command.
      */
     public RunWrist(Wrist clawPivot, Elevator elevator, double pos) {
-        m_clawPivot = clawPivot;
+        m_wrist = clawPivot;
         m_elevator = elevator;
         this.pos = pos;
 
-        addRequirements(m_clawPivot);
+        addRequirements(m_wrist);
     }
 
     // Called when the command is initially scheduled.
@@ -39,7 +39,7 @@ public class RunWrist extends Command {
         if (
             m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
         ) {
-            m_clawPivot.setWrist(pos);
+            m_wrist.setWrist(pos);
         }
         // }
     }
@@ -51,6 +51,9 @@ public class RunWrist extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return (
+            Math.abs(m_wrist.getPosition() - pos) <
+            Constants.WristConstants.posTolerance
+        );
     }
 }
