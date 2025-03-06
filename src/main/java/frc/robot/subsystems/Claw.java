@@ -53,7 +53,7 @@ public class Claw extends SubsystemBase {
         try {
             lasercan.setRangingMode(LaserCan.RangingMode.SHORT);
             lasercan.setRegionOfInterest(
-                new LaserCan.RegionOfInterest(8, 8, 16, 16)
+                new LaserCan.RegionOfInterest(8, 8, 8, 8)
             );
             lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         } catch (ConfigurationFailedException e) {
