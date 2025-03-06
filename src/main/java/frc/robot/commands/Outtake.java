@@ -55,7 +55,7 @@ public class Outtake extends Command {
                 Constants.ElevatorConstants.upThreshold
             ) {
                 m_wrist.setWrist(
-                    Constants.WristConstants.pos[RobotState.handoff.ordinal()]
+                    Constants.WristConstants.pos[RobotState.processor.ordinal()]
                 );
                 m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
                 if (
