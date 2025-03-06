@@ -69,19 +69,19 @@ public class GroundIntake extends Command {
             m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
             l_leds.intakeCompleteLeds();
         }
-        // if (
-        //     m_climber.getPosition() <
-        //         Constants.ClimberConstants.restingRot - 5 &&
-        //     robotContainer.isCoral
-        // ) {
-        //     m_wrist.setWrist(0.1);
-        //     if (m_wrist.getPosition() > 0.08) {
-        //         m_climber.setClimber(Constants.ClimberConstants.restingRot, 0);
-        //     }
-        // }
         if (
+            m_climber.getPosition() <
+                Constants.ClimberConstants.restingRot - 5 &&
             robotContainer.isCoral
-            //&& m_climber.getPosition() > Constants.ClimberConstants.restingRot - 5
+        ) {
+            m_wrist.setWrist(0.1);
+            if (m_wrist.getPosition() > 0.08) {
+                m_climber.setClimber(Constants.ClimberConstants.restingRot, 0);
+            }
+        }
+        if (
+            robotContainer.isCoral &&
+            m_climber.getPosition() > Constants.ClimberConstants.restingRot - 5
         ) {
             if (
                 m_wrist.getPosition() <

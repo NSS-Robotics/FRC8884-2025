@@ -10,16 +10,9 @@ import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
- * constants are needed, to reduce verbosity.
+ * Luke, I am your father
+ * hwllo from the bombynation
+ * ;>s
  */
 public final class Constants {
 
@@ -246,7 +239,7 @@ public final class Constants {
             0.2, // algaeGround
             1.82, // algaeReefLow
             2.8, // algaeReefHigh
-            0.66, // processor // changed
+            0.66, // processor
             0, // climb
         };
 
@@ -258,9 +251,9 @@ public final class Constants {
         public static final int encoder = 42;
         public static final int motorID = 40;
         public static final double magnetSensorOffset = -0.413818359375; // This should be undefbeefed
-        public static final double kP = 16; // Why so much bad food
-        public static final double kI = 0; // Why so much bad food
-        public static final double kD = 0; // Why so much bad food
+        public static final double kP = 16;
+        public static final double kI = 0;
+        public static final double kD = 0;
         // public static final double handoffPos = 0.02976171875;
         public static final double[] pos = {
             0.63, // l1
@@ -270,10 +263,10 @@ public final class Constants {
             0.455810546875, // stationIntake
             0.03576171875, // handoff
             0.39, // barge
-            0.622, // algaeGround // changed
+            0.622, // algaeGround
             0.626, // algaeReefLow
             0.626, // algaeReefHigh
-            0.622, // processor // changed
+            0.622, // processor
             0.4, // climb
         };
         public static final double posTolerance = 0.05;
@@ -281,8 +274,7 @@ public final class Constants {
         public static final double minElevatorRaisedPos = 0.323;
         public static final double maxElevatorLoweredPos = 0.634;
         public static final double minOuttakePos = 0.45;
-        // barge wrist current limit
-        public static final double pedroDoIt = 20; // change
+        public static final double pedroDoIt = 20;
     }
 
     public static final class ClimberConstants {
@@ -295,7 +287,7 @@ public final class Constants {
         public static final double upkI = 0;
         public static final double upkD = 0.020493;
         // public static final double downkP = 3.781;
-        public static final double downkP = 50;
+        public static final double downkP = 55; // testing
         public static final double downkI = 0;
         public static final double downkD = 0.020493;
         public static final double maxRotations = 40.88916015625;
