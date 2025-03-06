@@ -33,9 +33,9 @@ public class AlignToStation extends Command {
             Rotation2d.fromDegrees(-128.7191925970513)
         ),
         new Pose2d(
-            1.263248021566995,
-            6.815782900461778,
-            Rotation2d.fromDegrees(123.32251262148702)
+            1.21958906088757,
+            6.8990669868565435,
+            Rotation2d.fromDegrees(125.8879236365134)
         ),
     };
 
