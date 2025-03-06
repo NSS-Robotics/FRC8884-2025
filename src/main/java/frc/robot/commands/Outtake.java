@@ -92,7 +92,12 @@ public class Outtake extends Command {
     // Called once the command ends or is interrupted%.
     @Override
     public void end(boolean interrupted) {
-        m_intake.setPivot(Constants.IntakeConstants.upPosition, 0);
+        m_intake.setPivot(
+            robotContainer.intakeDown
+                ? Constants.IntakeConstants.intakePosition
+                : Constants.IntakeConstants.upPosition,
+            robotContainer.intakeDown ? 1 : 0
+        );
         m_intake.stopIntake();
         m_indexer.stopIndexer();
         l_Led.stop();

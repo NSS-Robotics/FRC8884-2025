@@ -1,10 +1,9 @@
 package frc.robot.commands;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
+import java.util.function.BooleanSupplier;
 
 public class UpClimb extends Command {
 
@@ -37,15 +36,16 @@ public class UpClimb extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if(operatorSaysYes.getAsBoolean()) {
+        if (operatorSaysYes.getAsBoolean()) {
             m_climber.setClimber(0, 0);
             if (
-                m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+                m_elevator.getPosition() <
+                Constants.ElevatorConstants.upThreshold
             ) {
                 m_wrist.setWrist(
                     Constants.WristConstants.pos[Constants.RobotState.algaeGround.ordinal()]
                 );
-                // m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
+                m_intake.setPivot(Constants.IntakeConstants.upPosition, 0);
             }
         }
     }

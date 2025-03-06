@@ -62,6 +62,7 @@ public class RobotContainer {
     public boolean runningCommand = false;
     public boolean fieldCentric = false;
     public RobotState scoringLevel;
+    public boolean intakeDown;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -115,7 +116,7 @@ public class RobotContainer {
                 new StationIntake(m_elevator, m_wrist, m_endEffector)
             )
         );
-
+        intakeDown = false;
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
@@ -188,7 +189,7 @@ public class RobotContainer {
                     )
                 )
             );
-        m_driverController.a().whileTrue(new AlignToStation(m_swerve));
+        m_driverController.a().onTrue(new ToggleIntake(this, m_intake));
         m_driverController
             .x()
             .onTrue(new StationIntake(m_elevator, m_wrist, m_endEffector));
