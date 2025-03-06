@@ -201,7 +201,6 @@ public class RobotContainer {
             .leftTrigger()
             .whileTrue(
                 new SequentialCommandGroup(
-                    new InstantCommand(l_leds::intakeLeds),
                     new GroundIntake(
                         this,
                         m_intake,
@@ -212,8 +211,7 @@ public class RobotContainer {
                         m_driverController,
                         m_climber,
                         l_leds
-                    ),
-                    new InstantCommand(l_leds::stop)
+                    )
                 )
             );
 

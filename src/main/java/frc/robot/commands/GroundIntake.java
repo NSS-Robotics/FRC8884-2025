@@ -63,7 +63,7 @@ public class GroundIntake extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // m_led.runLED();
+        l_leds.intakeLeds();
         // coral
         if (m_claw.gamePieceDetected()) {
             m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
@@ -154,7 +154,7 @@ public class GroundIntake extends Command {
                 Constants.ElevatorConstants.upSlot
             );
         }
-        // m_led.stopLED();
+        l_leds.stop();
         robotContainer.runningCommand = false;
     }
 
