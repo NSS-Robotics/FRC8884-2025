@@ -197,7 +197,7 @@ public class LED extends SubsystemBase {
     }
 
     public void intakeLeds() {
-        colour = Color.kHotPink;
+        colour = Color.kAliceBlue;
 
         LEDPattern breathe = LEDPattern.solid(colour)
             .breathe(Seconds.of(.25))
