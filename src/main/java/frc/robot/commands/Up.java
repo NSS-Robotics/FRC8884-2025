@@ -26,7 +26,7 @@ public class Up extends Command {
     private double targetWristPos;
     private double outWristPos =
         Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
-    private double timerDelay = 1;
+    private double timerDelay = 2;
 
     public Up(
         RobotContainer robotContainer,
