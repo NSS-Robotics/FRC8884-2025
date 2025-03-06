@@ -44,7 +44,7 @@ public class Climber extends SubsystemBase {
         lMotor.clearStickyFaults();
         resetEncoders();
         // Put these in Brake mode when running for real.
-        lMotor.setNeutralMode(NeutralModeValue.Brake);
+        lMotor.setNeutralMode(NeutralModeValue.Coast);
         // rMotor.setControl(leader);
 
         upPID.kP = Constants.ClimberConstants.upkP;
