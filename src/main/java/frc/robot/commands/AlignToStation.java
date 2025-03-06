@@ -19,11 +19,15 @@ public class AlignToStation extends Command {
 
     private final Pose2d[] redStations = {
         new Pose2d(
-            16.333905334503033,
-            1.17987787819051,
-            Rotation2d.fromDegrees(-55)
+            16.347670560240708,
+            1.2212042219638495,
+            Rotation2d.fromDegrees(-56.97384521966168)
         ),
-        new Pose2d(16.23, 6.9, Rotation2d.fromDegrees(55)),
+        new Pose2d(
+            16.255201947463604,
+            6.879534286109712,
+            Rotation2d.fromDegrees(51.41240189667511)
+        ),
     };
 
     private final Pose2d[] blueStations = {

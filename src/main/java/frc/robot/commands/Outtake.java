@@ -68,8 +68,17 @@ public class Outtake extends Command {
                     );
                     m_indexer.setIndexer(-Constants.IndexerConstants.velocity);
                 }
-            } else {
-                m_claw.setClaw(Constants.EndEffectorConstants.outtakeVelocity);
+                if (
+                    Math.abs(
+                        m_wrist.getPosition() -
+                        Constants.WristConstants.pos[RobotState.processor.ordinal()]
+                    ) <
+                    Constants.WristConstants.posTolerance
+                ) {
+                    m_claw.setClaw(
+                        -Constants.EndEffectorConstants.outtakeVelocity
+                    );
+                }
             }
         }
         // algae
