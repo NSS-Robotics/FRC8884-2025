@@ -221,6 +221,7 @@ public class RobotContainer {
             .x()
             .onTrue(
                 new SequentialCommandGroup(
+                    new InstantCommand(l_leds::stationAlignLeds),
                     new AlignToStation(m_swerve),
                     new StationIntake(m_elevator, m_wrist, m_endEffector)
                 )
