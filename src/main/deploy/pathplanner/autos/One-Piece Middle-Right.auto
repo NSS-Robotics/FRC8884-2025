@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero Gyro"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Target Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle-Right Red1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Placing"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Down Elevator"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
