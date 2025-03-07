@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.reduxrobotics.canand.CanandDeviceDetails.Msg;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -68,6 +69,7 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        CameraServer.startAutomaticCapture();
         // Configure the trigger bindings
         configureBindings();
         m_swerve.setDefaultCommand(
@@ -168,10 +170,10 @@ public class RobotContainer {
                     new ParallelDeadlineGroup(
                         new WaitCommand(0.75),
                         new RunServos(m_climber, false)
-                    ) //,
-                    // new UpClimb(m_climber, m_wrist, m_intake, m_elevator, () ->
-                    //     m_operatorController.cross().getAsBoolean()
-                    // )
+                    ),
+                    new UpClimb(m_climber, m_wrist, m_intake, m_elevator, () ->
+                        m_operatorController.cross().getAsBoolean()
+                    )
                 )
             );
 
@@ -183,10 +185,10 @@ public class RobotContainer {
                         new WaitCommand(0.5),
                         new RunServos(m_climber, true)
                     ),
-                    new InstantCommand(l_leds::climbLeds) //,
-                    // new DownClimb(m_climber, () ->
-                    //     m_operatorController.cross().getAsBoolean()
-                    // )
+                    new InstantCommand(l_leds::climbLeds),
+                    new DownClimb(m_climber, () ->
+                        m_operatorController.cross().getAsBoolean()
+                    )
                 )
             );
         m_driverController.a().whileTrue(new ToggleIntake(this, m_intake));
@@ -383,7 +385,7 @@ public class RobotContainer {
             new RunWrist(m_wrist, m_elevator, 0.1),
             new ParallelDeadlineGroup(
                 new WaitCommand(0.5),
-                new RunServos(m_climber, true)
+                new RunServos(m_climber, false)
             ),
             new ParallelDeadlineGroup(
                 new WaitCommand(0.5),

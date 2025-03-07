@@ -27,6 +27,7 @@ public class Up extends Command {
     private double outWristPos =
         Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
     private double timerDelay = 2;
+    private boolean ended = false;
 
     public Up(
         RobotContainer robotContainer,
@@ -50,6 +51,8 @@ public class Up extends Command {
     public void initialize() {
         timer1 = new Timer();
         timer2 = new Timer();
+        timerDelay = 2;
+        ended = false;
         robotContainer.runningCommand = true;
         targetState = robotContainer.scoringLevel;
         targetElevatorPos =
@@ -94,6 +97,7 @@ public class Up extends Command {
                 if (m_claw.gamePieceDetected()) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
+                        timerDelay = 1;
                     }
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
@@ -172,7 +176,7 @@ public class Up extends Command {
                     }
                 }
             }
-            // for things we need elevator for
+            // reef algae intake
             else {
                 if (
                     m_elevator.getPosition() <
@@ -211,6 +215,7 @@ public class Up extends Command {
                 }
                 if (m_claw.gamePieceDetected()) {
                     m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
+                    ended = true;
                 }
             }
         }
@@ -228,6 +233,6 @@ public class Up extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return robotContainer.isCoral && timer1.hasElapsed(timerDelay);
+        return timer1.hasElapsed(timerDelay) || ended;
     }
 }

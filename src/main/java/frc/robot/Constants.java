@@ -283,7 +283,7 @@ public final class Constants {
         public static final int rMotorID = 21;
         public static final int lChannel = 7;
         public static final int rChannel = 8;
-        public static final double upkP = 5.1952;
+        public static final double upkP = 4.1952;
         public static final double upkI = 0;
         public static final double upkD = 0.020493;
         // public static final double downkP = 3.781;
@@ -291,9 +291,9 @@ public final class Constants {
         public static final double downkI = 0;
         public static final double downkD = 0.020493;
         // public static final double downkD = 0.020493;
-        public static final double maxRotations = 51.88916015625;
+        public static final double maxRotations = 55.88916015625;
         public static final double restingRot = 37.75;
-        public static final double climbRot = 51.787109375;
+        public static final double climbRot = 55.787109375;
         public static final double minRot = 0;
     }
 
