@@ -50,26 +50,35 @@ public class Outtake extends Command {
         l_Led.outtakeLeds();
         // coral
         if (robotContainer.isCoral) {
-            m_wrist.setWrist(
-                Constants.WristConstants.pos[RobotState.processor.ordinal()]
-            );
-            m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
-            if (
-                m_intake.getPosition() <
-                Constants.IntakeConstants.intakeStartPos
-            ) {
-                m_intake.setIntake(-Constants.IntakeConstants.velocity, false);
-                m_indexer.setIndexer(-Constants.IndexerConstants.velocity);
-            }
-            if (
+            
+            if (m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold) {
+                m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
+                if (
+                    m_intake.getPosition() <
+                    Constants.IntakeConstants.intakeStartPos
+                ) {
+                    m_intake.setIntake(-Constants.IntakeConstants.velocity, false);
+                    m_indexer.setIndexer(-Constants.IndexerConstants.velocity);
+                }
+
+                m_wrist.setWrist(
+                    Constants.WristConstants.pos[RobotState.processor.ordinal()]
+                );
+                if (
                 Math.abs(
                     m_wrist.getPosition() -
                     Constants.WristConstants.pos[RobotState.processor.ordinal()]
-                ) <
-                Constants.WristConstants.posTolerance
-            ) {
+                    ) <
+                    Constants.WristConstants.posTolerance
+                ) {
+                    m_claw.setClaw(-Constants.EndEffectorConstants.outtakeVelocity);
+                } 
+                else {
+                    m_claw.setClaw(Constants.EndEffectorConstants.velocity);
+                }
+            } else {
                 m_claw.setClaw(-Constants.EndEffectorConstants.outtakeVelocity);
-            }
+            } 
         }
         // algae
         else {
