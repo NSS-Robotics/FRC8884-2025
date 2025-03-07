@@ -15,6 +15,7 @@ import edu.wpi.first.units.measure.MutLinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,13 +39,14 @@ public class Climber extends SubsystemBase {
     private static Slot0Configs upPID = new Slot0Configs();
     private static Slot1Configs downPID = new Slot1Configs();
     private static PositionVoltage positionPID;
+    private static Timer timer = new Timer();
     public boolean latchEngaged = true;
 
     public Climber() {
         lMotor.clearStickyFaults();
         resetEncoders();
         // Put these in Brake mode when running for real.
-        lMotor.setNeutralMode(NeutralModeValue.Coast);
+        lMotor.setNeutralMode(NeutralModeValue.Brake);
         // rMotor.setControl(leader);
 
         upPID.kP = Constants.ClimberConstants.upkP;
@@ -87,13 +89,13 @@ public class Climber extends SubsystemBase {
     }
 
     public void engageLatch() {
-        lServo.set(0.5);
+        lServo.setAngle(0);
         // rServo.set(0.5);
         latchEngaged = true;
     }
 
     public void disengageLatch() {
-        lServo.set(0);
+        lServo.setAngle(90);
         // rServo.set(0.6);
         latchEngaged = false;
     }

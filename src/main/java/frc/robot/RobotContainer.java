@@ -165,10 +165,10 @@ public class RobotContainer {
             .povUp()
             .onTrue(
                 new SequentialCommandGroup(
-                    new ParallelDeadlineGroup(
-                        new WaitCommand(0.75),
-                        new RunServos(m_climber, false)
-                    ),
+                    // new ParallelDeadlineGroup(
+                    //     // new WaitCommand(0.75),
+                    //     // new RunServos(m_climber, false)
+                    // ) ,
                     new UpClimb(m_climber, m_wrist, m_intake, m_elevator, () ->
                         m_operatorController.cross().getAsBoolean()
                     )
@@ -179,10 +179,10 @@ public class RobotContainer {
             .povDown()
             .onTrue(
                 new SequentialCommandGroup(
-                    new ParallelDeadlineGroup(
-                        new WaitCommand(0.5),
-                        new RunServos(m_climber, true)
-                    ),
+                    // new ParallelDeadlineGroup(
+                    //     // new WaitCommand(0.5),
+                    //     // new RunServos(m_climber, true)
+                    // ),
                     new InstantCommand(l_leds::climbLeds),
                     new DownClimb(m_climber, () ->
                         m_operatorController.cross().getAsBoolean()
