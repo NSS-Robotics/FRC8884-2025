@@ -68,7 +68,7 @@ public class GroundIntake extends Command {
         if (m_claw.gamePieceDetected()) {
             m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
             l_leds.intakeCompleteLeds();
-        }
+        } //TODO: Uncomment this stuff before first actual match
         // if (
         //     m_climber.getPosition() <
         //         Constants.ClimberConstants.restingRot - 5 &&
