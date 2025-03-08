@@ -22,11 +22,11 @@ public class RunServos extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (latchEngage) {
-            m_climber.engageLatch();
-        } else {
-            m_climber.disengageLatch();
-        }
+        // if (latchEngage) {
+        //     m_climber.engageLatch();
+        // } else {
+        //     m_climber.disengageLatch();
+        // }
     }
 
     // Called once the command ends or is interrupted%.

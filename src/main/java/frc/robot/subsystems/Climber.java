@@ -28,9 +28,9 @@ public class Climber extends SubsystemBase {
         Constants.ClimberConstants.rMotorID
     );
 
-    private static Servo lServo = new Servo(
-        Constants.ClimberConstants.rChannel
-    );
+    // private static Servo lServo = new Servo(
+    //     Constants.ClimberConstants.rChannel
+    // );
 
     // private static Follower leader = new Follower(
     //     Constants.ClimberConstants.lMotorID,
@@ -39,8 +39,8 @@ public class Climber extends SubsystemBase {
     private static Slot0Configs upPID = new Slot0Configs();
     private static Slot1Configs downPID = new Slot1Configs();
     private static PositionVoltage positionPID;
-    private static Timer timer = new Timer();
-    public boolean latchEngaged = true;
+
+    // public boolean latchEngaged = true;
 
     public Climber() {
         lMotor.clearStickyFaults();
@@ -61,7 +61,7 @@ public class Climber extends SubsystemBase {
         // rMotor.getConfigurator().apply(upPID);
         // rMotor.getConfigurator().apply(downPID);
 
-        engageLatch();
+        // engageLatch();
     }
 
     public void resetEncoders() {
@@ -88,21 +88,21 @@ public class Climber extends SubsystemBase {
         return lMotor.getPosition().getValueAsDouble();
     }
 
-    public void engageLatch() {
-        lServo.setPosition(0.45);
-        // rServo.set(0.5);
-        latchEngaged = true;
-    }
+    // public void engageLatch() {
+    //     lServo.setPosition(0.45);
+    //     // rServo.set(0.5);
+    //     latchEngaged = true;
+    // }
 
-    public void disengageLatch() {
-        lServo.setPosition(0.85);
-        // rServo.set(0.6);
-        latchEngaged = false;
-    }
+    // public void disengageLatch() {
+    //     lServo.setPosition(0.85);
+    //     // rServo.set(0.6);
+    //     latchEngaged = false;
+    // }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("lServo", lServo.getPosition());
+        // SmartDashboard.putNumber("lServo", lServo.getPosition());
         // SmartDashboard.putNumber("rServo", rServo.getPosition());
         SmartDashboard.putNumber(
             "L Climber Pos",
@@ -112,6 +112,6 @@ public class Climber extends SubsystemBase {
         //     "R Climber Pos",
         //     rMotor.getPosition().getValueAsDouble()
         // );
-        SmartDashboard.putBoolean("Latch Engaged", latchEngaged);
+        // SmartDashboard.putBoolean("Latch Engaged", latchEngaged);
     }
 }

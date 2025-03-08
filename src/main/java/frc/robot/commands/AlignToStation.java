@@ -17,15 +17,27 @@ public class AlignToStation extends Command {
     private Pose2d target;
     private boolean atSetpoint;
 
+    // private final Pose2d[] redStations = {
+    //     new Pose2d(
+    //         16.347670560240708,
+    //         1.2212042219638495,
+    //         Rotation2d.fromDegrees(-56.97384521966168)
+    //     ),
+    //     new Pose2d(
+    //         16.255201947463604,
+    //         6.879534286109712,
+    //         Rotation2d.fromDegrees(51.41240189667511)
+    //     ),
+    // };
     private final Pose2d[] redStations = {
         new Pose2d(
-            16.347670560240708,
-            1.2212042219638495,
+            17.5 - 1.2692396853783483,
+            1.1844133124895877,
             Rotation2d.fromDegrees(-56.97384521966168)
         ),
         new Pose2d(
-            16.255201947463604,
-            6.879534286109712,
+            17.5 - 1.21958906088757,
+            6.8990669868565435,
             Rotation2d.fromDegrees(51.41240189667511)
         ),
     };
