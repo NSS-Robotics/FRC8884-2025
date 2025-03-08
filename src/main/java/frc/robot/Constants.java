@@ -291,9 +291,9 @@ public final class Constants {
         public static final double downkI = 0;
         public static final double downkD = 0.020493;
         // public static final double downkD = 0.020493;
-        public static final double maxRotations = 90;
+        public static final double maxRotations = 96;
         public static final double restingRot = 62.3544921875;
-        public static final double climbRot = 87.14453125;
+        public static final double climbRot = 95.14453125;
         public static final double minRot = 0;
     }
 
