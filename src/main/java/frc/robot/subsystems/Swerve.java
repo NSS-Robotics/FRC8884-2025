@@ -298,9 +298,10 @@ public class Swerve extends SubsystemBase {
         boolean htv = l_limelighthigh.tv > 0;
         boolean ltv = l_limelightlow.tv > 0;
 
-        if (isStationAligning) {
-            limelight = l_limelighthigh;
-        } else if (htv && ltv) {
+        // if (isStationAligning) {
+        //     limelight = l_limelighthigh;
+        // } else
+        if (htv && ltv) {
             limelight = l_limelighthigh.ta > l_limelightlow.ta
                 ? l_limelighthigh
                 : l_limelightlow;
