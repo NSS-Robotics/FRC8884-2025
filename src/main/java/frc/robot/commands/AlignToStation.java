@@ -84,6 +84,7 @@ public class AlignToStation extends Command {
     @Override
     public void initialize() {
         atSetpoint = false;
+        m_swerve.isStationAligning = true;
 
         Pose2d[] poses = m_swerve.isRed() ? redStations : blueStations;
 
@@ -102,6 +103,7 @@ public class AlignToStation extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        m_swerve.isStationAligning = false;
         m_swerve.stopSwerve();
     }
 
