@@ -14,7 +14,7 @@ import frc.robot.subsystems.*;
 
 public class Align extends Command {
 
-    private static final double PEDRO_GO_UP = 0.50000;
+    private static final double PEDRO_GO_UP = 1.5;
     private static final double RED_BLUE_OFFSET = 8.569576;
 
     private RobotContainer rob;
@@ -176,8 +176,8 @@ public class Align extends Command {
         ),
         // 7
         new Pose2d(
-            14.924302814848982,
-            4.150537615247084,
+            14.976717628500175,
+            4.016416363281362,
             Rotation2d.fromDegrees(180)
         ),
         // 8
@@ -209,8 +209,8 @@ public class Align extends Command {
     // BLUE ALGAE
     private final Pose2d[] blueAlgaePoses = new Pose2d[redAlgaePoses.length];
 
-    private final double redBargeX = 10.253391158244787;
-    private final double blueBargeX = 7.3377792414058485;
+    // private final double redBargeX = 10.253391158244787;
+    // private final double blueBargeX = 7.3377792414058485;
 
     private final Pose2d redProcessorPose = new Pose2d(
         11.584401479408479,
@@ -239,6 +239,7 @@ public class Align extends Command {
             elevator,
             wrist,
             claw,
+            swerve,
             driveController,
             () -> atSetpoint
         );
@@ -276,24 +277,24 @@ public class Align extends Command {
         upCommand.initialize();
         atSetpoint = false;
 
-        if (rob.scoringLevel.equals(RobotState.barge)) {
-            timer = new Timer();
-            xTolerance = 0.01;
-            yTolerance = 0.05;
-            rTolerance = 0.5;
+        // if (rob.scoringLevel.equals(RobotState.barge)) {
+        //     timer = new Timer();
+        //     xTolerance = 0.01;
+        //     yTolerance = 0.05;
+        //     rTolerance = 0.5;
 
-            Pose2d pose = m_swerve.getPose();
-            boolean isRed =
-                Math.abs(pose.getX() - redBargeX) <
-                Math.abs(pose.getX() - blueBargeX);
+        //     Pose2d pose = m_swerve.getPose();
+        //     boolean isRed =
+        //         Math.abs(pose.getX() - redBargeX) <
+        //         Math.abs(pose.getX() - blueBargeX);
 
-            target = new Pose2d(
-                isRed ? redBargeX : blueBargeX,
-                pose.getY(),
-                Rotation2d.fromDegrees(isRed ? 180 : 0)
-            );
-            return;
-        }
+        //     target = new Pose2d(
+        //         isRed ? redBargeX : blueBargeX,
+        //         pose.getY(),
+        //         Rotation2d.fromDegrees(isRed ? 180 : 0)
+        //     );
+        //     return;
+        // }
 
         if (rob.scoringLevel.equals(RobotState.processor)) {
             xTolerance = 0.08;
@@ -410,14 +411,14 @@ public class Align extends Command {
             Math.abs(pidController.getXError(target)) < 2 &&
             Math.abs(pidController.getYError(target)) < 2
         ) {
-            double botX = m_swerve.getPose().getX();
+            // double botX = m_swerve.getPose().getX();
 
-            if (
-                rob.scoringLevel.equals(RobotState.barge) &&
-                (blueBargeX < botX && botX < redBargeX)
-            ) {
-                return;
-            }
+            // if (
+            //     rob.scoringLevel.equals(RobotState.barge) &&
+            //     (blueBargeX < botX && botX < redBargeX)
+            // ) {
+            //     return;
+            // }
 
             pidController.alignLimelight(target);
         }
@@ -432,12 +433,13 @@ public class Align extends Command {
 
     @Override
     public boolean isFinished() {
-        boolean isBarge = rob.scoringLevel.equals(Constants.RobotState.barge);
+        // boolean isBarge = rob.scoringLevel.equals(Constants.RobotState.barge);
 
-        if (isBarge && !timer.isRunning()) {
-            timer.restart();
-        }
+        // if (isBarge && !timer.isRunning()) {
+        //     timer.restart();
+        // }
 
-        return (!isBarge || timer.hasElapsed(2)) ? atSetpoint : false;
+        // return (!isBarge || timer.hasElapsed(2)) ? atSetpoint : false;
+        return atSetpoint;
     }
 }

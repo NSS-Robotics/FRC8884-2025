@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,6 +11,7 @@ import frc.robot.Constants.RobotState;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
 import java.util.function.BooleanSupplier;
 
@@ -19,6 +21,7 @@ public class Up extends Command {
     private final Elevator m_elevator;
     private final Wrist m_wrist;
     private final Claw m_claw;
+    private final Swerve m_swerve;
     private final CommandXboxController m_driverController;
     private Timer timer1;
     private Timer timer2;
@@ -27,7 +30,8 @@ public class Up extends Command {
     private double targetWristPos;
     private double outWristPos =
         Constants.WristConstants.pos[RobotState.barge.ordinal()];
-    private double timerDelay = 2;
+    private double timerDelay = 1;
+    private double SWERVE_STOP = 0.05;
     private boolean ended = false;
     private BooleanSupplier isAtSetpoint;
 
@@ -36,6 +40,7 @@ public class Up extends Command {
         Elevator elevator,
         Wrist wrist,
         Claw claw,
+        Swerve swerve,
         CommandXboxController driverController,
         BooleanSupplier isAtSetpoint
     ) {
@@ -44,6 +49,7 @@ public class Up extends Command {
         m_elevator = elevator;
         m_wrist = wrist;
         m_claw = claw;
+        m_swerve = swerve;
         m_driverController = driverController;
         timer1 = new Timer();
         timer2 = new Timer();
@@ -55,7 +61,7 @@ public class Up extends Command {
     public void initialize() {
         timer1 = new Timer();
         timer2 = new Timer();
-        timerDelay = 2;
+        timerDelay = 1;
         ended = false;
         robotContainer.runningCommand = true;
         targetState = robotContainer.scoringLevel;
@@ -98,7 +104,14 @@ public class Up extends Command {
                 Math.abs(m_elevator.getPosition() - targetElevatorPos) <
                 Constants.ElevatorConstants.posTolerance
             ) {
-                if (m_claw.gamePieceDetected() && isAtSetpoint.getAsBoolean()) {
+                ChassisSpeeds speeds = m_swerve.getRobotRelativeChassisSpeeds();
+
+                if (
+                    m_claw.gamePieceDetected() &&
+                    isAtSetpoint.getAsBoolean() &&
+                    speeds.vxMetersPerSecond < SWERVE_STOP &&
+                    speeds.vyMetersPerSecond < SWERVE_STOP
+                ) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
                         timerDelay = 1;
@@ -219,7 +232,9 @@ public class Up extends Command {
                 }
                 if (m_claw.gamePieceDetected()) {
                     m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
-                    ended = true;
+                    if (!timer1.isRunning()) {
+                        timer1.restart();
+                    }
                 }
             }
         }
