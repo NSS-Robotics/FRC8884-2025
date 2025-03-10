@@ -1,16 +1,16 @@
 package frc.robot;
 
 import au.grapplerobotics.CanBridge;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.AddressableLEDBufferView;
-import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.LED;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
 
 /**
  * The methods in this class are called automatically corresponding to each
@@ -33,6 +33,27 @@ public class Robot extends TimedRobot {
      * initialization code.
      */
     public Robot() {
+        Thread thread = new Thread(() -> {
+            UsbCamera camera = CameraServer.startAutomaticCapture();
+            camera.setResolution(640, 480);
+
+            CvSink sink = CameraServer.getVideo();
+            CvSource stream = CameraServer.putVideo("Cage Camera", 640, 480);
+
+            Mat mat = new Mat();
+
+            while (!Thread.interrupted()) {
+                if (sink.grabFrame(mat) == 0) {
+                    stream.notifyError(sink.getError());
+                } else {
+                    Core.flip(mat, mat, 1);
+                    stream.putFrame(mat);
+                }
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+
         CanBridge.runTCP();
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
