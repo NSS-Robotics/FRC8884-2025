@@ -98,14 +98,31 @@ public class RobotContainer {
             new InstantCommand(() -> isLeft = false)
         );
 
-        NamedCommands.registerCommand("Align", new Align(this, m_swerve));
+        NamedCommands.registerCommand(
+            "Align",
+            new Align(
+                this,
+                m_swerve,
+                m_elevator,
+                m_wrist,
+                m_endEffector,
+                m_driverController
+            )
+        );
         NamedCommands.registerCommand(
             "Align To Station",
             new AlignToStation(m_swerve)
         );
         NamedCommands.registerCommand(
             "Coral Placing",
-            new Up(this, m_elevator, m_wrist, m_endEffector, m_driverController)
+            new Up(
+                this,
+                m_elevator,
+                m_wrist,
+                m_endEffector,
+                m_driverController,
+                () -> true
+            )
         );
         NamedCommands.registerCommand(
             "Down Elevator",
@@ -196,7 +213,18 @@ public class RobotContainer {
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
-        m_driverController.povLeft().whileTrue(new Align(this, m_swerve));
+        m_driverController
+            .povLeft()
+            .whileTrue(
+                new Align(
+                    this,
+                    m_swerve,
+                    m_elevator,
+                    m_wrist,
+                    m_endEffector,
+                    m_driverController
+                )
+            );
         m_driverController
             .leftTrigger()
             .whileTrue(
@@ -230,14 +258,22 @@ public class RobotContainer {
             .onTrue(
                 new SequentialCommandGroup(
                     new InstantCommand(l_leds::alignLeds),
-                    new Align(this, m_swerve).asProxy(),
+                    new Align(
+                        this,
+                        m_swerve,
+                        m_elevator,
+                        m_wrist,
+                        m_endEffector,
+                        m_driverController
+                    ).asProxy(),
                     new InstantCommand(() -> l_leds.score(m_elevator)),
                     new Up(
                         this,
                         m_elevator,
                         m_wrist,
                         m_endEffector,
-                        m_driverController
+                        m_driverController,
+                        () -> true
                     )
                 )
             );
@@ -251,7 +287,8 @@ public class RobotContainer {
                         m_elevator,
                         m_wrist,
                         m_endEffector,
-                        m_driverController
+                        m_driverController,
+                        () -> true
                     )
                 )
             );

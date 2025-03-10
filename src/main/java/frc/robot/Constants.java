@@ -215,7 +215,7 @@ public final class Constants {
         public static final int motorID = 30;
         public static final int encoder = 31;
         public static final double magnetSensorOffset = 0.599609375;
-        public static final double currentLimit = 30;
+        public static final double currentLimit = 45;
         public static final double upKP = 18;
         public static final double upKI = 0;
         public static final double upKD = 0;

@@ -11,6 +11,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
+import java.util.function.BooleanSupplier;
 
 public class Up extends Command {
 
@@ -25,17 +26,20 @@ public class Up extends Command {
     private double targetElevatorPos;
     private double targetWristPos;
     private double outWristPos =
-        Constants.WristConstants.pos[RobotState.algaeGround.ordinal()];
+        Constants.WristConstants.pos[RobotState.barge.ordinal()];
     private double timerDelay = 2;
     private boolean ended = false;
+    private BooleanSupplier isAtSetpoint;
 
     public Up(
         RobotContainer robotContainer,
         Elevator elevator,
         Wrist wrist,
         Claw claw,
-        CommandXboxController driverController
+        CommandXboxController driverController,
+        BooleanSupplier isAtSetpoint
     ) {
+        this.isAtSetpoint = isAtSetpoint;
         this.robotContainer = robotContainer;
         m_elevator = elevator;
         m_wrist = wrist;
@@ -94,7 +98,7 @@ public class Up extends Command {
                 Math.abs(m_elevator.getPosition() - targetElevatorPos) <
                 Constants.ElevatorConstants.posTolerance
             ) {
-                if (m_claw.gamePieceDetected()) {
+                if (m_claw.gamePieceDetected() && isAtSetpoint.getAsBoolean()) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
                         timerDelay = 1;

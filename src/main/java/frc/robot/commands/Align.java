@@ -3,8 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotState;
 import frc.robot.RobotContainer;
@@ -12,6 +14,7 @@ import frc.robot.subsystems.*;
 
 public class Align extends Command {
 
+    private static final double PEDRO_GO_UP = 0.50000;
     private static final double RED_BLUE_OFFSET = 8.569576;
 
     private RobotContainer rob;
@@ -92,76 +95,6 @@ public class Align extends Command {
             Rotation2d.fromDegrees(84.29466186011739)
         ),
     };
-
-    // // BLUE CORAL
-    // private final Pose2d[] blueCoralPoses = {
-    //     // 17
-    //     new Pose2d(
-    //         3.4262242976656996,
-    //         2.919854276977841,
-    //         Rotation2d.fromDegrees(40.88202068828051)
-    //     ),
-    //     new Pose2d(
-    //         4.231882968245696,
-    //         2.5333526571604104,
-    //         Rotation2d.fromDegrees(89.57861213295725)
-    //     ),
-    //     // 18
-    //     new Pose2d(
-    //         2.9951088752426487,
-    //         4.4084558948742885,
-    //         Rotation2d.fromDegrees(-19.667031946761643)
-    //     ),
-    //     new Pose2d(
-    //         3.0535927099289584,
-    //         3.50306401578839,
-    //         Rotation2d.fromDegrees(29.57005577056487)
-    //     ),
-    //     // 19
-    //     new Pose2d(
-    //         4.085112465590101,
-    //         5.513184762437938,
-    //         Rotation2d.fromDegrees(-79.09741439099274)
-    //     ),
-    //     new Pose2d(
-    //         3.3148819377449614,
-    //         4.999087951557525,
-    //         Rotation2d.fromDegrees(-30.72914539869436)
-    //     ),
-    //     // 20
-    //     new Pose2d(
-    //         5.5671103940629765,
-    //         5.125866653006128,
-    //         Rotation2d.fromDegrees(-139.247780993426)
-    //     ),
-    //     new Pose2d(
-    //         4.725074687581623,
-    //         5.536871238624893,
-    //         Rotation2d.fromDegrees(-90.59682516308365)
-    //     ),
-    //     // 21
-    //     new Pose2d(
-    //         5.98140383441108,
-    //         3.646841125383143,
-    //         Rotation2d.fromDegrees(160.5931605707581)
-    //     ),
-    //     new Pose2d(
-    //         5.912799104870625,
-    //         4.572151931157451,
-    //         Rotation2d.fromDegrees(-150.0842691212723)
-    //     ),
-    //     // 22
-    //     new Pose2d(
-    //         4.905252041858879,
-    //         2.5448529264687982,
-    //         Rotation2d.fromDegrees(100.86324577638341)
-    //     ),
-    //     new Pose2d(
-    //         5.673102655617341,
-    //         3.062575736600282,
-    //         Rotation2d.fromDegrees(149.41473467519194)
-    //     ),
-    // };
 
     // BLUE CORAL
     private final Pose2d[] blueCoralPoses = {
@@ -291,8 +224,24 @@ public class Align extends Command {
     );
 
     private Timer timer;
+    private Up upCommand;
 
-    public Align(RobotContainer rob, Swerve swerve) {
+    public Align(
+        RobotContainer rob,
+        Swerve swerve,
+        Elevator elevator,
+        Wrist wrist,
+        Claw claw,
+        CommandXboxController driveController
+    ) {
+        this.upCommand = new Up(
+            rob,
+            elevator,
+            wrist,
+            claw,
+            driveController,
+            () -> atSetpoint
+        );
         this.rob = rob;
         this.m_swerve = swerve;
         pidController = new AlignPIDController(swerve);
@@ -324,6 +273,7 @@ public class Align extends Command {
 
     @Override
     public void initialize() {
+        upCommand.initialize();
         atSetpoint = false;
 
         if (rob.scoringLevel.equals(RobotState.barge)) {
@@ -434,6 +384,17 @@ public class Align extends Command {
 
     @Override
     public void execute() {
+        if (
+            rob.isCoral &&
+            mag(
+                pidController.getXError(target),
+                pidController.getYError(target)
+            ) <
+            PEDRO_GO_UP
+        ) {
+            upCommand.execute();
+        }
+
         if (
             !atSetpoint &&
             Math.abs(pidController.getXError(target)) < xTolerance &&
