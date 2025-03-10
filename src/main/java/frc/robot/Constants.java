@@ -215,8 +215,8 @@ public final class Constants {
         public static final int motorID = 30;
         public static final int encoder = 31;
         public static final double magnetSensorOffset = 0.599609375;
-        public static final double currentLimit = 45;
-        public static final double upKP = 18;
+        public static final double currentLimit = 40;
+        public static final double upKP = 25;
         public static final double upKI = 0;
         public static final double upKD = 0;
         public static final double downKP = 20;
@@ -272,7 +272,7 @@ public final class Constants {
         public static final double posTolerance = 0.05;
         public static final double maxRotations = 0.72;
         public static final double minElevatorRaisedPos = 0.323;
-        public static final double maxElevatorLoweredPos = 0.634;
+        public static final double maxElevatorLoweredPos = 0.64;
         public static final double minOuttakePos = 0.45;
         public static final double pedroDoIt = 20;
     }
@@ -283,7 +283,7 @@ public final class Constants {
         public static final int rMotorID = 21;
         public static final int lChannel = 7;
         public static final int rChannel = 8;
-        public static final double upkP = 4.1952;
+        public static final double upkP = 2.1952;
         public static final double upkI = 0;
         public static final double upkD = 0.020493;
         // public static final double downkP = 3.781;
@@ -291,9 +291,9 @@ public final class Constants {
         public static final double downkI = 0;
         public static final double downkD = 0.020493;
         // public static final double downkD = 0.020493;
-        public static final double maxRotations = 96;
+        public static final double maxRotations = 106;
         public static final double restingRot = 62.3544921875;
-        public static final double climbRot = 95.14453125;
+        public static final double climbRot = 105.14453125;
         public static final double minRot = 0;
     }
 
@@ -319,7 +319,7 @@ public final class Constants {
         public static final double upKP = 9.842;
         public static final double upKI = 0;
         public static final double upKD = 2;
-        public static final double downKP = 6.7;
+        public static final double downKP = 9;
         public static final double downKI = 0;
         public static final double downKD = 0;
         public static final double maxRot = 0;

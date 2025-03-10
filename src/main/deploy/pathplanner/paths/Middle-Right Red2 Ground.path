@@ -75,7 +75,7 @@
   "eventMarkers": [
     {
       "name": "Ground Intake",
-      "waypointRelativePos": 0.8981846882399362,
+      "waypointRelativePos": 0.6487632508833913,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -93,7 +93,7 @@
     "rotation": -126.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Three-Piece Middle-Right",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -29.4

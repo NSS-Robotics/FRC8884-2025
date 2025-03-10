@@ -112,7 +112,7 @@ public class GroundIntake extends Command {
             }
         }
         // algae
-        else {
+        else if (!robotContainer.isCoral) {
             if (
                 m_elevator.getPosition() <
                 Constants.ElevatorConstants.upThreshold

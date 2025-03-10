@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -114,6 +115,7 @@ public class RobotContainer {
                 m_elevator,
                 m_wrist,
                 m_endEffector,
+                m_swerve,
                 m_driverController,
                 () -> true
             )
@@ -194,34 +196,7 @@ public class RobotContainer {
                     l_leds
                 )
             );
-        m_driverController
-            .povUp()
-            .onTrue(
-                new SequentialCommandGroup(
-                    // new ParallelDeadlineGroup(
-                    //     new WaitCommand(0.75),
-                    //     new RunServos(m_climber, false)
-                    // ),
-                    new UpClimb(m_climber, m_wrist, m_intake, m_elevator, () ->
-                        m_operatorController.cross().getAsBoolean()
-                    )
-                )
-            );
 
-        m_driverController
-            .povDown()
-            .onTrue(
-                new SequentialCommandGroup(
-                    // new ParallelDeadlineGroup(
-                    //     new WaitCommand(0.5),
-                    //     new RunServos(m_climber, true)
-                    // ),
-                    new InstantCommand(l_leds::climbLeds),
-                    new DownClimb(m_climber, () ->
-                        m_operatorController.cross().getAsBoolean()
-                    )
-                )
-            );
         m_driverController.a().whileTrue(new ToggleIntake(this, m_intake));
         m_driverController
             .y()
@@ -272,20 +247,25 @@ public class RobotContainer {
             .onTrue(
                 new SequentialCommandGroup(
                     new InstantCommand(l_leds::alignLeds),
-                    new Align(
-                        this,
-                        m_swerve,
-                        m_elevator,
-                        m_wrist,
-                        m_endEffector,
-                        m_driverController
-                    ).asProxy(),
+                    new ConditionalCommand(
+                        new InstantCommand(),
+                        new Align(
+                            this,
+                            m_swerve,
+                            m_elevator,
+                            m_wrist,
+                            m_endEffector,
+                            m_driverController
+                        ).asProxy(),
+                        () -> scoringLevel.equals(RobotState.barge)
+                    ),
                     new InstantCommand(() -> l_leds.score(m_elevator)),
                     new Up(
                         this,
                         m_elevator,
                         m_wrist,
                         m_endEffector,
+                        m_swerve,
                         m_driverController,
                         () -> true
                     )
@@ -301,6 +281,7 @@ public class RobotContainer {
                         m_elevator,
                         m_wrist,
                         m_endEffector,
+                        m_swerve,
                         m_driverController,
                         () -> true
                     )
@@ -424,6 +405,33 @@ public class RobotContainer {
                         : RobotState.processor;
                     l_leds.L1Leds();
                 })
+            );
+
+        //Combined Buttons
+        m_operatorController
+            .cross()
+            .and(m_driverController.povDown())
+            .onTrue(
+                new SequentialCommandGroup(
+                    // new ParallelDeadlineGroup(
+                    //     new WaitCommand(0.5),
+                    //     new RunServos(m_climber, true)
+                    // ),
+                    new InstantCommand(l_leds::climbLeds),
+                    new DownClimb(m_climber)
+                )
+            );
+        m_operatorController
+            .cross()
+            .and(m_driverController.povUp())
+            .onTrue(
+                new SequentialCommandGroup(
+                    // new ParallelDeadlineGroup(
+                    //     new WaitCommand(0.75),
+                    //     new RunServos(m_climber, false)
+                    // ),
+                    new UpClimb(m_climber, m_wrist, m_intake, m_elevator)
+                )
             );
     }
 

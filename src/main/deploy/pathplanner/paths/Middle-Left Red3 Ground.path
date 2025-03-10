@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.545945945945943,
-        "y": 2.938006756756757
+        "x": 14.426824507711016,
+        "y": 2.960984147225523
       },
       "isLocked": false,
       "linkedName": null
@@ -20,12 +20,12 @@
         "y": 2.5540000000000003
       },
       "prevControl": {
-        "x": 14.818054605715266,
-        "y": 2.75478662684891
+        "x": 14.687955298013243,
+        "y": 2.906332781456953
       },
       "nextControl": {
-        "x": 15.158614864864866,
-        "y": 2.2956925675675666
+        "x": 15.23106497167428,
+        "y": 2.22058121335783
       },
       "isLocked": false,
       "linkedName": null
@@ -36,12 +36,12 @@
         "y": 1.3170000000000002
       },
       "prevControl": {
-        "x": 15.562126968522008,
-        "y": 1.8769010859195099
+        "x": 15.547297456119042,
+        "y": 1.8646870121066157
       },
       "nextControl": {
-        "x": 16.375710869315824,
-        "y": 0.7570989140804905
+        "x": 16.322371688741722,
+        "y": 0.8578642384105944
       },
       "isLocked": false,
       "linkedName": null
@@ -52,8 +52,8 @@
         "y": 2.354
       },
       "prevControl": {
-        "x": 15.302713503841627,
-        "y": 1.407022395926937
+        "x": 15.173853083767739,
+        "y": 1.9771679403735551
       },
       "nextControl": null,
       "isLocked": false,
@@ -71,7 +71,7 @@
   "eventMarkers": [
     {
       "name": "Ground Intake",
-      "waypointRelativePos": 0.9875389408099722,
+      "waypointRelativePos": 0.3519434628975287,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -89,7 +89,7 @@
     "rotation": 126.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Three-Piece Middle-Left",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 149.81445534558955
