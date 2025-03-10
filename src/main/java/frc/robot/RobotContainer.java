@@ -135,6 +135,26 @@ public class RobotContainer {
                 new StationIntake(m_elevator, m_wrist, m_endEffector)
             )
         );
+
+        NamedCommands.registerCommand(
+            "Ground Intake",
+            new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    intakeDown = true;
+                }),
+                new GroundIntake(
+                    this,
+                    m_intake,
+                    m_indexer,
+                    m_wrist,
+                    m_endEffector,
+                    m_elevator,
+                    m_driverController,
+                    m_climber,
+                    l_leds
+                )
+            )
+        );
         intakeDown = false;
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -418,12 +438,9 @@ public class RobotContainer {
     }
 
     public Command setupRobot() {
+        intakeDown = false;
         return new SequentialCommandGroup(
             new RunWrist(m_wrist, m_elevator, 0.1),
-            // new ParallelDeadlineGroup(
-            //     new WaitCommand(0.5),
-            //     new RunServos(m_climber, false)
-            // ),
             new ParallelDeadlineGroup(
                 new WaitCommand(0.5),
                 new RestingClimb(m_climber)
