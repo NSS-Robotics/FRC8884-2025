@@ -49,6 +49,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Ground Intake Pedro Backy"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Target Left"
           }
         },
@@ -80,6 +86,12 @@
           "type": "path",
           "data": {
             "pathName": "Middle-Right Red3 Ground"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Ground Intake Pedro Backy"
           }
         },
         {
