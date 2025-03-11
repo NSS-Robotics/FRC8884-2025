@@ -386,7 +386,6 @@ public class Align extends Command {
     @Override
     public void execute() {
         if (
-            rob.isCoral &&
             mag(
                 pidController.getXError(target),
                 pidController.getYError(target)

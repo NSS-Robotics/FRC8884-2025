@@ -167,6 +167,8 @@ public class GroundIntake extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return m_claw.gamePieceDetected() && DriverStation.isAutonomous();
+        return (
+            m_claw.gamePieceDetected() && DriverStation.isAutonomousEnabled()
+        );
     }
 }
