@@ -256,7 +256,7 @@ public final class Constants {
         public static final double kD = 0;
         // public static final double handoffPos = 0.02976171875;
         public static final double[] pos = {
-            0.63, // l1
+            0.6, // l1
             0.63, // l2
             0.63, // l3
             0.63, // l4

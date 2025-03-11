@@ -39,9 +39,7 @@ public class ElevatorDown extends Command {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {
-        robotContainer.runningCommand = true;
-    }
+    public void initialize() {}
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
@@ -56,11 +54,6 @@ public class ElevatorDown extends Command {
                 m_wrist.setWrist(outWristPos);
             } else {
                 m_wrist.setWrist(handoffWristPos);
-
-                // when elevator down, cmd doesn't end but is effectively over.
-                if (robotContainer.runningCommand) {
-                    robotContainer.runningCommand = false;
-                }
             }
             if (
                 m_wrist.getPosition() <
@@ -88,9 +81,6 @@ public class ElevatorDown extends Command {
             // when elevator down, cmd doesn't end but is effectively over.
             if (!m_claw.gamePieceDetected()) {
                 m_claw.stopClaw();
-            }
-            if (robotContainer.runningCommand) {
-                robotContainer.runningCommand = false;
             }
         }
     }

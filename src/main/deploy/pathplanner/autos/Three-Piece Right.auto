@@ -11,15 +11,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Right Red1"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Target Left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Red1"
           }
         },
         {
@@ -71,15 +71,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Middle-Right Red3 Ground"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Target Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle-Right Red3 Ground"
           }
         },
         {
