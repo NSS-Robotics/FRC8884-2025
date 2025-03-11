@@ -151,6 +151,34 @@ public class RobotContainer {
                 )
             )
         );
+        NamedCommands.registerCommand(
+            "Ground Intake Pedro Backy",
+            new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    intakeDown = true;
+                }),
+                new ParallelDeadlineGroup(
+                    new GroundIntake(
+                        this,
+                        m_intake,
+                        m_indexer,
+                        m_wrist,
+                        m_endEffector,
+                        m_elevator,
+                        m_driverController,
+                        m_climber,
+                        l_leds
+                    ),
+                    new TeleopSwerve(
+                        m_swerve,
+                        () -> -2,
+                        () -> 0,
+                        () -> 0,
+                        () -> true
+                    )
+                )
+            )
+        );
         intakeDown = false;
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);

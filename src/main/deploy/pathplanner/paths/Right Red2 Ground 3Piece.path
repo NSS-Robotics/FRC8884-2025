@@ -16,44 +16,12 @@
     },
     {
       "anchor": {
-        "x": 14.73153973509934,
-        "y": 5.4560223509933765
+        "x": 14.732,
+        "y": 5.456
       },
       "prevControl": {
-        "x": 14.07517900227131,
-        "y": 4.61604910892256
-      },
-      "nextControl": {
-        "x": 15.011828642384106,
-        "y": 5.814720198675495
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 15.821150662251656,
-        "y": 6.865252483443708
-      },
-      "prevControl": {
-        "x": 15.49127231014162,
-        "y": 6.427168541494522
-      },
-      "nextControl": {
-        "x": 16.009885672095933,
-        "y": 7.1158957177376045
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 14.16055743242938,
-        "y": 5.625844594596423
-      },
-      "prevControl": {
-        "x": 15.074397094758666,
-        "y": 5.762519251967774
+        "x": 14.07563926717197,
+        "y": 4.616026757929184
       },
       "nextControl": null,
       "isLocked": false,
@@ -74,7 +42,7 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0.7802120141342751,
-      "maxWaypointRelativePos": 2.3109540636042394,
+      "maxWaypointRelativePos": 1,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 4.0,
@@ -86,19 +54,7 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Ground Intake",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Ground Intake"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.5,
     "maxAcceleration": 4.0,

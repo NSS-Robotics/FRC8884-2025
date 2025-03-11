@@ -56,6 +56,16 @@ public class Up extends Command {
         addRequirements(m_elevator, m_wrist, m_claw);
     }
 
+    private boolean canRunClaw() {
+        ChassisSpeeds speeds = m_swerve.getRobotRelativeChassisSpeeds();
+
+        return (
+            isAtSetpoint.getAsBoolean() &&
+            speeds.vxMetersPerSecond < SWERVE_STOP &&
+            speeds.vyMetersPerSecond < SWERVE_STOP
+        );
+    }
+
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
@@ -104,18 +114,12 @@ public class Up extends Command {
                 Math.abs(m_elevator.getPosition() - targetElevatorPos) <
                 Constants.ElevatorConstants.posTolerance
             ) {
-                ChassisSpeeds speeds = m_swerve.getRobotRelativeChassisSpeeds();
-
-                if (
-                    m_claw.gamePieceDetected() &&
-                    isAtSetpoint.getAsBoolean() &&
-                    speeds.vxMetersPerSecond < SWERVE_STOP &&
-                    speeds.vyMetersPerSecond < SWERVE_STOP
-                ) {
+                if (m_claw.gamePieceDetected() && canRunClaw()) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
                         timerDelay = 1;
                     }
+                    robotContainer.runningCommand = false;
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
@@ -126,7 +130,6 @@ public class Up extends Command {
         }
         // ALGAE
         else {
-            // dont need to move elevator
             if (targetState.equals(RobotState.processor)) {
                 m_wrist.setWrist(targetWristPos);
                 if (
@@ -140,7 +143,8 @@ public class Up extends Command {
                 }
                 if (
                     Math.abs(m_elevator.getPosition() - targetElevatorPos) <
-                    Constants.ElevatorConstants.posTolerance
+                        Constants.ElevatorConstants.posTolerance &&
+                    canRunClaw()
                 ) {
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
@@ -184,6 +188,7 @@ public class Up extends Command {
                         if (!timer1.isRunning()) {
                             timer1.restart();
                         }
+                        robotContainer.runningCommand = false;
                         m_claw.setClaw(
                             -Constants.EndEffectorConstants.outtakeVelocity
                         );
@@ -219,8 +224,10 @@ public class Up extends Command {
                 }
                 if (
                     Math.abs(m_elevator.getPosition() - targetElevatorPos) <
-                    Constants.ElevatorConstants.posTolerance
+                        Constants.ElevatorConstants.posTolerance &&
+                    canRunClaw()
                 ) {
+                    robotContainer.runningCommand = false;
                     m_claw.setClaw(Constants.EndEffectorConstants.velocity);
                 }
                 if (
