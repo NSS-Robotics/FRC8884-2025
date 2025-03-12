@@ -121,7 +121,9 @@ public class Up extends Command {
                     }
                     robotContainer.runningCommand = false;
                     m_claw.setClaw(
-                        -Constants.EndEffectorConstants.outtakeVelocity
+                        robotContainer.scoringLevel.equals(RobotState.l1)
+                            ? -Constants.EndEffectorConstants.l1Velocity
+                            : -Constants.EndEffectorConstants.outtakeVelocity
                     );
                 } else if (timer1.hasElapsed(timerDelay)) {
                     m_claw.stopClaw();
@@ -138,7 +140,7 @@ public class Up extends Command {
                 ) {
                     m_elevator.setElevator(
                         targetElevatorPos,
-                        Constants.ElevatorConstants.upSlot
+                        Constants.ElevatorConstants.algaeSlot
                     );
                 }
                 if (
@@ -166,7 +168,7 @@ public class Up extends Command {
                 ) {
                     m_elevator.setElevator(
                         targetElevatorPos,
-                        Constants.ElevatorConstants.upSlot
+                        Constants.ElevatorConstants.algaeSlot
                     );
                 }
                 if (
@@ -219,13 +221,12 @@ public class Up extends Command {
                 ) {
                     m_elevator.setElevator(
                         targetElevatorPos,
-                        Constants.ElevatorConstants.upSlot
+                        Constants.ElevatorConstants.algaeSlot
                     );
                 }
                 if (
                     Math.abs(m_elevator.getPosition() - targetElevatorPos) <
-                        Constants.ElevatorConstants.posTolerance &&
-                    canRunClaw()
+                    Constants.ElevatorConstants.posTolerance
                 ) {
                     robotContainer.runningCommand = false;
                     m_claw.setClaw(Constants.EndEffectorConstants.velocity);

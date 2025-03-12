@@ -42,6 +42,7 @@ public class Swerve extends SubsystemBase {
     private Limelight l_limelightlow;
     private Limelight l_limelighthigh;
     private RobotConfig config;
+    public boolean gyroZeroed;
 
     public boolean isStationAligning;
 
@@ -51,6 +52,7 @@ public class Swerve extends SubsystemBase {
         .publish();
 
     public Swerve(Limelight limelightlow, Limelight limelighthigh) {
+        gyroZeroed = false;
         isStationAligning = false;
 
         gyro = new Canandgyro(Constants.Swerve.gyroID);
@@ -214,6 +216,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void zeroGyro() {
+        gyroZeroed = true;
         gyro.setYaw(0);
         setHeading(new Rotation2d(Units.degreesToRadians(isRed() ? 0 : 180)));
     }

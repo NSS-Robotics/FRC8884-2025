@@ -104,6 +104,152 @@ public class RobotContainer {
                 m_driverController
             )
         );
+        // NamedCommands.registerCommand(
+        //     "Align 6 Left",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         0
+        //     )
+        // );
+        // NamedCommands.registerCommand(
+        //     "Align 6 Right",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         1
+        //     )
+        // );
+        // NamedCommands.registerCommand(
+        //     "Align 7 Left",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         2
+        //     )
+        // );
+        // NamedCommands.registerCommand(
+        //     "Align 7 Right",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         3
+        //     )
+        // );
+        // NamedCommands.registerCommand(
+        //     "Align 8 Left",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         4
+        //     )
+        // );
+        // NamedCommands.registerCommand(
+        //     "Align 8 Right",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         5
+        //     )
+        // );
+        // NamedCommands.registerCommand(
+        //     "Align 9 Left",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         6
+        //     )
+        // );
+        // NamedCommands.registerCommand(
+        //     "Align 9 Right",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         7
+        //     )
+        // );
+        // NamedCommands.registerCommand(
+        //     "Align 10 Left",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         8
+        //     )
+        // );
+        // NamedCommands.registerCommand(
+        //     "Align 10 Right",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         9
+        //     )
+        // );
+        // NamedCommands.registerCommand(
+        //     "Align 11 Left",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         10
+        //     )
+        // );
+        // NamedCommands.registerCommand(
+        //     "Align 11 Right",
+        //     new Align(
+        //         this,
+        //         m_swerve,
+        //         m_elevator,
+        //         m_wrist,
+        //         m_endEffector,
+        //         m_driverController,
+        //         11
+        //     )
+        // );
+        // // end aligns
+
         NamedCommands.registerCommand(
             "Align To Station",
             new AlignToStation(m_swerve)
@@ -171,7 +317,7 @@ public class RobotContainer {
                     ),
                     new TeleopSwerve(
                         m_swerve,
-                        () -> -2,
+                        () -> 0.5,
                         () -> 0,
                         () -> 0,
                         () -> true

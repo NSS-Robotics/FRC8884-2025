@@ -41,15 +41,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Left Red2 Ground 3Piece"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Target Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Red2 Ground 3Piece"
           }
         },
         {
@@ -71,15 +71,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Middle-Left Red3 Ground"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Target Left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle-Left Red3 Ground"
           }
         },
         {

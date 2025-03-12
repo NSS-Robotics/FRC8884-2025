@@ -274,6 +274,8 @@ public class Align extends Command {
 
     @Override
     public void initialize() {
+        if (!m_swerve.gyroZeroed) return;
+
         upCommand.initialize();
         atSetpoint = false;
 
@@ -385,6 +387,8 @@ public class Align extends Command {
 
     @Override
     public void execute() {
+        if (!m_swerve.gyroZeroed) return;
+
         if (
             mag(
                 pidController.getXError(target),

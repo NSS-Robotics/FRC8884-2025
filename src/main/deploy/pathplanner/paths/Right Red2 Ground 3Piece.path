@@ -8,20 +8,52 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.968812086092715,
-        "y": 6.378559602649006
+        "x": 14.12135761589404,
+        "y": 5.913658940397351
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 14.732,
-        "y": 5.456
+        "x": 14.739,
+        "y": 5.587
       },
       "prevControl": {
-        "x": 14.07563926717197,
-        "y": 4.616026757929184
+        "x": 14.026924668874171,
+        "y": 4.671502483443708
+      },
+      "nextControl": {
+        "x": 15.01848387320848,
+        "y": 5.946325454282143
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 15.683,
+        "y": 6.88
+      },
+      "prevControl": {
+        "x": 15.35482697743526,
+        "y": 6.441130466697991
+      },
+      "nextControl": {
+        "x": 16.011173022564737,
+        "y": 7.31886953330201
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 14.376,
+        "y": 5.906
+      },
+      "prevControl": {
+        "x": 15.193975076927295,
+        "y": 6.612281396533198
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,10 +73,10 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7802120141342751,
-      "maxWaypointRelativePos": 1,
+      "minWaypointRelativePos": 0.6954063604240286,
+      "maxWaypointRelativePos": 2.0,
       "constraints": {
-        "maxVelocity": 2.0,
+        "maxVelocity": 1.5,
         "maxAcceleration": 4.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -54,7 +86,19 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Ground Intake",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Ground Intake"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.5,
     "maxAcceleration": 4.0,
@@ -71,7 +115,7 @@
   "folder": "Three-Piece Right",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -82.5972415409531
+    "rotation": -82.597
   },
   "useDefaultConstraints": true
 }

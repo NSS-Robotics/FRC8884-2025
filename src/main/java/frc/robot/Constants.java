@@ -222,13 +222,17 @@ public final class Constants {
         public static final double downKP = 20;
         public static final double downKI = 0;
         public static final double downKD = 0;
+        public static final double algaekP = 18; // testing
+        public static final double algaekI = 0;
+        public static final double algaekD = 0.020493;
         public static final int upSlot = 0;
         public static final int downSlot = 1;
+        public static final int algaeSlot = 2;
         public static final double upThreshold = 0.1;
         public static final double wristDownSafeThreshold = 0.34;
         public static final double posTolerance = 0.05;
         public static final double[] pos = {
-            1.1, // l1
+            0.375, // l1
             1.82, // l2
             2.8, // l3
             4.28, // l4
@@ -256,7 +260,7 @@ public final class Constants {
         public static final double kD = 0;
         // public static final double handoffPos = 0.02976171875;
         public static final double[] pos = {
-            0.6, // l1
+            0.475, // l1
             0.63, // l2
             0.63, // l3
             0.63, // l4
@@ -291,9 +295,9 @@ public final class Constants {
         public static final double downkI = 0;
         public static final double downkD = 0.020493;
         // public static final double downkD = 0.020493;
-        public static final double maxRotations = 106;
+        public static final double maxRotations = 95;
         public static final double restingRot = 62.3544921875;
-        public static final double climbRot = 105.14453125;
+        public static final double climbRot = 94;
         public static final double minRot = 0;
     }
 
@@ -356,6 +360,7 @@ public final class Constants {
         public static final double elevatorUpMinValue = -0.12;
         public static final double velocity = 9000;
         public static final double outtakeVelocity = 750;
+        public static final double l1Velocity = 500;
         public static final double holdingVelocity = 3500;
     }
 

@@ -74,7 +74,7 @@ public class ElevatorDown extends Command {
             ) {
                 m_elevator.setElevator(
                     Constants.ElevatorConstants.pos[RobotState.processor.ordinal()],
-                    Constants.ElevatorConstants.downSlot
+                    Constants.ElevatorConstants.algaeSlot
                 );
             }
 

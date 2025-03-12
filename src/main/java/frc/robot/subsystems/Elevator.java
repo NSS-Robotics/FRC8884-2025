@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
+import com.ctre.phoenix6.configs.Slot2Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -42,6 +43,7 @@ public class Elevator extends SubsystemBase {
         new CurrentLimitsConfigs();
     private static Slot0Configs slot0Configs = new Slot0Configs();
     private static Slot1Configs slot1Configs = new Slot1Configs();
+    private static Slot2Configs slot2Configs = new Slot2Configs();
     private static PositionVoltage elevatorPositionVoltage;
 
     public Elevator() {
@@ -62,6 +64,10 @@ public class Elevator extends SubsystemBase {
         slot1Configs.kI = Constants.ElevatorConstants.downKI;
         slot1Configs.kD = Constants.ElevatorConstants.downKD;
 
+        slot2Configs.kP = Constants.ElevatorConstants.algaekP;
+        slot2Configs.kI = Constants.ElevatorConstants.algaekI;
+        slot2Configs.kD = Constants.ElevatorConstants.algaekD;
+
         talonFXConfig.Feedback.FeedbackRemoteSensorID = encoder.getDeviceID();
         talonFXConfig.Feedback.FeedbackSensorSource =
             FeedbackSensorSourceValue.RemoteCANcoder;
@@ -74,6 +80,7 @@ public class Elevator extends SubsystemBase {
 
         motor.getConfigurator().apply(slot0Configs);
         motor.getConfigurator().apply(slot1Configs);
+        motor.getConfigurator().apply(slot2Configs);
         motor.getConfigurator().apply(motorOutputConfigs);
         motor.getConfigurator().apply(currentLimitsConfigs);
     }
@@ -84,7 +91,6 @@ public class Elevator extends SubsystemBase {
             Math.min(Constants.ElevatorConstants.maxRotations, position)
         );
         SmartDashboard.putNumber("elevator setpoint", position);
-
         elevatorPositionVoltage = new PositionVoltage(position).withSlot(slot);
 
         motor.setControl(elevatorPositionVoltage);
