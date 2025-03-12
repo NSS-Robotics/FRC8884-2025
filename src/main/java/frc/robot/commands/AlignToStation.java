@@ -44,9 +44,9 @@ public class AlignToStation extends Command {
 
     private final Pose2d[] blueStations = {
         new Pose2d(
-            1.2692396853783483,
-            1.1844133124895877,
-            Rotation2d.fromDegrees(-128.7191925970513)
+            1.0926524519258318,
+            1.288397843456241,
+            Rotation2d.fromDegrees(-127.30302739771987)
         ),
         new Pose2d(
             1.21958906088757,

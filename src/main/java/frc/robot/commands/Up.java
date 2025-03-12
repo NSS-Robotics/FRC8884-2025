@@ -119,7 +119,6 @@ public class Up extends Command {
                         timer1.restart();
                         timerDelay = 1;
                     }
-                    robotContainer.runningCommand = false;
                     m_claw.setClaw(
                         robotContainer.scoringLevel.equals(RobotState.l1)
                             ? -Constants.EndEffectorConstants.l1Velocity
@@ -151,7 +150,7 @@ public class Up extends Command {
                     m_claw.setClaw(
                         -Constants.EndEffectorConstants.outtakeVelocity
                     );
-                    robotContainer.runningCommand = false;
+                    //robotContainer.runningCommand = false;
                     if (!timer1.isRunning()) {
                         timer1.restart();
                     }
@@ -175,12 +174,10 @@ public class Up extends Command {
                     Math.abs(m_elevator.getPosition() - targetElevatorPos) <
                     Constants.ElevatorConstants.posTolerance
                 ) {
-                    if (m_claw.gamePieceDetected()) {
-                        if (!timer2.isRunning()) {
-                            timer2.restart();
-                        }
-                        m_wrist.setWrist(targetWristPos);
+                    if (!timer2.isRunning()) {
+                        timer2.restart();
                     }
+                    m_wrist.setWrist(targetWristPos);
                     if (
                         // m_claw.gamePieceDetected() &&
                         Math.abs(m_wrist.getPosition() - targetWristPos) <
@@ -190,7 +187,7 @@ public class Up extends Command {
                         if (!timer1.isRunning()) {
                             timer1.restart();
                         }
-                        robotContainer.runningCommand = false;
+                        //robotContainer.runningCommand = false;
                         m_claw.setClaw(
                             -Constants.EndEffectorConstants.outtakeVelocity
                         );
@@ -228,7 +225,7 @@ public class Up extends Command {
                     Math.abs(m_elevator.getPosition() - targetElevatorPos) <
                     Constants.ElevatorConstants.posTolerance
                 ) {
-                    robotContainer.runningCommand = false;
+                    //robotContainer.runningCommand = false;
                     m_claw.setClaw(Constants.EndEffectorConstants.velocity);
                 }
                 if (

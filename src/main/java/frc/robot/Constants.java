@@ -222,17 +222,17 @@ public final class Constants {
         public static final double downKP = 20;
         public static final double downKI = 0;
         public static final double downKD = 0;
-        public static final double algaekP = 18; // testing
+        public static final double algaekP = 16; // testing
         public static final double algaekI = 0;
         public static final double algaekD = 0.020493;
         public static final int upSlot = 0;
         public static final int downSlot = 1;
         public static final int algaeSlot = 2;
         public static final double upThreshold = 0.1;
-        public static final double wristDownSafeThreshold = 0.34;
+        public static final double wristDownSafeThreshold = 0.3;
         public static final double posTolerance = 0.05;
         public static final double[] pos = {
-            0.375, // l1
+            0.32, // l1
             1.82, // l2
             2.8, // l3
             4.28, // l4
@@ -319,7 +319,7 @@ public final class Constants {
         public static final int pivotMotorID = 60;
         public static final int intakeMotorID = 61;
         public static final int encoderID = 62;
-        public static final double encoderOffset = -0.38037109375;
+        public static final double encoderOffset = -0.37255859375;
         public static final double upKP = 9.842;
         public static final double upKI = 0;
         public static final double upKD = 2;
@@ -360,7 +360,7 @@ public final class Constants {
         public static final double elevatorUpMinValue = -0.12;
         public static final double velocity = 9000;
         public static final double outtakeVelocity = 750;
-        public static final double l1Velocity = 500;
+        public static final double l1Velocity = 600;
         public static final double holdingVelocity = 3500;
     }
 

@@ -98,16 +98,16 @@ public class Align extends Command {
 
     // BLUE CORAL
     private final Pose2d[] blueCoralPoses = {
-        // 17
+        // 19
         new Pose2d(
-            3.3052187861031546,
-            3.05038747187902,
-            Rotation2d.fromDegrees(30.625131794523984)
+            4.224899579823936,
+            5.5344501521126634,
+            Rotation2d.fromDegrees(-88.4521317697861)
         ),
         new Pose2d(
-            4.19345985524054,
-            2.5656987211536366,
-            Rotation2d.fromDegrees(88.71774517314905)
+            3.3666678936356473,
+            5.007216787737023,
+            Rotation2d.fromDegrees(-31.01720028633875)
         ),
         // 18
         new Pose2d(
@@ -120,27 +120,27 @@ public class Align extends Command {
             3.5378292020069964,
             Rotation2d.fromDegrees(29.78052470205579)
         ),
-        // 19
+        // 17
         new Pose2d(
-            4.224899579823936,
-            5.5344501521126634,
-            Rotation2d.fromDegrees(-88.4521317697861)
+            3.3052187861031546,
+            3.05038747187902,
+            Rotation2d.fromDegrees(30.625131794523984)
         ),
         new Pose2d(
-            3.3666678936356473,
-            5.007216787737023,
-            Rotation2d.fromDegrees(-31.01720028633875)
+            4.19345985524054,
+            2.5656987211536366,
+            Rotation2d.fromDegrees(88.71774517314905)
         ),
-        // 20
+        // 22
         new Pose2d(
-            5.66315743098829,
-            5.002576394543338,
-            Rotation2d.fromDegrees(-149.00439104983965)
+            4.737597160312245,
+            2.5121039548371664,
+            Rotation2d.fromDegrees(90.6691484645772)
         ),
         new Pose2d(
-            4.777538613599835,
-            5.499334065613224,
-            Rotation2d.fromDegrees(-91.60050909753255)
+            5.609083255706641,
+            3.0343413870803384,
+            Rotation2d.fromDegrees(148.50942957515792)
         ),
         // 21
         new Pose2d(
@@ -153,16 +153,16 @@ public class Align extends Command {
             4.512771462417399,
             Rotation2d.fromDegrees(-151.1744710358385)
         ),
-        // 22
+        // 20
         new Pose2d(
-            4.737597160312245,
-            2.5121039548371664,
-            Rotation2d.fromDegrees(90.6691484645772)
+            5.66315743098829,
+            5.002576394543338,
+            Rotation2d.fromDegrees(-149.00439104983965)
         ),
         new Pose2d(
-            5.609083255706641,
-            3.0343413870803384,
-            Rotation2d.fromDegrees(148.50942957515792)
+            4.777538613599835,
+            5.499334065613224,
+            Rotation2d.fromDegrees(-91.60050909753255)
         ),
     };
 
@@ -226,14 +226,18 @@ public class Align extends Command {
     private Timer timer;
     private Up upCommand;
 
+    private int postIndex;
+
     public Align(
         RobotContainer rob,
         Swerve swerve,
         Elevator elevator,
         Wrist wrist,
         Claw claw,
-        CommandXboxController driveController
+        CommandXboxController driveController,
+        int postIndex
     ) {
+        this.postIndex = postIndex;
         this.upCommand = new Up(
             rob,
             elevator,
@@ -379,7 +383,9 @@ public class Align extends Command {
                 right = min1;
             }
 
-            target = rob.isLeft ? left : right;
+            target = postIndex != -1
+                ? poses[postIndex]
+                : rob.isLeft ? left : right;
         } else {
             target = min1;
         }

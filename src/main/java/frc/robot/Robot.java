@@ -33,26 +33,27 @@ public class Robot extends TimedRobot {
      * initialization code.
      */
     public Robot() {
-        Thread thread = new Thread(() -> {
-            UsbCamera camera = CameraServer.startAutomaticCapture();
-            camera.setResolution(640, 480);
+        // Thread thread = new Thread(() -> {
+        // UsbCamera camera =
+        CameraServer.startAutomaticCapture();
+        //     camera.setResolution(640, 480);
 
-            CvSink sink = CameraServer.getVideo();
-            CvSource stream = CameraServer.putVideo("Cage Camera", 640, 480);
+        //     CvSink sink = CameraServer.getVideo();
+        //     CvSource stream = CameraServer.putVideo("Cage Camera", 640, 480);
 
-            Mat mat = new Mat();
+        //     Mat mat = new Mat();
 
-            while (!Thread.interrupted()) {
-                if (sink.grabFrame(mat) == 0) {
-                    stream.notifyError(sink.getError());
-                } else {
-                    Core.flip(mat, mat, 1);
-                    stream.putFrame(mat);
-                }
-            }
-        });
-        thread.setDaemon(true);
-        thread.start();
+        //     while (!Thread.interrupted()) {
+        //         if (sink.grabFrame(mat) == 0) {
+        //             stream.notifyError(sink.getError());
+        //         } else {
+        //             Core.flip(mat, mat, 1);
+        //             stream.putFrame(mat);
+        //         }
+        //     }
+        // });
+        // thread.setDaemon(true);
+        // thread.start();
 
         CanBridge.runTCP();
         // Instantiate our RobotContainer. This will perform all our button bindings,
