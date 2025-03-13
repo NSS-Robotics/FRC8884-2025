@@ -393,8 +393,6 @@ public class Align extends Command {
 
     @Override
     public void execute() {
-        if (!m_swerve.gyroZeroed) return;
-
         if (
             mag(
                 pidController.getXError(target),

@@ -68,6 +68,8 @@ public class AlignToStation extends Command {
 
     @Override
     public void execute() {
+        if (!m_swerve.gyroZeroed) return;
+
         if (
             !atSetpoint &&
             Math.abs(pidController.getXError(target)) < 0.05 &&

@@ -236,7 +236,7 @@ public class Up extends Command {
                     m_driverController.setRumble(RumbleType.kBothRumble, 0);
                 }
                 if (m_claw.gamePieceDetected()) {
-                    m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
+                    m_driverController.setRumble(RumbleType.kBothRumble, 1);
                     if (!timer1.isRunning()) {
                         timer1.restart();
                     }

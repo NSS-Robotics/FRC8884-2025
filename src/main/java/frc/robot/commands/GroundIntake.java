@@ -67,7 +67,7 @@ public class GroundIntake extends Command {
         l_leds.intakeLeds();
         // coral
         if (m_claw.gamePieceDetected()) {
-            m_driverController.setRumble(RumbleType.kBothRumble, 0.5);
+            m_driverController.setRumble(RumbleType.kBothRumble, 1);
             l_leds.intakeCompleteLeds();
         }
         if (

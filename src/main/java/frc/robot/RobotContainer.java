@@ -437,6 +437,7 @@ public class RobotContainer {
                         () -> scoringLevel.equals(RobotState.barge)
                     ),
                     new InstantCommand(() -> l_leds.score(m_elevator)),
+                    //new ConditionalCommand(new WaitCommand(0.25), new InstantCommand(), () -> isCoral),
                     new Up(
                         this,
                         m_elevator,
