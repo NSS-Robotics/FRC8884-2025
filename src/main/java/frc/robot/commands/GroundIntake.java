@@ -101,7 +101,12 @@ public class GroundIntake extends Command {
                     Constants.WristConstants.pos[RobotState.handoff.ordinal()]
                 );
             }
-            m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1);
+            m_intake.setPivot(
+                DriverStation.isAutonomousEnabled()
+                    ? Constants.IntakeConstants.autoIntakePosition
+                    : Constants.IntakeConstants.intakePosition,
+                1
+            );
             if (
                 m_intake.getPosition() <
                 Constants.IntakeConstants.intakeStartPos
@@ -142,7 +147,9 @@ public class GroundIntake extends Command {
     public void end(boolean interrupted) {
         m_intake.setPivot(
             robotContainer.intakeDown
-                ? Constants.IntakeConstants.intakePosition
+                ? (DriverStation.isAutonomousEnabled()
+                        ? Constants.IntakeConstants.autoIntakePosition
+                        : Constants.IntakeConstants.intakePosition)
                 : Constants.IntakeConstants.upPosition,
             robotContainer.intakeDown ? 1 : 0
         );

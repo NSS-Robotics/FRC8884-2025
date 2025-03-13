@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Target Right"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Left Red1"
@@ -19,31 +25,32 @@
         {
           "type": "named",
           "data": {
-            "name": "Target Right"
+            "name": "Align 11 Right"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Align"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Coral Placing"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Down Elevator"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Target Right"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coral Placing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Resting Climb"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Down"
+                }
+              }
+            ]
           }
         },
         {
@@ -55,7 +62,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Align"
+            "name": "Target Right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align 6 Right"
           }
         },
         {
@@ -73,7 +86,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Target Left"
+            "name": "Target Right"
           }
         },
         {
@@ -85,7 +98,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Align"
+            "name": "Align 7 Left"
           }
         },
         {

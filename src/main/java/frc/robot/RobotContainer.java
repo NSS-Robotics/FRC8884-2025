@@ -333,7 +333,10 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "Intake Down",
             new InstantCommand(() ->
-                m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1)
+                m_intake.setPivot(
+                    Constants.IntakeConstants.autoIntakePosition,
+                    1
+                )
             )
         );
         intakeDown = false;

@@ -338,6 +338,7 @@ public final class Constants {
         public static final double algaePosition = 0;
         public static final double upPosition = -0.0;
         public static final double intakePosition = -0.356201171875;
+        public static final double autoIntakePosition = -0.326201171875;
         public static final double velocity = 2000;
         public static final double l1velocity = 1000;
     }
