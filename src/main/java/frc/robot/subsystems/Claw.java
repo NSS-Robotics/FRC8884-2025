@@ -91,7 +91,7 @@ public class Claw extends SubsystemBase {
             "LaserCAN dist",
             lasercan.getMeasurement().distance_mm
         );
-        return lasercan.getMeasurement().distance_mm < 115;
+        return lasercan.getMeasurement().distance_mm < 100;
     }
 
     @Override

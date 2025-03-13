@@ -413,10 +413,12 @@ public class Align extends Command {
             m_swerve.stopSwerve();
         }
 
+        double maxAlign = postIndex != -1 ? 3 : 2;
+
         if (
             !atSetpoint &&
-            Math.abs(pidController.getXError(target)) < 2 &&
-            Math.abs(pidController.getYError(target)) < 2
+            Math.abs(pidController.getXError(target)) < maxAlign &&
+            Math.abs(pidController.getYError(target)) < maxAlign
         ) {
             // double botX = m_swerve.getPose().getX();
 

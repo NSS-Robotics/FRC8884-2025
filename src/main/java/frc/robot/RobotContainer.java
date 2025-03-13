@@ -326,6 +326,16 @@ public class RobotContainer {
                 )
             )
         );
+        NamedCommands.registerCommand(
+            "Resting Climb",
+            new RestingClimb(m_climber)
+        );
+        NamedCommands.registerCommand(
+            "Intake Down",
+            new InstantCommand(() ->
+                m_intake.setPivot(Constants.IntakeConstants.intakePosition, 1)
+            )
+        );
         intakeDown = false;
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);

@@ -33,6 +33,11 @@ public class RestingClimb extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return (
+            Math.abs(
+                m_climber.getPosition() - Constants.ClimberConstants.restingRot
+            ) <
+            0.5
+        );
     }
 }

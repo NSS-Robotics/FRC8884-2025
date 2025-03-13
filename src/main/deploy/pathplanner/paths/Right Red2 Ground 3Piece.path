@@ -88,13 +88,26 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Ground Intake",
+      "name": "elevator down then intake",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "named",
+        "type": "sequential",
         "data": {
-          "name": "Ground Intake"
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Down Elevator"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Ground Intake"
+              }
+            }
+          ]
         }
       }
     }
@@ -108,7 +121,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.5,
     "rotation": -126.0
   },
   "reversed": false,
