@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -114,7 +115,10 @@ public class Up extends Command {
                 Math.abs(m_elevator.getPosition() - targetElevatorPos) <
                 Constants.ElevatorConstants.posTolerance
             ) {
-                if (m_claw.gamePieceDetected() && canRunClaw()) {
+                if (
+                    (m_claw.gamePieceDetected() && canRunClaw()) ||
+                    DriverStation.isAutonomousEnabled()
+                ) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
                         timerDelay = .5;
