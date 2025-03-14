@@ -319,11 +319,11 @@ public final class Constants {
         public static final int pivotMotorID = 60;
         public static final int intakeMotorID = 61;
         public static final int encoderID = 62;
-        public static final double encoderOffset = -0.37255859375;
-        public static final double upKP = 9.842;
+        public static final double encoderOffset = 0.2958984375;
+        public static final double upKP = 12.75;
         public static final double upKI = 0;
         public static final double upKD = 2;
-        public static final double downKP = 9;
+        public static final double downKP = 8.25;
         public static final double downKI = 0;
         public static final double downKD = 0;
         public static final double maxRot = 0;
@@ -337,8 +337,8 @@ public final class Constants {
         public static final double intakeStartPos = -0.3;
         public static final double algaePosition = 0;
         public static final double upPosition = -0.0;
-        public static final double intakePosition = -0.356201171875;
-        public static final double autoIntakePosition = -0.326201171875;
+        public static final double intakePosition = -0.3583984375;
+        public static final double autoIntakePosition = -0.3583984375;
         public static final double velocity = 2000;
         public static final double l1velocity = 1000;
     }

@@ -116,8 +116,9 @@ public class Up extends Command {
                 Constants.ElevatorConstants.posTolerance
             ) {
                 if (
-                    (m_claw.gamePieceDetected() && canRunClaw()) ||
-                    DriverStation.isAutonomousEnabled()
+                    (m_claw.gamePieceDetected() ||
+                        DriverStation.isAutonomousEnabled()) &&
+                    canRunClaw()
                 ) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
