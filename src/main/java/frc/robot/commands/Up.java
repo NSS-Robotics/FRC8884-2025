@@ -30,7 +30,7 @@ public class Up extends Command {
     private double targetElevatorPos;
     private double targetWristPos;
     private double outWristPos =
-        Constants.WristConstants.pos[RobotState.barge.ordinal()];
+        Constants.WristConstants.pos[RobotState.l1.ordinal()];
     private double timerDelay = 1;
     private double SWERVE_STOP = 0.05;
     private boolean ended = false;
