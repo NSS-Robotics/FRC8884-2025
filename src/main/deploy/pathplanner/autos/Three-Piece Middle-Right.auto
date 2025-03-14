@@ -23,15 +23,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Coral Placing"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Down Elevator"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coral Placing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Resting Climb"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Down"
+                }
+              }
+            ]
           }
         },
         {
@@ -49,7 +62,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Align"
+            "name": "Align 8 Left"
           }
         },
         {
@@ -79,7 +92,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Align"
+            "name": "Align 7 Right"
           }
         },
         {

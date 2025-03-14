@@ -16,44 +16,44 @@
     },
     {
       "anchor": {
-        "x": 14.934933774834438,
-        "y": 6.087996688741721
+        "x": 14.87,
+        "y": 5.732
       },
       "prevControl": {
-        "x": 13.700041390728474,
-        "y": 5.063762417218542
+        "x": 14.557201986754967,
+        "y": 5.252628311258277
       },
       "nextControl": {
-        "x": 15.375204288836546,
-        "y": 6.453162232708174
+        "x": 15.18258035495686,
+        "y": 6.211038121337997
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 15.719453642384105,
-        "y": 7.214
+        "x": 15.741,
+        "y": 7.076
       },
       "prevControl": {
-        "x": 15.40513375526373,
-        "y": 6.7651046797296335
+        "x": 15.426680112879625,
+        "y": 6.627104679729633
       },
       "nextControl": {
-        "x": 16.033773529504487,
-        "y": 7.662895320270368
+        "x": 16.055319887120383,
+        "y": 7.5248953202703674
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 14.16055743242938,
-        "y": 5.625844594596423
+        "x": 14.441,
+        "y": 5.18
       },
       "prevControl": {
-        "x": 14.81275389080552,
-        "y": 6.060641123247442
+        "x": 14.756238611413355,
+        "y": 5.630207394538133
       },
       "nextControl": null,
       "isLocked": false,
@@ -76,7 +76,7 @@
       "minWaypointRelativePos": 0.8607773851590124,
       "maxWaypointRelativePos": 2.27703180212014,
       "constraints": {
-        "maxVelocity": 1.5,
+        "maxVelocity": 2.0,
         "maxAcceleration": 4.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -88,13 +88,26 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Ground Intake",
-      "waypointRelativePos": 0.3816254416961127,
+      "name": "elevator down then intake",
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "named",
+        "type": "sequential",
         "data": {
-          "name": "Ground Intake"
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Down Elevator"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Ground Intake"
+              }
+            }
+          ]
         }
       }
     }
@@ -108,8 +121,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -126.0
+    "velocity": 0.5,
+    "rotation": -146.352
   },
   "reversed": false,
   "folder": "Three-Piece Middle-Right",
