@@ -385,7 +385,9 @@ public class RobotContainer {
                 )
             );
 
-        m_driverController.a().whileTrue(new ToggleIntake(this, m_intake));
+        m_driverController
+            .a()
+            .whileTrue(new ToggleIntake(this, m_intake, m_climber));
         m_driverController
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
@@ -426,7 +428,7 @@ public class RobotContainer {
             .onTrue(
                 new SequentialCommandGroup(
                     new InstantCommand(l_leds::stationAlignLeds),
-                    new AlignToStation(m_swerve),
+                    // new AlignToStation(m_swerve),
                     new StationIntake(m_elevator, m_wrist, m_endEffector)
                 )
             );
@@ -447,7 +449,9 @@ public class RobotContainer {
                             m_driverController,
                             -1
                         ).asProxy(),
-                        () -> scoringLevel.equals(RobotState.barge)
+                        () ->
+                            scoringLevel.equals(RobotState.barge) ||
+                            scoringLevel.equals(RobotState.processor)
                     ),
                     new InstantCommand(() -> l_leds.score(m_elevator)),
                     //new ConditionalCommand(new WaitCommand(0.25), new InstantCommand(), () -> isCoral),

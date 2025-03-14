@@ -271,7 +271,7 @@ public final class Constants {
             0.626, // algaeReefLow
             0.626, // algaeReefHigh
             0.622, // processor
-            0.4, // climb
+            0.270751953125, // climb
         };
         public static final double posTolerance = 0.05;
         public static final double maxRotations = 0.72;
@@ -338,6 +338,7 @@ public final class Constants {
         public static final double algaePosition = 0;
         public static final double upPosition = -0.0;
         public static final double intakePosition = -0.3583984375;
+        public static final double climbPosition = intakePosition / 6.0;
         public static final double autoIntakePosition = -0.3583984375;
         public static final double velocity = 2000;
         public static final double l1velocity = 1000;

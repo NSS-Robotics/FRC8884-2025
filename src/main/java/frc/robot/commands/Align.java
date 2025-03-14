@@ -302,13 +302,13 @@ public class Align extends Command {
         //     return;
         // }
 
-        if (rob.scoringLevel.equals(RobotState.processor)) {
-            xTolerance = 0.08;
-            yTolerance = 0.08;
-            rTolerance = 0.5;
-            target = m_swerve.isRed() ? redProcessorPose : blueProcessorPose;
-            return;
-        }
+        // if (rob.scoringLevel.equals(RobotState.processor)) {
+        //     xTolerance = 0.08;
+        //     yTolerance = 0.08;
+        //     rTolerance = 0.5;
+        //     target = m_swerve.isRed() ? redProcessorPose : blueProcessorPose;
+        //     return;
+        // }
 
         xTolerance = 0.01;
         yTolerance = 0.01;

@@ -10,10 +10,16 @@ public class ToggleIntake extends Command {
 
     private final RobotContainer ron;
     private final Intake m_intake;
+    private final Climber m_climber;
 
-    public ToggleIntake(RobotContainer ron, Intake m_intake) {
+    public ToggleIntake(
+        RobotContainer ron,
+        Intake m_intake,
+        Climber m_climber
+    ) {
         this.ron = ron;
         this.m_intake = m_intake;
+        this.m_climber = m_climber;
 
         addRequirements(m_intake);
     }
@@ -27,11 +33,15 @@ public class ToggleIntake extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_intake.setPivot(
-            ron.intakeDown
-                ? Constants.IntakeConstants.intakePosition
-                : Constants.IntakeConstants.upPosition,
-            ron.intakeDown ? 1 : 0
-        );
+        if (m_climber.getPosition() > 60) {
+            m_intake.setPivot(Constants.IntakeConstants.climbPosition, 1);
+        } else {
+            m_intake.setPivot(
+                ron.intakeDown
+                    ? Constants.IntakeConstants.intakePosition
+                    : Constants.IntakeConstants.upPosition,
+                ron.intakeDown ? 1 : 0
+            );
+        }
     }
 }

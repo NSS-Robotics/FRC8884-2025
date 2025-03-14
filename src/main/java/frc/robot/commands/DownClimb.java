@@ -20,7 +20,9 @@ public class DownClimb extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_climber.setClimber(Constants.ClimberConstants.climbRot, 1);
+        if (m_climber.getPosition() < 1) {
+            m_climber.setClimber(Constants.ClimberConstants.climbRot, 1);
+        }
     }
 
     // Called once the command ends or is interrupted%.
