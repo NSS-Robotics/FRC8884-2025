@@ -181,6 +181,7 @@ public class Up extends Command {
                 ) {
                     if (!timer2.isRunning()) {
                         timer2.restart();
+                        timerDelay = 0.75;
                     }
                     m_wrist.setWrist(targetWristPos);
                     if (
@@ -191,6 +192,7 @@ public class Up extends Command {
                     ) {
                         if (!timer1.isRunning()) {
                             timer1.restart();
+                            timerDelay = 0.5;
                         }
                         //robotContainer.runningCommand = false;
                         m_claw.setClaw(

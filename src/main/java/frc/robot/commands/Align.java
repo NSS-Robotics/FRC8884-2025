@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,6 +16,7 @@ import frc.robot.subsystems.*;
 public class Align extends Command {
 
     private static final double PEDRO_GO_UP = 1.75;
+    private static final double PEDRO_GO_UP_AUTO = 2.5;
     private static final double RED_BLUE_OFFSET = 8.569576;
 
     private RobotContainer rob;
@@ -398,7 +400,9 @@ public class Align extends Command {
                 pidController.getXError(target),
                 pidController.getYError(target)
             ) <
-            PEDRO_GO_UP
+            (DriverStation.isAutonomousEnabled()
+                    ? PEDRO_GO_UP_AUTO
+                    : PEDRO_GO_UP)
         ) {
             upCommand.execute();
         }
