@@ -467,6 +467,16 @@ public class RobotContainer {
                 )
             );
         m_driverController
+            .start()
+            .onTrue(
+                new InstantCommand(() ->
+                    m_intake.setPivot(
+                        Constants.IntakeConstants.intakePosition / 8.0,
+                        0
+                    )
+                )
+            );
+        m_driverController
             .rightBumper()
             .onTrue(
                 new SequentialCommandGroup(
