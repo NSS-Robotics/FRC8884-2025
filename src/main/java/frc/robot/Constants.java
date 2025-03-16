@@ -239,7 +239,7 @@ public final class Constants {
             // 1.204619140625, // stationIntake
             1.204619140625, // stationIntake
             0, // handoff
-            4.28, // bargex
+            4.1, // barge
             0.2, // algaeGround
             1.82, // algaeReefLow
             2.8, // algaeReefHigh
