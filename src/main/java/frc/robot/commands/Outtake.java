@@ -98,7 +98,7 @@ public class Outtake extends Command {
                 ) <
                 Constants.WristConstants.posTolerance
             ) {
-                m_claw.setClaw(Constants.EndEffectorConstants.outtakeVelocity);
+                m_claw.setClaw(-Constants.EndEffectorConstants.outtakeVelocity);
             }
         }
     }
