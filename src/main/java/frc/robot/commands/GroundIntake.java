@@ -100,20 +100,41 @@ public class GroundIntake extends Command {
                 m_wrist.setWrist(
                     Constants.WristConstants.pos[RobotState.handoff.ordinal()]
                 );
+                m_claw.setClaw(Constants.EndEffectorConstants.velocity);
             }
-            m_intake.setPivot(
-                DriverStation.isAutonomousEnabled()
-                    ? Constants.IntakeConstants.autoIntakePosition
-                    : Constants.IntakeConstants.intakePosition,
-                1
-            );
-            if (
-                m_intake.getPosition() <
-                Constants.IntakeConstants.intakeStartPos
+            if (!m_indexer.gamepieceDetected()) {
+                m_intake.setPivot(
+                    DriverStation.isAutonomousEnabled()
+                        ? Constants.IntakeConstants.autoIntakePosition
+                        : Constants.IntakeConstants.intakePosition,
+                    1
+                );
+                if (
+                    m_intake.getPosition() <
+                        Constants.IntakeConstants.intakeStartPos &&
+                    Math.abs(
+                        m_wrist.getPosition() -
+                        Constants.WristConstants.pos[RobotState.handoff.ordinal()]
+                    ) <
+                    Constants.WristConstants.posTolerance
+                ) {
+                    m_intake.setIntake(
+                        Constants.IntakeConstants.velocity,
+                        false
+                    );
+                    m_indexer.setIndexer(Constants.IndexerConstants.velocity);
+                    m_claw.setClaw(Constants.EndEffectorConstants.velocity);
+                }
+            } else if (
+                Math.abs(
+                        m_wrist.getPosition() -
+                        Constants.WristConstants.pos[RobotState.handoff.ordinal()]
+                    ) <
+                    Constants.WristConstants.posTolerance &&
+                m_claw.getVelocity() > 80
             ) {
                 m_intake.setIntake(Constants.IntakeConstants.velocity, false);
                 m_indexer.setIndexer(Constants.IndexerConstants.velocity);
-                m_claw.setClaw(Constants.EndEffectorConstants.velocity);
             }
         }
         // algae

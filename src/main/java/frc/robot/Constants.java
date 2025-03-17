@@ -299,6 +299,7 @@ public final class Constants {
         public static final double restingRot = 50.9296875;
         public static final double climbRot = 94;
         public static final double minRot = 0;
+        public static final double halfIntakeRot = 19.7880859375;
     }
 
     public static final class IndexerConstants {
@@ -340,7 +341,8 @@ public final class Constants {
         public static final double intakePosition = -0.3583984375;
         public static final double climbPosition = intakePosition / 6.0;
         public static final double autoIntakePosition = -0.3583984375;
-        public static final double velocity = 2000;
+        // public static final double velocity = 2000;
+        public static final double velocity = 3000;
         public static final double l1velocity = 1000;
     }
 

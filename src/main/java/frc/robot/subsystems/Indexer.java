@@ -57,7 +57,7 @@ public class Indexer extends SubsystemBase {
             lasercan.setRegionOfInterest(
                 new LaserCan.RegionOfInterest(8, 8, 16, 16)
             );
-            lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+            lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);
         } catch (ConfigurationFailedException e) {
             System.out.println("Configuration failed! " + e);
         }
