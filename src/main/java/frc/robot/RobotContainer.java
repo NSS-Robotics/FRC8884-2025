@@ -392,17 +392,29 @@ public class RobotContainer {
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
 
+        // m_driverController
+        //     .povLeft()
+        //     .whileTrue(
+        //         new Align(
+        //             this,
+        //             m_swerve,
+        //             m_elevator,
+        //             m_wrist,
+        //             m_endEffector,
+        //             m_driverController,
+        //             -1
+        //         )
+        //     );
         m_driverController
             .povLeft()
             .whileTrue(
-                new Align(
+                new HalfIntake(
                     this,
-                    m_swerve,
-                    m_elevator,
-                    m_wrist,
-                    m_endEffector,
+                    m_intake,
+                    m_indexer,
                     m_driverController,
-                    -1
+                    m_climber,
+                    l_leds
                 )
             );
         m_driverController
