@@ -25,14 +25,16 @@ import frc.robot.Constants;
 public class Indexer extends SubsystemBase {
 
     private final SparkMax motor = new SparkMax(
-            Constants.IndexerConstants.motorID,
-            MotorType.kBrushless);
+        Constants.IndexerConstants.motorID,
+        MotorType.kBrushless
+    );
     private final SparkMaxConfig motorConfig;
     private final LaserCan lasercan;
     private final SimpleMotorFeedforward ff = new SimpleMotorFeedforward(
-            Constants.IndexerConstants.kS,
-            Constants.IndexerConstants.kV,
-            Constants.IndexerConstants.kA);
+        Constants.IndexerConstants.kS,
+        Constants.IndexerConstants.kV,
+        Constants.IndexerConstants.kA
+    );
 
     public Indexer() {
         motorConfig = new SparkMaxConfig();
@@ -45,14 +47,16 @@ public class Indexer extends SubsystemBase {
 
         motorConfig.smartCurrentLimit(40).idleMode(IdleMode.kCoast);
         motor.configure(
-                motorConfig,
-                ResetMode.kResetSafeParameters,
-                PersistMode.kNoPersistParameters);
+            motorConfig,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kNoPersistParameters
+        );
 
         try {
             lasercan.setRangingMode(LaserCan.RangingMode.SHORT);
             lasercan.setRegionOfInterest(
-                    new LaserCan.RegionOfInterest(8, 8, 16, 16));
+                new LaserCan.RegionOfInterest(8, 8, 16, 16)
+            );
             lasercan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         } catch (ConfigurationFailedException e) {
             System.out.println("Configuration failed! " + e);
@@ -86,11 +90,16 @@ public class Indexer extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber(
-                "Indexer Velocity",
-                motor.getEncoder().getVelocity());
-        // SmartDashboard.putBoolean(
-        // "Indexer Game Piece Detected",
-        // gamepieceDetected()
-        // );
+            "Indexer Velocity",
+            motor.getEncoder().getVelocity()
+        );
+        SmartDashboard.putBoolean(
+            "Indexer Game Piece Detected",
+            gamepieceDetected()
+        );
+        SmartDashboard.putNumber(
+            "LaserCAN dist Indexer",
+            lasercan.getMeasurement().distance_mm
+        );
     }
 }
