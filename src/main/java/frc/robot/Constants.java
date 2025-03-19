@@ -313,6 +313,7 @@ public final class Constants {
         public static final double kV = 0.5;
         public static final double kA = 0.1;
         public static final double velocity = 0.5;
+        public static final double halfIntakeVelocity = 0.3;
     }
 
     public static final class IntakeConstants {
@@ -343,6 +344,7 @@ public final class Constants {
         public static final double autoIntakePosition = -0.3583984375;
         // public static final double velocity = 2000;
         public static final double velocity = 3000;
+        public static final double halfIntakeVelocity = 3000;
         public static final double l1velocity = 1000;
     }
 

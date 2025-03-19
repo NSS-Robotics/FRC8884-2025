@@ -445,39 +445,39 @@ public class RobotContainer {
                 )
             );
 
-        m_driverController
-            .rightTrigger()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(l_leds::alignLeds),
-                    new ConditionalCommand(
-                        new InstantCommand(),
-                        new Align(
-                            this,
-                            m_swerve,
-                            m_elevator,
-                            m_wrist,
-                            m_endEffector,
-                            m_driverController,
-                            -1
-                        ).asProxy(),
-                        () ->
-                            scoringLevel.equals(RobotState.barge) ||
-                            scoringLevel.equals(RobotState.processor)
-                    ),
-                    new InstantCommand(() -> l_leds.score(m_elevator)),
-                    //new ConditionalCommand(new WaitCommand(0.25), new InstantCommand(), () -> isCoral),
-                    new Up(
-                        this,
-                        m_elevator,
-                        m_wrist,
-                        m_endEffector,
-                        m_swerve,
-                        m_driverController,
-                        () -> true
-                    )
-                )
-            );
+        // m_driverController
+        //     .rightTrigger()
+        //     .onTrue(
+        //         new SequentialCommandGroup(
+        //             new InstantCommand(l_leds::alignLeds),
+        //             new ConditionalCommand(
+        //                 new InstantCommand(),
+        //                 new Align(
+        //                     this,
+        //                     m_swerve,
+        //                     m_elevator,
+        //                     m_wrist,
+        //                     m_endEffector,
+        //                     m_driverController,
+        //                     -1
+        //                 ).asProxy(),
+        //                 () ->
+        //                     scoringLevel.equals(RobotState.barge) ||
+        //                     scoringLevel.equals(RobotState.processor)
+        //             ),
+        //             new InstantCommand(() -> l_leds.score(m_elevator)),
+        //             //new ConditionalCommand(new WaitCommand(0.25), new InstantCommand(), () -> isCoral),
+        //             new Up(
+        //                 this,
+        //                 m_elevator,
+        //                 m_wrist,
+        //                 m_endEffector,
+        //                 m_swerve,
+        //                 m_driverController,
+        //                 () -> true
+        //             )
+        //         )
+        //     );
         m_driverController
             .start()
             .onTrue(

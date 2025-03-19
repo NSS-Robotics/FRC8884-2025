@@ -56,8 +56,11 @@ public class HalfIntake extends Command {
             1
         );
         if (m_intake.getPosition() < Constants.IntakeConstants.intakeStartPos) {
-            m_intake.setIntake(Constants.IntakeConstants.velocity, false);
-            m_indexer.setIndexer(Constants.IndexerConstants.velocity);
+            m_intake.setIntake(
+                Constants.IntakeConstants.halfIntakeVelocity,
+                false
+            );
+            m_indexer.setIndexer(Constants.IndexerConstants.halfIntakeVelocity);
         }
         if (m_indexer.gamepieceDetected()) {
             m_intake.stopIntake();
