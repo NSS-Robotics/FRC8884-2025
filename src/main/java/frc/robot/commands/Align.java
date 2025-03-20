@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -27,6 +29,75 @@ public class Align extends Command {
     private double xTolerance;
     private double yTolerance;
     private double rTolerance;
+
+    private final Pose2d[] redL1Poses = {
+        //6\
+        new Pose2d(
+            13.427346264776789,
+            2.515705824540677,
+            Rotation2d.fromDegrees(98.88435146986305)
+        ),
+        new Pose2d(
+            14.562038133605228,
+            3.5589768148937693,
+            Rotation2d.fromDegrees(174.93780344438036)
+        ),
+        //7
+        new Pose2d(
+            14.474698233432257,
+            3.511730009749397,
+            Rotation2d.fromDegrees(149.11166780153667)
+        ),
+        new Pose2d(
+            14.201058007081613,
+            5.09842946655324,
+            Rotation2d.fromDegrees(-114.36672494755307)
+        ),
+        //8
+        new Pose2d(
+            14.21768773408878,
+            5.035340508559569,
+            Rotation2d.fromDegrees(-146.35153267274092)
+        ),
+        new Pose2d(
+            12.720033253898677,
+            5.551081323729148,
+            Rotation2d.fromDegrees(-54.99991727968953)
+        ),
+        //9
+        new Pose2d(
+            12.741693919859538,
+            5.527083506044402,
+            Rotation2d.fromDegrees(-82.5972415409531)
+        ),
+        new Pose2d(
+            11.570111821884012,
+            4.505731222931736,
+            Rotation2d.fromDegrees(4.692670352466536)
+        ),
+        //10
+        new Pose2d(
+            11.633289217372596,
+            4.562910020151264,
+            Rotation2d.fromDegrees(-29.400396067552148)
+        ),
+        new Pose2d(
+            11.894687198114651,
+            2.978409464013095,
+            Rotation2d.fromDegrees(64.56303823886117)
+        ),
+        //11
+        new Pose2d(
+            11.93383383675274,
+            3.032111893217508,
+            Rotation2d.fromDegrees(35.029174811110195)
+        ),
+        new Pose2d(
+            13.37806864381898,
+            2.484554728269225,
+            Rotation2d.fromDegrees(124.14802881172679)
+        ),
+    };
 
     // RED CORAL
     private final Pose2d[] redCoralPoses = {
@@ -325,7 +396,11 @@ public class Align extends Command {
         double minDist2 = Double.MAX_VALUE;
 
         Pose2d[] poses = m_swerve.isRed()
-            ? rob.isCoral ? redCoralPoses : redAlgaePoses
+            ? rob.isCoral
+                ? (rob.scoringLevel.equals(RobotState.l1)
+                        ? redL1Poses
+                        : redCoralPoses)
+                : redAlgaePoses
             : rob.isCoral ? blueCoralPoses : blueAlgaePoses;
 
         // find target with minimum distance

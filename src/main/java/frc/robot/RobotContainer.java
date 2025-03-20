@@ -416,7 +416,7 @@ public class RobotContainer {
         //     );
         m_driverController
             .povLeft()
-            .onTrue(
+            .whileTrue(
                 new Align(
                     this,
                     m_swerve,
@@ -424,7 +424,7 @@ public class RobotContainer {
                     m_wrist,
                     m_endEffector,
                     m_driverController,
-                    2
+                    3
                 )
             );
         m_driverController
@@ -469,7 +469,7 @@ public class RobotContainer {
                             m_wrist,
                             m_endEffector,
                             m_driverController,
-                            2
+                            3
                         ).asProxy(),
                         () ->
                             scoringLevel.equals(RobotState.barge) ||
