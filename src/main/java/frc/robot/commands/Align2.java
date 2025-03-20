@@ -11,7 +11,7 @@ import frc.robot.subsystems.*;
 public class Align2 extends Command {
 
     private static final double BOT_RADIUS = 1;
-    private static final double PEDRO_GO_UP = 1.75;
+    private static final double PEDRO_GO_UP = 2.5;
     private static final double RED_BLUE_OFFSET = 8.569576;
 
     private RobotContainer rob;
@@ -273,10 +273,7 @@ public class Align2 extends Command {
         double botX = botPose.getX();
         double botY = botPose.getY();
 
-        double targetX = target.getX();
-        double targetY = target.getY();
-
-        double m_b = (targetY - botY) / (targetX - botX);
+        double m_b = (target.getY() - botY) / (target.getX() - botX);
 
         double theta = Math.atan(-1 / m_b);
         double shiftX = BOT_RADIUS * Math.cos(theta);
