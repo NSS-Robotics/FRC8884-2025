@@ -15,7 +15,7 @@ import frc.robot.subsystems.*;
 
 public class Align extends Command {
 
-    private static final double PEDRO_GO_UP = 1.75;
+    private static final double PEDRO_GO_UP = 2.5;
     private static final double PEDRO_GO_UP_AUTO = 2.5;
     private static final double RED_BLUE_OFFSET = 8.569576;
 
