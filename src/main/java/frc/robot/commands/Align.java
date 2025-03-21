@@ -31,66 +31,66 @@ public class Align extends Command {
     private double rTolerance;
 
     private final Pose2d[] redL1Poses = {
-        //6\
+        // 6
         new Pose2d(
-            13.427346264776789,
-            2.515705824540677,
-            Rotation2d.fromDegrees(98.88435146986305)
+            12.648779945166266,
+            2.4684989462587814,
+            Rotation2d.fromDegrees(53.98024239366128)
         ),
         new Pose2d(
-            14.562038133605228,
-            3.5589768148937693,
-            Rotation2d.fromDegrees(174.93780344438036)
+            14.560310462335117,
+            3.558725472835589,
+            Rotation2d.fromDegrees(-175.30412722281832)
         ),
-        //7
+        // 7
         new Pose2d(
-            14.474698233432257,
-            3.511730009749397,
-            Rotation2d.fromDegrees(149.11166780153667)
+            14.201058007081613,
+            8 - 5.09842946655324,
+            Rotation2d.fromDegrees(114.36672494755307)
         ),
         new Pose2d(
             14.201058007081613,
             5.09842946655324,
             Rotation2d.fromDegrees(-114.36672494755307)
         ),
-        //8
+        // 8
         new Pose2d(
-            14.21768773408878,
-            5.035340508559569,
-            Rotation2d.fromDegrees(-146.35153267274092)
+            14.60273292271843,
+            4.442631425979867,
+            Rotation2d.fromDegrees(173.9508284788378)
         ),
         new Pose2d(
             12.720033253898677,
             5.551081323729148,
             Rotation2d.fromDegrees(-54.99991727968953)
         ),
-        //9
+        // 9
         new Pose2d(
-            12.741693919859538,
-            5.527083506044402,
-            Rotation2d.fromDegrees(-82.5972415409531)
+            13.468060384967364,
+            5.567111252491732,
+            Rotation2d.fromDegrees(-126.33236078083564)
         ),
         new Pose2d(
             11.570111821884012,
             4.505731222931736,
             Rotation2d.fromDegrees(4.692670352466536)
         ),
-        //10
+        // 10
         new Pose2d(
-            11.633289217372596,
-            4.562910020151264,
-            Rotation2d.fromDegrees(-29.400396067552148)
+            11.932886066650994,
+            5.127923898600779,
+            Rotation2d.fromDegrees(-66.48094346729839)
         ),
         new Pose2d(
             11.894687198114651,
             2.978409464013095,
             Rotation2d.fromDegrees(64.56303823886117)
         ),
-        //11
+        // 11
         new Pose2d(
-            11.93383383675274,
-            3.032111893217508,
-            Rotation2d.fromDegrees(35.029174811110195)
+            11.514464849624483,
+            3.6065191063628173,
+            Rotation2d.fromDegrees(-6.089001164643469)
         ),
         new Pose2d(
             13.37806864381898,

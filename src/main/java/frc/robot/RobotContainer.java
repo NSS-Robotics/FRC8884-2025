@@ -386,7 +386,7 @@ public class RobotContainer {
             );
 
         m_driverController
-            .a()
+            .rightBumper()
             .whileTrue(
                 new HalfIntake(
                     this,
@@ -417,14 +417,14 @@ public class RobotContainer {
         m_driverController
             .povLeft()
             .whileTrue(
-                new Align(
+                new Align2(
                     this,
                     m_swerve,
                     m_elevator,
                     m_wrist,
                     m_endEffector,
                     m_driverController,
-                    3
+                    0
                 )
             );
         m_driverController
@@ -469,7 +469,7 @@ public class RobotContainer {
                             m_wrist,
                             m_endEffector,
                             m_driverController,
-                            3
+                            -1
                         ).asProxy(),
                         () ->
                             scoringLevel.equals(RobotState.barge) ||
@@ -501,22 +501,22 @@ public class RobotContainer {
                     )
                 )
             );
-        m_driverController
-            .rightBumper()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(() -> l_leds.score(m_elevator)),
-                    new Up(
-                        this,
-                        m_elevator,
-                        m_wrist,
-                        m_endEffector,
-                        m_swerve,
-                        m_driverController,
-                        () -> true
-                    )
-                )
-            );
+        // m_driverController
+        //     .rightBumper()
+        //     .onTrue(
+        //         new SequentialCommandGroup(
+        //             new InstantCommand(() -> l_leds.score(m_elevator)),
+        //             new Up(
+        //                 this,
+        //                 m_elevator,
+        //                 m_wrist,
+        //                 m_endEffector,
+        //                 m_swerve,
+        //                 m_driverController,
+        //                 () -> true
+        //             )
+        //         )
+        //     );
         m_driverController
             .leftBumper()
             .onTrue(

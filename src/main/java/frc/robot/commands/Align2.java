@@ -10,7 +10,7 @@ import frc.robot.subsystems.*;
 
 public class Align2 extends Command {
 
-    private static final double BOT_RADIUS = 1;
+    private static final double BOT_RADIUS = mag(0.84, 0.98) / 2;
     private static final double PEDRO_GO_UP = 2.5;
     private static final double RED_BLUE_OFFSET = 8.569576;
 
@@ -204,9 +204,25 @@ public class Align2 extends Command {
     private final Pose2d[] blueAlgaePoses = new Pose2d[redAlgaePoses.length];
 
     // RED REEF CORNERS
-    private final Pose2d[] redReefCorners = new Pose2d[6];
+    private final Pose2d[] redReefCorners = {
+        new Pose2d(13.046, 3.059, new Rotation2d()),
+        new Pose2d(13.903, 3.546, new Rotation2d()),
+        new Pose2d(13.903, 4.483, new Rotation2d()),
+        new Pose2d(13.061, 4.984, new Rotation2d()),
+        new Pose2d(12.218, 4.497, new Rotation2d()),
+        new Pose2d(12.218, 3.546, new Rotation2d()),
+        new Pose2d(13.046, 3.059, new Rotation2d()),
+    };
     // BLUE REEF CORNERS
-    private final Pose2d[] blueReefCorners = new Pose2d[6];
+    private final Pose2d[] blueReefCorners = {
+        new Pose2d(4.489, 3.059, new Rotation2d()),
+        new Pose2d(5.325, 3.546, new Rotation2d()),
+        new Pose2d(5.332, 4.483, new Rotation2d()),
+        new Pose2d(4.489, 4.984, new Rotation2d()),
+        new Pose2d(3.632, 4.497, new Rotation2d()),
+        new Pose2d(3.632, 3.546, new Rotation2d()),
+        new Pose2d(4.489, 3.059, new Rotation2d()),
+    };
 
     private boolean canAlign;
     private Up upCommand;
@@ -248,7 +264,7 @@ public class Align2 extends Command {
         addRequirements(swerve);
     }
 
-    public double mag(double x, double y) {
+    public static double mag(double x, double y) {
         return Math.sqrt(x * x + y * y);
     }
 
@@ -265,7 +281,7 @@ public class Align2 extends Command {
             : rob.isCoral ? blueCoralPoses : blueAlgaePoses;
 
         // TODO: target index based on button
-        target = poses[0];
+        target = poses[postIndex];
 
         Pose2d[] corners = m_swerve.isRed() ? redReefCorners : blueReefCorners;
 
@@ -284,7 +300,7 @@ public class Align2 extends Command {
         double botX2 = botX + shiftX;
         double botY2 = botY + shiftY;
 
-        for (int i = 0; i < corners.length; i++) {
+        for (int i = 0; i < corners.length - 1; i++) {
             Pose2d r1 = corners[i];
             Pose2d r2 = corners[i + 1];
 
@@ -315,6 +331,7 @@ public class Align2 extends Command {
     @Override
     public void execute() {
         if (
+            canAlign &&
             mag(
                 pidController.getXError(target),
                 pidController.getYError(target)
