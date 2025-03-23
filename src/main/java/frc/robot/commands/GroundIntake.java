@@ -20,6 +20,7 @@ public class GroundIntake extends Command {
     private final RobotContainer robotContainer;
     private final LED l_leds;
     private final CommandXboxController m_driverController;
+    private final double speed;
 
     // private final LED m_led;
 
@@ -32,7 +33,8 @@ public class GroundIntake extends Command {
         Elevator m_elevator,
         CommandXboxController driverController,
         Climber climber,
-        LED l_leds
+        LED l_leds,
+        boolean faster
     ) {
         this.m_climber = climber;
         this.robotContainer = robotContainer;
@@ -43,6 +45,7 @@ public class GroundIntake extends Command {
         this.m_elevator = m_elevator;
         this.m_driverController = driverController;
         this.l_leds = l_leds;
+        speed = faster ? 4000 : Constants.IntakeConstants.velocity;
 
         addRequirements(
             m_intake,
@@ -118,10 +121,7 @@ public class GroundIntake extends Command {
                     ) <
                     Constants.WristConstants.posTolerance
                 ) {
-                    m_intake.setIntake(
-                        Constants.IntakeConstants.velocity,
-                        false
-                    );
+                    m_intake.setIntake(speed, false);
                     m_indexer.setIndexer(Constants.IndexerConstants.velocity);
                     m_claw.setClaw(Constants.EndEffectorConstants.velocity);
                 }

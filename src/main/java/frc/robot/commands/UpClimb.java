@@ -40,7 +40,7 @@ public class UpClimb extends Command {
             m_wrist.setWrist(
                 Constants.WristConstants.pos[Constants.RobotState.climb.ordinal()]
             );
-            m_intake.setPivot(Constants.IntakeConstants.intakePosition, 0);
+            m_intake.setPivot(Constants.IntakeConstants.climbPosition, 0);
         }
     }
 

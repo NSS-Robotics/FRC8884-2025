@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -294,8 +295,54 @@ public class RobotContainer {
                     m_elevator,
                     m_driverController,
                     m_climber,
-                    l_leds
+                    l_leds,
+                    false
                 )
+            )
+        );
+        NamedCommands.registerCommand(
+            "Ation Ground Intake",
+            new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    intakeDown = false;
+                }),
+                new GroundIntake(
+                    this,
+                    m_intake,
+                    m_indexer,
+                    m_wrist,
+                    m_endEffector,
+                    m_elevator,
+                    m_driverController,
+                    m_climber,
+                    l_leds,
+                    true
+                )
+            )
+        );
+        NamedCommands.registerCommand(
+            "Ation Intake",
+            new SequentialCommandGroup(
+                new ParallelDeadlineGroup(
+                    new AlignToStation(m_swerve),
+                    new AutoStationIntake(this, m_intake)
+                ),
+                new ParallelDeadlineGroup(
+                    new WaitCommand(0.75),
+                    new AutoStationIntake(this, m_intake)
+                )
+            )
+        );
+        NamedCommands.registerCommand(
+            "Half Intake",
+            new HalfIntake(
+                // tommy and tracy sittin
+                this,
+                m_intake,
+                m_indexer,
+                m_driverController,
+                m_climber,
+                l_leds
             )
         );
         NamedCommands.registerCommand(
@@ -314,7 +361,8 @@ public class RobotContainer {
                         m_elevator,
                         m_driverController,
                         m_climber,
-                        l_leds
+                        l_leds,
+                        false
                     ),
                     new TeleopSwerve(
                         m_swerve,
@@ -329,6 +377,10 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "Resting Climb",
             new RestingClimb(m_climber)
+        );
+        NamedCommands.registerCommand(
+            "Coral In Claw",
+            new CoralInClaw(m_endEffector)
         );
         NamedCommands.registerCommand(
             "Intake Down",
@@ -400,33 +452,47 @@ public class RobotContainer {
         m_driverController
             .y()
             .whileTrue(new InstantCommand(m_swerve::zeroGyro));
-
         m_driverController
-            .povLeft()
+            .a()
             .whileTrue(
-                new Align(
-                    this,
-                    m_swerve,
-                    m_elevator,
-                    m_wrist,
-                    m_endEffector,
-                    m_driverController,
-                    -1
+                new SequentialCommandGroup(
+                    new ParallelDeadlineGroup(
+                        new AlignToStation(m_swerve),
+                        new AutoStationIntake(this, m_intake)
+                    ),
+                    new ParallelDeadlineGroup(
+                        new WaitCommand(1.5),
+                        new AutoStationIntake(this, m_intake)
+                    )
                 )
             );
+
         // m_driverController
         //     .povLeft()
         //     .whileTrue(
-        //         new Align2(
+        //         new Align(
         //             this,
         //             m_swerve,
         //             m_elevator,
         //             m_wrist,
         //             m_endEffector,
         //             m_driverController,
-        //             0
+        //             -1
         //         )
         //     );
+        m_driverController
+            .povLeft()
+            .whileTrue(
+                new Up(
+                    this,
+                    m_elevator,
+                    m_wrist,
+                    m_endEffector,
+                    m_swerve,
+                    m_driverController,
+                    () -> true
+                )
+            );
         m_driverController
             .leftTrigger()
             .whileTrue(
@@ -440,7 +506,8 @@ public class RobotContainer {
                         m_elevator,
                         m_driverController,
                         m_climber,
-                        l_leds
+                        l_leds,
+                        false
                     )
                 )
             );
@@ -654,7 +721,7 @@ public class RobotContainer {
                     //     new RunServos(m_climber, true)
                     // ),
                     new InstantCommand(l_leds::climbLeds),
-                    new DownClimb(m_climber)
+                    new DownClimb(m_climber, m_intake)
                 )
             );
         m_operatorController

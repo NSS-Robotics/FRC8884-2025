@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -92,11 +93,12 @@ public class Claw extends SubsystemBase {
     }
 
     public boolean gamePieceDetected() {
-        SmartDashboard.putNumber(
-            "LaserCAN dist",
-            lasercan.getMeasurement().distance_mm
-        );
-        return lasercan.getMeasurement().distance_mm < 90;
+        Measurement m = lasercan.getMeasurement();
+        if (m == null) {
+            return false;
+        }
+        SmartDashboard.putNumber("LaserCAN dist", m.distance_mm);
+        return m.distance_mm < 90;
     }
 
     @Override

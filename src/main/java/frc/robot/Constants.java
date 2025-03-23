@@ -232,7 +232,8 @@ public final class Constants {
         public static final double wristDownSafeThreshold = 0.3;
         public static final double posTolerance = 0.05;
         public static final double[] pos = {
-            0.63, // l1
+            //0.59, // l1
+            0.5,
             1.82, // l2
             2.8, // l3
             4.28, // l4
@@ -255,17 +256,18 @@ public final class Constants {
         public static final int encoder = 42;
         public static final int motorID = 40;
         public static final double magnetSensorOffset = -0.413818359375; // This should be undefbeefed
-        public static final double kP = 16;
+        public static final double kP = 20;
         public static final double kI = 0;
         public static final double kD = 0;
         // public static final double handoffPos = 0.02976171875;
         public static final double[] pos = {
-            0.52, // l1
+            // 0.52, // l1
+            0.52,
             0.63, // l2
             0.63, // l3
             0.63, // l4
             0.455810546875, // stationIntake
-            0.03576171875, // handoff
+            0.0306484375, // handoff
             0.39, // barge
             0.622, // algaeGround
             0.626, // algaeReefLow
@@ -291,13 +293,13 @@ public final class Constants {
         public static final double upkI = 0;
         public static final double upkD = 0.020493;
         // public static final double downkP = 3.781;
-        public static final double downkP = 50; // testing
+        public static final double downkP = 57; // testing
         public static final double downkI = 0;
         public static final double downkD = 0.020493;
         // public static final double downkD = 0.020493;
-        public static final double maxRotations = 95;
+        public static final double maxRotations = 98;
         public static final double restingRot = 50.9296875;
-        public static final double climbRot = 94;
+        public static final double climbRot = 97;
         public static final double minRot = 0;
         public static final double halfIntakeRot = 19.7880859375;
     }
@@ -312,7 +314,7 @@ public final class Constants {
         public static final double kS = 0.5;
         public static final double kV = 0.5;
         public static final double kA = 0.1;
-        public static final double velocity = 0.5;
+        public static final double velocity = 0.7;
         public static final double halfIntakeVelocity = 0.3;
     }
 
@@ -338,13 +340,15 @@ public final class Constants {
         public static final double pivotMaxRotations = -0.4;
         public static final double intakeStartPos = -0.3;
         public static final double algaePosition = 0;
-        public static final double upPosition = -0.0;
+        public static final double upPosition = 0;
         // public static final double intakePosition = -0.3583984375;
-        public static final double intakePosition = -0.344482421875;
-        public static final double climbPosition = intakePosition / 6.0;
-        public static final double autoIntakePosition = -0.344482421875;
+        public static final double intakePosition = -0.348388671875;
+        public static final double climbPosition = intakePosition / 5.0;
+        public static final double autoIntakePosition = -0.348388671875;
+        public static final double autoIntakeUpPosition = -0.061279296875;
         // public static final double velocity = 2000;
         public static final double velocity = 3000;
+        public static final double stationVelocity = 500;
         public static final double halfIntakeVelocity = 3000;
         public static final double l1velocity = 1000;
     }
