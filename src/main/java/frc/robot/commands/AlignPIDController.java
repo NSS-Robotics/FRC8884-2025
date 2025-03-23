@@ -9,12 +9,16 @@ import frc.robot.subsystems.*;
 public class AlignPIDController extends PIDController {
 
     private Swerve m_swerve;
+    private double kPT;
+    private double kPR;
 
-    public AlignPIDController(Swerve swerve) {
+    public AlignPIDController(Swerve swerve, double kPR, double kPT) {
         super(0.01, 0.001, 0);
         setTolerance(3);
         enableContinuousInput(-180, 180);
         this.m_swerve = swerve;
+        this.kPT = kPT;
+        this.kPR = kPR;
     }
 
     public void alignLimelight(Pose2d target) {
@@ -53,13 +57,13 @@ public class AlignPIDController extends PIDController {
     }
 
     public double turnPID(Pose2d target) {
-        setPID(0.1, 0, 0);
+        setPID(kPR, 0, 0);
         double rx = calculate(getAngleError(target), 0);
         return rx;
     }
 
     public double[] translationPID(Pose2d target) {
-        setPID(2.5, 0, 0);
+        setPID(kPT, 0, 0);
         double tx = calculate(getXError(target), 0);
         double ty = calculate(getYError(target), 0);
         return new double[] { tx, ty };

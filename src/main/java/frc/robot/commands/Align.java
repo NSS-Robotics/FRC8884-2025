@@ -1,16 +1,12 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants;
 import frc.robot.Constants.RobotState;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
@@ -113,9 +109,9 @@ public class Align extends Command {
         ),
         // 18
         new Pose2d(
-            3.370223398743634,
-            5.185742035103555,
-            Rotation2d.fromDegrees(-66.54292329621606)
+            3.534583206364148,
+            5.1294588090887725,
+            Rotation2d.fromDegrees(-65.30523239251472)
         ),
         new Pose2d(
             3.3556953727680328,
@@ -365,6 +361,12 @@ public class Align extends Command {
         Rotation2d.fromDegrees(-90)
     );
 
+    private final Pose2d autoStationAlign = new Pose2d(
+        1.5338556202793288,
+        0.9687364585534288,
+        Rotation2d.fromDegrees(52.08101368211756)
+    );
+
     private Timer timer;
     private Up upCommand;
 
@@ -391,7 +393,7 @@ public class Align extends Command {
         );
         this.rob = rob;
         this.m_swerve = swerve;
-        pidController = new AlignPIDController(swerve);
+        pidController = new AlignPIDController(swerve, 0.2, 3);
 
         for (int i = 0; i < blueAlgaePoses.length; i++) {
             Pose2d pose = redAlgaePoses[i];
@@ -543,6 +545,8 @@ public class Align extends Command {
 
     @Override
     public void execute() {
+        if (!m_swerve.gyroZeroed) return;
+
         if (
             mag(
                 pidController.getXError(target),

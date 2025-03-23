@@ -1,0 +1,113 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 14.21768773408878,
+        "y": 5.035340508559569
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 14.375296617271202,
+        "y": 5.229400911377841
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 15.778,
+        "y": 6.923
+      },
+      "prevControl": {
+        "x": 15.17317255929865,
+        "y": 5.847671290668525
+      },
+      "nextControl": {
+        "x": 15.900558389441807,
+        "y": 7.14089777689878
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 14.789652317880794,
+        "y": 4.67876655629139
+      },
+      "prevControl": {
+        "x": 14.860755001857807,
+        "y": 5.196372941553302
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.3414043583535107,
+      "rotationDegrees": -125.00000000000001
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "elevator down then intake",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "deadline",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "Down Elevator"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "Half Intake"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Ground Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -155.88179827623432
+  },
+  "reversed": false,
+  "folder": "Four-Piece Right",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -146.352
+  },
+  "useDefaultConstraints": true
+}

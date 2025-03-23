@@ -55,9 +55,21 @@ public class AlignToStation extends Command {
         ),
     };
 
+    private final Pose2d blueAutoStationAlign = new Pose2d(
+        1.5437975423372992,
+        1.04450067121170695,
+        Rotation2d.fromDegrees(51.16146211625527)
+    );
+
+    private final Pose2d redAutoStationAlign = new Pose2d(
+        15.985993701862498,
+        7.004769187034083,
+        Rotation2d.fromDegrees(-128.3819957894946)
+    );
+
     public AlignToStation(Swerve swerve) {
         this.m_swerve = swerve;
-        pidController = new AlignPIDController(swerve);
+        pidController = new AlignPIDController(swerve, 0.1, 2.5);
 
         addRequirements(swerve);
     }
@@ -79,13 +91,13 @@ public class AlignToStation extends Command {
             atSetpoint = true;
         }
 
-        if (
-            !atSetpoint &&
-            Math.abs(pidController.getXError(target)) < 2 &&
-            Math.abs(pidController.getYError(target)) < 2
-        ) {
-            pidController.alignLimelight(target);
-        }
+        // if (
+        //     !atSetpoint &&
+        //     Math.abs(pidController.getXError(target)) < 2 &&
+        //     Math.abs(pidController.getYError(target)) < 2
+        // ) {
+        pidController.alignLimelight(target);
+        // }
 
         SmartDashboard.putNumber("Station Target X", target.getX());
         SmartDashboard.putNumber("Station Target Y", target.getY());
@@ -98,21 +110,23 @@ public class AlignToStation extends Command {
     @Override
     public void initialize() {
         atSetpoint = false;
-        m_swerve.isStationAligning = true;
+        // m_swerve.isStationAligning = true;
 
-        Pose2d[] poses = m_swerve.isRed() ? redStations : blueStations;
+        // Pose2d[] poses = m_swerve.isRed() ? redStations : blueStations;
 
-        Pose2d botPose = m_swerve.getPose();
+        // Pose2d botPose = m_swerve.getPose();
 
-        double dist1 = mag(
-            poses[0].getX() - botPose.getX(),
-            poses[0].getY() - botPose.getY()
-        );
-        double dist2 = mag(
-            poses[1].getX() - botPose.getX(),
-            poses[1].getY() - botPose.getY()
-        );
-        target = dist1 < dist2 ? poses[0] : poses[1];
+        // double dist1 = mag(
+        //     poses[0].getX() - botPose.getX(),
+        //     poses[0].getY() - botPose.getY()
+        // );
+        // double dist2 = mag(
+        //     poses[1].getX() - botPose.getX(),
+        //     poses[1].getY() - botPose.getY()
+        // );
+        // target = dist1 < dist2 ? poses[0] : poses[1];
+
+        target = m_swerve.isRed() ? redAutoStationAlign : blueAutoStationAlign;
     }
 
     @Override

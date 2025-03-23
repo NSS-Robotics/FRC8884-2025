@@ -1,0 +1,200 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero Gyro"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Red1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align 9 Left"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coral Placing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Resting Climb"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Down"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Three-Piece Station Right 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Down Elevator"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Down Elevator"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Ation Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Three-Piece Station Right 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coral In Claw"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align 8 Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Placing"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Three-Piece Station Right 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Down Elevator"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Down Elevator"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Ation Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Three-Piece Station Right 5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coral In Claw"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align 7 Right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Placing"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Down Elevator"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
