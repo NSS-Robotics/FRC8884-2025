@@ -84,9 +84,9 @@ public class AlignToStation extends Command {
 
         if (
             !atSetpoint &&
-            Math.abs(pidController.getXError(target)) < 0.05 &&
-            Math.abs(pidController.getYError(target)) < 0.05 &&
-            Math.abs(pidController.getAngleError(target)) < 0.5
+            Math.abs(pidController.getXError(target)) < 0.07 &&
+            Math.abs(pidController.getYError(target)) < 0.07 &&
+            Math.abs(pidController.getAngleError(target)) < 1
         ) {
             atSetpoint = true;
         }

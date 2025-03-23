@@ -328,7 +328,7 @@ public class RobotContainer {
                     new AutoStationIntake(this, m_intake)
                 ),
                 new ParallelDeadlineGroup(
-                    new WaitCommand(1.5),
+                    new WaitCommand(0.75),
                     new AutoStationIntake(this, m_intake)
                 )
             )
@@ -336,6 +336,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "Half Intake",
             new HalfIntake(
+                // tommy and tracy sittin
                 this,
                 m_intake,
                 m_indexer,
@@ -720,7 +721,7 @@ public class RobotContainer {
                     //     new RunServos(m_climber, true)
                     // ),
                     new InstantCommand(l_leds::climbLeds),
-                    new DownClimb(m_climber)
+                    new DownClimb(m_climber, m_intake)
                 )
             );
         m_operatorController

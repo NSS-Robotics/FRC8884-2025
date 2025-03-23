@@ -34,7 +34,7 @@ public class ToggleIntake extends Command {
     @Override
     public void execute() {
         if (m_climber.getPosition() > 60) {
-            m_intake.setPivot(Constants.IntakeConstants.climbPosition, 1);
+            m_intake.setPivot(Constants.IntakeConstants.climbPosition, 0);
         } else {
             m_intake.setPivot(
                 ron.intakeDown

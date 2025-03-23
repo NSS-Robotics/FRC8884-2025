@@ -109,9 +109,9 @@ public class Align extends Command {
         ),
         // 18
         new Pose2d(
-            3.534583206364148,
-            5.1294588090887725,
-            Rotation2d.fromDegrees(-65.30523239251472)
+            3.370223398743634,
+            5.185742035103555,
+            Rotation2d.fromDegrees(-66.54292329621606)
         ),
         new Pose2d(
             3.3556953727680328,
@@ -393,7 +393,7 @@ public class Align extends Command {
         );
         this.rob = rob;
         this.m_swerve = swerve;
-        pidController = new AlignPIDController(swerve, 0.2, 3);
+        pidController = new AlignPIDController(swerve, 0.1, 2.65);
 
         for (int i = 0; i < blueAlgaePoses.length; i++) {
             Pose2d pose = redAlgaePoses[i];

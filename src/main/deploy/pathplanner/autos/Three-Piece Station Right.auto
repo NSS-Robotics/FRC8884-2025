@@ -37,12 +37,6 @@
                 "data": {
                   "name": "Resting Climb"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Down"
-                }
               }
             ]
           }
