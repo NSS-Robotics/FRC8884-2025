@@ -99,6 +99,75 @@ public class Align extends Command {
         ),
     };
 
+    private final Pose2d[] blueL1Poses = {
+        // 19
+        new Pose2d(
+            4.916662567085468,
+            5.600762810456995,
+            Rotation2d.fromDegrees(-125.74868403149233)
+        ),
+        new Pose2d(
+            3.0093958308432756,
+            4.482416931920206,
+            Rotation2d.fromDegrees(5.244653279838466)
+        ),
+        // 18
+        new Pose2d(
+            3.370223398743634,
+            5.185742035103555,
+            Rotation2d.fromDegrees(-66.54292329621606)
+        ),
+        new Pose2d(
+            3.3556953727680328,
+            2.979633590250977,
+            Rotation2d.fromDegrees(65.34416226013789)
+        ),
+        // 17
+        new Pose2d(
+            2.929293224307501,
+            3.611890139904748,
+            Rotation2d.fromDegrees(-5.784001316973641)
+        ),
+        new Pose2d(
+            4.839822201325507,
+            2.5085741431425754,
+            Rotation2d.fromDegrees(125.12885038238431)
+        ),
+        // 22
+        new Pose2d(
+            4.054235827487181,
+            2.4628621954561694,
+            Rotation2d.fromDegrees(53.77604300375448)
+        ),
+        new Pose2d(
+            5.9700579196124615,
+            3.569791861710402,
+            Rotation2d.fromDegrees(-174.35485674381573)
+        ),
+        // 21
+        new Pose2d(
+            5.628495347469564,
+            2.875846396139371,
+            Rotation2d.fromDegrees(113.84256649659072)
+        ),
+        new Pose2d(
+            5.624467998972,
+            5.087008110547992,
+            Rotation2d.fromDegrees(-114.26117886248036)
+        ),
+        // 20
+        new Pose2d(
+            6.040638216749063,
+            4.442352828754763,
+            Rotation2d.fromDegrees(174.31919809409044)
+        ),
+        new Pose2d(
+            4.136044861501736,
+            5.5474082926978125,
+            Rotation2d.fromDegrees(-54.62810044573254)
+        ),
+    };
+
     // RED CORAL
     private final Pose2d[] redCoralPoses = {
         // 6
@@ -401,7 +470,11 @@ public class Align extends Command {
                         ? redL1Poses
                         : redCoralPoses)
                 : redAlgaePoses
-            : rob.isCoral ? blueCoralPoses : blueAlgaePoses;
+            : rob.isCoral
+                ? (rob.scoringLevel.equals(RobotState.l1)
+                        ? blueL1Poses
+                        : blueCoralPoses)
+                : blueAlgaePoses;
 
         // find target with minimum distance
         for (Pose2d target : poses) {
