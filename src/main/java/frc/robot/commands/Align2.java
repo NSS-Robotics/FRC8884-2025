@@ -378,9 +378,6 @@ public class Align2 extends Command {
             swap(botCorners, 0, 2);
             swap(botCorners, 1, 3);
 
-            swap(targetCorners, 0, 2);
-            swap(targetCorners, 1, 3);
-
             m_path1 =
                 (targetCorners[1] - botCorners[1]) /
                 (targetCorners[0] - botCorners[0]);
