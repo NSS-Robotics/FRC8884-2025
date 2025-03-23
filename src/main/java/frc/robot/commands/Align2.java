@@ -10,7 +10,10 @@ import frc.robot.subsystems.*;
 
 public class Align2 extends Command {
 
-    private static final double BOT_RADIUS = mag(0.84, 0.98) / 2;
+    private static final double BOT_W = 0.84;
+    private static final double BOT_L = 0.98;
+    private static final double BOT_RADIUS = mag(BOT_W, BOT_L) / 2;
+
     private static final double PEDRO_GO_UP = 2.5;
     private static final double RED_BLUE_OFFSET = 8.569576;
 
@@ -213,6 +216,7 @@ public class Align2 extends Command {
         new Pose2d(12.218, 3.546, new Rotation2d()),
         new Pose2d(13.046, 3.059, new Rotation2d()),
     };
+
     // BLUE REEF CORNERS
     private final Pose2d[] blueReefCorners = {
         new Pose2d(4.489, 3.059, new Rotation2d()),
@@ -268,70 +272,188 @@ public class Align2 extends Command {
         return Math.sqrt(x * x + y * y);
     }
 
+    private static double[] getLRBounds(Pose2d center, double m_path) {
+        double botTheta = center.getRotation().getDegrees();
+        double cornerTheta = Math.atan(BOT_W / BOT_L);
+
+        double cornerTheta1 = botTheta - cornerTheta;
+        double cornerTheta2 = botTheta + cornerTheta;
+
+        cornerTheta = Math.abs(Math.tan(cornerTheta1) - m_path) >
+            Math.abs(Math.tan(cornerTheta2) - m_path)
+            ? cornerTheta1
+            : cornerTheta2;
+
+        double shiftX = BOT_RADIUS * Math.cos(cornerTheta);
+        double shiftY = BOT_RADIUS * Math.sin(cornerTheta);
+
+        return new double[] {
+            center.getX() - shiftX,
+            center.getY() - shiftY,
+            center.getX() + shiftX,
+            center.getY() + shiftY,
+        };
+    }
+
+    private static boolean intersects(
+        // line 1
+        double m_1,
+        double x_1,
+        double y_1,
+        // line 2
+        double m_2,
+        double x_2,
+        double y_2,
+        // domain of line 1: [a_1, b_1] or [b_1, a_2]
+        double a_1,
+        double b_1,
+        // domain of line 2: [a_2, b_2] or [b_2, a_2]
+        double a_2,
+        double b_2
+    ) {
+        if (m_1 == m_2) return false;
+
+        double x = (m_1 * x_1 - y_1 - m_2 * x_2 + y_2) / (m_2 - m_1);
+        return (
+            ((a_1 <= x && x <= b_1) || (b_1 <= x && x <= a_1)) &&
+            ((a_2 <= x && x <= b_2) || (b_2 <= x && x <= a_2))
+        );
+    }
+
+    private static void swap(double[] arr, int i, int j) {
+        double temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
     @Override
     public void initialize() {
         if (!m_swerve.gyroZeroed) return;
 
         upCommand.initialize();
-        canAlign = false;
+        canAlign = true;
         atSetpoint = false;
 
         Pose2d[] poses = m_swerve.isRed()
             ? rob.isCoral ? redCoralPoses : redAlgaePoses
             : rob.isCoral ? blueCoralPoses : blueAlgaePoses;
 
-        // TODO: target index based on button
-        target = poses[postIndex];
-
         Pose2d[] corners = m_swerve.isRed() ? redReefCorners : blueReefCorners;
 
+        target = poses[postIndex];
+
         Pose2d botPose = m_swerve.getPose();
-        double botX = botPose.getX();
-        double botY = botPose.getY();
 
-        double m_b = (target.getY() - botY) / (target.getX() - botX);
+        double m_path =
+            (botPose.getY() - target.getY()) / (botPose.getX() - target.getX());
 
-        double theta = Math.atan(-1 / m_b);
-        double shiftX = BOT_RADIUS * Math.cos(theta);
-        double shiftY = BOT_RADIUS * Math.sin(theta);
+        double[] botCorners = getLRBounds(botPose, m_path);
+        double[] targetCorners = getLRBounds(target, m_path);
 
-        double botX1 = botX - shiftX;
-        double botY1 = botY - shiftY;
-        double botX2 = botX + shiftX;
-        double botY2 = botY + shiftY;
+        double m_path1 =
+            (targetCorners[1] - botCorners[1]) /
+            (targetCorners[0] - botCorners[0]);
+        double m_path2 =
+            (targetCorners[3] - botCorners[3]) /
+            (targetCorners[2] - botCorners[2]);
 
+        if (
+            intersects(
+                // path line 1
+                m_path1,
+                botCorners[0],
+                botCorners[1],
+                // path line 2
+                m_path2,
+                botCorners[2],
+                botCorners[3],
+                // path line 1 domain
+                botCorners[0],
+                targetCorners[0],
+                // path line 2 domain
+                botCorners[2],
+                targetCorners[2]
+            )
+        ) {
+            swap(botCorners, 0, 2);
+            swap(botCorners, 1, 3);
+
+            swap(targetCorners, 0, 2);
+            swap(targetCorners, 1, 3);
+
+            m_path1 =
+                (targetCorners[1] - botCorners[1]) /
+                (targetCorners[0] - botCorners[0]);
+            m_path2 =
+                (targetCorners[3] - botCorners[3]) /
+                (targetCorners[2] - botCorners[2]);
+        }
+
+        // check intersection for each reef side
         for (int i = 0; i < corners.length - 1; i++) {
             Pose2d r1 = corners[i];
             Pose2d r2 = corners[i + 1];
 
-            double _x_r1 = r1.getX();
+            double x_r1 = r1.getX();
             double y_r1 = r1.getY();
-            double _x_r2 = r2.getX();
+            double x_r2 = r2.getX();
             double y_r2 = r2.getY();
-
-            double x_r1 = Math.min(_x_r1, _x_r2);
-            double x_r2 = Math.max(_x_r1, _x_r2);
 
             double m_r = (y_r2 - y_r1) / (x_r2 - x_r1);
 
-            if (m_b != m_r) {
-                double x1 =
-                    (m_r * x_r1 - y_r1 - m_b * botX1 + botY1) / (m_b - m_r);
-                double x2 =
-                    (m_r * x_r1 - y_r1 - m_b * botX2 + botY2) / (m_b - m_r);
-
-                if ((x_r1 <= x1 && x1 <= x_r2) || (x_r1 <= x2 && x2 <= x_r2)) {
-                    canAlign = false;
-                    break;
-                }
+            if (
+                intersects(
+                    // reef side line
+                    m_r,
+                    x_r1,
+                    y_r1,
+                    // path line 1
+                    m_path1,
+                    botCorners[0],
+                    botCorners[1],
+                    // reef side line domain
+                    x_r1,
+                    x_r2,
+                    // path line 1 domain
+                    botCorners[0],
+                    targetCorners[0]
+                ) ||
+                intersects(
+                    // reef side line
+                    m_r,
+                    x_r1,
+                    y_r1,
+                    // path line 2
+                    m_path2,
+                    botCorners[2],
+                    botCorners[3],
+                    // reef side line domain
+                    x_r1,
+                    x_r2,
+                    // path line 2 domain
+                    botCorners[2],
+                    targetCorners[2]
+                )
+            ) {
+                canAlign = false;
+                break;
             }
         }
     }
 
     @Override
     public void execute() {
+        SmartDashboard.putBoolean("Can Align", canAlign);
+        SmartDashboard.putNumber("Cur Target X", target.getX());
+        SmartDashboard.putNumber("Cur Target Y", target.getY());
+        SmartDashboard.putNumber(
+            "Cur Target R",
+            target.getRotation().getDegrees()
+        );
+
+        if (!canAlign) return;
+
         if (
-            canAlign &&
             mag(
                 pidController.getXError(target),
                 pidController.getYError(target)
@@ -342,7 +464,6 @@ public class Align2 extends Command {
         }
 
         if (
-            canAlign &&
             !atSetpoint &&
             Math.abs(pidController.getXError(target)) < 0.01 &&
             Math.abs(pidController.getYError(target)) < 0.01 &&
@@ -356,19 +477,11 @@ public class Align2 extends Command {
 
         if (
             !atSetpoint &&
-            canAlign &&
             Math.abs(pidController.getXError(target)) < maxAlign &&
             Math.abs(pidController.getYError(target)) < maxAlign
         ) {
             pidController.alignLimelight(target);
         }
-
-        SmartDashboard.putNumber("Cur Target X", target.getX());
-        SmartDashboard.putNumber("Cur Target Y", target.getY());
-        SmartDashboard.putNumber(
-            "Cur Target R",
-            target.getRotation().getDegrees()
-        );
     }
 
     @Override
