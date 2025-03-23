@@ -99,10 +99,10 @@ public class Intake extends SubsystemBase {
     }
 
     public void setPivot(double position, int slot) {
-        // position = Math.min(
-        //     0,
-        //     Math.max(Constants.IntakeConstants.pivotMaxRotations, position)
-        // );
+        position = Math.min(
+            0,
+            Math.max(Constants.IntakeConstants.pivotMaxRotations, position)
+        );
 
         pivotPositionVoltage = new PositionVoltage(position).withSlot(slot);
 

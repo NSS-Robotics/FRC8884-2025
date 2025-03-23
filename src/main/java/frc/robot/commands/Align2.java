@@ -313,7 +313,7 @@ public class Align2 extends Command {
     ) {
         if (m_1 == m_2) return false;
 
-        double x = (m_1 * x_1 - y_1 - m_2 * x_2 + y_2) / (m_2 - m_1);
+        double x = (m_1 * x_1 - y_1 - m_2 * x_2 + y_2) / (m_1 - m_2);
         return (
             ((a_1 <= x && x <= b_1) || (b_1 <= x && x <= a_1)) &&
             ((a_2 <= x && x <= b_2) || (b_2 <= x && x <= a_2))

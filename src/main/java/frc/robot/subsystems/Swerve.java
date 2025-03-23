@@ -37,7 +37,7 @@ public class Swerve extends SubsystemBase {
 
     private SwerveDriveOdometry swerveOdometry;
     private SwerveModule[] mSwerveMods;
-    private Canandgyro gyro;
+    public Canandgyro gyro;
 
     private Limelight l_limelightlow;
     private Limelight l_limelighthigh;

@@ -342,7 +342,7 @@ public final class Constants {
         // public static final double intakePosition = -0.3583984375;
         public static final double intakePosition = -0.344482421875;
         public static final double climbPosition = intakePosition / 6.0;
-        public static final double autoIntakePosition = -0.3583984375;
+        public static final double autoIntakePosition = -0.344482421875;
         // public static final double velocity = 2000;
         public static final double velocity = 3000;
         public static final double halfIntakeVelocity = 3000;
