@@ -273,7 +273,7 @@ public class Align2 extends Command {
     }
 
     private static double[] getLRBounds(Pose2d center, double m_path) {
-        double botTheta = center.getRotation().getDegrees();
+        double botTheta = center.getRotation().getRadians();
         double cornerTheta = Math.atan(BOT_W / BOT_L);
 
         double cornerTheta1 = botTheta - cornerTheta;
