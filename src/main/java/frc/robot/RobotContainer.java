@@ -2,18 +2,18 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.RobotState;
@@ -48,8 +48,9 @@ public class RobotContainer {
     private final CommandXboxController m_driverController =
         new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-    private final CommandPS4Controller m_operatorController =
-        new CommandPS4Controller(OperatorConstants.kOperatorControllerPort);
+    private final Joystick m_gamePanel = new Joystick(
+        OperatorConstants.kOperatorControllerPort
+    );
 
     private final int translationAxis = XboxController.Axis.kRightY.value;
     private final int strafeAxis = XboxController.Axis.kRightX.value;
@@ -61,6 +62,7 @@ public class RobotContainer {
     public boolean fieldCentric = false;
     public RobotState scoringLevel;
     public boolean intakeDown;
+    public int postIndex;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -93,165 +95,6 @@ public class RobotContainer {
             "Target Right",
             new InstantCommand(() -> isLeft = false)
         );
-
-        NamedCommands.registerCommand(
-            "Align",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                -1
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 6 Left",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                0
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 6 Right",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                1
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 7 Left",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                2
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 7 Right",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                3
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 8 Left",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                4
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 8 Right",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                5
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 9 Left",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                6
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 9 Right",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                7
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 10 Left",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                8
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 10 Right",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                9
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 11 Left",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                10
-            )
-        );
-        NamedCommands.registerCommand(
-            "Align 11 Right",
-            new Align(
-                this,
-                m_swerve,
-                m_elevator,
-                m_wrist,
-                m_endEffector,
-                m_driverController,
-                11
-            )
-        );
-        // end aligns
-
         NamedCommands.registerCommand(
             "Align To Station",
             new AlignToStation(m_swerve)
@@ -538,14 +381,13 @@ public class RobotContainer {
                     new InstantCommand(l_leds::alignLeds),
                     new ConditionalCommand(
                         new InstantCommand(),
-                        new Align(
+                        new Align2(
                             this,
                             m_swerve,
                             m_elevator,
                             m_wrist,
                             m_endEffector,
-                            m_driverController,
-                            -1
+                            m_driverController
                         ).asProxy(),
                         () ->
                             scoringLevel.equals(RobotState.barge) ||
@@ -612,137 +454,121 @@ public class RobotContainer {
                 )
             );
 
-        // operator controls
+        // Game panel controls
 
-        // m_operatorController.L2().whileTrue(new AlignToStation(m_swerve));
-        // m_operatorController
-        //     .R2()
-        //     .onTrue(new StationIntake(m_elevator, m_wrist, m_endEffector));
+        for (int i = 0; i < 12; i++) {
+            final int idx = i;
+            JoystickButton post = new JoystickButton(m_gamePanel, i);
+            InstantCommand setPost = new InstantCommand(() -> {
+                this.postIndex = idx;
+            });
 
-        m_operatorController
-            .square()
-            .onTrue(
-                new InstantCommand(() -> {
-                    if (canChangeGamePiece()) {
-                        this.isCoral = true;
-                        l_leds.updateGamePiece();
-                        if (scoringLevel.equals(RobotState.barge)) {
-                            this.scoringLevel = RobotState.l4;
-                        } else if (
-                            scoringLevel.equals(RobotState.algaeReefHigh)
-                        ) {
-                            this.scoringLevel = RobotState.l3;
-                        } else if (
-                            scoringLevel.equals(RobotState.algaeReefLow)
-                        ) {
-                            this.scoringLevel = RobotState.l2;
-                        } else if (scoringLevel.equals(RobotState.processor)) {
-                            this.scoringLevel = RobotState.l1;
-                        }
-                    }
-                })
-            );
-        m_operatorController
-            .circle()
-            .onTrue(
-                new InstantCommand(() -> {
-                    if (canChangeGamePiece()) {
-                        this.isCoral = false;
-                        l_leds.updateGamePiece();
-                        if (scoringLevel.equals(RobotState.l4)) {
-                            this.scoringLevel = RobotState.barge;
-                        } else if (scoringLevel.equals(RobotState.l3)) {
-                            this.scoringLevel = RobotState.algaeReefHigh;
-                        } else if (scoringLevel.equals(RobotState.l2)) {
-                            this.scoringLevel = RobotState.algaeReefLow;
-                        } else if (scoringLevel.equals(RobotState.l1)) {
-                            this.scoringLevel = RobotState.processor;
-                        }
-                    }
-                })
-            );
-        m_operatorController
-            .L1()
-            .whileTrue(
-                new InstantCommand(() -> {
-                    this.isLeft = true;
-                    l_leds.updateGamePiece();
-                })
-            );
-        m_operatorController
-            .R1()
-            .whileTrue(
-                new InstantCommand(() -> {
-                    this.isLeft = false;
-                    l_leds.updateGamePiece();
-                })
-            );
+            post.onTrue(setPost);
 
-        m_operatorController
-            .povUp()
-            .onTrue(
-                new InstantCommand(() -> {
-                    this.scoringLevel = isCoral
-                        ? RobotState.l4
-                        : RobotState.barge;
-                    l_leds.L4Leds();
-                })
-            );
-        m_operatorController
-            .povRight()
-            .onTrue(
-                new InstantCommand(() -> {
-                    this.scoringLevel = isCoral
-                        ? RobotState.l3
-                        : RobotState.algaeReefHigh;
-                    l_leds.L3Leds();
-                })
-            );
-        m_operatorController
-            .povLeft()
-            .onTrue(
-                new InstantCommand(() -> {
-                    this.scoringLevel = isCoral
-                        ? RobotState.l2
-                        : RobotState.algaeReefLow;
-                    l_leds.L2Leds();
-                })
-            );
-        m_operatorController
-            .povDown()
-            .onTrue(
-                new InstantCommand(() -> {
-                    this.scoringLevel = isCoral
-                        ? RobotState.l1
-                        : RobotState.processor;
-                    l_leds.L1Leds();
-                })
-            );
-
-        //Combined Buttons
-        m_operatorController
-            .cross()
-            .and(m_driverController.povDown())
-            .onTrue(
+            NamedCommands.registerCommand(
+                String.format("Align %c%d", i < 6 ? 'L' : 'R', (i % 6) + 1),
                 new SequentialCommandGroup(
-                    // new ParallelDeadlineGroup(
-                    //     new WaitCommand(0.5),
-                    //     new RunServos(m_climber, true)
-                    // ),
-                    new InstantCommand(l_leds::climbLeds),
-                    new DownClimb(m_climber, m_intake)
+                    setPost,
+                    new Align2(
+                        this,
+                        m_swerve,
+                        m_elevator,
+                        m_wrist,
+                        m_endEffector,
+                        m_driverController
+                    )
                 )
             );
-        m_operatorController
-            .cross()
+        }
+
+        new JoystickButton(m_gamePanel, 12).onTrue(
+            new InstantCommand(() -> {
+                this.scoringLevel = isCoral
+                    ? RobotState.l1
+                    : RobotState.processor;
+                l_leds.L1Leds();
+            })
+        );
+
+        new JoystickButton(m_gamePanel, 13).onTrue(
+            new InstantCommand(() -> {
+                this.scoringLevel = isCoral
+                    ? RobotState.l2
+                    : RobotState.algaeReefLow;
+                l_leds.L2Leds();
+            })
+        );
+
+        new JoystickButton(m_gamePanel, 14).onTrue(
+            new InstantCommand(() -> {
+                this.scoringLevel = isCoral
+                    ? RobotState.l3
+                    : RobotState.algaeReefHigh;
+                l_leds.L3Leds();
+            })
+        );
+
+        new JoystickButton(m_gamePanel, 15).onTrue(
+            new InstantCommand(() -> {
+                this.scoringLevel = isCoral ? RobotState.l4 : RobotState.barge;
+                l_leds.L4Leds();
+            })
+        );
+
+        new JoystickButton(m_gamePanel, 16).onTrue(
+            new InstantCommand(() -> {
+                if (canChangeGamePiece()) {
+                    this.isCoral = false;
+                    l_leds.updateGamePiece();
+
+                    if (scoringLevel.equals(RobotState.l4)) {
+                        this.scoringLevel = RobotState.barge;
+                    } else if (scoringLevel.equals(RobotState.l3)) {
+                        this.scoringLevel = RobotState.algaeReefHigh;
+                    } else if (scoringLevel.equals(RobotState.l2)) {
+                        this.scoringLevel = RobotState.algaeReefLow;
+                    } else if (scoringLevel.equals(RobotState.l1)) {
+                        this.scoringLevel = RobotState.processor;
+                    }
+                }
+            })
+        );
+
+        new JoystickButton(m_gamePanel, 17).onTrue(
+            new InstantCommand(() -> {
+                if (canChangeGamePiece()) {
+                    this.isCoral = true;
+                    l_leds.updateGamePiece();
+
+                    if (scoringLevel.equals(RobotState.barge)) {
+                        this.scoringLevel = RobotState.l4;
+                    } else if (scoringLevel.equals(RobotState.algaeReefHigh)) {
+                        this.scoringLevel = RobotState.l3;
+                    } else if (scoringLevel.equals(RobotState.algaeReefLow)) {
+                        this.scoringLevel = RobotState.l2;
+                    } else if (scoringLevel.equals(RobotState.processor)) {
+                        this.scoringLevel = RobotState.l1;
+                    }
+                }
+            })
+        );
+
+        JoystickButton climbConfirm = new JoystickButton(m_gamePanel, 18);
+
+        climbConfirm
             .and(m_driverController.povUp())
             .onTrue(
                 new SequentialCommandGroup(
-                    // new ParallelDeadlineGroup(
-                    //     new WaitCommand(0.75),
-                    //     new RunServos(m_climber, false)
-                    // ),
                     new UpClimb(m_climber, m_wrist, m_intake, m_elevator)
+                )
+            );
+
+        climbConfirm
+            .and(m_driverController.povDown())
+            .onTrue(
+                new SequentialCommandGroup(
+                    new InstantCommand(l_leds::climbLeds),
+                    new DownClimb(m_climber, m_intake)
                 )
             );
     }
@@ -766,11 +592,6 @@ public class RobotContainer {
             )
         );
     }
-
-    // public RobotState getRobotState() {
-
-    // return RobotState.l2;
-    // }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
