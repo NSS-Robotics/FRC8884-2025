@@ -334,9 +334,23 @@ public class RobotContainer {
             )
         );
         NamedCommands.registerCommand(
+            "Align Station Intake",
+            new ParallelCommandGroup(
+                new SequentialCommandGroup(
+                    new AlignToStation(m_swerve),
+                    new TurnAround(m_swerve)
+                ),
+                new StationIntake(m_elevator, m_wrist, m_endEffector)
+            )
+        );
+        NamedCommands.registerCommand(
+            "Station Intake",
+            new StationIntake(m_elevator, m_wrist, m_endEffector)
+        );
+        NamedCommands.registerCommand(
             "Half Intake",
             new HalfIntake(
-                // tommy and tracy sittin
+                // tommy and tracy sitting in a tree
                 this,
                 m_intake,
                 m_indexer,
@@ -455,44 +469,39 @@ public class RobotContainer {
         m_driverController
             .a()
             .whileTrue(
-                new SequentialCommandGroup(
-                    new ParallelDeadlineGroup(
-                        new AlignToStation(m_swerve),
-                        new AutoStationIntake(this, m_intake)
+                // new SequentialCommandGroup(
+                //     new ParallelDeadlineGroup(
+                //         new AlignToStation(m_swerve),
+                //         new AutoStationIntake(this, m_intake)
+                //     ),
+                //     new ParallelDeadlineGroup(
+                //         new WaitCommand(1.5),
+                //         new AutoStationIntake(this, m_intake)
+                //     )
+                // )
+                new ParallelCommandGroup(
+                    new SequentialCommandGroup(
+                        new AlignToStation(m_swerve)
+                        //new TurnAround(m_swerve)
                     ),
-                    new ParallelDeadlineGroup(
-                        new WaitCommand(1.5),
-                        new AutoStationIntake(this, m_intake)
-                    )
+                    new StationIntake(m_elevator, m_wrist, m_endEffector)
                 )
             );
 
+        m_driverController.povLeft().whileTrue(new TurnAround(m_swerve));
         // m_driverController
         //     .povLeft()
         //     .whileTrue(
-        //         new Align(
+        //         new Up(
         //             this,
-        //             m_swerve,
         //             m_elevator,
         //             m_wrist,
         //             m_endEffector,
+        //             m_swerve,
         //             m_driverController,
-        //             -1
+        //             () -> true
         //         )
         //     );
-        m_driverController
-            .povLeft()
-            .whileTrue(
-                new Up(
-                    this,
-                    m_elevator,
-                    m_wrist,
-                    m_endEffector,
-                    m_swerve,
-                    m_driverController,
-                    () -> true
-                )
-            );
         m_driverController
             .leftTrigger()
             .whileTrue(

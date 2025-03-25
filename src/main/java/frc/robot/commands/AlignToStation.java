@@ -55,16 +55,25 @@ public class AlignToStation extends Command {
         ),
     };
 
+    // private final Pose2d blueAutoStationAlign = new Pose2d(
+    //     1.5437975423372992,
+    //     1.04450067121170695,
+    //     Rotation2d.fromDegrees(51.16146211625527)
+    // );
     private final Pose2d blueAutoStationAlign = new Pose2d(
-        1.5437975423372992,
-        1.04450067121170695,
-        Rotation2d.fromDegrees(51.16146211625527)
+        1.1367700621520278,
+        1.2557006747489021,
+        Rotation2d.fromDegrees(55)
     );
-
+    // private final Pose2d redAutoStationAlign = new Pose2d(
+    //     15.985993701862498,
+    //     7.004769187034083,
+    //     Rotation2d.fromDegrees(-128.3819957894946)
+    // );
     private final Pose2d redAutoStationAlign = new Pose2d(
-        15.985993701862498,
-        7.004769187034083,
-        Rotation2d.fromDegrees(-128.3819957894946)
+        17.5 - 1.21958906088757,
+        6.8990669868565435,
+        Rotation2d.fromDegrees(51.41240189667511)
     );
 
     public AlignToStation(Swerve swerve) {
@@ -84,9 +93,9 @@ public class AlignToStation extends Command {
 
         if (
             !atSetpoint &&
-            Math.abs(pidController.getXError(target)) < 0.07 &&
-            Math.abs(pidController.getYError(target)) < 0.07 &&
-            Math.abs(pidController.getAngleError(target)) < 1
+            Math.abs(pidController.getXError(target)) < 0.02 &&
+            Math.abs(pidController.getYError(target)) < 0.02 &&
+            Math.abs(pidController.getAngleError(target)) < 10 //TODO:ahdsbf.kabfljhadfbljkh baslkvkhbadfljhvbmdhfbvjhdsbfvkhdbv.kjbdsjfhvbdsjhbjkdfhsvbjdvhbdfjhbdfkjhbdsf
         ) {
             atSetpoint = true;
         }

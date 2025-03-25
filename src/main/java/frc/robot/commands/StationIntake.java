@@ -29,24 +29,39 @@ public class StationIntake extends Command {
     @Override
     public void execute() {
         if (
-            m_elevator.getPosition() < Constants.ElevatorConstants.upThreshold
+            m_elevator.getPosition() <
+                Constants.ElevatorConstants.upThreshold &&
+            m_wrist.getPosition() <
+            Constants.WristConstants.maxElevatorLoweredPos
         ) {
             m_wrist.setWrist(
                 Constants.WristConstants.pos[Constants.RobotState.stationIntake.ordinal()]
             );
+        }
+        if (
+            m_wrist.getPosition() >
+            Constants.WristConstants.minElevatorRaisedPos
+        ) {
             if (
-                m_wrist.getPosition() >
-                Constants.WristConstants.minElevatorRaisedPos
+                m_elevator.getPosition() <
+                Constants.ElevatorConstants.pos[Constants.RobotState.l4.ordinal()] -
+                0.3
             ) {
-                m_elevator.setElevator(
-                    Constants.ElevatorConstants.pos[Constants.RobotState.stationIntake.ordinal()],
-                    0
+                m_wrist.setWrist(
+                    Constants.WristConstants.pos[Constants.RobotState.stationIntake.ordinal()]
                 );
-                if (!m_claw.gamePieceDetected()) {
-                    m_claw.setClaw(Constants.EndEffectorConstants.velocity);
-                } else {
-                    m_claw.stopClaw();
-                }
+            }
+            m_elevator.setElevator(
+                Constants.ElevatorConstants.pos[Constants.RobotState.stationIntake.ordinal()],
+                m_elevator.getPosition() >
+                    Constants.ElevatorConstants.pos[Constants.RobotState.stationIntake.ordinal()]
+                    ? 1
+                    : 0
+            );
+            if (!m_claw.gamePieceDetected()) {
+                m_claw.setClaw(Constants.EndEffectorConstants.velocity);
+            } else {
+                m_claw.stopClaw();
             }
         }
     }

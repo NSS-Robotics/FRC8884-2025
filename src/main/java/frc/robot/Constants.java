@@ -238,7 +238,7 @@ public final class Constants {
             2.8, // l3
             4.28, // l4
             // 1.204619140625, // stationIntake
-            1.204619140625, // stationIntake
+            1, // stationIntake
             0, // handoff
             4.1, // barge
             0.2, // algaeGround
