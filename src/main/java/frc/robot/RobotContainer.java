@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -20,6 +21,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.RobotState;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -477,6 +480,7 @@ public class RobotContainer {
             );
 
         // Game panel controls
+        HashSet<Integer> highAlgae = new HashSet<>(List.of(0, 3, 4, 6, 9, 10));
 
         for (int i = 0; i < 12; i++) {
             final int idx = i;
@@ -485,12 +489,19 @@ public class RobotContainer {
             post.onTrue(
                 new InstantCommand(() -> {
                     this.postIndex = idx;
+
+                    if (!this.isCoral) {
+                        this.scoringLevel = highAlgae.contains(idx)
+                            ? RobotState.algaeReefHigh
+                            : RobotState.algaeReefLow;
+                    }
                 })
             );
+
             NamedCommands.registerCommand(
                 String.format("Align %c%d", i < 6 ? 'L' : 'R', (i % 6) + 1),
-                new SequentialCommandGroup(
-                    new InstantCommand(() -> {
+                Commands.sequence(
+                    Commands.runOnce(() -> {
                         this.postIndex = idx;
                     }),
                     new Align2(
