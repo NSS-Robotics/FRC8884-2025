@@ -64,11 +64,14 @@ public class RobotContainer {
     public RobotState scoringLevel;
     public boolean intakeDown;
     public int postIndex;
+    public boolean canAlign;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        postIndex = 0;
+
         // Configure the trigger bindings
         configureBindings();
         m_swerve.setDefaultCommand(
@@ -332,7 +335,18 @@ public class RobotContainer {
                 )
             );
 
-        m_driverController.povLeft().whileTrue(new TurnAround(m_swerve));
+        m_driverController
+            .povLeft()
+            .whileTrue(
+                new Align2(
+                    this,
+                    m_swerve,
+                    m_elevator,
+                    m_wrist,
+                    m_endEffector,
+                    m_driverController
+                )
+            );
         // m_driverController
         //     .povLeft()
         //     .whileTrue(
@@ -395,15 +409,22 @@ public class RobotContainer {
                             scoringLevel.equals(RobotState.processor)
                     ),
                     new InstantCommand(() -> l_leds.score(m_elevator)),
-                    //new ConditionalCommand(new WaitCommand(0.25), new InstantCommand(), () -> isCoral),
-                    new Up(
-                        this,
-                        m_elevator,
-                        m_wrist,
-                        m_endEffector,
-                        m_swerve,
-                        m_driverController,
-                        () -> true
+                    // new ConditionalCommand(new WaitCommand(0.25), new InstantCommand(), () -> isCoral),
+                    new ConditionalCommand(
+                        new Up(
+                            this,
+                            m_elevator,
+                            m_wrist,
+                            m_endEffector,
+                            m_swerve,
+                            m_driverController,
+                            () -> true
+                        ),
+                        new InstantCommand(),
+                        () ->
+                            scoringLevel.equals(RobotState.barge) ||
+                            scoringLevel.equals(RobotState.processor) ||
+                            canAlign
                     )
                 )
             );
@@ -459,17 +480,19 @@ public class RobotContainer {
 
         for (int i = 0; i < 12; i++) {
             final int idx = i;
-            JoystickButton post = new JoystickButton(m_gamePanel, i);
-            InstantCommand setPost = new InstantCommand(() -> {
-                this.postIndex = idx;
-            });
+            JoystickButton post = new JoystickButton(m_gamePanel, i + 1);
 
-            post.onTrue(setPost);
-
+            post.onTrue(
+                new InstantCommand(() -> {
+                    this.postIndex = idx;
+                })
+            );
             NamedCommands.registerCommand(
                 String.format("Align %c%d", i < 6 ? 'L' : 'R', (i % 6) + 1),
                 new SequentialCommandGroup(
-                    setPost,
+                    new InstantCommand(() -> {
+                        this.postIndex = idx;
+                    }),
                     new Align2(
                         this,
                         m_swerve,
@@ -482,7 +505,7 @@ public class RobotContainer {
             );
         }
 
-        new JoystickButton(m_gamePanel, 12).onTrue(
+        new JoystickButton(m_gamePanel, 13).onTrue(
             new InstantCommand(() -> {
                 this.scoringLevel = isCoral
                     ? RobotState.l1
@@ -491,7 +514,7 @@ public class RobotContainer {
             })
         );
 
-        new JoystickButton(m_gamePanel, 13).onTrue(
+        new JoystickButton(m_gamePanel, 14).onTrue(
             new InstantCommand(() -> {
                 this.scoringLevel = isCoral
                     ? RobotState.l2
@@ -500,7 +523,7 @@ public class RobotContainer {
             })
         );
 
-        new JoystickButton(m_gamePanel, 14).onTrue(
+        new JoystickButton(m_gamePanel, 15).onTrue(
             new InstantCommand(() -> {
                 this.scoringLevel = isCoral
                     ? RobotState.l3
@@ -509,14 +532,14 @@ public class RobotContainer {
             })
         );
 
-        new JoystickButton(m_gamePanel, 15).onTrue(
+        new JoystickButton(m_gamePanel, 16).onTrue(
             new InstantCommand(() -> {
                 this.scoringLevel = isCoral ? RobotState.l4 : RobotState.barge;
                 l_leds.L4Leds();
             })
         );
 
-        new JoystickButton(m_gamePanel, 16).onTrue(
+        new JoystickButton(m_gamePanel, 17).onTrue(
             new InstantCommand(() -> {
                 if (canChangeGamePiece()) {
                     this.isCoral = false;
@@ -535,7 +558,7 @@ public class RobotContainer {
             })
         );
 
-        new JoystickButton(m_gamePanel, 17).onTrue(
+        new JoystickButton(m_gamePanel, 18).onTrue(
             new InstantCommand(() -> {
                 if (canChangeGamePiece()) {
                     this.isCoral = true;
@@ -554,7 +577,7 @@ public class RobotContainer {
             })
         );
 
-        JoystickButton climbConfirm = new JoystickButton(m_gamePanel, 18);
+        JoystickButton climbConfirm = new JoystickButton(m_gamePanel, 19);
 
         climbConfirm
             .and(m_driverController.povUp())

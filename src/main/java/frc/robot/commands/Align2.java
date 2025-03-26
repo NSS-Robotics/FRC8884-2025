@@ -396,7 +396,6 @@ public class Align2 extends Command {
         new Pose2d(4.489, 3.059, new Rotation2d()),
     };
 
-    private boolean canAlign;
     private Up upCommand;
 
     public Align2(
@@ -418,7 +417,7 @@ public class Align2 extends Command {
         );
         this.rob = rob;
         this.m_swerve = swerve;
-        pidController = new AlignPIDController(swerve, 0.2, 3);
+        pidController = new AlignPIDController(swerve, 0.1, 2.5);
 
         int[] indices = { 1, 0, 0, 5, 5, 4, 1, 2, 2, 3, 3, 4 };
 
@@ -502,7 +501,7 @@ public class Align2 extends Command {
         if (!m_swerve.gyroZeroed) return;
 
         upCommand.initialize();
-        canAlign = true;
+        rob.canAlign = true;
         atSetpoint = false;
 
         boolean isL1 = rob.scoringLevel.equals(RobotState.l1);
@@ -607,7 +606,7 @@ public class Align2 extends Command {
                     targetCorners[2]
                 )
             ) {
-                canAlign = false;
+                rob.canAlign = false;
                 break;
             }
         }
@@ -615,7 +614,7 @@ public class Align2 extends Command {
 
     @Override
     public void execute() {
-        SmartDashboard.putBoolean("Can Align", canAlign);
+        SmartDashboard.putBoolean("Can Align", rob.canAlign);
         SmartDashboard.putNumber("Cur Target X", target.getX());
         SmartDashboard.putNumber("Cur Target Y", target.getY());
         SmartDashboard.putNumber(
@@ -623,7 +622,7 @@ public class Align2 extends Command {
             target.getRotation().getDegrees()
         );
 
-        if (!canAlign) return;
+        if (!rob.canAlign) return;
 
         if (
             mag(
@@ -656,6 +655,6 @@ public class Align2 extends Command {
 
     @Override
     public boolean isFinished() {
-        return atSetpoint;
+        return atSetpoint || !rob.canAlign;
     }
 }
