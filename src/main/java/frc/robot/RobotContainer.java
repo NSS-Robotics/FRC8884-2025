@@ -329,13 +329,14 @@ public class RobotContainer {
                 //         new AutoStationIntake(this, m_intake)
                 //     )
                 // )
-                new ParallelCommandGroup(
-                    new SequentialCommandGroup(
-                        new AlignToStation(m_swerve)
-                        //new TurnAround(m_swerve)
-                    ),
-                    new StationIntake(m_elevator, m_wrist, m_endEffector)
-                )
+                // new ParallelCommandGroup(
+                //     new SequentialCommandGroup(
+                //         new AlignToStation(m_swerve)
+                //         //new TurnAround(m_swerve)
+                //     ),
+                //     new StationIntake(m_elevator, m_wrist, m_endEffector)
+                // )
+                new AutoStationIntake(this, m_intake)
             );
 
         m_driverController
@@ -395,40 +396,61 @@ public class RobotContainer {
         m_driverController
             .rightTrigger()
             .onTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(l_leds::alignLeds),
-                    new ConditionalCommand(
-                        new InstantCommand(),
-                        new Align2(
-                            this,
-                            m_swerve,
-                            m_elevator,
-                            m_wrist,
-                            m_endEffector,
-                            m_driverController
-                        ).asProxy(),
-                        () ->
-                            scoringLevel.equals(RobotState.barge) ||
-                            scoringLevel.equals(RobotState.processor)
-                    ),
-                    new InstantCommand(() -> l_leds.score(m_elevator)),
-                    // new ConditionalCommand(new WaitCommand(0.25), new InstantCommand(), () -> isCoral),
-                    new ConditionalCommand(
-                        new Up(
-                            this,
-                            m_elevator,
-                            m_wrist,
-                            m_endEffector,
-                            m_swerve,
-                            m_driverController,
-                            () -> true
+                new ConditionalCommand(
+                    new SequentialCommandGroup(
+                        new InstantCommand(() ->
+                            m_intake.setPivot(
+                                Constants.IntakeConstants.intakePosition / 8.0,
+                                0
+                            )
                         ),
-                        new InstantCommand(),
-                        () ->
-                            scoringLevel.equals(RobotState.barge) ||
-                            scoringLevel.equals(RobotState.processor) ||
-                            canAlign
-                    )
+                        new ParallelDeadlineGroup(
+                            new WaitCommand(2),
+                            new InstantCommand(() ->
+                                m_intake.setIntake(
+                                    -Constants.IntakeConstants.velocity / 2,
+                                    true
+                                )
+                            )
+                        ),
+                        new InstantCommand(m_intake::stopIntake)
+                    ),
+                    new SequentialCommandGroup(
+                        new InstantCommand(l_leds::alignLeds),
+                        new ConditionalCommand(
+                            new InstantCommand(),
+                            new Align2(
+                                this,
+                                m_swerve,
+                                m_elevator,
+                                m_wrist,
+                                m_endEffector,
+                                m_driverController
+                            ).asProxy(),
+                            () ->
+                                scoringLevel.equals(RobotState.barge) ||
+                                scoringLevel.equals(RobotState.processor)
+                        ),
+                        new InstantCommand(() -> l_leds.score(m_elevator)),
+                        // new ConditionalCommand(new WaitCommand(0.25), new InstantCommand(), () -> isCoral),
+                        new ConditionalCommand(
+                            new Up(
+                                this,
+                                m_elevator,
+                                m_wrist,
+                                m_endEffector,
+                                m_swerve,
+                                m_driverController,
+                                () -> true
+                            ),
+                            new InstantCommand(),
+                            () ->
+                                scoringLevel.equals(RobotState.barge) ||
+                                scoringLevel.equals(RobotState.processor) ||
+                                canAlign
+                        )
+                    ),
+                    () -> scoringLevel.equals(RobotState.l1)
                 )
             );
         m_driverController
