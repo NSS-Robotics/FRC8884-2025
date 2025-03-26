@@ -11,14 +11,24 @@ public class AlignPIDController extends PIDController {
     private Swerve m_swerve;
     private double kPT;
     private double kPR;
+    private double kDR;
+    private double kDT;
 
-    public AlignPIDController(Swerve swerve, double kPR, double kPT) {
+    public AlignPIDController(
+        Swerve swerve,
+        double kPR,
+        double kPT,
+        double kDR,
+        double kDT
+    ) {
         super(0.01, 0.001, 0);
         setTolerance(3);
         enableContinuousInput(-180, 180);
         this.m_swerve = swerve;
         this.kPT = kPT;
         this.kPR = kPR;
+        this.kDT = kDT;
+        this.kDR = kDR;
     }
 
     public void alignLimelight(Pose2d target) {
@@ -57,13 +67,13 @@ public class AlignPIDController extends PIDController {
     }
 
     public double turnPID(Pose2d target) {
-        setPID(kPR, 0, 0);
+        setPID(kPR, 0, kDR);
         double rx = calculate(getAngleError(target), 0);
         return rx;
     }
 
     public double[] translationPID(Pose2d target) {
-        setPID(kPT, 0, 0);
+        setPID(kPT, 0, kDT);
         double tx = calculate(getXError(target), 0);
         double ty = calculate(getYError(target), 0);
         return new double[] { tx, ty };

@@ -232,8 +232,7 @@ public final class Constants {
         public static final double wristDownSafeThreshold = 0.3;
         public static final double posTolerance = 0.05;
         public static final double[] pos = {
-            //0.59, // l1
-            0.5,
+            0.5, // l1
             1.82, // l2
             2.8, // l3
             4.28, // l4
@@ -261,8 +260,7 @@ public final class Constants {
         public static final double kD = 0;
         // public static final double handoffPos = 0.02976171875;
         public static final double[] pos = {
-            // 0.52, // l1
-            0.52,
+            0.52, // l1
             0.63, // l2
             0.63, // l3
             0.63, // l4

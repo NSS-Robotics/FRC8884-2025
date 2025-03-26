@@ -416,7 +416,7 @@ public class Align2 extends Command {
         );
         this.rob = rob;
         this.m_swerve = swerve;
-        pidController = new AlignPIDController(swerve, 0.1, 2.5);
+        pidController = new AlignPIDController(swerve, 0.1, 2.5, 0, 0);
 
         int[] indices = { 1, 0, 0, 5, 5, 4, 1, 2, 2, 3, 3, 4 };
 
@@ -614,14 +614,15 @@ public class Align2 extends Command {
     @Override
     public void execute() {
         SmartDashboard.putBoolean("Can Align", rob.canAlign);
+
+        if (!rob.canAlign || !m_swerve.gyroZeroed) return;
+
         SmartDashboard.putNumber("Cur Target X", target.getX());
         SmartDashboard.putNumber("Cur Target Y", target.getY());
         SmartDashboard.putNumber(
             "Cur Target R",
             target.getRotation().getDegrees()
         );
-
-        if (!rob.canAlign) return;
 
         if (
             mag(
@@ -654,6 +655,6 @@ public class Align2 extends Command {
 
     @Override
     public boolean isFinished() {
-        return atSetpoint || !rob.canAlign;
+        return atSetpoint || !rob.canAlign || !m_swerve.gyroZeroed;
     }
 }

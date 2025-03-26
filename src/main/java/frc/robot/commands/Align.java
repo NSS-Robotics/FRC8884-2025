@@ -393,7 +393,7 @@ public class Align extends Command {
         );
         this.rob = rob;
         this.m_swerve = swerve;
-        pidController = new AlignPIDController(swerve, 0.1, 2.65);
+        pidController = new AlignPIDController(swerve, 0.1, 2.65, 0, 0);
 
         for (int i = 0; i < blueAlgaePoses.length; i++) {
             Pose2d pose = redAlgaePoses[i];
