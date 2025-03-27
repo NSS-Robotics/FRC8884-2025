@@ -173,15 +173,9 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand(
             "Ation Intake",
-            new SequentialCommandGroup(
-                new ParallelDeadlineGroup(
-                    new AlignToStation(m_swerve),
-                    new AutoStationIntake(this, m_intake)
-                ),
-                new ParallelDeadlineGroup(
-                    new WaitCommand(0.75),
-                    new AutoStationIntake(this, m_intake)
-                )
+            new ParallelDeadlineGroup(
+                new WaitCommand(0.75),
+                new AutoStationIntake(this, m_intake)
             )
         );
         NamedCommands.registerCommand(
