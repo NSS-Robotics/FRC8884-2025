@@ -551,17 +551,12 @@ public class RobotContainer {
             new InstantCommand(() -> {
                 if (canChangeGamePiece()) {
                     this.isCoral = false;
-                    l_leds.updateGamePiece();
 
-                    if (scoringLevel.equals(RobotState.l4)) {
-                        this.scoringLevel = RobotState.barge;
-                    } else if (scoringLevel.equals(RobotState.l3)) {
-                        this.scoringLevel = RobotState.algaeReefHigh;
-                    } else if (scoringLevel.equals(RobotState.l2)) {
-                        this.scoringLevel = RobotState.algaeReefLow;
-                    } else if (scoringLevel.equals(RobotState.l1)) {
-                        this.scoringLevel = RobotState.processor;
-                    }
+                    this.scoringLevel = highAlgae.contains(postIndex)
+                        ? RobotState.algaeReefHigh
+                        : RobotState.algaeReefLow;
+
+                    l_leds.updateGamePiece();
                 }
             })
         );
