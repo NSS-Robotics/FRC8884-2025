@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -397,23 +398,9 @@ public class RobotContainer {
             .rightTrigger()
             .onTrue(
                 new ConditionalCommand(
-                    new SequentialCommandGroup(
-                        new InstantCommand(() ->
-                            m_intake.setPivot(
-                                Constants.IntakeConstants.intakePosition / 8.0,
-                                0
-                            )
-                        ),
-                        new ParallelDeadlineGroup(
-                            new WaitCommand(2),
-                            new InstantCommand(() ->
-                                m_intake.setIntake(
-                                    -Constants.IntakeConstants.velocity / 2,
-                                    true
-                                )
-                            )
-                        ),
-                        new InstantCommand(m_intake::stopIntake)
+                    new ParallelDeadlineGroup(
+                        new WaitCommand(2),
+                        new IntakeL1(this, m_intake)
                     ),
                     new SequentialCommandGroup(
                         new InstantCommand(l_leds::alignLeds),
