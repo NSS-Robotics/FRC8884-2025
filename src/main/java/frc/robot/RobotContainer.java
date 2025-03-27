@@ -423,7 +423,8 @@ public class RobotContainer {
                                 canAlign
                         )
                     ),
-                    () -> scoringLevel.equals(RobotState.l1)
+                    //() -> scoringLevel.equals(RobotState.l1)
+                    () -> false
                 )
             );
         m_driverController
