@@ -96,14 +96,6 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
-            "Target Left",
-            new InstantCommand(() -> isLeft = true)
-        );
-        NamedCommands.registerCommand(
-            "Target Right",
-            new InstantCommand(() -> isLeft = false)
-        );
-        NamedCommands.registerCommand(
             "Align To Station",
             new AlignToStation(m_swerve)
         );
@@ -493,15 +485,17 @@ public class RobotContainer {
             post.onTrue(
                 new InstantCommand(() -> {
                     this.postIndex = idx;
+                    this.isLeft = idx % 2 == 0 ? idx <= 6 : idx > 6;
 
                     if (!this.isCoral) {
                         this.scoringLevel = highAlgae.contains(idx)
                             ? RobotState.algaeReefHigh
                             : RobotState.algaeReefLow;
                     }
+
+                    l_leds.updateGamePiece();
                 })
             );
-
             NamedCommands.registerCommand(
                 String.format("Align %c%d", i < 6 ? 'L' : 'R', (i % 6) + 1),
                 Commands.sequence(
