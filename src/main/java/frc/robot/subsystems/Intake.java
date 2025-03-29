@@ -98,6 +98,10 @@ public class Intake extends SubsystemBase {
         intakeMotor.setPosition(0);
     }
 
+    public double getIntakeCurrent() {
+        return intakeMotor.getStatorCurrent().getValueAsDouble();
+    }
+
     public void setPivot(double position, int slot) {
         position = Math.min(
             0,
@@ -142,9 +146,6 @@ public class Intake extends SubsystemBase {
             "Intake Velocity",
             pivotEncoder.getVelocity().getValueAsDouble()
         );
-        SmartDashboard.putNumber(
-            "Intake Current",
-            intakeMotor.getStatorCurrent().getValueAsDouble()
-        );
+        SmartDashboard.putNumber("Intake Current", getIntakeCurrent());
     }
 }

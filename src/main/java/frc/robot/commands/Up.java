@@ -115,21 +115,18 @@ public class Up extends Command {
                 Math.abs(m_elevator.getPosition() - targetElevatorPos) <
                 Constants.ElevatorConstants.posTolerance
             ) {
-                if (
-                    (m_claw.gamePieceDetected() ||
-                        DriverStation.isAutonomousEnabled()) &&
-                    canRunClaw()
-                ) {
+                if (canRunClaw()) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
-                        timerDelay = .5;
+                        timerDelay = .25;
                     }
                     m_claw.setClaw(
                         robotContainer.scoringLevel.equals(RobotState.l1)
                             ? -Constants.EndEffectorConstants.l1Velocity
                             : -Constants.EndEffectorConstants.outtakeVelocity
                     );
-                } else if (timer1.hasElapsed(timerDelay)) {
+                }
+                if (timer1.hasElapsed(timerDelay)) {
                     m_claw.stopClaw();
                 }
             }

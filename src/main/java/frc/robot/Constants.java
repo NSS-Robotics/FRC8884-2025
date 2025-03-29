@@ -296,7 +296,7 @@ public final class Constants {
         public static final double downkD = 0.020493;
         // public static final double downkD = 0.020493;
         public static final double maxRotations = 98;
-        public static final double restingRot = 50.9296875;
+        public static final double restingRot = 55.9296875;
         public static final double climbRot = 97;
         public static final double minRot = 0;
         public static final double halfIntakeRot = 19.7880859375;
@@ -312,7 +312,7 @@ public final class Constants {
         public static final double kS = 0.5;
         public static final double kV = 0.5;
         public static final double kA = 0.1;
-        public static final double velocity = 0.7;
+        public static final double velocity = 0.6;
         public static final double halfIntakeVelocity = 0.3;
     }
 

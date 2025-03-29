@@ -165,10 +165,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand(
             "Ation Intake",
-            new ParallelDeadlineGroup(
-                new WaitCommand(0.75),
-                new AutoStationIntake(this, m_intake)
-            )
+            new AutoStationIntake(this, m_intake)
         );
         NamedCommands.registerCommand(
             "Align Station Intake",
@@ -434,10 +431,7 @@ public class RobotContainer {
             .start()
             .onTrue(
                 new InstantCommand(() ->
-                    m_intake.setPivot(
-                        Constants.IntakeConstants.intakePosition / 8.0,
-                        0
-                    )
+                    m_intake.setPivot(Constants.IntakeConstants.upPosition, 0)
                 )
             );
         // m_driverController
