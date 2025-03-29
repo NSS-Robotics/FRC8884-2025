@@ -24,6 +24,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import java.util.HashSet;
 import java.util.List;
+import java.util.jar.Attributes.Name;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -79,6 +80,8 @@ public class RobotContainer {
     public RobotContainer() {
         l1_2 = false;
         postIndex = 0;
+        intakeDown = false;
+        scoringLevel = RobotState.l4;
 
         // Configure the trigger bindings
         configureBindings();
@@ -91,8 +94,6 @@ public class RobotContainer {
                 () -> povDown.getAsBoolean()
             )
         );
-
-        scoringLevel = RobotState.l4;
 
         NamedCommands.registerCommand(
             "Zero Gyro",
@@ -247,7 +248,53 @@ public class RobotContainer {
                 )
             )
         );
-        intakeDown = false;
+        NamedCommands.registerCommand(
+            "Align Algae",
+            new SequentialCommandGroup(
+                new InstantCommand(() -> isCoral = false),
+                new Align2(
+                    this,
+                    m_swerve,
+                    m_elevator,
+                    m_wrist,
+                    m_endEffector,
+                    m_driverController
+                )
+            )
+        );
+        NamedCommands.registerCommand(
+            "Reef Intake",
+            new SequentialCommandGroup(
+                new InstantCommand(() ->
+                    this.scoringLevel = RobotState.algaeReefLow
+                ),
+                new Up(
+                    this,
+                    m_elevator,
+                    m_wrist,
+                    m_endEffector,
+                    m_swerve,
+                    m_driverController,
+                    () -> true
+                )
+            )
+        );
+        NamedCommands.registerCommand(
+            "Barge Shoot",
+            new SequentialCommandGroup(
+                new InstantCommand(() -> this.scoringLevel = RobotState.barge)
+                // ,new Up(
+                //     this,
+                //     m_elevator,
+                //     m_wrist,
+                //     m_endEffector,
+                //     m_swerve,
+                //     m_driverController,
+                //     () -> true
+                // )
+            )
+        );
+
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
