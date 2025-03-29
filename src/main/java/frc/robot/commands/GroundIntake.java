@@ -131,7 +131,7 @@ public class GroundIntake extends Command {
                         Constants.WristConstants.pos[RobotState.handoff.ordinal()]
                     ) <
                     Constants.WristConstants.posTolerance &&
-                m_claw.getVelocity() > 80
+                m_claw.getVelocity() > 40
             ) {
                 m_intake.setIntake(Constants.IntakeConstants.velocity, false);
                 m_indexer.setIndexer(Constants.IndexerConstants.velocity);

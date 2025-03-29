@@ -33,15 +33,11 @@ public class ToggleIntake extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (m_climber.getPosition() > 60) {
-            m_intake.setPivot(Constants.IntakeConstants.climbPosition, 0);
-        } else {
-            m_intake.setPivot(
-                ron.intakeDown
-                    ? Constants.IntakeConstants.intakePosition
-                    : Constants.IntakeConstants.upPosition,
-                ron.intakeDown ? 1 : 0
-            );
-        }
+        m_intake.setPivot(
+            ron.intakeDown
+                ? Constants.IntakeConstants.intakePosition
+                : Constants.IntakeConstants.upPosition,
+            ron.intakeDown ? 1 : 0
+        );
     }
 }

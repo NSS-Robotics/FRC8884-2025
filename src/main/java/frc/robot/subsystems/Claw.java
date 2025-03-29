@@ -98,7 +98,7 @@ public class Claw extends SubsystemBase {
             return false;
         }
         SmartDashboard.putNumber("LaserCAN dist", m.distance_mm);
-        return m.distance_mm < 90;
+        return m.distance_mm < 130;
     }
 
     @Override
