@@ -69,11 +69,15 @@ public class RobotContainer {
     public boolean intakeDown;
     public int postIndex;
     public boolean canAlign;
+    public boolean l1_2;
+
+    public SendableChooser<Boolean> m_chooser = new SendableChooser<>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        l1_2 = false;
         postIndex = 0;
 
         // Configure the trigger bindings
@@ -83,7 +87,7 @@ public class RobotContainer {
                 m_swerve,
                 () -> m_driverController.getRawAxis(translationAxis),
                 () -> m_driverController.getRawAxis(strafeAxis),
-                () -> m_driverController.getRawAxis(rotationAxis) * 0.75,
+                () -> m_driverController.getRawAxis(rotationAxis) * 0.9,
                 () -> povDown.getAsBoolean()
             )
         );
@@ -96,8 +100,12 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
-            "Align To Station",
-            new AlignToStation(m_swerve)
+            "Align To Station 1",
+            new AlignToStation(m_swerve, false)
+        );
+        NamedCommands.registerCommand(
+            "Align To Station 2",
+            new AlignToStation(m_swerve, true)
         );
         NamedCommands.registerCommand(
             "Coral Placing",
@@ -165,13 +173,13 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand(
             "Ation Intake",
-            new AutoStationIntake(this, m_intake)
+            new AutoStationIntake(this, m_intake, l_leds)
         );
         NamedCommands.registerCommand(
             "Align Station Intake",
             new ParallelCommandGroup(
                 new SequentialCommandGroup(
-                    new AlignToStation(m_swerve),
+                    new AlignToStation(m_swerve, false),
                     new TurnAround(m_swerve)
                 ),
                 new StationIntake(m_elevator, m_wrist, m_endEffector)
@@ -242,6 +250,11 @@ public class RobotContainer {
         intakeDown = false;
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
+        m_chooser.addOption("on", true);
+        m_chooser.setDefaultOption("off", false);
+
+        SmartDashboard.putData("Limelight Light", m_chooser);
     }
 
     /**
@@ -320,21 +333,12 @@ public class RobotContainer {
                 //     ),
                 //     new StationIntake(m_elevator, m_wrist, m_endEffector)
                 // )
-                new AutoStationIntake(this, m_intake)
+                new AutoStationIntake(this, m_intake, l_leds)
             );
 
         m_driverController
             .povLeft()
-            .whileTrue(
-                new Align2(
-                    this,
-                    m_swerve,
-                    m_elevator,
-                    m_wrist,
-                    m_endEffector,
-                    m_driverController
-                )
-            );
+            .whileTrue(new AlignToStation(m_swerve, true));
         // m_driverController
         //     .povLeft()
         //     .whileTrue(
@@ -351,7 +355,8 @@ public class RobotContainer {
         m_driverController
             .leftTrigger()
             .whileTrue(
-                new SequentialCommandGroup(
+                new ConditionalCommand(
+                    new AutoStationIntake(this, m_intake, l_leds),
                     new GroundIntake(
                         this,
                         m_intake,
@@ -363,7 +368,8 @@ public class RobotContainer {
                         m_climber,
                         l_leds,
                         false
-                    )
+                    ),
+                    () -> l1_2
                 )
             );
 
@@ -395,6 +401,7 @@ public class RobotContainer {
                                 m_elevator,
                                 m_wrist,
                                 m_endEffector,
+                                l_limelightLow,
                                 m_driverController
                             ).asProxy(),
                             () ->
@@ -402,7 +409,6 @@ public class RobotContainer {
                                 scoringLevel.equals(RobotState.processor)
                         ),
                         new InstantCommand(() -> l_leds.score(m_elevator)),
-                        // new ConditionalCommand(new WaitCommand(0.25), new InstantCommand(), () -> isCoral),
                         new ConditionalCommand(
                             new Up(
                                 this,
@@ -420,8 +426,7 @@ public class RobotContainer {
                                 canAlign
                         )
                     ),
-                    //() -> scoringLevel.equals(RobotState.l1)
-                    () -> false
+                    () -> l1_2
                 )
             );
         m_driverController
@@ -502,6 +507,7 @@ public class RobotContainer {
                         m_elevator,
                         m_wrist,
                         m_endEffector,
+                        l_limelightLow,
                         m_driverController
                     )
                 )
@@ -593,6 +599,13 @@ public class RobotContainer {
                     new DownClimb(m_climber, m_intake)
                 )
             );
+
+        new JoystickButton(m_gamePanel, 20).onTrue(
+            new InstantCommand(() -> {
+                this.l1_2 = !this.l1_2;
+                l_leds.ationIntake();
+            })
+        );
     }
 
     public boolean canChangeGamePiece() {

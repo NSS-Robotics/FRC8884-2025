@@ -237,7 +237,7 @@ public final class Constants {
             2.8, // l3
             4.28, // l4
             // 1.204619140625, // stationIntake
-            1, // stationIntake
+            1.1, // stationIntake
             0, // handoff
             4.1, // barge
             0.2, // algaeGround
@@ -296,8 +296,9 @@ public final class Constants {
         public static final double downkD = 0.020493;
         // public static final double downkD = 0.020493;
         public static final double maxRotations = 98;
-        public static final double restingRot = 55.9296875;
-        public static final double climbRot = 97;
+        //55.9296875
+        public static final double restingRot = 50.9296875;
+        public static final double climbRot = 95.5;
         public static final double minRot = 0;
         public static final double halfIntakeRot = 19.7880859375;
     }
@@ -312,7 +313,7 @@ public final class Constants {
         public static final double kS = 0.5;
         public static final double kV = 0.5;
         public static final double kA = 0.1;
-        public static final double velocity = 0.6;
+        public static final double velocity = 0.7;
         public static final double halfIntakeVelocity = 0.3;
     }
 
@@ -346,7 +347,7 @@ public final class Constants {
         public static final double autoIntakeUpPosition = -0.061279296875;
         // public static final double velocity = 2000;
         public static final double velocity = 3000;
-        public static final double stationVelocity = 500;
+        public static final double stationVelocity = 300;
         public static final double halfIntakeVelocity = 3000;
         public static final double l1velocity = 1000;
     }
@@ -367,7 +368,7 @@ public final class Constants {
         public static final double intakePosition = 0.49;
         public static final double elevatorUpMaxValue = 0.18;
         public static final double elevatorUpMinValue = -0.12;
-        public static final double velocity = 9000;
+        public static final double velocity = 11000;
         public static final double outtakeVelocity = 750;
         public static final double l1Velocity = 1100;
         public static final double holdingVelocity = 3500;

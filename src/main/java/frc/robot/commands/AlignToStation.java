@@ -12,33 +12,64 @@ public class AlignToStation extends Command {
     private AlignPIDController pidController;
     private Pose2d target;
     private boolean atSetpoint;
+    private boolean second;
 
-    private final Pose2d[] redStations = {
-        // left
+    private final Pose2d[] red1Stations = {
+        // left 1
         new Pose2d(
-            17.5 - 1.2692396853783483,
-            1.1844133124895877,
-            Rotation2d.fromDegrees(-56.97384521966168)
+            16.0594969587832,
+            0.7830495015824503,
+            Rotation2d.fromDegrees(125)
         ),
-        // right
+        // right 1
         new Pose2d(
-            16.37013145134452,
-            6.829709251668506,
-            Rotation2d.fromDegrees(-123.48950993988609)
+            16.176141176184014,
+            7.133442181606093,
+            Rotation2d.fromDegrees(-125)
         ),
     };
 
-    private final Pose2d[] blueStations = {
-        // left
+    private final Pose2d[] red2Stations = {
+        // left 2
         new Pose2d(
-            1.0926524519258318,
-            1.288397843456241,
-            Rotation2d.fromDegrees(-127.30302739771987)
+            16.7506470264957,
+            1.384709157495407,
+            Rotation2d.fromDegrees(125)
         ),
-        // right
+        // right 2
         new Pose2d(
-            1.1367700621520278,
-            1.2557006747489021,
+            16.709179431253965,
+            6.842094499292262,
+            Rotation2d.fromDegrees(-125)
+        ),
+    };
+
+    private final Pose2d[] blue1Stations = {
+        // left 1
+        new Pose2d(
+            1.4635853394401748,
+            7.509376541192244,
+            Rotation2d.fromDegrees(-55)
+        ),
+        // right 1
+        new Pose2d(
+            1.4022679738957065,
+            0.6610813692485196,
+            Rotation2d.fromDegrees(55)
+        ),
+    };
+
+    private final Pose2d[] blue2Stations = {
+        // left 2
+        new Pose2d(
+            0.8498332334278809,
+            6.817571150863968,
+            Rotation2d.fromDegrees(-55)
+        ),
+        // right 2
+        new Pose2d(
+            0.7221496971264223,
+            1.2856696776887762,
             Rotation2d.fromDegrees(55)
         ),
     };
@@ -54,9 +85,10 @@ public class AlignToStation extends Command {
     //     Rotation2d.fromDegrees(-128.3819957894946)
     // );
 
-    public AlignToStation(Swerve swerve) {
+    public AlignToStation(Swerve swerve, boolean second) {
         this.m_swerve = swerve;
-        pidController = new AlignPIDController(swerve, 0.1, 2.4, 0, 0);
+        this.second = second;
+        pidController = new AlignPIDController(swerve, 0.3, 4.5, 0, 0);
 
         addRequirements(swerve);
     }
@@ -71,9 +103,9 @@ public class AlignToStation extends Command {
 
         if (
             !atSetpoint &&
-            Math.abs(pidController.getXError(target)) < 0.03 &&
-            Math.abs(pidController.getYError(target)) < 0.03 &&
-            Math.abs(pidController.getAngleError(target)) < 10 //TODO:ahdsbf.kabfljhadfbljkh baslkvkhbadfljhvbmdhfbvjhdsbfvkhdbv.kjbdsjfhvbdsjhbjkdfhsvbjdvhbdfjhbdfkjhbdsf
+            Math.abs(pidController.getXError(target)) < 0.1 &&
+            Math.abs(pidController.getYError(target)) < 0.1 &&
+            Math.abs(pidController.getAngleError(target)) < 3 //TODO:ahdsbf.kabfljhadfbljkh baslkvkhbadfljhvbmdhfbvjhdsbfvkhdbv.kjbdsjfhvbdsjhbjkdfhsvbjdvhbdfjhbdfkjhbdsf
         ) {
             atSetpoint = true;
         }
@@ -98,7 +130,9 @@ public class AlignToStation extends Command {
     public void initialize() {
         atSetpoint = false;
 
-        Pose2d[] poses = m_swerve.isRed() ? redStations : blueStations;
+        Pose2d[] poses = m_swerve.isRed()
+            ? second ? red2Stations : red1Stations
+            : second ? blue2Stations : blue1Stations;
         Pose2d botPose = m_swerve.getPose();
 
         double dist1 = mag(

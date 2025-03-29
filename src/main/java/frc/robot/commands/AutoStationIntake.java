@@ -17,12 +17,18 @@ import java.lang.constant.Constable;
 public class AutoStationIntake extends Command {
 
     private final Intake m_intake;
+    private final LED l_led;
     private final RobotContainer robotContainer;
     private final double pose = Constants.IntakeConstants.upPosition;
 
-    public AutoStationIntake(RobotContainer robotContainer, Intake m_intake) {
+    public AutoStationIntake(
+        RobotContainer robotContainer,
+        Intake m_intake,
+        LED l_led
+    ) {
         this.robotContainer = robotContainer;
         this.m_intake = m_intake;
+        this.l_led = l_led;
 
         addRequirements(m_intake);
     }
@@ -34,6 +40,7 @@ public class AutoStationIntake extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        l_led.ationIntake();
         m_intake.setPivot(pose, m_intake.getPosition() <= pose ? 0 : 1);
         m_intake.setIntake(Constants.IntakeConstants.stationVelocity, false);
     }
@@ -42,6 +49,7 @@ public class AutoStationIntake extends Command {
     @Override
     public void end(boolean interrupted) {
         m_intake.stopIntake();
+        l_led.stop();
     }
 
     // Returns true when the command should end.

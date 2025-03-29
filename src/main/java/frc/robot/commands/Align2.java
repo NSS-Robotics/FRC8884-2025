@@ -20,6 +20,7 @@ public class Align2 extends Command {
 
     private RobotContainer rob;
     private Swerve m_swerve;
+    private Limelight limelight;
     private AlignPIDController pidController;
     private Pose2d target;
     private boolean atSetpoint;
@@ -403,8 +404,11 @@ public class Align2 extends Command {
         Elevator elevator,
         Wrist wrist,
         Claw claw,
+        Limelight limelight,
         CommandXboxController driveController
     ) {
+        this.limelight = limelight;
+
         this.upCommand = new Up(
             rob,
             elevator,
@@ -498,7 +502,7 @@ public class Align2 extends Command {
     @Override
     public void initialize() {
         if (!m_swerve.gyroZeroed) return;
-
+        this.limelight.turnLimelightLED(rob.m_chooser.getSelected());
         upCommand.initialize();
         rob.canAlign = true;
         atSetpoint = false;
@@ -651,6 +655,11 @@ public class Align2 extends Command {
         ) {
             pidController.alignLimelight(target);
         }
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        limelight.turnLimelightLED(false);
     }
 
     @Override

@@ -26,8 +26,8 @@ public class IntakeL1 extends Command {
     @Override
     public void execute() {
         m_intake.setPivot(pose, m_intake.getPosition() <= pose ? 0 : 1);
-        if (Math.abs(m_intake.getPosition() - pose) < 0.03) m_intake.setIntake(
-            -Constants.IntakeConstants.stationVelocity,
+        if (Math.abs(m_intake.getPosition() - pose) < 0.02) m_intake.setIntake(
+            -Constants.IntakeConstants.stationVelocity * 1.5,
             false
         );
     }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 16.235202814569536,
-        "y": 7.0904387417218535
+        "x": 16.709179431253965,
+        "y": 6.842094499292262
       },
       "prevControl": null,
       "nextControl": {
-        "x": 16.138634761447697,
-        "y": 6.852923259599999
+        "x": 16.543489135967146,
+        "y": 6.60526983865226
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 5.179987582781457
       },
       "prevControl": {
-        "x": 15.338584409404667,
-        "y": 5.75176158362117
+        "x": 15.323699973127503,
+        "y": 5.498194966084406
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "Ation Ground Intake",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.05,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

@@ -303,6 +303,19 @@ public class LED extends SubsystemBase {
         rightBackPattern = climbPattern;
     }
 
+    public void ationIntake() {
+        colour = Color.kOrange;
+
+        LEDPattern breathe = LEDPattern.solid(colour)
+            .breathe(Seconds.of(.25))
+            .atBrightness(Percent.of(20));
+
+        leftFrontPattern = breathe;
+        leftBackPattern = breathe;
+        rightFrontPattern = breathe;
+        rightBackPattern = breathe;
+    }
+
     public void stop() {
         LEDPattern off = LEDPattern.solid(Color.kBlack);
 

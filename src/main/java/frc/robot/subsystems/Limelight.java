@@ -24,6 +24,10 @@ public class Limelight extends SubsystemBase {
         table = NetworkTableInstance.getDefault().getTable(this.name);
     }
 
+    public void turnLimelightLED(boolean on) {
+        table.getEntry("ledMode").setNumber(on ? 3 : 1);
+    }
+
     public void updateLimelightTracking() {
         ta = table.getEntry("ta").getDouble(0);
         tx = table.getEntry("tx").getDouble(0);
