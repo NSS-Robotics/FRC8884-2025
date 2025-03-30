@@ -369,7 +369,8 @@ public final class Constants {
         public static final double elevatorUpMaxValue = 0.18;
         public static final double elevatorUpMinValue = -0.12;
         public static final double velocity = 11000;
-        public static final double outtakeVelocity = 3000;
+        public static final double autoOuttakeVelocity = 3000;
+        public static final double teleopOuttakeVelocity = 750;
         public static final double l1Velocity = 1100;
         public static final double holdingVelocity = 3500;
     }

@@ -77,13 +77,15 @@ public class Outtake extends Command {
                     Constants.WristConstants.posTolerance
                 ) {
                     m_claw.setClaw(
-                        -Constants.EndEffectorConstants.outtakeVelocity
+                        -Constants.EndEffectorConstants.teleopOuttakeVelocity
                     );
                 } else {
                     m_claw.setClaw(Constants.EndEffectorConstants.velocity);
                 }
             } else {
-                m_claw.setClaw(-Constants.EndEffectorConstants.outtakeVelocity);
+                m_claw.setClaw(
+                    -Constants.EndEffectorConstants.teleopOuttakeVelocity
+                );
             }
         }
         // algae
@@ -98,7 +100,9 @@ public class Outtake extends Command {
                 ) <
                 Constants.WristConstants.posTolerance
             ) {
-                m_claw.setClaw(-Constants.EndEffectorConstants.outtakeVelocity);
+                m_claw.setClaw(
+                    -Constants.EndEffectorConstants.teleopOuttakeVelocity
+                );
             }
         }
     }

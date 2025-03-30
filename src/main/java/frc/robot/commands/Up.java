@@ -125,7 +125,9 @@ public class Up extends Command {
                     m_claw.setClaw(
                         robotContainer.scoringLevel.equals(RobotState.l1)
                             ? -Constants.EndEffectorConstants.l1Velocity
-                            : -Constants.EndEffectorConstants.outtakeVelocity
+                            : DriverStation.isAutonomousEnabled()
+                                ? -Constants.EndEffectorConstants.autoOuttakeVelocity
+                                : -Constants.EndEffectorConstants.teleopOuttakeVelocity
                     );
                 }
                 if (timer1.hasElapsed(timerDelay)) {
@@ -152,7 +154,7 @@ public class Up extends Command {
                     canRunClaw()
                 ) {
                     m_claw.setClaw(
-                        -Constants.EndEffectorConstants.outtakeVelocity
+                        -Constants.EndEffectorConstants.teleopOuttakeVelocity
                     );
                     //robotContainer.runningCommand = false;
                     if (!timer1.isRunning()) {
@@ -195,7 +197,7 @@ public class Up extends Command {
                         }
                         //robotContainer.runningCommand = false;
                         m_claw.setClaw(
-                            -Constants.EndEffectorConstants.outtakeVelocity
+                            -Constants.EndEffectorConstants.teleopOuttakeVelocity
                         );
                     }
                     if (timer1.hasElapsed(timerDelay)) {
