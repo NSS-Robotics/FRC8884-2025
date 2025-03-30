@@ -392,22 +392,22 @@ public class RobotContainer {
                 new AutoStationIntake(this, m_intake, l_leds)
             );
 
-        m_driverController
-            .povLeft()
-            .whileTrue(new AlignToStation(m_swerve, true));
         // m_driverController
         //     .povLeft()
-        //     .whileTrue(
-        //         new Up(
-        //             this,
-        //             m_elevator,
-        //             m_wrist,
-        //             m_endEffector,
-        //             m_swerve,
-        //             m_driverController,
-        //             () -> true
-        //         )
-        //     );
+        //     .whileTrue(new AlignToStation(m_swerve, true));
+        m_driverController
+            .povLeft()
+            .onTrue(
+                new Up(
+                    this,
+                    m_elevator,
+                    m_wrist,
+                    m_endEffector,
+                    m_swerve,
+                    m_driverController,
+                    () -> true
+                )
+            );
         m_driverController
             .leftTrigger()
             .whileTrue(

@@ -216,12 +216,12 @@ public final class Constants {
         public static final int encoder = 31;
         public static final double magnetSensorOffset = 0.599609375;
         public static final double currentLimit = 40;
-        public static final double upKP = 40;
+        public static final double upKP = 63;
         public static final double upKI = 0;
-        public static final double upKD = 2.5;
-        public static final double downKP = 25;
+        public static final double upKD = 3;
+        public static final double downKP = 37;
         public static final double downKI = 0;
-        public static final double downKD = 0.5;
+        public static final double downKD = 4;
         public static final double algaekP = 16; // testing
         public static final double algaekI = 0;
         public static final double algaekD = 0.020493;
