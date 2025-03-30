@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Four-Piece Right 1"
+            "pathName": "Four-Piece Left 1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Align R4"
+            "name": "Align L4"
           }
         },
         {
@@ -37,56 +37,30 @@
                 "data": {
                   "name": "Resting Climb"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "named",
                 "data": {
-                  "name": "Down Elevator"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Align To Station 1"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Ation Intake"
-                      }
-                    }
-                  ]
+                  "name": "Intake Down"
                 }
               }
             ]
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Three-Piece Station Right 3"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Coral In Claw"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Four-Piece Left 2"
                 }
               }
             ]
@@ -95,7 +69,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Align R2"
+            "name": "Align L2"
           }
         },
         {
@@ -105,51 +79,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Down Elevator"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Align To Station 2"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Ation Intake"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Three-Piece Station Right 5"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Coral In Claw"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Four-Piece Left 3"
                 }
               }
             ]
@@ -158,7 +100,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Align R1"
+            "name": "Align L1"
           }
         },
         {
@@ -168,9 +110,34 @@
           }
         },
         {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coral In Claw"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Four-Piece Left 4"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Down Elevator"
+            "name": "Align L3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Placing"
           }
         }
       ]

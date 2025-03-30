@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Red1"
+            "pathName": "Four-Piece Right 1"
           }
         },
         {
@@ -60,7 +60,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right Red2 Ground 4Piece"
+                  "pathName": "Four-Piece Right 2"
                 }
               }
             ]
@@ -91,7 +91,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle-Right Red3 Ground"
+                  "pathName": "Four-Piece Right 3"
                 }
               }
             ]
@@ -122,7 +122,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right Red4"
+                  "pathName": "Four-Piece Right 4"
                 }
               }
             ]
