@@ -88,7 +88,7 @@ public class AlignToStation extends Command {
     public AlignToStation(Swerve swerve, boolean second) {
         this.m_swerve = swerve;
         this.second = second;
-        pidController = new AlignPIDController(swerve, 0.3, 4.5, 0, 0);
+        pidController = new AlignPIDController(swerve, 0.3, 3.5, 0, 0);
 
         addRequirements(swerve);
     }

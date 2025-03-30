@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "Ation Ground Intake",
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0.15,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

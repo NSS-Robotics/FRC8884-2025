@@ -90,7 +90,7 @@ public class RobotContainer {
                 m_swerve,
                 () -> m_driverController.getRawAxis(translationAxis),
                 () -> m_driverController.getRawAxis(strafeAxis),
-                () -> m_driverController.getRawAxis(rotationAxis) * 0.9,
+                () -> m_driverController.getRawAxis(rotationAxis) * 0.87,
                 () -> povDown.getAsBoolean()
             )
         );
@@ -99,7 +99,12 @@ public class RobotContainer {
             "Zero Gyro",
             new InstantCommand(m_swerve::zeroGyro)
         );
-
+        NamedCommands.registerCommand(
+            "l4",
+            new InstantCommand(() -> {
+                scoringLevel = RobotState.l4;
+            })
+        );
         NamedCommands.registerCommand(
             "Align To Station 1",
             new AlignToStation(m_swerve, false)
@@ -148,7 +153,7 @@ public class RobotContainer {
                     m_driverController,
                     m_climber,
                     l_leds,
-                    false
+                    true
                 )
             )
         );
@@ -252,12 +257,16 @@ public class RobotContainer {
             "Align Algae",
             new SequentialCommandGroup(
                 new InstantCommand(() -> isCoral = false),
+                new InstantCommand(() ->
+                    this.scoringLevel = RobotState.algaeReefLow
+                ),
                 new Align2(
                     this,
                     m_swerve,
                     m_elevator,
                     m_wrist,
                     m_endEffector,
+                    l_limelightLow,
                     m_driverController
                 )
             )
@@ -282,16 +291,16 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "Barge Shoot",
             new SequentialCommandGroup(
-                new InstantCommand(() -> this.scoringLevel = RobotState.barge)
-                // ,new Up(
-                //     this,
-                //     m_elevator,
-                //     m_wrist,
-                //     m_endEffector,
-                //     m_swerve,
-                //     m_driverController,
-                //     () -> true
-                // )
+                new InstantCommand(() -> this.scoringLevel = RobotState.barge),
+                new Up(
+                    this,
+                    m_elevator,
+                    m_wrist,
+                    m_endEffector,
+                    m_swerve,
+                    m_driverController,
+                    () -> true
+                )
             )
         );
 
@@ -531,7 +540,7 @@ public class RobotContainer {
             post.onTrue(
                 new InstantCommand(() -> {
                     this.postIndex = idx;
-                    this.isLeft = idx % 2 == 0 ? idx <= 6 : idx > 6;
+                    this.isLeft = ((idx % 6) + 1) % 2 != 0 ? idx < 6 : idx >= 6;
 
                     if (!this.isCoral) {
                         this.scoringLevel = highAlgae.contains(idx)

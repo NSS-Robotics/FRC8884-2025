@@ -13,6 +13,12 @@
         {
           "type": "named",
           "data": {
+            "name": "l4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Align L6"
           }
         },
@@ -70,6 +76,12 @@
           "type": "named",
           "data": {
             "name": "Barge Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Down Elevator"
           }
         }
       ]

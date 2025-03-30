@@ -73,7 +73,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.6954063604240286,
+      "minWaypointRelativePos": 1.1857042747021715,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
         "maxVelocity": 2.0,
@@ -88,26 +88,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "elevator down then intake",
+      "name": "Ground Intake",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "sequential",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Down Elevator"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Ground Intake"
-              }
-            }
-          ]
+          "name": "Ground Intake"
         }
       }
     }

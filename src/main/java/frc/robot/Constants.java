@@ -216,12 +216,12 @@ public final class Constants {
         public static final int encoder = 31;
         public static final double magnetSensorOffset = 0.599609375;
         public static final double currentLimit = 40;
-        public static final double upKP = 25;
+        public static final double upKP = 40;
         public static final double upKI = 0;
-        public static final double upKD = 0;
-        public static final double downKP = 20;
+        public static final double upKD = 2.5;
+        public static final double downKP = 25;
         public static final double downKI = 0;
-        public static final double downKD = 0;
+        public static final double downKD = 0.5;
         public static final double algaekP = 16; // testing
         public static final double algaekI = 0;
         public static final double algaekD = 0.020493;
@@ -257,7 +257,7 @@ public final class Constants {
         public static final double magnetSensorOffset = -0.413818359375; // This should be undefbeefed
         public static final double kP = 20;
         public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kD = 0.3;
         // public static final double handoffPos = 0.02976171875;
         public static final double[] pos = {
             0.52, // l1
