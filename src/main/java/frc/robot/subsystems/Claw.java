@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import java.io.ObjectInputFilter.Status;
 
 public class Claw extends SubsystemBase {
@@ -35,14 +36,16 @@ public class Claw extends SubsystemBase {
     private final CurrentLimitsConfigs currentLimitsConfigs =
         new CurrentLimitsConfigs();
     private final LaserCan lasercan = new LaserCan(43);
+    private final RobotContainer rob;
 
-    public Claw() {
+    public Claw(RobotContainer rob) {
         slot0Configs.kP = Constants.EndEffectorConstants.kP;
         slot0Configs.kI = Constants.EndEffectorConstants.kI;
         slot0Configs.kD = Constants.EndEffectorConstants.kD;
         slot0Configs.kS = Constants.EndEffectorConstants.kS;
         slot0Configs.kA = Constants.EndEffectorConstants.kA;
         slot0Configs.kV = Constants.EndEffectorConstants.kV;
+        this.rob = rob;
 
         currentLimitsConfigs.SupplyCurrentLimit =
             Constants.EndEffectorConstants.currentLimit;
@@ -98,7 +101,7 @@ public class Claw extends SubsystemBase {
             return false;
         }
         SmartDashboard.putNumber("LaserCAN dist", m.distance_mm);
-        return m.distance_mm < 130;
+        return m.distance_mm < (rob.isCoral ? 80 : 130);
     }
 
     @Override

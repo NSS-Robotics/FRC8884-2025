@@ -118,7 +118,9 @@ public class Up extends Command {
                 if (canRunClaw()) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
-                        timerDelay = .15;
+                        timerDelay = DriverStation.isAutonomousEnabled()
+                            ? .15
+                            : .25;
                     }
                     m_claw.setClaw(
                         robotContainer.scoringLevel.equals(RobotState.l1)

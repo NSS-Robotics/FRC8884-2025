@@ -48,56 +48,19 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Four-Piece Red2 Right"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Coral In Claw"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Align R3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Coral Placing"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Down Elevator"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Four-Piece Red3 Right"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Coral In Claw"
+                  "pathName": "Right Red2 Ground 4Piece"
                 }
               }
             ]
@@ -116,25 +79,19 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Down Elevator"
-          }
-        },
-        {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Four-Piece Red4 Right"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Coral In Claw"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle-Right Red3 Ground"
                 }
               }
             ]
@@ -153,9 +110,34 @@
           }
         },
         {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coral In Claw"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right Red4"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Down Elevator"
+            "name": "Align R3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Placing"
           }
         }
       ]
