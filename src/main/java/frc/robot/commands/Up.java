@@ -118,7 +118,7 @@ public class Up extends Command {
                 if (canRunClaw()) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
-                        timerDelay = .25;
+                        timerDelay = .15;
                     }
                     m_claw.setClaw(
                         robotContainer.scoringLevel.equals(RobotState.l1)
