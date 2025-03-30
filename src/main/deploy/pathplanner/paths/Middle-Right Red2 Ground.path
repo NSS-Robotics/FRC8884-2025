@@ -88,7 +88,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "elevator down then intake",
+      "name": "Elevator Down Then Intake",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {

@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,7 +23,6 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import java.util.HashSet;
 import java.util.List;
-import java.util.jar.Attributes.Name;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -98,12 +96,6 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "Zero Gyro",
             new InstantCommand(m_swerve::zeroGyro)
-        );
-        NamedCommands.registerCommand(
-            "l4",
-            new InstantCommand(() -> {
-                scoringLevel = RobotState.l4;
-            })
         );
         NamedCommands.registerCommand(
             "Align To Station 1",
@@ -253,13 +245,15 @@ public class RobotContainer {
                 )
             )
         );
+
+        // ALGAE COMMANDS
         NamedCommands.registerCommand(
             "Align Algae",
             new SequentialCommandGroup(
-                new InstantCommand(() -> isCoral = false),
-                new InstantCommand(() ->
-                    this.scoringLevel = RobotState.algaeReefLow
-                ),
+                new InstantCommand(() -> {
+                    this.isCoral = false;
+                    this.scoringLevel = RobotState.algaeReefLow;
+                }),
                 new Align2(
                     this,
                     m_swerve,
@@ -274,9 +268,10 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "Reef Intake",
             new SequentialCommandGroup(
-                new InstantCommand(() ->
-                    this.scoringLevel = RobotState.algaeReefLow
-                ),
+                new InstantCommand(() -> {
+                    this.isCoral = false;
+                    this.scoringLevel = RobotState.algaeReefLow;
+                }),
                 new Up(
                     this,
                     m_elevator,
@@ -291,7 +286,10 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "Barge Shoot",
             new SequentialCommandGroup(
-                new InstantCommand(() -> this.scoringLevel = RobotState.barge),
+                new InstantCommand(() -> {
+                    this.isCoral = false;
+                    this.scoringLevel = RobotState.barge;
+                }),
                 new Up(
                     this,
                     m_elevator,

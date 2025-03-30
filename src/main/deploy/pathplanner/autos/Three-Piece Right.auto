@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left 1"
+            "pathName": "Right 1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Align L4"
+            "name": "Align R4"
           }
         },
         {
@@ -50,13 +50,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Three-Piece Left 2"
+            "pathName": "Three-Piece Right 2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Align L2"
+            "name": "Align R2"
           }
         },
         {
@@ -74,13 +74,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Three-Piece Left 3"
+            "pathName": "Three-Piece Right 3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Align L1"
+            "name": "Align R1"
           }
         },
         {
