@@ -25,7 +25,7 @@ public class DownClimb extends Command {
     public void execute() {
         if (m_climber.getPosition() < 1) {
             m_climber.setClimber(Constants.ClimberConstants.climbRot, 1);
-            m_intake.setPivot(Constants.IntakeConstants.climbPosition, 0);
+            m_intake.setPivot(Constants.IntakeConstants.upPosition, 0);
         }
     }
 

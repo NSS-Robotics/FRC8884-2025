@@ -490,7 +490,10 @@ public class RobotContainer {
             .start()
             .onTrue(
                 new InstantCommand(() ->
-                    m_intake.setPivot(Constants.IntakeConstants.upPosition, 0)
+                    m_intake.setPivot(
+                        Constants.IntakeConstants.climbPosition,
+                        0
+                    )
                 )
             );
         // m_driverController

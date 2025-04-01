@@ -218,7 +218,7 @@ public final class Constants {
         public static final double currentLimit = 40;
         public static final double upKP = 63;
         public static final double upKI = 0;
-        public static final double upKD = 3;
+        public static final double upKD = 5;
         public static final double downKP = 37;
         public static final double downKI = 0;
         public static final double downKD = 4;
