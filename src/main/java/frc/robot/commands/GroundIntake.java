@@ -45,7 +45,7 @@ public class GroundIntake extends Command {
         this.m_elevator = m_elevator;
         this.m_driverController = driverController;
         this.l_leds = l_leds;
-        speed = faster ? 4000 : Constants.IntakeConstants.velocity;
+        speed = faster ? 5000 : Constants.IntakeConstants.velocity;
 
         addRequirements(
             m_intake,

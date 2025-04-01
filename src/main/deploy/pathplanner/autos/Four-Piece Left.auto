@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Left 1"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Align L4"
@@ -138,6 +132,12 @@
           "type": "named",
           "data": {
             "name": "Coral Placing"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Down Elevator"
           }
         }
       ]
