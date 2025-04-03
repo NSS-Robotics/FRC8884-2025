@@ -322,7 +322,7 @@ public final class Constants {
         public static final int pivotMotorID = 60;
         public static final int intakeMotorID = 61;
         public static final int encoderID = 62;
-        public static final double encoderOffset = 0.213623046875;
+        public static final double encoderOffset = 0.23193359375;
         public static final double upKP = 12.75;
         public static final double upKI = 0;
         public static final double upKD = 2;
