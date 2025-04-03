@@ -118,6 +118,18 @@ public class RobotContainer {
             )
         );
         NamedCommands.registerCommand(
+            "4 Piece Coral Placing",
+            new Up4Piece(
+                this,
+                m_elevator,
+                m_wrist,
+                m_endEffector,
+                m_swerve,
+                m_driverController,
+                () -> true
+            )
+        );
+        NamedCommands.registerCommand(
             "Down Elevator",
             new ElevatorDown(this, m_elevator, m_wrist, m_endEffector)
         );

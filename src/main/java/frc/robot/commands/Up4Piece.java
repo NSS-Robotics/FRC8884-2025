@@ -16,7 +16,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
 import java.util.function.BooleanSupplier;
 
-public class Up extends Command {
+public class Up4Piece extends Command {
 
     private final RobotContainer robotContainer;
     private final Elevator m_elevator;
@@ -36,7 +36,7 @@ public class Up extends Command {
     private boolean ended = false;
     private BooleanSupplier isAtSetpoint;
 
-    public Up(
+    public Up4Piece(
         RobotContainer robotContainer,
         Elevator elevator,
         Wrist wrist,
@@ -119,13 +119,15 @@ public class Up extends Command {
                     if (!timer1.isRunning()) {
                         timer1.restart();
                         timerDelay = DriverStation.isAutonomousEnabled()
-                            ? .25
+                            ? .15
                             : .25;
                     }
                     m_claw.setClaw(
                         robotContainer.scoringLevel.equals(RobotState.l1)
                             ? -Constants.EndEffectorConstants.l1Velocity
-                            : -Constants.EndEffectorConstants.teleopOuttakeVelocity
+                            : DriverStation.isAutonomousEnabled()
+                                ? -Constants.EndEffectorConstants.autoOuttakeVelocity
+                                : -Constants.EndEffectorConstants.teleopOuttakeVelocity
                     );
                 }
                 if (timer1.hasElapsed(timerDelay)) {
