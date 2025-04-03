@@ -5,6 +5,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,6 +39,8 @@ public class Robot extends TimedRobot {
         // Thread thread = new Thread(() -> {
         // UsbCamera camera =
         CameraServer.startAutomaticCapture();
+        DataLogManager.start();
+        DriverStation.startDataLog(DataLogManager.getLog());
         //     camera.setResolution(640, 480);
 
         //     CvSink sink = CameraServer.getVideo();
@@ -57,6 +61,7 @@ public class Robot extends TimedRobot {
         // thread.start();
 
         CanBridge.runTCP();
+
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.

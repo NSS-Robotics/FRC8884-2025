@@ -119,7 +119,7 @@ public class Up extends Command {
                     if (!timer1.isRunning()) {
                         timer1.restart();
                         timerDelay = DriverStation.isAutonomousEnabled()
-                            ? .15
+                            ? .25
                             : .25;
                     }
                     m_claw.setClaw(
