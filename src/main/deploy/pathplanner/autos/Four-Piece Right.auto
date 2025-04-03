@@ -133,6 +133,12 @@
           "data": {
             "name": "4 Piece Coral Placing"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Down Elevator"
+          }
         }
       ]
     }

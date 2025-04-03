@@ -68,13 +68,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Ground Intake",
+      "name": "4 Piece Ground Intake",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Ground Intake"
+          "name": "4 Piece Ground Intake"
         }
       }
     }

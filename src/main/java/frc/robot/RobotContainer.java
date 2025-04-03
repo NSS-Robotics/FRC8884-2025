@@ -157,7 +157,26 @@ public class RobotContainer {
                     m_driverController,
                     m_climber,
                     l_leds,
-                    true
+                    false
+                )
+            )
+        );
+        NamedCommands.registerCommand(
+            "4 Piece Ground Intake",
+            new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    intakeDown = true;
+                }),
+                new GroundIntake4Piece(
+                    this,
+                    m_intake,
+                    m_indexer,
+                    m_wrist,
+                    m_endEffector,
+                    m_elevator,
+                    m_driverController,
+                    m_climber,
+                    l_leds
                 )
             )
         );

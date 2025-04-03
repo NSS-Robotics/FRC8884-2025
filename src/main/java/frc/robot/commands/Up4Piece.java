@@ -118,16 +118,12 @@ public class Up4Piece extends Command {
                 if (canRunClaw()) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
-                        timerDelay = DriverStation.isAutonomousEnabled()
-                            ? .15
-                            : .25;
+                        timerDelay = .15;
                     }
                     m_claw.setClaw(
                         robotContainer.scoringLevel.equals(RobotState.l1)
                             ? -Constants.EndEffectorConstants.l1Velocity
-                            : DriverStation.isAutonomousEnabled()
-                                ? -Constants.EndEffectorConstants.autoOuttakeVelocity
-                                : -Constants.EndEffectorConstants.teleopOuttakeVelocity
+                            : -Constants.EndEffectorConstants.autoOuttakeVelocity
                     );
                 }
                 if (timer1.hasElapsed(timerDelay)) {
