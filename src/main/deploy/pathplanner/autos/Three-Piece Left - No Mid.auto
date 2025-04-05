@@ -44,13 +44,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Three-Piece Left 2 - No Mid"
+            "pathName": "Three-Piece Left 2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Align L3"
+            "name": "Align L2"
           }
         },
         {
@@ -68,7 +68,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Align L2"
+            "name": "Align L3"
           }
         },
         {
