@@ -18,6 +18,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
@@ -27,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Elevator extends SubsystemBase {
 
@@ -42,11 +44,15 @@ public class Elevator extends SubsystemBase {
     private static CurrentLimitsConfigs currentLimitsConfigs =
         new CurrentLimitsConfigs();
     private static Slot0Configs slot0Configs = new Slot0Configs();
+    private static Slot0Configs slot0ConfigsL4 = new Slot0Configs();
     private static Slot1Configs slot1Configs = new Slot1Configs();
     private static Slot2Configs slot2Configs = new Slot2Configs();
     private static PositionVoltage elevatorPositionVoltage;
 
-    public Elevator() {
+    private final RobotContainer rob;
+
+    public Elevator(RobotContainer rob) {
+        this.rob = rob;
         CANcoderConfiguration CANcoderConfig = new CANcoderConfiguration();
         MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
 
@@ -59,6 +65,10 @@ public class Elevator extends SubsystemBase {
         slot0Configs.kP = Constants.ElevatorConstants.upKP;
         slot0Configs.kI = Constants.ElevatorConstants.upKI;
         slot0Configs.kD = Constants.ElevatorConstants.upKD;
+
+        slot0ConfigsL4.kP = Constants.ElevatorConstants.upL4KP;
+        slot0ConfigsL4.kI = Constants.ElevatorConstants.upL4KI;
+        slot0ConfigsL4.kD = Constants.ElevatorConstants.upL4KD;
 
         slot1Configs.kP = Constants.ElevatorConstants.downKP;
         slot1Configs.kI = Constants.ElevatorConstants.downKI;
@@ -91,6 +101,17 @@ public class Elevator extends SubsystemBase {
             Math.min(Constants.ElevatorConstants.maxRotations, position)
         );
         SmartDashboard.putNumber("elevator setpoint", position);
+        if (slot == 0) {
+            if (rob.scoringLevel.equals(Constants.RobotState.l4)) {
+                motor.getConfigurator().apply(slot0ConfigsL4);
+            } else if (
+                rob.scoringLevel.equals(Constants.RobotState.l1) ||
+                rob.scoringLevel.equals(Constants.RobotState.l2) ||
+                rob.scoringLevel.equals(Constants.RobotState.l3)
+            ) {
+                motor.getConfigurator().apply(slot0Configs);
+            }
+        }
         elevatorPositionVoltage = new PositionVoltage(position).withSlot(slot);
 
         motor.setControl(elevatorPositionVoltage);

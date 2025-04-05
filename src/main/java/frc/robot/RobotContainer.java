@@ -38,7 +38,7 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
     // The robot's subsystems and commands are defined here...
     private final Climber m_climber = new Climber();
-    private final Elevator m_elevator = new Elevator();
+    private final Elevator m_elevator = new Elevator(this);
     private final Claw m_endEffector = new Claw(this);
     private final Indexer m_indexer = new Indexer();
     private final Intake m_intake = new Intake();
