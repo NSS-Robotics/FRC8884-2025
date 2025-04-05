@@ -1,0 +1,92 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Zero Gyro"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align L4"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coral Placing"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Resting Climb"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Down"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Three-Piece Left 2 - No Mid"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align L3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Placing"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Three-Piece Left 3 - No Mid"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Align L2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Placing"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Down Elevator"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
