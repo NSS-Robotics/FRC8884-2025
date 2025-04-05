@@ -115,7 +115,11 @@ public class Up extends Command {
                 Math.abs(m_elevator.getPosition() - targetElevatorPos) <
                 Constants.ElevatorConstants.posTolerance
             ) {
-                if (canRunClaw()) {
+                if (
+                    canRunClaw() &&
+                    Math.abs(m_wrist.getPosition() - targetWristPos) <
+                    Constants.WristConstants.posTolerance
+                ) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
                         timerDelay = .25;
