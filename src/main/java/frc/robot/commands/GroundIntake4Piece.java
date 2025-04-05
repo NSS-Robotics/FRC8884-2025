@@ -86,8 +86,8 @@ public class GroundIntake4Piece extends Command {
             robotContainer.isCoral &&
             m_climber.getPosition() > Constants.ClimberConstants.restingRot - 5
         ) {
-            m_intake.setIntake(1000, false);
-            m_indexer.setIndexer(Constants.IndexerConstants.halfIntakeVelocity);
+            // m_intake.setIntake(1000, false);
+            // m_indexer.setIndexer(Constants.IndexerConstants.halfIntakeVelocity);
             m_claw.setClaw(Constants.EndEffectorConstants.velocity);
 
             if (
