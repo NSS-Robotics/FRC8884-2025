@@ -694,6 +694,9 @@ public class RobotContainer {
                 l_leds.ationIntake();
             })
         );
+        new JoystickButton(m_gamePanel, 21).whileTrue(
+            new IndexerOuttake(m_indexer)
+        );
     }
 
     public boolean canChangeGamePiece() {
