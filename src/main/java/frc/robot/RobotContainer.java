@@ -69,6 +69,7 @@ public class RobotContainer {
     public int postIndex;
     public boolean canAlign;
     public boolean l1_2;
+    public boolean manualMode = false;
 
     public SendableChooser<Boolean> m_chooser = new SendableChooser<>();
 
@@ -472,46 +473,58 @@ public class RobotContainer {
             .rightTrigger()
             .onTrue(
                 new ConditionalCommand(
-                    new ParallelDeadlineGroup(
-                        new WaitCommand(2),
-                        new IntakeL1(this, m_intake)
+                    new Up(
+                        this,
+                        m_elevator,
+                        m_wrist,
+                        m_endEffector,
+                        m_swerve,
+                        m_driverController,
+                        () -> false
                     ),
-                    new SequentialCommandGroup(
-                        new InstantCommand(l_leds::alignLeds),
-                        new ConditionalCommand(
-                            new InstantCommand(),
-                            new Align2(
-                                this,
-                                m_swerve,
-                                m_elevator,
-                                m_wrist,
-                                m_endEffector,
-                                l_limelightLow,
-                                m_driverController
-                            ).asProxy(),
-                            () ->
-                                scoringLevel.equals(RobotState.barge) ||
-                                scoringLevel.equals(RobotState.processor)
+                    new ConditionalCommand(
+                        new ParallelDeadlineGroup(
+                            new WaitCommand(2),
+                            new IntakeL1(this, m_intake)
                         ),
-                        new InstantCommand(() -> l_leds.score(m_elevator)),
-                        new ConditionalCommand(
-                            new Up(
-                                this,
-                                m_elevator,
-                                m_wrist,
-                                m_endEffector,
-                                m_swerve,
-                                m_driverController,
-                                () -> true
+                        new SequentialCommandGroup(
+                            new InstantCommand(l_leds::alignLeds),
+                            new ConditionalCommand(
+                                new InstantCommand(),
+                                new Align2(
+                                    this,
+                                    m_swerve,
+                                    m_elevator,
+                                    m_wrist,
+                                    m_endEffector,
+                                    l_limelightLow,
+                                    m_driverController
+                                ).asProxy(),
+                                () ->
+                                    scoringLevel.equals(RobotState.barge) ||
+                                    scoringLevel.equals(RobotState.processor)
                             ),
-                            new InstantCommand(),
-                            () ->
-                                scoringLevel.equals(RobotState.barge) ||
-                                scoringLevel.equals(RobotState.processor) ||
-                                canAlign
-                        )
+                            new InstantCommand(() -> l_leds.score(m_elevator)),
+                            new ConditionalCommand(
+                                new Up(
+                                    this,
+                                    m_elevator,
+                                    m_wrist,
+                                    m_endEffector,
+                                    m_swerve,
+                                    m_driverController,
+                                    () -> true
+                                ),
+                                new InstantCommand(),
+                                () ->
+                                    scoringLevel.equals(RobotState.barge) ||
+                                    scoringLevel.equals(RobotState.processor) ||
+                                    canAlign
+                            )
+                        ),
+                        () -> l1_2
                     ),
-                    () -> l1_2
+                    () -> manualMode && isCoral
                 )
             );
         m_driverController
@@ -691,11 +704,19 @@ public class RobotContainer {
         new JoystickButton(m_gamePanel, 20).onTrue(
             new InstantCommand(() -> {
                 this.l1_2 = !this.l1_2;
-                l_leds.ationIntake();
+                if (this.l1_2) {
+                    l_leds.ationIntake();
+                } else {
+                    l_leds.stop();
+                }
             })
         );
         new JoystickButton(m_gamePanel, 21).whileTrue(
             new IndexerOuttake(m_indexer)
+        );
+
+        new JoystickButton(m_gamePanel, 22).onTrue(
+            new InstantCommand(() -> this.manualMode = !this.manualMode)
         );
     }
 

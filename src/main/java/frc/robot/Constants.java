@@ -277,6 +277,7 @@ public final class Constants {
             0.622, // processor
             0.270751953125, // climb
         };
+        public static final double manualPos = 0.696044921875;
         public static final double posTolerance = 0.05;
         public static final double maxRotations = 0.72;
         public static final double minElevatorRaisedPos = 0.323;

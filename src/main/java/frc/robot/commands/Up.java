@@ -78,7 +78,11 @@ public class Up extends Command {
         targetState = robotContainer.scoringLevel;
         targetElevatorPos =
             Constants.ElevatorConstants.pos[targetState.ordinal()];
-        targetWristPos = Constants.WristConstants.pos[targetState.ordinal()];
+        targetWristPos = robotContainer.manualMode &&
+            robotContainer.isCoral &&
+            !robotContainer.scoringLevel.equals(RobotState.l1)
+            ? Constants.WristConstants.manualPos
+            : Constants.WristConstants.pos[targetState.ordinal()];
     }
 
     // Called every time the scheduler runs while the command is scheduled.
