@@ -1,16 +1,33 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Swerve;
 
 public class TurnAround extends Command {
 
+    private final RobotContainer rob;
     private Swerve m_swerve;
     private TurnAroundPIDController pidController;
 
     private boolean atSetpoint;
+    private double[] angles = {
+        180,
+        120,
+        120,
+        60,
+        60,
+        0,
+        180,
+        -120,
+        -120,
+        -60,
+        -60,
+        0,
+    };
 
-    public TurnAround(Swerve swerve) {
+    public TurnAround(RobotContainer rob, Swerve swerve) {
+        this.rob = rob;
         this.m_swerve = swerve;
         this.pidController = new TurnAroundPIDController(this.m_swerve);
 
@@ -24,12 +41,15 @@ public class TurnAround extends Command {
 
     @Override
     public void execute() {
-        if (!atSetpoint && Math.abs(pidController.getError()) < 1) {
+        if (
+            !atSetpoint &&
+            Math.abs(pidController.getError(angles[rob.postIndex])) < 1
+        ) {
             atSetpoint = true;
             m_swerve.stopSwerve();
         }
 
-        pidController.turn();
+        pidController.turn(angles[rob.postIndex]);
     }
 
     @Override
