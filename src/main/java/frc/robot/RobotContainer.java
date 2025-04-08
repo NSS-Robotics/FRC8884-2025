@@ -210,7 +210,7 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new SequentialCommandGroup(
                     new AlignToStation(m_swerve, false),
-                    new TurnAround(m_swerve)
+                    new TurnAround(this, m_swerve, false)
                 ),
                 new StationIntake(m_elevator, m_wrist, m_endEffector)
             )
@@ -476,9 +476,9 @@ public class RobotContainer {
         m_driverController
             .x()
             .onTrue(
-                new SequentialCommandGroup(
+                new ParallelCommandGroup(
                     new InstantCommand(l_leds::stationAlignLeds),
-                    // new AlignToStation(m_swerve),
+                    new TurnAround(this, m_swerve, true),
                     new StationIntake(m_elevator, m_wrist, m_endEffector)
                 )
             );
@@ -488,7 +488,8 @@ public class RobotContainer {
             .onTrue(
                 new ConditionalCommand(
                     new ParallelCommandGroup(
-                        new TurnAround(m_swerve),
+                        new InstantCommand(l_leds::manualMode),
+                        new TurnAround(this, m_swerve, false).asProxy(),
                         new Up(
                             this,
                             m_elevator,

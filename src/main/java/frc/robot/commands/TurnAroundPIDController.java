@@ -18,7 +18,7 @@ public class TurnAroundPIDController extends PIDController {
     }
 
     public void turn(double targetYaw) {
-        double yaw = calculate(getError(), 0);
+        double yaw = calculate(getError(targetYaw), 0);
 
         m_swerve.turnStates(yaw, 0, 0);
     }
