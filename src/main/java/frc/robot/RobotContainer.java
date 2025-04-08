@@ -333,6 +333,20 @@ public class RobotContainer {
                 )
             )
         );
+        NamedCommands.registerCommand(
+            "Lock Intake",
+            new SequentialCommandGroup(
+                new InstantCommand(() -> m_intake.setPivot(0, 0))
+            )
+        );
+        NamedCommands.registerCommand(
+            "Coral",
+            new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    isCoral = true;
+                })
+            )
+        );
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
