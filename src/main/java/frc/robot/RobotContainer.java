@@ -716,7 +716,14 @@ public class RobotContainer {
         );
 
         new JoystickButton(m_gamePanel, 22).onTrue(
-            new InstantCommand(() -> this.manualMode = !this.manualMode)
+            new InstantCommand(() -> {
+                this.manualMode = !this.manualMode;
+                if (manualMode) {
+                    l_leds.manualMode();
+                } else {
+                    l_leds.restingLeds();
+                }
+            })
         );
     }
 
