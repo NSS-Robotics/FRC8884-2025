@@ -103,6 +103,7 @@ public class Robot extends TimedRobot {
             "Can Change Game Piece",
             m_robotContainer.canChangeGamePiece()
         );
+        SmartDashboard.putBoolean("Manual Mode", m_robotContainer.manualMode);
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
