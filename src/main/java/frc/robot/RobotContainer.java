@@ -487,14 +487,17 @@ public class RobotContainer {
             .rightTrigger()
             .onTrue(
                 new ConditionalCommand(
-                    new Up(
-                        this,
-                        m_elevator,
-                        m_wrist,
-                        m_endEffector,
-                        m_swerve,
-                        m_driverController,
-                        () -> false
+                    new ParallelCommandGroup(
+                        new TurnAround(m_swerve),
+                        new Up(
+                            this,
+                            m_elevator,
+                            m_wrist,
+                            m_endEffector,
+                            m_swerve,
+                            m_driverController,
+                            () -> false
+                        )
                     ),
                     new ConditionalCommand(
                         new ParallelDeadlineGroup(
