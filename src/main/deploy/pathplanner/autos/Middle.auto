@@ -77,6 +77,12 @@
           "data": {
             "name": "Down Elevator"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "back"
+          }
         }
       ]
     }

@@ -68,6 +68,15 @@ public class GroundIntake extends Command {
     @Override
     public void execute() {
         l_leds.intakeLeds();
+        if (
+            robotContainer.manualMode &&
+            (m_elevator.getPosition() >
+                Constants.ElevatorConstants.pos[RobotState.handoff.ordinal()] +
+                Constants.ElevatorConstants.posTolerance)
+        ) {
+            m_claw.setClaw(Constants.EndEffectorConstants.velocity);
+            return;
+        }
         // coral
         if (m_claw.gamePieceDetected()) {
             m_driverController.setRumble(RumbleType.kBothRumble, 1);

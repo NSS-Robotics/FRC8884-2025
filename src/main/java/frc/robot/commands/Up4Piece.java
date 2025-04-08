@@ -101,6 +101,13 @@ public class Up4Piece extends Command {
                 m_wrist.setWrist(targetWristPos); // only move wrist down when elevator up (prevents wrist/bumper collision)
             }
 
+            if (
+                m_wrist.getPosition() >
+                Constants.WristConstants.pos[RobotState.climb.ordinal()]
+            ) {
+                m_claw.stopClaw();
+            }
+
             // only move elevator when wrist out (prevents dismembering)
             if (
                 m_wrist.getPosition() >

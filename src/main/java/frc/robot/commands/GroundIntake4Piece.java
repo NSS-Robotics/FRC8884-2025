@@ -181,7 +181,7 @@ public class GroundIntake4Piece extends Command {
         m_indexer.stopIndexer();
         m_driverController.setRumble(RumbleType.kBothRumble, 0);
         if (robotContainer.isCoral || !m_claw.gamePieceDetected()) {
-            m_claw.stopClaw();
+            //m_claw.stopClaw();
             // Reset the leds to their appropritate resting state
             l_leds.updateGamePiece();
         } else {
