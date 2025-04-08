@@ -333,6 +333,20 @@ public class RobotContainer {
                 )
             )
         );
+        NamedCommands.registerCommand(
+            "Lock Intake",
+            new SequentialCommandGroup(
+                new InstantCommand(() -> m_intake.setPivot(0, 0))
+            )
+        );
+        NamedCommands.registerCommand(
+            "Coral",
+            new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    isCoral = true;
+                })
+            )
+        );
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -473,14 +487,17 @@ public class RobotContainer {
             .rightTrigger()
             .onTrue(
                 new ConditionalCommand(
-                    new Up(
-                        this,
-                        m_elevator,
-                        m_wrist,
-                        m_endEffector,
-                        m_swerve,
-                        m_driverController,
-                        () -> false
+                    new ParallelCommandGroup(
+                        new TurnAround(m_swerve),
+                        new Up(
+                            this,
+                            m_elevator,
+                            m_wrist,
+                            m_endEffector,
+                            m_swerve,
+                            m_driverController,
+                            () -> false
+                        )
                     ),
                     new ConditionalCommand(
                         new ParallelDeadlineGroup(
@@ -524,7 +541,10 @@ public class RobotContainer {
                         ),
                         () -> l1_2
                     ),
-                    () -> manualMode && isCoral
+                    () ->
+                        manualMode &&
+                        !scoringLevel.equals(RobotState.barge) &&
+                        !scoringLevel.equals(RobotState.processor)
                 )
             );
         m_driverController
@@ -716,7 +736,14 @@ public class RobotContainer {
         );
 
         new JoystickButton(m_gamePanel, 22).onTrue(
-            new InstantCommand(() -> this.manualMode = !this.manualMode)
+            new InstantCommand(() -> {
+                this.manualMode = !this.manualMode;
+                if (manualMode) {
+                    l_leds.manualMode();
+                } else {
+                    l_leds.restingLeds();
+                }
+            })
         );
     }
 

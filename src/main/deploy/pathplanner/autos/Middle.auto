@@ -13,6 +13,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Lock Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Align L6"
           }
         },
@@ -75,13 +81,26 @@
         {
           "type": "named",
           "data": {
-            "name": "Down Elevator"
+            "name": "Coral"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "back"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Down Elevator"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "back"
+                }
+              }
+            ]
           }
         }
       ]
