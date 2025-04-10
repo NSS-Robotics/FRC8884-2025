@@ -550,8 +550,9 @@ public class RobotContainer {
                     ),
                     () ->
                         manualMode &&
-                        !scoringLevel.equals(RobotState.barge) &&
-                        !scoringLevel.equals(RobotState.processor)
+                        (isCoral ||
+                            scoringLevel.equals(RobotState.algaeReefHigh) ||
+                            scoringLevel.equals(RobotState.algaeReefLow))
                 )
             );
         m_driverController
