@@ -70,6 +70,7 @@ public class GroundIntake extends Command {
         l_leds.intakeLeds();
         if (
             robotContainer.manualMode &&
+            robotContainer.isCoral &&
             (m_elevator.getPosition() >
                 Constants.ElevatorConstants.pos[RobotState.handoff.ordinal()] +
                 Constants.ElevatorConstants.posTolerance)

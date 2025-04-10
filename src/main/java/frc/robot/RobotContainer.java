@@ -68,7 +68,7 @@ public class RobotContainer {
     public boolean intakeDown;
     public int postIndex;
     public boolean canAlign;
-    public boolean l1_2;
+    public boolean ationOuttake;
     public boolean manualMode = false;
 
     public SendableChooser<Boolean> m_chooser = new SendableChooser<>();
@@ -77,7 +77,7 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        l1_2 = false;
+        ationOuttake = false;
         postIndex = 0;
         intakeDown = false;
         scoringLevel = RobotState.l4;
@@ -473,7 +473,7 @@ public class RobotContainer {
                         l_leds,
                         false
                     ),
-                    () -> l1_2
+                    () -> ationOuttake
                 )
             );
 
@@ -546,10 +546,11 @@ public class RobotContainer {
                                     canAlign
                             )
                         ),
-                        () -> l1_2
+                        () -> ationOuttake
                     ),
                     () ->
                         manualMode &&
+                        !ationOuttake &&
                         !scoringLevel.equals(RobotState.barge) &&
                         !scoringLevel.equals(RobotState.processor)
                 )
@@ -730,8 +731,8 @@ public class RobotContainer {
 
         new JoystickButton(m_gamePanel, 20).onTrue(
             new InstantCommand(() -> {
-                this.l1_2 = !this.l1_2;
-                if (this.l1_2) {
+                this.ationOuttake = !this.ationOuttake;
+                if (this.ationOuttake) {
                     l_leds.ationIntake();
                 } else {
                     l_leds.stop();
