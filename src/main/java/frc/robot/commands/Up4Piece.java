@@ -125,7 +125,7 @@ public class Up4Piece extends Command {
                 if (canRunClaw()) {
                     if (!timer1.isRunning()) {
                         timer1.restart();
-                        timerDelay = .15;
+                        timerDelay = .18;
                     }
                     m_claw.setClaw(
                         robotContainer.scoringLevel.equals(RobotState.l1)

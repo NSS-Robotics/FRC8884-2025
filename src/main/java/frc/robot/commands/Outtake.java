@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotState;
@@ -104,6 +105,15 @@ public class Outtake extends Command {
                     -Constants.EndEffectorConstants.teleopOuttakeVelocity
                 );
             }
+            m_intake.setPivot(
+                robotContainer.intakeDown
+                    ? (DriverStation.isAutonomousEnabled()
+                            ? Constants.IntakeConstants.autoIntakePosition
+                            : Constants.IntakeConstants.intakePosition)
+                    : Constants.IntakeConstants.upPosition,
+                robotContainer.intakeDown ? 1 : 0
+            );
+            m_intake.setIntake(1000, false);
         }
     }
 

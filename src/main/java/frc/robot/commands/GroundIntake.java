@@ -169,21 +169,28 @@ public class GroundIntake extends Command {
                     Constants.ElevatorConstants.upSlot
                 );
             }
+            //pedro algae
+            m_intake.setPivot(Constants.IntakeConstants.algaeIntake, 0);
+            m_intake.setIntake(-1000, false);
         }
     }
 
     // Called once the command ends or is interrupted%.
     @Override
     public void end(boolean interrupted) {
-        m_intake.setPivot(
-            robotContainer.intakeDown
-                ? (DriverStation.isAutonomousEnabled()
-                        ? Constants.IntakeConstants.autoIntakePosition
-                        : Constants.IntakeConstants.intakePosition)
-                : Constants.IntakeConstants.upPosition,
-            robotContainer.intakeDown ? 1 : 0
-        );
-        m_intake.stopIntake();
+        if (m_intake.getIntakeCurrent() > 40) {
+            m_intake.setIntake(-1000, false);
+        } else {
+            m_intake.stopIntake();
+            m_intake.setPivot(
+                robotContainer.intakeDown
+                    ? (DriverStation.isAutonomousEnabled()
+                            ? Constants.IntakeConstants.autoIntakePosition
+                            : Constants.IntakeConstants.intakePosition)
+                    : Constants.IntakeConstants.upPosition,
+                robotContainer.intakeDown ? 1 : 0
+            );
+        }
         m_indexer.stopIndexer();
         m_driverController.setRumble(RumbleType.kBothRumble, 0);
         if (robotContainer.isCoral || !m_claw.gamePieceDetected()) {

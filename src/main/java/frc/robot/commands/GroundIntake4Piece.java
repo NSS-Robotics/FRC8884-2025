@@ -199,7 +199,9 @@ public class GroundIntake4Piece extends Command {
     @Override
     public boolean isFinished() {
         return (
-            m_claw.gamePieceDetected() && DriverStation.isAutonomousEnabled()
+            (m_claw.gamePieceDetected() &&
+                DriverStation.isAutonomousEnabled()) ||
+            DriverStation.isTeleopEnabled()
         );
     }
 }

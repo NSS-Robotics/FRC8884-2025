@@ -350,6 +350,7 @@ public final class Constants {
         public static final double climbPosition = intakePosition / 5.0;
         public static final double autoIntakePosition = -0.348388671875;
         public static final double autoIntakeUpPosition = -0.061279296875;
+        public static final double algaeIntake = -0.142822265625;
         // public static final double velocity = 2000;
         public static final double velocity = 3000;
         public static final double stationVelocity = 300;

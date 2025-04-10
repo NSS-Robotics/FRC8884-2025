@@ -41,7 +41,7 @@ public class RobotContainer {
     private final Elevator m_elevator = new Elevator(this);
     private final Claw m_endEffector = new Claw(this);
     private final Indexer m_indexer = new Indexer();
-    private final Intake m_intake = new Intake();
+    public final Intake m_intake = new Intake(this);
     private final Limelight l_limelightLow = new Limelight("low");
     private final Limelight l_limelightHigh = new Limelight("high");
     private final Swerve m_swerve = new Swerve(l_limelightLow, l_limelightHigh);
@@ -114,6 +114,7 @@ public class RobotContainer {
                 m_wrist,
                 m_endEffector,
                 m_swerve,
+                m_intake,
                 m_driverController,
                 () -> true
             )
@@ -310,6 +311,7 @@ public class RobotContainer {
                     m_wrist,
                     m_endEffector,
                     m_swerve,
+                    m_intake,
                     m_driverController,
                     () -> true
                 )
@@ -328,6 +330,7 @@ public class RobotContainer {
                     m_wrist,
                     m_endEffector,
                     m_swerve,
+                    m_intake,
                     m_driverController,
                     () -> true
                 )
@@ -448,6 +451,7 @@ public class RobotContainer {
                     m_wrist,
                     m_endEffector,
                     m_swerve,
+                    m_intake,
                     m_driverController,
                     () -> true
                 )
@@ -478,7 +482,7 @@ public class RobotContainer {
             .onTrue(
                 new ParallelCommandGroup(
                     new InstantCommand(l_leds::stationAlignLeds),
-                    new TurnAround(this, m_swerve, true),
+                    new TurnAround(this, m_swerve, true).asProxy(),
                     new StationIntake(m_elevator, m_wrist, m_endEffector)
                 )
             );
@@ -496,6 +500,7 @@ public class RobotContainer {
                             m_wrist,
                             m_endEffector,
                             m_swerve,
+                            m_intake,
                             m_driverController,
                             () -> false
                         )
@@ -530,6 +535,7 @@ public class RobotContainer {
                                     m_wrist,
                                     m_endEffector,
                                     m_swerve,
+                                    m_intake,
                                     m_driverController,
                                     () -> true
                                 ),

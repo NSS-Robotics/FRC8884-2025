@@ -12,6 +12,7 @@ import frc.robot.Constants.RobotState;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
 import java.util.function.BooleanSupplier;
@@ -23,6 +24,7 @@ public class Up extends Command {
     private final Wrist m_wrist;
     private final Claw m_claw;
     private final Swerve m_swerve;
+    private final Intake m_intake;
     private final CommandXboxController m_driverController;
     private Timer timer1;
     private Timer timer2;
@@ -42,6 +44,7 @@ public class Up extends Command {
         Wrist wrist,
         Claw claw,
         Swerve swerve,
+        Intake intake,
         CommandXboxController driverController,
         BooleanSupplier isAtSetpoint
     ) {
@@ -52,6 +55,7 @@ public class Up extends Command {
         m_claw = claw;
         m_swerve = swerve;
         m_driverController = driverController;
+        m_intake = intake;
         timer1 = new Timer();
         timer2 = new Timer();
         addRequirements(m_elevator, m_wrist, m_claw);
@@ -170,6 +174,15 @@ public class Up extends Command {
                 ) {
                     m_claw.stopClaw();
                 }
+                m_intake.setPivot(
+                    robotContainer.intakeDown
+                        ? (DriverStation.isAutonomousEnabled()
+                                ? Constants.IntakeConstants.autoIntakePosition
+                                : Constants.IntakeConstants.intakePosition)
+                        : Constants.IntakeConstants.upPosition,
+                    robotContainer.intakeDown ? 1 : 0
+                );
+                m_intake.setIntake(1000, false);
             } else if (targetState.equals(RobotState.barge)) {
                 if (
                     m_wrist.getPosition() >
@@ -260,6 +273,7 @@ public class Up extends Command {
     // Called once the command ends or is interrupted%.
     @Override
     public void end(boolean interrupted) {
+        m_intake.stopIntake();
         robotContainer.runningCommand = false;
         m_driverController.setRumble(RumbleType.kBothRumble, 0);
         timer1.stop();

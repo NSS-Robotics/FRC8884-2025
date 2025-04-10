@@ -388,6 +388,7 @@ public class Align extends Command {
             wrist,
             claw,
             swerve,
+            rob.m_intake,
             driveController,
             () -> atSetpoint
         );

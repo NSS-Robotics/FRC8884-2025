@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
 
@@ -51,8 +52,10 @@ public class Intake extends SubsystemBase {
     private static Slot0Configs intakeSlot0Configs = new Slot0Configs();
     private static PositionVoltage pivotPositionVoltage;
     private static VelocityVoltage intakeVelocityVoltage;
+    private RobotContainer rob;
 
-    public Intake() {
+    public Intake(RobotContainer rob) {
+        this.rob = rob;
         CANcoderConfiguration pivotCANcoderConfig = new CANcoderConfiguration();
         pivotCANcoderConfig.MagnetSensor.SensorDirection =
             SensorDirectionValue.CounterClockwise_Positive;
@@ -115,7 +118,7 @@ public class Intake extends SubsystemBase {
 
     public void setIntake(double velocity, boolean l1) {
         intakeVelocityVoltage = new VelocityVoltage(velocity / 60);
-        intakeCurrentLimitsConfigs.StatorCurrentLimit = 80;
+        intakeCurrentLimitsConfigs.StatorCurrentLimit = rob.isCoral ? 80 : 50;
         intakeMotor.getConfigurator().apply(intakeCurrentLimitsConfigs);
 
         intakeMotor.setControl(intakeVelocityVoltage);
