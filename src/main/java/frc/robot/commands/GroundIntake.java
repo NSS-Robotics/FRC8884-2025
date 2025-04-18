@@ -173,6 +173,9 @@ public class GroundIntake extends Command {
             //pedro algae
             m_intake.setPivot(Constants.IntakeConstants.algaeIntake, 0);
             m_intake.setIntake(-1000, false);
+            if (m_intake.getIntakeCurrent() > 40) {
+                m_driverController.setRumble(RumbleType.kBothRumble, 1);
+            }
         }
     }
 
