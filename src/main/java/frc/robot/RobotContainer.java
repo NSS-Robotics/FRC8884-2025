@@ -482,7 +482,7 @@ public class RobotContainer {
             .onTrue(
                 new ParallelCommandGroup(
                     new InstantCommand(l_leds::stationAlignLeds),
-                    new TurnAround(this, m_swerve, true).asProxy(),
+                    //new TurnAround(this, m_swerve, true).asProxy(),
                     new StationIntake(m_elevator, m_wrist, m_endEffector)
                 )
             );
@@ -493,7 +493,7 @@ public class RobotContainer {
                 new ConditionalCommand(
                     new ParallelCommandGroup(
                         new InstantCommand(l_leds::manualMode),
-                        new TurnAround(this, m_swerve, false).asProxy(),
+                        //new TurnAround(this, m_swerve, false).asProxy(),
                         new Up(
                             this,
                             m_elevator,

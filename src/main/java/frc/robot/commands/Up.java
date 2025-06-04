@@ -162,7 +162,7 @@ public class Up extends Command {
                     canRunClaw()
                 ) {
                     m_claw.setClaw(
-                        -Constants.EndEffectorConstants.teleopOuttakeVelocity
+                        -Constants.EndEffectorConstants.autoOuttakeVelocity
                     );
                     //robotContainer.runningCommand = false;
                     if (!timer1.isRunning()) {
