@@ -375,73 +375,7 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-        // pressed,
-        // cancelling on release.
-        m_driverController
-            .povRight()
-            .whileTrue(
-                new RunWrist(
-                    m_wrist,
-                    m_elevator,
-                    Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
-                )
-            );
-        m_driverController
-            .b()
-            .whileTrue(
-                new Outtake(
-                    this,
-                    m_intake,
-                    m_indexer,
-                    m_wrist,
-                    m_elevator,
-                    m_endEffector,
-                    l_leds
-                )
-            );
-
-        m_driverController
-            .rightBumper()
-            .whileTrue(
-                new HalfIntake(
-                    this,
-                    m_intake,
-                    m_indexer,
-                    m_driverController,
-                    m_climber,
-                    l_leds
-                )
-            );
-        m_driverController
-            .y()
-            .whileTrue(new InstantCommand(m_swerve::zeroGyro));
-        m_driverController
-            .a()
-            .whileTrue(
-                // new SequentialCommandGroup(
-                //     new ParallelDeadlineGroup(
-                //         new AlignToStation(m_swerve),
-                //         new AutoStationIntake(this, m_intake)
-                //     ),
-                //     new ParallelDeadlineGroup(
-                //         new WaitCommand(1.5),
-                //         new AutoStationIntake(this, m_intake)
-                //     )
-                // )
-                // new ParallelCommandGroup(
-                //     new SequentialCommandGroup(
-                //         new AlignToStation(m_swerve)
-                //         //new TurnAround(m_swerve)
-                //     ),
-                //     new StationIntake(m_elevator, m_wrist, m_endEffector)
-                // )
-                new AutoStationIntake(this, m_intake, l_leds)
-            );
-
-        // m_driverController
-        //     .povLeft()
-        //     .whileTrue(new AlignToStation(m_swerve, true));
+        // dpad
         m_driverController
             .povLeft()
             .onTrue(
@@ -456,6 +390,102 @@ public class RobotContainer {
                     () -> true
                 )
             );
+        m_driverController
+            .povRight()
+            .whileTrue(
+                new RunWrist(
+                    m_wrist,
+                    m_elevator,
+                    Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
+                )
+            );
+
+        // bumpers
+        m_driverController
+            .leftBumper()
+            .onTrue(
+                new SequentialCommandGroup(
+                    new InstantCommand(() -> l_leds.score(m_elevator)),
+                    new ElevatorDown(this, m_elevator, m_wrist, m_endEffector),
+                    new InstantCommand(l_leds::stop)
+                )
+            );
+        m_driverController
+            .rightBumper()
+            .whileTrue(
+                new HalfIntake(
+                    this,
+                    m_intake,
+                    m_indexer,
+                    m_driverController,
+                    m_climber,
+                    l_leds
+                )
+            );
+
+        // start/back (middle buttons)
+        m_driverController
+            .start()
+            .whileTrue(
+                new Outtake(
+                    this,
+                    m_intake,
+                    m_indexer,
+                    m_wrist,
+                    m_elevator,
+                    m_endEffector,
+                    l_leds
+                )
+            );
+        m_driverController
+            .back()
+            .whileTrue(new InstantCommand(m_swerve::zeroGyro));
+
+        // abxy buttons
+        m_driverController
+            .a()
+            .onTrue(
+                new InstantCommand(() -> {
+                    this.scoringLevel = isCoral
+                        ? RobotState.l1
+                        : RobotState.processor;
+                    l_leds.L1Leds();
+                })
+            );
+        m_driverController
+            .b()
+            .onTrue(
+                new InstantCommand(() -> {
+                    this.scoringLevel = isCoral
+                        ? RobotState.l2
+                        : RobotState.algaeReefLow;
+                    l_leds.L2Leds();
+                })
+            );
+        m_driverController
+            .x()
+            .onTrue(
+                // normally, we would do station intake. but if the robot is
+                // solo-driven, we can assume that we're skipping station intake
+                new InstantCommand(() -> {
+                    this.scoringLevel = isCoral
+                        ? RobotState.l3
+                        : RobotState.algaeReefHigh;
+                    l_leds.L3Leds();
+                })
+            );
+        m_driverController
+            .y()
+            .onTrue(
+                new InstantCommand(() -> {
+                    this.scoringLevel = isCoral
+                        ? RobotState.l4
+                        : RobotState.barge;
+                    l_leds.L4Leds();
+                })
+            );
+
+        // triggers
         m_driverController
             .leftTrigger()
             .whileTrue(
@@ -476,17 +506,6 @@ public class RobotContainer {
                     () -> ationOuttake
                 )
             );
-
-        m_driverController
-            .x()
-            .onTrue(
-                new ParallelCommandGroup(
-                    new InstantCommand(l_leds::stationAlignLeds),
-                    //new TurnAround(this, m_swerve, true).asProxy(),
-                    new StationIntake(m_elevator, m_wrist, m_endEffector)
-                )
-            );
-
         m_driverController
             .rightTrigger()
             .onTrue(
@@ -555,55 +574,13 @@ public class RobotContainer {
                         !scoringLevel.equals(RobotState.processor)
                 )
             );
-        m_driverController
-            .back()
-            .whileTrue(new ToggleIntake(this, m_intake, m_climber));
-        m_driverController
-            .start()
-            .onTrue(
-                new InstantCommand(() ->
-                    m_intake.setPivot(
-                        Constants.IntakeConstants.climbPosition,
-                        0
-                    )
-                )
-            );
-        // m_driverController
-        //     .rightBumper()
-        //     .onTrue(
-        //         new SequentialCommandGroup(
-        //             new InstantCommand(() -> l_leds.score(m_elevator)),
-        //             new Up(
-        //                 this,
-        //                 m_elevator,
-        //                 m_wrist,
-        //                 m_endEffector,
-        //                 m_swerve,
-        //                 m_driverController,
-        //                 () -> true
-        //             )
-        //         )
-        //     );
-        m_driverController
-            .leftBumper()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(() -> l_leds.score(m_elevator)), // score()
-                    // just
-                    // tracks
-                    // the
-                    // elevator
-                    // position
-                    // and
-                    // sets
-                    // the
-                    // LEDs
-                    new ElevatorDown(this, m_elevator, m_wrist, m_endEffector),
-                    new InstantCommand(l_leds::stop)
-                )
-            );
 
-        // Game panel controls
+        // I have a feeling this is about as useful as a screw without a head.
+        // m_driverController
+        //     .back()
+        //     .whileTrue(new ToggleIntake(this, m_intake, m_climber));
+
+        // Game panel controls - not used when solo driving
         HashSet<Integer> highAlgae = new HashSet<>(List.of(0, 3, 4, 6, 9, 10));
 
         for (int i = 0; i < 12; i++) {
