@@ -3,6 +3,9 @@
 
 This is the Knight Owls' code for the 2025 season and one of the very few repos with a README.
 
+This branch is only to be used when the robot is being driven by one person.
+Made specially for Head Start to High School 2025.
+
 Though if you thought the README would be useful, I'm (not really) sorry to disappoint you.
 
 Okay fine, it can be somewhat useful.
@@ -23,3 +26,9 @@ Okay fine, it can be somewhat useful.
                 - `commands/`: I think this is command for autos, but I'm not sure.
                 - `subsystems/`: Subsystems, like Swerve, Pivot, etc.
 - `vendordeps/`: Dependency files, like CTRE, Phoenix, etc.
+
+## Problems
+
+- You can't do station intake (unless we bind the backpedals but I think we're using those too)
+- It's kinda hell to do everything yourself
+- Auto align only works for April Tag 7 (left & right poles) because I was lazy and we didn't need to align to all the poles.
