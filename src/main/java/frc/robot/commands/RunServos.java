@@ -1,18 +1,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Climber;
 
 public class RunServos extends Command {
 
-    private final Climber m_climber;
-    private final boolean latchEngage;
+    // private final Climber m_climber;
+    // private final boolean latchEngage;
 
-    public RunServos(Climber m_climber, boolean latchEngage) {
-        this.m_climber = m_climber;
-        this.latchEngage = latchEngage;
+    public RunServos(/*Climber m_climber, boolean latchEngage*/) {
+        // this.m_climber = m_climber;
+        // this.latchEngage = latchEngage;
 
-        addRequirements(m_climber);
+        // addRequirements(m_climber);
     }
 
     // Called when the command is initially scheduled.

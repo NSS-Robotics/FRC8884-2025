@@ -1,32 +1,17 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.Constants.RobotState;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
-import java.lang.constant.Constable;
 
 public class AutoStationIntake extends Command {
 
     private final Intake m_intake;
     private final LED l_led;
-    private final RobotContainer robotContainer;
     private final double pose = Constants.IntakeConstants.upPosition;
 
-    public AutoStationIntake(
-        RobotContainer robotContainer,
-        Intake m_intake,
-        LED l_led
-    ) {
-        this.robotContainer = robotContainer;
+    public AutoStationIntake(Intake m_intake, LED l_led) {
         this.m_intake = m_intake;
         this.l_led = l_led;
 

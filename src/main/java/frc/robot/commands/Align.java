@@ -367,7 +367,6 @@ public class Align extends Command {
         Rotation2d.fromDegrees(52.08101368211756)
     );
 
-    private Timer timer;
     private Up upCommand;
 
     private int postIndex;

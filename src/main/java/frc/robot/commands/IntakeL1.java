@@ -2,17 +2,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 
 public class IntakeL1 extends Command {
 
     private final Intake m_intake;
-    private final RobotContainer robotContainer;
     private final double pose = Constants.IntakeConstants.intakePosition / 6;
 
-    public IntakeL1(RobotContainer robotContainer, Intake m_intake) {
-        this.robotContainer = robotContainer;
+    public IntakeL1(Intake m_intake) {
         this.m_intake = m_intake;
 
         addRequirements(m_intake);

@@ -10,16 +10,10 @@ public class ToggleIntake extends Command {
 
     private final RobotContainer ron;
     private final Intake m_intake;
-    private final Climber m_climber;
 
-    public ToggleIntake(
-        RobotContainer ron,
-        Intake m_intake,
-        Climber m_climber
-    ) {
+    public ToggleIntake(RobotContainer ron, Intake m_intake) {
         this.ron = ron;
         this.m_intake = m_intake;
-        this.m_climber = m_climber;
 
         addRequirements(m_intake);
     }

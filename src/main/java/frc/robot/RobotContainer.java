@@ -204,7 +204,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand(
             "Ation Intake",
-            new AutoStationIntake(this, m_intake, l_leds)
+            new AutoStationIntake(m_intake, l_leds)
         );
         NamedCommands.registerCommand(
             "Align Station Intake",
@@ -228,8 +228,7 @@ public class RobotContainer {
                 m_intake,
                 m_indexer,
                 m_driverController,
-                m_climber,
-                l_leds
+                m_climber
             )
         );
         NamedCommands.registerCommand(
@@ -418,8 +417,7 @@ public class RobotContainer {
                     m_intake,
                     m_indexer,
                     m_driverController,
-                    m_climber,
-                    l_leds
+                    m_climber
                 )
             );
 
@@ -490,7 +488,7 @@ public class RobotContainer {
             .leftTrigger()
             .whileTrue(
                 new ConditionalCommand(
-                    new AutoStationIntake(this, m_intake, l_leds),
+                    new AutoStationIntake(m_intake, l_leds),
                     new GroundIntake(
                         this,
                         m_intake,
@@ -527,7 +525,7 @@ public class RobotContainer {
                     new ConditionalCommand(
                         new ParallelDeadlineGroup(
                             new WaitCommand(2),
-                            new IntakeL1(this, m_intake)
+                            new IntakeL1(m_intake)
                         ),
                         new SequentialCommandGroup(
                             new InstantCommand(l_leds::alignLeds),
