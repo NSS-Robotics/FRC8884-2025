@@ -39,7 +39,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Climber m_climber = new Climber();
     private final Elevator m_elevator = new Elevator(this);
-    private final Claw m_endEffector = new Claw(this);
+    private final Claw m_claw = new Claw(this);
     private final Indexer m_indexer = new Indexer();
     public final Intake m_intake = new Intake(this);
     private final Limelight l_limelightLow = new Limelight("low");
@@ -112,7 +112,7 @@ public class RobotContainer {
                 this,
                 m_elevator,
                 m_wrist,
-                m_endEffector,
+                m_claw,
                 m_swerve,
                 m_intake,
                 m_driverController,
@@ -125,7 +125,7 @@ public class RobotContainer {
                 this,
                 m_elevator,
                 m_wrist,
-                m_endEffector,
+                m_claw,
                 m_swerve,
                 m_driverController,
                 () -> true
@@ -133,13 +133,13 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand(
             "Down Elevator",
-            new ElevatorDown(this, m_elevator, m_wrist, m_endEffector)
+            new ElevatorDown(this, m_elevator, m_wrist, m_claw)
         );
 
         NamedCommands.registerCommand(
             "Intake",
             new SequentialCommandGroup(
-                new StationIntake(m_elevator, m_wrist, m_endEffector)
+                new StationIntake(m_elevator, m_wrist, m_claw)
             )
         );
 
@@ -154,7 +154,7 @@ public class RobotContainer {
                     m_intake,
                     m_indexer,
                     m_wrist,
-                    m_endEffector,
+                    m_claw,
                     m_elevator,
                     m_driverController,
                     m_climber,
@@ -174,7 +174,7 @@ public class RobotContainer {
                     m_intake,
                     m_indexer,
                     m_wrist,
-                    m_endEffector,
+                    m_claw,
                     m_elevator,
                     m_driverController,
                     m_climber,
@@ -193,7 +193,7 @@ public class RobotContainer {
                     m_intake,
                     m_indexer,
                     m_wrist,
-                    m_endEffector,
+                    m_claw,
                     m_elevator,
                     m_driverController,
                     m_climber,
@@ -213,12 +213,12 @@ public class RobotContainer {
                     new AlignToStation(m_swerve, false),
                     new TurnAround(this, m_swerve, false)
                 ),
-                new StationIntake(m_elevator, m_wrist, m_endEffector)
+                new StationIntake(m_elevator, m_wrist, m_claw)
             )
         );
         NamedCommands.registerCommand(
             "Station Intake",
-            new StationIntake(m_elevator, m_wrist, m_endEffector)
+            new StationIntake(m_elevator, m_wrist, m_claw)
         );
         NamedCommands.registerCommand(
             "Half Intake",
@@ -243,7 +243,7 @@ public class RobotContainer {
                         m_intake,
                         m_indexer,
                         m_wrist,
-                        m_endEffector,
+                        m_claw,
                         m_elevator,
                         m_driverController,
                         m_climber,
@@ -264,10 +264,7 @@ public class RobotContainer {
             "Resting Climb",
             new RestingClimb(m_climber)
         );
-        NamedCommands.registerCommand(
-            "Coral In Claw",
-            new CoralInClaw(m_endEffector)
-        );
+        NamedCommands.registerCommand("Coral In Claw", new CoralInClaw(m_claw));
         NamedCommands.registerCommand(
             "Intake Down",
             new InstantCommand(() ->
@@ -291,7 +288,7 @@ public class RobotContainer {
                     m_swerve,
                     m_elevator,
                     m_wrist,
-                    m_endEffector,
+                    m_claw,
                     l_limelightLow,
                     m_driverController
                 )
@@ -308,7 +305,7 @@ public class RobotContainer {
                     this,
                     m_elevator,
                     m_wrist,
-                    m_endEffector,
+                    m_claw,
                     m_swerve,
                     m_intake,
                     m_driverController,
@@ -327,7 +324,7 @@ public class RobotContainer {
                     this,
                     m_elevator,
                     m_wrist,
-                    m_endEffector,
+                    m_claw,
                     m_swerve,
                     m_intake,
                     m_driverController,
@@ -374,21 +371,43 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        // dpad
-        m_driverController
-            .povLeft()
-            .onTrue(
+        HashSet<Integer> highAlgae = new HashSet<>(List.of(0, 3, 4, 6, 9, 10));
+
+        final SequentialCommandGroup cmdUpAtSetpoint =
+            new SequentialCommandGroup(
                 new Up(
                     this,
                     m_elevator,
                     m_wrist,
-                    m_endEffector,
+                    m_claw,
                     m_swerve,
                     m_intake,
                     m_driverController,
                     () -> true
-                )
+                ),
+                new InstantCommand(() -> l_leds.score(m_elevator)),
+                new ElevatorDown(this, m_elevator, m_wrist, m_claw), // delete if bad tomorrow
+                new InstantCommand(l_leds::stop)
             );
+        final SequentialCommandGroup cmdUpNotAtSetpoint =
+            new SequentialCommandGroup(
+                new Up(
+                    this,
+                    m_elevator,
+                    m_wrist,
+                    m_claw,
+                    m_swerve,
+                    m_intake,
+                    m_driverController,
+                    () -> false
+                ),
+                new InstantCommand(() -> l_leds.score(m_elevator)),
+                new ElevatorDown(this, m_elevator, m_wrist, m_claw), // delete if bad tomorrow
+                new InstantCommand(l_leds::stop)
+            );
+
+        // dpad
+        m_driverController.povLeft().onTrue(cmdUpAtSetpoint);
         m_driverController
             .povRight()
             .whileTrue(
@@ -398,17 +417,55 @@ public class RobotContainer {
                     Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
                 )
             );
+        m_driverController
+            .povUp()
+            .onTrue(
+                new InstantCommand(() -> {
+                    if (canChangeGamePiece()) {
+                        if (this.isCoral) {
+                            this.isCoral = false;
+
+                            this.scoringLevel = highAlgae.contains(postIndex)
+                                ? RobotState.algaeReefHigh
+                                : RobotState.algaeReefLow;
+
+                            l_leds.updateGamePiece();
+                        } else {
+                            this.isCoral = true;
+                            l_leds.updateGamePiece();
+
+                            if (scoringLevel.equals(RobotState.barge)) {
+                                this.scoringLevel = RobotState.l4;
+                            } else if (
+                                scoringLevel.equals(RobotState.algaeReefHigh)
+                            ) {
+                                this.scoringLevel = RobotState.l3;
+                            } else if (
+                                scoringLevel.equals(RobotState.algaeReefLow)
+                            ) {
+                                this.scoringLevel = RobotState.l2;
+                            } else if (
+                                scoringLevel.equals(RobotState.processor)
+                            ) {
+                                this.scoringLevel = RobotState.l1;
+                            }
+                        }
+                    }
+                })
+            );
 
         // bumpers
-        m_driverController
-            .leftBumper()
-            .onTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(() -> l_leds.score(m_elevator)),
-                    new ElevatorDown(this, m_elevator, m_wrist, m_endEffector),
-                    new InstantCommand(l_leds::stop)
-                )
-            );
+        // should be fine to get rid of this since the elevator is supposed to
+        // go down automatically
+        // m_driverController
+        //     .leftBumper()
+        //     .onTrue(
+        //         new SequentialCommandGroup(
+        //             new InstantCommand(() -> l_leds.score(m_elevator)),
+        //             new ElevatorDown(this, m_elevator, m_wrist, m_claw),
+        //             new InstantCommand(l_leds::stop)
+        //         )
+        //     );
         m_driverController
             .rightBumper()
             .whileTrue(
@@ -431,7 +488,7 @@ public class RobotContainer {
                     m_indexer,
                     m_wrist,
                     m_elevator,
-                    m_endEffector,
+                    m_claw,
                     l_leds
                 )
             );
@@ -494,7 +551,7 @@ public class RobotContainer {
                         m_intake,
                         m_indexer,
                         m_wrist,
-                        m_endEffector,
+                        m_claw,
                         m_elevator,
                         m_driverController,
                         m_climber,
@@ -510,17 +567,7 @@ public class RobotContainer {
                 new ConditionalCommand(
                     new ParallelCommandGroup(
                         new InstantCommand(l_leds::manualMode),
-                        //new TurnAround(this, m_swerve, false).asProxy(),
-                        new Up(
-                            this,
-                            m_elevator,
-                            m_wrist,
-                            m_endEffector,
-                            m_swerve,
-                            m_intake,
-                            m_driverController,
-                            () -> false
-                        )
+                        cmdUpNotAtSetpoint
                     ),
                     new ConditionalCommand(
                         new ParallelDeadlineGroup(
@@ -536,7 +583,7 @@ public class RobotContainer {
                                     m_swerve,
                                     m_elevator,
                                     m_wrist,
-                                    m_endEffector,
+                                    m_claw,
                                     l_limelightLow,
                                     m_driverController
                                 ).asProxy(),
@@ -546,16 +593,7 @@ public class RobotContainer {
                             ),
                             new InstantCommand(() -> l_leds.score(m_elevator)),
                             new ConditionalCommand(
-                                new Up(
-                                    this,
-                                    m_elevator,
-                                    m_wrist,
-                                    m_endEffector,
-                                    m_swerve,
-                                    m_intake,
-                                    m_driverController,
-                                    () -> true
-                                ),
+                                cmdUpAtSetpoint,
                                 new InstantCommand(),
                                 () ->
                                     scoringLevel.equals(RobotState.barge) ||
@@ -573,13 +611,7 @@ public class RobotContainer {
                 )
             );
 
-        // I have a feeling this is about as useful as a screw without a head.
-        // m_driverController
-        //     .back()
-        //     .whileTrue(new ToggleIntake(this, m_intake, m_climber));
-
         // Game panel controls - not used when solo driving
-        HashSet<Integer> highAlgae = new HashSet<>(List.of(0, 3, 4, 6, 9, 10));
 
         for (int i = 0; i < 12; i++) {
             final int idx = i;
@@ -610,7 +642,7 @@ public class RobotContainer {
                         m_swerve,
                         m_elevator,
                         m_wrist,
-                        m_endEffector,
+                        m_claw,
                         l_limelightLow,
                         m_driverController
                     )
@@ -731,7 +763,7 @@ public class RobotContainer {
     }
 
     public boolean canChangeGamePiece() {
-        return !m_endEffector.gamePieceDetected() && !runningCommand;
+        return !m_claw.gamePieceDetected() && !runningCommand;
     }
 
     public Command setupRobot() {
