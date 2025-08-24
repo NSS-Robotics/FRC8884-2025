@@ -59,9 +59,10 @@ public class RobotContainer {
     private final int translationAxis = XboxController.Axis.kRightY.value;
     private final int strafeAxis = XboxController.Axis.kRightX.value;
     private final int rotationAxis = XboxController.Axis.kLeftX.value;
-    private final Trigger povDown = m_driverController.povDown();
+    // private final Trigger povDown = m_driverController.povDown();
     public boolean isCoral = true;
     public boolean isLeft = true;
+    public boolean alignOnBumperPress = true;
     public boolean runningCommand = false;
     public boolean fieldCentric = false;
     public RobotState scoringLevel;
@@ -90,7 +91,7 @@ public class RobotContainer {
                 () -> m_driverController.getRawAxis(translationAxis),
                 () -> m_driverController.getRawAxis(strafeAxis),
                 () -> m_driverController.getRawAxis(rotationAxis) * 0.87,
-                () -> povDown.getAsBoolean()
+                () -> false // use povDown.getAsBoolean() if you need robot-relative driving
             )
         );
 
@@ -373,8 +374,10 @@ public class RobotContainer {
     private void configureBindings() {
         HashSet<Integer> highAlgae = new HashSet<>(List.of(0, 3, 4, 6, 9, 10));
 
-        final SequentialCommandGroup cmdUpAtSetpoint =
-            new SequentialCommandGroup(
+        // dpad
+        m_driverController
+            .povLeft()
+            .onTrue(
                 new Up(
                     this,
                     m_elevator,
@@ -384,30 +387,8 @@ public class RobotContainer {
                     m_intake,
                     m_driverController,
                     () -> true
-                ),
-                new InstantCommand(() -> l_leds.score(m_elevator)),
-                new ElevatorDown(this, m_elevator, m_wrist, m_claw), // delete if bad tomorrow
-                new InstantCommand(l_leds::stop)
+                )
             );
-        final SequentialCommandGroup cmdUpNotAtSetpoint =
-            new SequentialCommandGroup(
-                new Up(
-                    this,
-                    m_elevator,
-                    m_wrist,
-                    m_claw,
-                    m_swerve,
-                    m_intake,
-                    m_driverController,
-                    () -> false
-                ),
-                new InstantCommand(() -> l_leds.score(m_elevator)),
-                new ElevatorDown(this, m_elevator, m_wrist, m_claw), // delete if bad tomorrow
-                new InstantCommand(l_leds::stop)
-            );
-
-        // dpad
-        m_driverController.povLeft().onTrue(cmdUpAtSetpoint);
         m_driverController
             .povRight()
             .whileTrue(
@@ -453,44 +434,145 @@ public class RobotContainer {
                     }
                 })
             );
+        m_driverController
+            .povDown()
+            .onTrue(
+                new InstantCommand(() ->
+                    this.alignOnBumperPress = !this.alignOnBumperPress
+                )
+            );
 
         // bumpers
-        // should be fine to get rid of this since the elevator is supposed to
-        // go down automatically
-        // m_driverController
-        //     .leftBumper()
-        //     .onTrue(
-        //         new SequentialCommandGroup(
-        //             new InstantCommand(() -> l_leds.score(m_elevator)),
-        //             new ElevatorDown(this, m_elevator, m_wrist, m_claw),
-        //             new InstantCommand(l_leds::stop)
-        //         )
-        //     );
+        m_driverController
+            .leftBumper()
+            .whileTrue(
+                new ConditionalCommand(
+                    // alignOnBumperPress == true
+                    new ConditionalCommand(
+                        new ParallelDeadlineGroup(
+                            new WaitCommand(2),
+                            new IntakeL1(m_intake)
+                        ),
+                        new SequentialCommandGroup(
+                            new InstantCommand(l_leds::alignLeds),
+                            new ConditionalCommand(
+                                new InstantCommand(),
+                                new Align2(
+                                    this,
+                                    m_swerve,
+                                    m_elevator,
+                                    m_wrist,
+                                    m_claw,
+                                    l_limelightLow,
+                                    m_driverController
+                                ).asProxy(),
+                                () -> // do nothing if true
+                                    scoringLevel.equals(RobotState.barge) ||
+                                    scoringLevel.equals(RobotState.processor)
+                            ),
+                            new InstantCommand(() -> l_leds.score(m_elevator)),
+                            new ConditionalCommand(
+                                new Up(
+                                    this,
+                                    m_elevator,
+                                    m_wrist,
+                                    m_claw,
+                                    m_swerve,
+                                    m_intake,
+                                    m_driverController,
+                                    () -> true
+                                ),
+                                new InstantCommand(),
+                                () ->
+                                    scoringLevel.equals(RobotState.barge) ||
+                                    scoringLevel.equals(RobotState.processor) ||
+                                    canAlign
+                            ),
+                            new RunWrist(
+                                m_wrist,
+                                m_elevator,
+                                Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
+                            )
+                        ),
+                        () -> ationOuttake
+                    ),
+                    // alignOnBumperPress == false
+                    new SequentialCommandGroup(
+                        new InstantCommand(() -> l_leds.score(m_elevator)),
+                        new ElevatorDown(this, m_elevator, m_wrist, m_claw),
+                        new InstantCommand(l_leds::stop)
+                    ),
+                    () -> this.alignOnBumperPress
+                )
+            );
         m_driverController
             .rightBumper()
             .whileTrue(
-                new HalfIntake(
-                    this,
-                    m_intake,
-                    m_indexer,
-                    m_driverController,
-                    m_climber
+                new ConditionalCommand(
+                    new ConditionalCommand(
+                        new ParallelDeadlineGroup(
+                            new WaitCommand(2),
+                            new IntakeL1(m_intake)
+                        ),
+                        new SequentialCommandGroup(
+                            new InstantCommand(l_leds::alignLeds),
+                            new ConditionalCommand(
+                                new InstantCommand(),
+                                new Align2(
+                                    this,
+                                    m_swerve,
+                                    m_elevator,
+                                    m_wrist,
+                                    m_claw,
+                                    l_limelightLow,
+                                    m_driverController
+                                ).asProxy(),
+                                () ->
+                                    scoringLevel.equals(RobotState.barge) ||
+                                    scoringLevel.equals(RobotState.processor)
+                            ),
+                            new InstantCommand(() -> l_leds.score(m_elevator)),
+                            new ConditionalCommand(
+                                new Up(
+                                    this,
+                                    m_elevator,
+                                    m_wrist,
+                                    m_claw,
+                                    m_swerve,
+                                    m_intake,
+                                    m_driverController,
+                                    () -> true
+                                ),
+                                new InstantCommand(),
+                                () ->
+                                    scoringLevel.equals(RobotState.barge) ||
+                                    scoringLevel.equals(RobotState.processor) ||
+                                    canAlign
+                            ),
+                            new RunWrist(
+                                m_wrist,
+                                m_elevator,
+                                Constants.WristConstants.pos[RobotState.algaeGround.ordinal()]
+                            )
+                        ),
+                        () -> ationOuttake
+                    ),
+                    new HalfIntake(
+                        this,
+                        m_intake,
+                        m_indexer,
+                        m_driverController,
+                        m_climber
+                    ),
+                    () -> this.alignOnBumperPress
                 )
             );
 
         // start/back (middle buttons)
         m_driverController
             .start()
-            .whileTrue(
-                new Outtake(
-                    this,
-                    m_intake,
-                    m_indexer,
-                    m_wrist,
-                    m_elevator,
-                    m_claw,
-                    l_leds
-                )
+            .onTrue(
+                new InstantCommand(() -> this.ationOuttake = !this.ationOuttake)
             );
         m_driverController
             .back()
@@ -564,50 +646,14 @@ public class RobotContainer {
         m_driverController
             .rightTrigger()
             .onTrue(
-                new ConditionalCommand(
-                    new ParallelCommandGroup(
-                        new InstantCommand(l_leds::manualMode),
-                        cmdUpNotAtSetpoint
-                    ),
-                    new ConditionalCommand(
-                        new ParallelDeadlineGroup(
-                            new WaitCommand(2),
-                            new IntakeL1(m_intake)
-                        ),
-                        new SequentialCommandGroup(
-                            new InstantCommand(l_leds::alignLeds),
-                            new ConditionalCommand(
-                                new InstantCommand(),
-                                new Align2(
-                                    this,
-                                    m_swerve,
-                                    m_elevator,
-                                    m_wrist,
-                                    m_claw,
-                                    l_limelightLow,
-                                    m_driverController
-                                ).asProxy(),
-                                () ->
-                                    scoringLevel.equals(RobotState.barge) ||
-                                    scoringLevel.equals(RobotState.processor)
-                            ),
-                            new InstantCommand(() -> l_leds.score(m_elevator)),
-                            new ConditionalCommand(
-                                cmdUpAtSetpoint,
-                                new InstantCommand(),
-                                () ->
-                                    scoringLevel.equals(RobotState.barge) ||
-                                    scoringLevel.equals(RobotState.processor) ||
-                                    canAlign
-                            )
-                        ),
-                        () -> ationOuttake
-                    ),
-                    () ->
-                        manualMode &&
-                        !ationOuttake &&
-                        !scoringLevel.equals(RobotState.barge) &&
-                        !scoringLevel.equals(RobotState.processor)
+                new Outtake(
+                    this,
+                    m_intake,
+                    m_indexer,
+                    m_wrist,
+                    m_elevator,
+                    m_claw,
+                    l_leds
                 )
             );
 
@@ -727,14 +773,14 @@ public class RobotContainer {
                 )
             );
 
-        climbConfirm
-            .and(m_driverController.povDown())
-            .onTrue(
-                new SequentialCommandGroup(
-                    new InstantCommand(l_leds::climbLeds),
-                    new DownClimb(m_climber, m_intake)
-                )
-            );
+        // climbConfirm
+        //     .and(m_driverController.povDown())
+        //     .onTrue(
+        //         new SequentialCommandGroup(
+        //             new InstantCommand(l_leds::climbLeds),
+        //             new DownClimb(m_climber, m_intake)
+        //         )
+        //     );
 
         new JoystickButton(m_gamePanel, 20).onTrue(
             new InstantCommand(() -> {
