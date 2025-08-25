@@ -626,21 +626,24 @@ public class RobotContainer {
         m_driverController
             .leftTrigger()
             .whileTrue(
-                new ConditionalCommand(
-                    new AutoStationIntake(m_intake, l_leds),
-                    new GroundIntake(
-                        this,
-                        m_intake,
-                        m_indexer,
-                        m_wrist,
-                        m_claw,
-                        m_elevator,
-                        m_driverController,
-                        m_climber,
-                        l_leds,
-                        false
+                new ParallelCommandGroup(
+                    new ConditionalCommand(
+                        new AutoStationIntake(m_intake, l_leds),
+                        new GroundIntake(
+                            this,
+                            m_intake,
+                            m_indexer,
+                            m_wrist,
+                            m_claw,
+                            m_elevator,
+                            m_driverController,
+                            m_climber,
+                            l_leds,
+                            false
+                        ),
+                        () -> ationOuttake
                     ),
-                    () -> ationOuttake
+                    new ElevatorDown(this, m_elevator, m_wrist, m_claw)
                 )
             );
         m_driverController
