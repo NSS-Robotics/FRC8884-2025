@@ -17,6 +17,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
@@ -43,6 +45,8 @@ public class Intake extends SubsystemBase {
     );
 
     CurrentLimitsConfigs intakeCurrentLimitsConfigs =
+        new CurrentLimitsConfigs();
+    CurrentLimitsConfigs pivotCurrentLimitsConfigs =
         new CurrentLimitsConfigs();
 
     private static TalonFXConfiguration pivotMotorConfig =
@@ -79,6 +83,10 @@ public class Intake extends SubsystemBase {
         pivotMotor.getConfigurator().apply(pivotSlot0Configs);
         pivotMotor.getConfigurator().apply(pivotSlot1Configs);
         pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+        // pivotCurrentLimitsConfigs.StatorCurrentLimitEnable = true;
+        // pivotCurrentLimitsConfigs.StatorCurrentLimit = 15;
+        // pivotMotor.getConfigurator().apply(pivotCurrentLimitsConfigs);
+
 
         intakeSlot0Configs.kP = Constants.IntakeConstants.intakeKP;
         intakeSlot0Configs.kI = Constants.IntakeConstants.intakeKI;
@@ -110,6 +118,13 @@ public class Intake extends SubsystemBase {
             0,
             Math.max(Constants.IntakeConstants.pivotMaxRotations, position)
         );
+
+        // if (position < this.getPosition()) { // if intake is going up
+        //     pivotCurrentLimitsConfigs.StatorCurrentLimitEnable = false;
+        // } else { // if intake is going down
+        //     pivotCurrentLimitsConfigs.StatorCurrentLimitEnable = true;
+        // }
+        // pivotMotor.getConfigurator().apply(pivotCurrentLimitsConfigs);        
 
         pivotPositionVoltage = new PositionVoltage(position).withSlot(slot);
 

@@ -375,19 +375,9 @@ public class RobotContainer {
         HashSet<Integer> highAlgae = new HashSet<>(List.of(0, 3, 4, 6, 9, 10));
 
         // dpad
-        m_driverController
-            .povLeft()
+        m_driverController.povLeft()
             .onTrue(
-                new Up(
-                    this,
-                    m_elevator,
-                    m_wrist,
-                    m_claw,
-                    m_swerve,
-                    m_intake,
-                    m_driverController,
-                    () -> true
-                )
+                new UpClimb(m_climber, m_wrist, m_intake, m_elevator)
             );
         m_driverController
             .povRight()

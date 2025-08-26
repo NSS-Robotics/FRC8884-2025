@@ -332,7 +332,7 @@ public final class Constants {
         public static final double upKP = 12.75;
         public static final double upKI = 0;
         public static final double upKD = 2;
-        public static final double downKP = 8.25;
+        public static final double downKP = 8.1; // was 8.25
         public static final double downKI = 0;
         public static final double downKD = 0;
         public static final double maxRot = 0;
