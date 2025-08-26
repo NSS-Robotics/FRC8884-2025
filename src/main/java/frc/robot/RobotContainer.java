@@ -56,9 +56,9 @@ public class RobotContainer {
         OperatorConstants.kOperatorControllerPort
     );
 
-    private final int translationAxis = XboxController.Axis.kRightY.value;
-    private final int strafeAxis = XboxController.Axis.kRightX.value;
-    private final int rotationAxis = XboxController.Axis.kLeftX.value;
+    private final int translationAxis = XboxController.Axis.kLeftY.value;
+    private final int strafeAxis = XboxController.Axis.kLeftX.value;
+    private final int rotationAxis = XboxController.Axis.kRightX.value;
     // private final Trigger povDown = m_driverController.povDown();
     public boolean isCoral = true;
     public boolean isLeft = true;
@@ -284,7 +284,7 @@ public class RobotContainer {
                     this.isCoral = false;
                     this.scoringLevel = RobotState.algaeReefLow;
                 }),
-                new Align2(
+                new AlignTwoPoleOnly(
                     this,
                     m_swerve,
                     m_elevator,
@@ -454,10 +454,13 @@ public class RobotContainer {
                             new IntakeL1(m_intake)
                         ),
                         new SequentialCommandGroup(
-                            new InstantCommand(l_leds::alignLeds),
+                            new InstantCommand(() -> {
+                                l_leds.alignLeds();
+                                this.isLeft = true;
+                            }),
                             new ConditionalCommand(
                                 new InstantCommand(),
-                                new Align2(
+                                new AlignTwoPoleOnly(
                                     this,
                                     m_swerve,
                                     m_elevator,
@@ -515,10 +518,14 @@ public class RobotContainer {
                             new IntakeL1(m_intake)
                         ),
                         new SequentialCommandGroup(
+                            new InstantCommand(() -> {
+                                l_leds.alignLeds();
+                                this.isLeft = false;
+                            }),
                             new InstantCommand(l_leds::alignLeds),
                             new ConditionalCommand(
                                 new InstantCommand(),
-                                new Align2(
+                                new AlignTwoPoleOnly(
                                     this,
                                     m_swerve,
                                     m_elevator,
@@ -626,7 +633,7 @@ public class RobotContainer {
         m_driverController
             .leftTrigger()
             .whileTrue(
-                new ParallelCommandGroup(
+                new SequentialCommandGroup(
                     new ConditionalCommand(
                         new AutoStationIntake(m_intake, l_leds),
                         new GroundIntake(
@@ -686,7 +693,7 @@ public class RobotContainer {
                     Commands.runOnce(() -> {
                         this.postIndex = idx;
                     }),
-                    new Align2(
+                    new AlignTwoPoleOnly(
                         this,
                         m_swerve,
                         m_elevator,

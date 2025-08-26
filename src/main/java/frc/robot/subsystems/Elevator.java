@@ -131,5 +131,7 @@ public class Elevator extends SubsystemBase {
             "elev current",
             motor.getStatorCurrent().getValueAsDouble()
         );
+
+        SmartDashboard.putBoolean("Align on bumper press", rob.alignOnBumperPress);
     }
 }
